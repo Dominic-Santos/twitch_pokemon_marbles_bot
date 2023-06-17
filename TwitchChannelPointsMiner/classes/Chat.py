@@ -317,6 +317,7 @@ class ClientIRCPokemon(ClientIRCBase):
                 bag_stats_thread(self.stats_computer)
             if THREADCONTROLLER.battle is False and POKEMON.auto_battle:
                 battle_thread(self.auto_battle)
+                create_thread(self.get_all_moves)
 
     def find_best_move(self, attacker, attacker_moves, defender):
         best_move = list(attacker_moves.keys())[0]
@@ -901,15 +902,40 @@ Inventory: {cash}$ {coins} Battle Coins
             if reward_sprite is not None:
                 reward_sprite.close()
 
+    def get_all_moves(self):
+        all_pokemon = self.pokemon_api.get_all_pokemon()
+        POKEMON.sync_computer(all_pokemon)
+
+        allpokemon = POKEMON.computer.pokemon
+        for poke in allpokemon:
+            pokemon = self.pokemon_api.get_pokemon(poke["id"])
+            print("pokemon", pokemon)
+            if "moves" in pokemon:
+                for move in pokemon["moves"]:
+                    self.get_pokemon_move(move["id"], move["type"])
+
+            sleep(0.1)
+
+    def get_pokemon_move(self, move_name, move_type="None"):
+
+        move = POKEMON.pokedex.move(move_name)
+        if move is None:
+            move_data = self.pokemon_api.get_move(move_name)
+            move_data["type"] = move_type
+
+            POKEMON.pokedex.pokemon_moves[str(move_name)] = move_data
+            POKEMON.pokedex.save_moves()
+
+            move = POKEMON.pokedex.move(move_name)
+
+        return move
+
     def get_pokemon_stats(self, pokedex_id, cached=False):
 
         pokemon = POKEMON.pokedex.stats(str(pokedex_id))
 
         if cached is False or pokemon is None:
             pokemon_data = self.pokemon_api.get_pokedex_info(pokedex_id)["content"]
-
-            if pokemon.tier != pokemon_data["tier"]:
-                self.log(f"{YELLOWLOG}{pokemon} changed to {pokemon_data['tier']} tier")
             POKEMON.pokedex.pokemon_stats[str(pokedex_id)] = pokemon_data
             POKEMON.pokedex.save_pokedex()
 
