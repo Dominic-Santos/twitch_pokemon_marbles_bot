@@ -1,36 +1,29 @@
 
 class Pokemon(object):
-    def __init__(self):
-        self.name = "NA"
-        self.bst = -1
-        self.weight = -1
-        self.pokemon_id = 0
-        self.tier = "NA"
-        self.types = []
-        self.spawn = None
+    def __init__(self, data={}):
+        self.name = data.get("name", "NA")
+        self.weight = data.get("weight", 0)
+        self.pokemon_id = data.get("pokedex_id", 0)
+        self.tier = data.get("tier", "NA")
+        self.types = [t for t in [data.get("type1", "none").title(), data.get("type2", "none").title()] if t != "None"]
+
+        base_stats = data.get("base_stats", {})
+        self.hp = base_stats.get("hp", 0)
+        self.speed = base_stats.get("speed", 0)
+        self.attack = base_stats.get("attack", 0)
+        self.defense = base_stats.get("defense", 0)
+        self.special_attack = base_stats.get("special_attack", 0)
+        self.special_defense = base_stats.get("special_defense", 0)
+
+        # not currently used
+        self.description = data.get("description", "")
+        self.generation = data.get("generation", 0)
 
         self.is_fish = False
-        self.alt_name = "NA"
 
     @property
-    def pokedex_name(self):
-        if self.name.startswith("Aegislash"):
-            return "Aegislash (Shield)"
-        return self.name.split("(")[0].strip()
-
-    def check_name(self):
-        if self.name.startswith("Rotom"):
-            self.name = self.name.replace(" ", " (") + ")"
+    def bst(self):
+        return self.hp + self.speed + self.attack + self.defense + self.special_attack + self.special_defense
 
     def __str__(self):
-        return f"{self.name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}"
-
-    def parse(self, data):
-        self.name = data["name"]
-        self.bst = sum(data["base_stats"][k] for k in data["base_stats"])
-        self.tier = data["tier"]
-        self.types = [data["type1"].title()]
-        if data["type2"] != "none":
-            self.types.append(data["type2"].title())
-        self.weight = data["weight"]
-        self.pokemon_id = data["pokedex_id"]
+        return f"{self.pokedex_id} {self.name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}"

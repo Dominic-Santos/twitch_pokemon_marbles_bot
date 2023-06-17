@@ -75,7 +75,7 @@ class Pokedex(object):
 
     def _get_pokemon_name(self, pokemon):
         if isinstance(pokemon, Pokemon):
-            pokename = pokemon.pokedex_name
+            pokename = pokemon.name
         else:
             pokename = pokemon
 
@@ -88,7 +88,7 @@ class Pokedex(object):
     @staticmethod
     def _get_pokemon_id(pokemon):
         if isinstance(pokemon, Pokemon):
-            return pokemon.pokemon_id
+            return pokemon.pokedex_id
         return pokemon
 
     def have(self, pokemon):
@@ -129,8 +129,7 @@ class Pokedex(object):
         if pokemon_id not in self.pokemon_stats:
             return None
 
-        poke = Pokemon()
-        poke.parse(self.pokemon_stats[pokemon_id])
+        poke = Pokemon(self.pokemon_stats[pokemon_id])
 
         return poke
 

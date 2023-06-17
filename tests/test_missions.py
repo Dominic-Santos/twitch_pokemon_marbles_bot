@@ -57,7 +57,7 @@ def test_check_missions_case2():
     MISSIONS.set(MISSIONS_JSON_2)
     pokemon = Pokemon()
     pokemon.types = ["Fire", "Fairy"]
-    pokemon.bst = 200
+    pokemon.hp = 200
     reasons = MISSIONS.check_all_missions(pokemon)
     wondertrade_reasons = MISSIONS.check_all_wondertrade_missions(pokemon)
 
@@ -68,7 +68,7 @@ def test_check_missions_case2():
 
     pokemon = Pokemon()
     pokemon.types = ["Fairy"]
-    pokemon.bst = 900
+    pokemon.hp = 900
     reasons = MISSIONS.check_all_missions(pokemon)
     wondertrade_reasons = MISSIONS.check_all_wondertrade_missions(pokemon)
 

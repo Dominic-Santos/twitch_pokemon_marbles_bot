@@ -127,7 +127,7 @@ def test_get_by_pokemon():
     for poke_name, poke_id, expected in test_cases:
         poke_obj = Pokemon()
         poke_obj.name = poke_name
-        poke_obj.pokemon_id = poke_id
+        poke_obj.pokedex_id = poke_id
         assert len(COMPUTER.get_pokemon(poke_obj)) == expected
 
 
@@ -147,7 +147,7 @@ def test_have_by_pokemon():
     for poke_name, poke_id, expected in test_cases:
         poke_obj = Pokemon()
         poke_obj.name = poke_name
-        poke_obj.pokemon_id = poke_id
+        poke_obj.pokedex_id = poke_id
         assert COMPUTER.have(poke_obj) == expected
 
 
@@ -167,5 +167,5 @@ def test_need_by_pokemon():
     for poke_name, poke_id, expected in test_cases:
         poke_obj = Pokemon()
         poke_obj.name = poke_name
-        poke_obj.pokemon_id = poke_id
+        poke_obj.pokedex_id = poke_id
         assert COMPUTER.need(poke_obj) == expected
