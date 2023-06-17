@@ -1,0 +1,8 @@
+{
+    "streamers": {
+        "streamer_name": {"goal": 3000, "priority": 1, "type": "the_prize", "points": 0, "percent": 0, "marbles": true},
+        "streamer_name_2": {"goal": 100000, "priority": 2, "type": "the_prize", "points": 0, "percent": 0, "marbles": false},
+    },
+    "username": "twitch_username",
+    "password": "twitch_password"
+}

@@ -155,3 +155,12 @@ analytics/*
 keep_replit_alive.py
 .replit
 replit.nix
+
+settings.json
+pokemon.json
+sprites
+results
+battle
+battles
+statistics.txt
+pokemon_loyalty.txt

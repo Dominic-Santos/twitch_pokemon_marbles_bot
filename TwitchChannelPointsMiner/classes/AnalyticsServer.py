@@ -8,8 +8,8 @@ from threading import Thread
 import pandas as pd
 from flask import Flask, Response, cli, render_template, request
 
-from TwitchChannelPointsMiner.classes.Settings import Settings
-from TwitchChannelPointsMiner.utils import download_file
+from .Settings import Settings
+from ..utils import download_file
 
 cli.show_server_banner = lambda *_: None
 logger = logging.getLogger(__name__)

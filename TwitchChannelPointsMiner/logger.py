@@ -11,14 +11,13 @@ from pathlib import Path
 import emoji
 from colorama import Fore, init
 
-from TwitchChannelPointsMiner.classes.Discord import Discord
-from TwitchChannelPointsMiner.classes.Webhook import Webhook
-from TwitchChannelPointsMiner.classes.Matrix import Matrix
-from TwitchChannelPointsMiner.classes.Settings import Events
-from TwitchChannelPointsMiner.classes.Telegram import Telegram
-from TwitchChannelPointsMiner.classes.Pushover import Pushover
-from TwitchChannelPointsMiner.utils import remove_emoji
-
+from .classes.Discord import Discord
+from .classes.Webhook import Webhook
+from .classes.Matrix import Matrix
+from .classes.Settings import Events
+from .classes.Telegram import Telegram
+from .classes.Pushover import Pushover
+from .utils import remove_emoji
 
 # Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
 class ColorPalette(object):

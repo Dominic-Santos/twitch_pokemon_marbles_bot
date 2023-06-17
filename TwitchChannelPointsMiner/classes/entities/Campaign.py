@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from TwitchChannelPointsMiner.classes.entities.Drop import Drop
-from TwitchChannelPointsMiner.classes.Settings import Settings
+from .Drop import Drop
+from ..Settings import Settings
 
 def parse_datetime(datetime_str):
     for fmt in ("%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ"):

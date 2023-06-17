@@ -8,13 +8,13 @@ from threading import Thread, Timer
 
 from dateutil import parser
 
-from TwitchChannelPointsMiner.classes.entities.EventPrediction import EventPrediction
-from TwitchChannelPointsMiner.classes.entities.Message import Message
-from TwitchChannelPointsMiner.classes.entities.Raid import Raid
-from TwitchChannelPointsMiner.classes.Settings import Events, Settings
-from TwitchChannelPointsMiner.classes.TwitchWebSocket import TwitchWebSocket
-from TwitchChannelPointsMiner.constants import WEBSOCKET
-from TwitchChannelPointsMiner.utils import (
+from .entities.EventPrediction import EventPrediction
+from .entities.Message import Message
+from .entities.Raid import Raid
+from .Settings import Events, Settings
+from .TwitchWebSocket import TwitchWebSocket
+from ..constants import WEBSOCKET
+from ..utils import (
     get_streamer_index,
     internet_connection_available,
 )

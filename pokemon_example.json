@@ -1,0 +1,14 @@
+{
+    "settings": {
+        "catch_everything": false,
+        "catch_alternates": true,
+        "complete_bag": true,
+        "catch": [
+            "Vivillon"
+        ],
+        "catch_tiers": ["A"]
+    },
+    "discord": {
+        "auth": "code"
+    }
+}
