@@ -16,8 +16,7 @@ def test_mamoswine():
 
     pokemon = Pokemon()
     pokemon.name = "Mamoswine"
-    pokemon.pokemon_id = 10392
-    pokemon.alt_name = "Mamoswine-female"
+    pokemon.pokedex_id = 10392
 
     filtered = COMPUTER.get_pokemon(pokemon)
     assert len(filtered) == 2
@@ -28,8 +27,7 @@ def test_mamoswine_again():
 
     pokemon = Pokemon()
     pokemon.name = "Mamoswine"
-    pokemon.pokemon_id = "10392"
-    pokemon.alt_name = "Mamoswine-female"
+    pokemon.pokedex_id = "10392"
 
     filtered = COMPUTER.get_pokemon(pokemon)
     assert len(filtered) == 0

@@ -922,6 +922,7 @@ Inventory: {cash}$ {coins} Battle Coins
         pokemon_id = data["pokedex_id"]
 
         pokemon = self.get_pokemon_stats(pokemon_id)
+        pokemon.is_fish = POKEMON.pokedex.fish(pokemon)
 
         self.log_file(f"{YELLOWLOG}Pokemon spawned - processing {pokemon}")
 

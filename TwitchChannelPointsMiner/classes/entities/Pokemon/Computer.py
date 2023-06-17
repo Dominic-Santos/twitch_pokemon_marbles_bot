@@ -38,8 +38,8 @@ class Computer(object):
 
     def have(self, pokemon):
         if isinstance(pokemon, Pokemon):
-            if pokemon.pokemon_id != 0:
-                return self._have_by_id(pokemon.pokemon_id)
+            if pokemon.pokedex_id != 0:
+                return self._have_by_id(pokemon.pokedex_id)
             return self._have_by_name(pokemon.name)
         return self._have_by_name(pokemon)
 
@@ -48,7 +48,7 @@ class Computer(object):
 
     def get_pokemon(self, pokemon):
         if isinstance(pokemon, Pokemon):
-            if pokemon.pokemon_id != 0:
-                return self._get_by_id(pokemon.pokemon_id)
+            if pokemon.pokedex_id != 0:
+                return self._get_by_id(pokemon.pokedex_id)
             return self._get_by_name(pokemon.name)
         return self._get_by_name(pokemon)
