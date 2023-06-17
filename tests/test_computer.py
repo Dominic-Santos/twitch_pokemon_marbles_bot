@@ -128,8 +128,6 @@ def test_get_by_pokemon():
         poke_obj = Pokemon()
         poke_obj.name = poke_name
         poke_obj.pokemon_id = poke_id
-        if poke_name != "NA":
-            poke_obj.is_alternate = poke_id != 0
         assert len(COMPUTER.get_pokemon(poke_obj)) == expected
 
 
@@ -150,8 +148,6 @@ def test_have_by_pokemon():
         poke_obj = Pokemon()
         poke_obj.name = poke_name
         poke_obj.pokemon_id = poke_id
-        if poke_name != "NA":
-            poke_obj.is_alternate = poke_id != 0
         assert COMPUTER.have(poke_obj) == expected
 
 
@@ -172,6 +168,4 @@ def test_need_by_pokemon():
         poke_obj = Pokemon()
         poke_obj.name = poke_name
         poke_obj.pokemon_id = poke_id
-        if poke_name != "NA":
-            poke_obj.is_alternate = poke_id != 0
         assert COMPUTER.need(poke_obj) == expected

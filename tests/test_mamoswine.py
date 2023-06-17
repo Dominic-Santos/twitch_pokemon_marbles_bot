@@ -18,7 +18,6 @@ def test_mamoswine():
     pokemon.name = "Mamoswine"
     pokemon.pokemon_id = 10392
     pokemon.alt_name = "Mamoswine-female"
-    pokemon.is_alternate = True
 
     filtered = COMPUTER.get_pokemon(pokemon)
     assert len(filtered) == 2
@@ -31,7 +30,6 @@ def test_mamoswine_again():
     pokemon.name = "Mamoswine"
     pokemon.pokemon_id = "10392"
     pokemon.alt_name = "Mamoswine-female"
-    pokemon.is_alternate = True
 
     filtered = COMPUTER.get_pokemon(pokemon)
     assert len(filtered) == 0

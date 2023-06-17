@@ -9,7 +9,6 @@ class Pokemon(object):
         self.types = []
         self.spawn = None
 
-        self.is_alternate = False
         self.is_fish = False
         self.alt_name = "NA"
 
@@ -24,8 +23,7 @@ class Pokemon(object):
             self.name = self.name.replace(" ", " (") + ")"
 
     def __str__(self):
-        alt_name = "" if self.is_alternate is False else f" ({self.pokemon_id} - {self.alt_name})"
-        return f"{self.name}{alt_name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}"
+        return f"{self.name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}"
 
     def parse(self, data):
         self.name = data["name"]

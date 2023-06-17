@@ -1,4 +1,4 @@
-from TwitchChannelPointsMinerLocal.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
+from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
 
 
 def main():
