@@ -3,7 +3,7 @@ class Pokemon(object):
     def __init__(self, data={}):
         self.name = data.get("name", "NA")
         self.weight = data.get("weight", 0)
-        self.pokemon_id = data.get("pokedex_id", 0)
+        self.pokedex_id = data.get("pokedex_id", 0)
         self.tier = data.get("tier", "NA")
         self.types = [t for t in [data.get("type1", "none").title(), data.get("type2", "none").title()] if t != "None"]
 

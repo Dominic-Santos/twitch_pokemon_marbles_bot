@@ -3,6 +3,7 @@ import json
 from .Pokemon import Pokemon
 
 POKEDEX_FILE = "pokemon_pokedex.json"
+POKEMOVE_FILE = "pokemon_moves.json"
 
 STARTER_POKEMON = ["Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard", "Squirtle", "Wartortle", "Blastoise", "Chikorita", "Bayleef", "Meganium", "Cyndaquil", "Quilava", "Typhlosion", "Totodile", "Croconaw", "Feraligatr", "Treecko", "Grovyle", "Sceptile", "Torchic", "Combusken", "Blaziken", "Mudkip", "Marshtomp", "Swampert", "Turtwig", "Grotle", "Torterra", "Chimchar", "Monferno", "Infernape", "Piplup", "Prinplup", "Empoleon", "Snivy", "Servine", "Serperior", "Tepig", "Pignite", "Emboar", "Oshawott", "Dewott", "Samurott", "Chespin", "Quilladin", "Chesnaught", "Fennekin", "Braixen", "Delphox", "Froakie", "Frogadier", "Greninja", "Rowlet", "Dartrix", "Decidueye", "Litten", "Torracat", "Incineroar", "Popplio", "Brionne", "Primarina", "Grookey", "Thwackey", "Rillaboom", "Scorbunny", "Raboot", "Cinderace", "Sobble", "Drizzile", "Inteleon"]
 LEGENDARY_POKEMON = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Lugia", "Ho-Oh", "Celebi", "Regirock", "Regice", "Registeel", "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Cresselia", "Phione", "Manaphy", "Darkrai", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Reshiram", "Zekrom", "Landorus", "Kyurem", "Keldeo", "Meloetta", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Diancie", "Hoopa", "Volcanion", "Type: Null", "Silvally", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", "Cosmoem", "Solgaleo", "Lunala", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Necrozma", "Magearna", "Marshadow", "Poipole", "Naganadel", "Stakataka", "Blacephalon", "Zeraora", "Meltan", "Melmetal", "Zacian", "Zamazenta", "Eternatus", "Kubfu", "Urshifu", "Zarude", "Regieleki", "Regidrago", "Glastrier", "Spectrier", "Calyrex", "Wyrdeer", "Kleavor", "Ursaluna", "Basculegion", "Sneasler", "Overqwil", "Type: Null"]
@@ -17,10 +18,26 @@ REGION_PREFIX = {
 }
 
 
+class Move(object):
+    def __init__(self, move_id, data):
+        self.move_id = move_id
+        self.name = data.get("name", "")
+        self.damage_class = data.get("damage_class", "")
+        self.stat_chance = data.get("stat_chance", 0)
+        self.effect_chance = data.get("effect_chance", 0)
+        self.priority = data.get("priority", 0)
+        self.description = data.get("description", "")
+        self.power = data.get("power", 0)
+        self.pp = data.get("pp", 0)
+        self.accuracy = data.get("accuracy", 100)
+        self.move_type = data.get("type", "none").title()
+
+
 class Pokedex(object):
     def __init__(self):
         self.pokemon = {}
         self.pokemon_stats = {}
+        self.pokemon_moves = {}
         self._total = 898
         self.load_pokedex()
 
@@ -35,6 +52,18 @@ class Pokedex(object):
     def save_pokedex(self):
         with open(POKEDEX_FILE, "w", encoding="utf-8") as f:
             f.write(json.dumps(self.pokemon_stats, indent=4))
+
+    def load_moves(self):
+        try:
+            with open(POKEMOVE_FILE, "r", encoding="utf-8") as f:
+                self.pokemon_moves = json.load(f)
+        except Exception as e:
+            print(e)
+            self.pokemon_moves = {}
+
+    def save_moves(self):
+        with open(POKEMOVE_FILE, "w", encoding="utf-8") as f:
+            f.write(json.dumps(self.pokemon_moves, indent=4))
 
     def set(self, dex):
         for pokemon in dex["dex"]:
@@ -132,6 +161,14 @@ class Pokedex(object):
         poke = Pokemon(self.pokemon_stats[pokemon_id])
 
         return poke
+
+    def move(self, move_name):
+        if move_name not in self.pokemon_moves:
+            return None
+
+        move = Move(move_name, self.pokemon_moves[move_name])
+
+        return move
 
     @property
     def total(self):
