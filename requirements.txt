@@ -10,4 +10,7 @@ flask
 irc
 pandas
 pytz
-validators
+4validators4
+beautifulsoup4
+pytest
+jwt

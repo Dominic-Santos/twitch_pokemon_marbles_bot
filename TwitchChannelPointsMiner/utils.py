@@ -10,7 +10,7 @@ from random import randrange
 import requests
 from millify import millify
 
-from TwitchChannelPointsMiner.constants import USER_AGENTS, GITHUB_url
+from .constants import USER_AGENTS, GITHUB_url
 
 
 def _millify(input, precision=2):
@@ -32,8 +32,7 @@ def float_round(number, ndigits=2):
 
 def server_time(message_data):
     return (
-        datetime.fromtimestamp(
-            message_data["server_time"], timezone.utc).isoformat()
+        datetime.fromtimestamp(message_data["server_time"], timezone.utc).isoformat()
         + "Z"
         if message_data is not None and "server_time" in message_data
         else datetime.fromtimestamp(time.time(), timezone.utc).isoformat() + "Z"

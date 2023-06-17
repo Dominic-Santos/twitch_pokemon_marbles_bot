@@ -13,11 +13,11 @@ import pickle
 
 import requests
 
-from TwitchChannelPointsMiner.classes.Exceptions import (
+from .Exceptions import (
     BadCredentialsException,
     WrongCookiesException,
 )
-from TwitchChannelPointsMiner.constants import CLIENT_ID, GQLOperations, USER_AGENTS
+from ..constants import CLIENT_ID, GQLOperations, USER_AGENTS
 
 from datetime import datetime, timedelta, timezone
 from time import sleep

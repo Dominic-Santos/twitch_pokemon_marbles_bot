@@ -4,7 +4,7 @@ import logging
 import requests
 from urllib.parse import quote
 
-from TwitchChannelPointsMiner.classes.Settings import Events
+from .Settings import Events
 
 
 class Matrix(object):

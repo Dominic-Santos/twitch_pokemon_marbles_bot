@@ -1,6 +1,6 @@
 import json
 
-from TwitchChannelPointsMiner.utils import server_time
+from ...utils import server_time
 
 
 class Message(object):

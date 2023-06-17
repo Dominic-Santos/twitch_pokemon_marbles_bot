@@ -20,26 +20,26 @@ from secrets import choice, token_hex
 # from base64 import urlsafe_b64decode
 # from datetime import datetime
 
-from TwitchChannelPointsMiner.classes.entities.Campaign import Campaign
-from TwitchChannelPointsMiner.classes.entities.Drop import Drop
-from TwitchChannelPointsMiner.classes.Exceptions import (
+from .entities.Campaign import Campaign
+from .entities.Drop import Drop
+from .Exceptions import (
     StreamerDoesNotExistException,
     StreamerIsOfflineException,
 )
-from TwitchChannelPointsMiner.classes.Settings import (
+from .Settings import (
     Events,
     FollowersOrder,
     Priority,
     Settings,
 )
-from TwitchChannelPointsMiner.classes.TwitchLogin import TwitchLogin
-from TwitchChannelPointsMiner.constants import (
+from .TwitchLogin import TwitchLogin
+from ..constants import (
     CLIENT_ID,
     CLIENT_VERSION,
     URL,
     GQLOperations,
 )
-from TwitchChannelPointsMiner.utils import (
+from ..utils import (
     _millify,
     create_chunks,
     internet_connection_available,
@@ -455,8 +455,7 @@ class Twitch(object):
                         ]
                         streamers_with_multiplier = sorted(
                             streamers_with_multiplier,
-                            key=lambda x: streamers[x].total_points_multiplier(
-                            ),
+                            key=lambda x: streamers[x].total_points_multiplier(),
                             reverse=True,
                         )
                         streamers_watching += streamers_with_multiplier[:2]
@@ -641,6 +640,17 @@ class Twitch(object):
             if community_points["availableClaim"] is not None:
                 self.claim_bonus(
                     streamer, community_points["availableClaim"]["id"])
+
+    def get_pokemoncg_token(self, channel_id):
+        json_data = copy.deepcopy(GQLOperations.ExtensionsForChannel)
+        json_data["variables"] = {"channelID": channel_id}
+        response = self.post_gql_request(json_data)
+        extensions = response["data"]["user"]["channel"]["selfInstalledExtensions"]
+        for extension in extensions:
+            if extension["installation"]["extension"]["name"] == "PokemonCommunityGame":
+                return extension["token"]["jwt"]
+
+        return None
 
     def make_predictions(self, event):
         decision = event.bet.calculate(event.streamer.channel_points)

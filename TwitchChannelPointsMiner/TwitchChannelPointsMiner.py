@@ -11,18 +11,18 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-from TwitchChannelPointsMiner.classes.Chat import ChatPresence, ThreadChat
-from TwitchChannelPointsMiner.classes.entities.PubsubTopic import PubsubTopic
-from TwitchChannelPointsMiner.classes.entities.Streamer import (
+from .classes.Chat import ChatPresence, ThreadChat
+from .classes.entities.PubsubTopic import PubsubTopic
+from .classes.entities.Streamer import (
     Streamer,
     StreamerSettings,
 )
-from TwitchChannelPointsMiner.classes.Exceptions import StreamerDoesNotExistException
-from TwitchChannelPointsMiner.classes.Settings import FollowersOrder, Priority, Settings
-from TwitchChannelPointsMiner.classes.Twitch import Twitch
-from TwitchChannelPointsMiner.classes.WebSocketsPool import WebSocketsPool
-from TwitchChannelPointsMiner.logger import LoggerSettings, configure_loggers
-from TwitchChannelPointsMiner.utils import (
+from .classes.Exceptions import StreamerDoesNotExistException
+from .classes.Settings import FollowersOrder, Priority, Settings
+from .classes.Twitch import Twitch
+from .classes.WebSocketsPool import WebSocketsPool
+from .logger import LoggerSettings, configure_loggers
+from .utils import (
     _millify,
     at_least_one_value_in_settings_is,
     check_versions,
@@ -282,6 +282,9 @@ class TwitchChannelPointsMiner:
                                 self.username,
                                 self.twitch.twitch_login.get_auth_token(),
                                 streamer.username,
+                                streamer.channel_id,
+                                self.twitch.get_pokemoncg_token,
+                                streamer.settings.marbles,
                             )
                         self.streamers.append(streamer)
                     except StreamerDoesNotExistException:

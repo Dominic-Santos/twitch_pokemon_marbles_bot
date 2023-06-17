@@ -40,6 +40,15 @@ GITHUB_url = (
 class GQLOperations:
     url = "https://gql.twitch.tv/gql"
     integrity_url = "https://gql.twitch.tv/integrity"
+    ExtensionsForChannel = {
+        "operationName": "ExtensionsForChannel",
+        "extensions": {
+            "persistedQuery": {
+                "version": 1,
+                "sha256Hash": "d52085e5b03d1fc3534aa49de8f5128b2ee0f4e700f79bf3875dcb1c90947ac3",
+            }
+        }
+    }
     WithIsStreamLiveQuery = {
         "operationName": "WithIsStreamLiveQuery",
         "extensions": {

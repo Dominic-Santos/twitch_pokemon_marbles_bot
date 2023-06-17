@@ -2,7 +2,7 @@ from textwrap import dedent
 
 import requests
 
-from TwitchChannelPointsMiner.classes.Settings import Events
+from .Settings import Events
 
 
 class Discord(object):
