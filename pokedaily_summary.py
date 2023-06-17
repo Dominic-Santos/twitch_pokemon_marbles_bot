@@ -1,5 +1,5 @@
-from TwitchChannelPointsMinerLocal.classes.entities.Pokemon import Pokedaily
-from TwitchChannelPointsMinerLocal.classes.Chat import DISCORD_POKEDAILY_SEARCH, POKEMON
+from TwitchChannelPointsMiner.classes.entities.Pokemon import Pokedaily
+from TwitchChannelPointsMiner.classes.Chat import DISCORD_POKEDAILY_SEARCH, POKEMON
 
 
 def main():

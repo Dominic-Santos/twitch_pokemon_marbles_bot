@@ -980,7 +980,6 @@ Inventory: {cash}$ {coins} Battle Coins
                         caught = poke
                         break
 
-                discord_pokemon_name = pokemon.name if pokemon.is_alternate is False else pokemon.alt_name
                 rewards = None
                 self.log(f"{GREENLOG}Trying to catch in {twitch_channel}")
                 if caught is not None:
@@ -988,7 +987,7 @@ Inventory: {cash}$ {coins} Battle Coins
                     lvl = poke['lvl']
                     shiny = " Shiny" if poke["isShiny"] else ""
                     self.log_file(f"{GREENLOG}Caught{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV")
-                    msg = f"I caught a{shiny} {discord_pokemon_name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV!"
+                    msg = f"I caught a{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV!"
                     if pokemon.is_fish and FISH_EVENT:
                         caught_pokemon = self.pokemon_api.get_pokemon(poke["id"])
                         if "🐟" in caught_pokemon["description"]:
@@ -999,7 +998,7 @@ Inventory: {cash}$ {coins} Battle Coins
                     rewards = POKEMON.increment_loyalty(twitch_channel)
                 else:
                     self.log_file(f"{REDLOG}Failed to catch {pokemon.name} ({pokemon.tier})")
-                    msg = f"I missed {discord_pokemon_name}!"
+                    msg = f"I missed {pokemon.name}!"
                     pokemon_sprite = None
 
                 msg = msg + f" {ball}, because {reasons_string}"

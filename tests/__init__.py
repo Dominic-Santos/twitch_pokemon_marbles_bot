@@ -1,1 +1,1 @@
-from ..TwitchChannelPointsMinerLocal.classes.entities.Pokemon import *
+from ..TwitchChannelPointsMiner.classes.entities.Pokemon import *
