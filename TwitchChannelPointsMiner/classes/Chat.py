@@ -13,7 +13,7 @@ from .ChatO import ChatPresence as ChatPresenceO
 from .ChatO import ThreadChat as ThreadChatO
 from .ChatO import logger
 
-from .entities.Pokemon import PokemonComunityGame, CGApi, Pokedaily, get_sprite, Battle, weakness_resistance
+from .entities.Pokemon import PokemonComunityGame, CGApi, Pokedaily, get_sprite, Battle, damage_calculator
 
 """
     TODO:
@@ -317,7 +317,6 @@ class ClientIRCPokemon(ClientIRCBase):
                 bag_stats_thread(self.stats_computer)
             if THREADCONTROLLER.battle is False and POKEMON.auto_battle:
                 battle_thread(self.auto_battle)
-                create_thread(self.get_all_moves)
 
     def find_best_move(self, attacker, attacker_moves, defender):
         best_move = list(attacker_moves.keys())[0]
@@ -327,17 +326,12 @@ class ClientIRCPokemon(ClientIRCBase):
             move = attacker_moves[move_id]
 
             if move["pp"] > 0:
-                move_type = move["type"].title()
 
-                if move["name"] in ["Metronome", "Mirror Move"]:
-                    effective = 1
-                else:
-                    effective = weakness_resistance(move_type, defender.types)
-                    if move_type in attacker.types:
-                        # STAB
-                        effective = effective * 1.5
-                if effective > best_damage:
-                    best_damage = effective
+                move_data = self.get_pokemon_move(move["id"], move["type"].title())
+                min_damage, max_damage = damage_calculator(attacker, move_data, defender, "normal", False)
+
+                if min_damage > best_damage:
+                    best_damage = min_damage
                     best_move = move_id
 
         return best_damage, best_move
@@ -365,36 +359,6 @@ class ClientIRCPokemon(ClientIRCBase):
 
                 best_damage, best_move = self.find_best_move(pokemon_stats, pokemon["moves"], enemy_stats)
 
-                if best_damage >= 2:
-                    # super effective or better
-                    self.pokemon_api.battle_submit_move(battle.battle_id, best_move)
-                    continue
-
-                best_enemy_damage, best_enemy_move = self.find_best_move(enemy_stats, enemy["moves"], pokemon_stats)
-
-                if best_enemy_damage >= 2:
-                    # enemy has super effective or better see if can safely switch
-                    best_wall_id = ""
-                    best_wall = 99
-                    for other_pokemon_id in battle.team["pokemon"]:
-                        if other_pokemon_id == str(battle.team["current_pokemon"]):
-                            continue
-
-                        other_pokemon = battle.team["pokemon"][other_pokemon_id]
-
-                        if other_pokemon["hp"] > 0:
-                            other_pokemon_stats = self.get_pokemon_stats(other_pokemon["pokedex_id"], cached=True)
-                            best_switch_damage, best_switch_move = self.find_best_move(enemy_stats, enemy["moves"], other_pokemon_stats)
-                            if best_switch_damage < best_wall:
-                                best_wall = best_switch_damage
-                                best_wall_id = other_pokemon_id
-
-                    if best_wall < 2:
-                        # have a pokemon that should be good to switch in
-                        self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_wall_id)
-                        continue
-
-                # pokemon seem evenly matched, just use a move
                 self.pokemon_api.battle_submit_move(battle.battle_id, best_move)
 
             elif battle.state == "switch":
@@ -403,7 +367,7 @@ class ClientIRCPokemon(ClientIRCBase):
                 enemy_stats = self.get_pokemon_stats(enemy["pokedex_id"], cached=True)
 
                 best_wall_id = ""
-                best_wall = 99
+                best_wall = 1000000000000
                 for other_pokemon_id in battle.team["pokemon"]:
                     if other_pokemon_id != str(battle.team["current_pokemon"]):
                         other_pokemon = battle.team["pokemon"][other_pokemon_id]
@@ -901,20 +865,6 @@ Inventory: {cash}$ {coins} Battle Coins
             POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:
                 reward_sprite.close()
-
-    def get_all_moves(self):
-        all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
-
-        allpokemon = POKEMON.computer.pokemon
-        for poke in allpokemon:
-            pokemon = self.pokemon_api.get_pokemon(poke["id"])
-            print("pokemon", pokemon)
-            if "moves" in pokemon:
-                for move in pokemon["moves"]:
-                    self.get_pokemon_move(move["id"], move["type"])
-
-            sleep(0.1)
 
     def get_pokemon_move(self, move_name, move_type="None"):
 
