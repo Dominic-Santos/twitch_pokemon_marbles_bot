@@ -4246,5 +4246,101 @@
         "pp": 5,
         "accuracy": 90,
         "type": "fairy"
+    },
+    "cosmic-power": {
+        "name": "Cosmic Power",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user absorbs a mystical power from space to\nraise its Defense and Sp. Def stats.",
+        "power": 0,
+        "pp": 20,
+        "accuracy": 0,
+        "type": "psychic"
+    },
+    "head-charge": {
+        "name": "Head Charge",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user charges its head into its target, using its\npowerful guard hair. This also damages the user\na little.",
+        "power": 120,
+        "pp": 15,
+        "accuracy": 100,
+        "type": "normal"
+    },
+    "wood-hammer": {
+        "name": "Wood Hammer",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user slams its rugged body into the target to\nattack. This also damages the user quite a lot.",
+        "power": 120,
+        "pp": 15,
+        "accuracy": 100,
+        "type": "grass"
+    },
+    "fake-tears": {
+        "name": "Fake Tears",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user feigns crying to fluster the target, harshly\r\nlowering its Sp. Def stat.",
+        "power": 0,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "dark"
+    },
+    "metal-sound": {
+        "name": "Metal Sound",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "A horrible sound like scraping metal harshly lowers\r\nthe target\u2019s Sp. Def stat.",
+        "power": 0,
+        "pp": 40,
+        "accuracy": 85,
+        "type": "steel"
+    },
+    "glare": {
+        "name": "Glare",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user intimidates the target with the pattern on\nits belly to cause paralysis.",
+        "power": 0,
+        "pp": 30,
+        "accuracy": 100,
+        "type": "normal"
+    },
+    "false-surrender": {
+        "name": "False Surrender",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "False Surrender inflicts damage and bypasses accuracy checks to always hit, unless the target is in the semi-invulnerable turn of a move such as Dig or Fly.",
+        "power": 80,
+        "pp": 10,
+        "accuracy": 0,
+        "type": "dark"
+    },
+    "feather-dance": {
+        "name": "Feather Dance",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user covers the target\u2019s body with a mass of\r\ndown that harshly lowers its Attack stat.",
+        "power": 0,
+        "pp": 15,
+        "accuracy": 100,
+        "type": "flying"
     }
 }
