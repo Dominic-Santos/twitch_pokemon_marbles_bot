@@ -4342,5 +4342,101 @@
         "pp": 15,
         "accuracy": 100,
         "type": "flying"
+    },
+    "dragon-hammer": {
+        "name": "Dragon Hammer",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user uses its body like a hammer to attack the\r\ntarget and inflict damage.",
+        "power": 90,
+        "pp": 15,
+        "accuracy": 100,
+        "type": "dragon"
+    },
+    "power-trip": {
+        "name": "Power Trip",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user boasts its strength and attacks the target.\r\nThe more the user\u2019s stats are raised, the greater the\r\nmove\u2019s power.",
+        "power": 20,
+        "pp": 10,
+        "accuracy": 100,
+        "type": "dark"
+    },
+    "stun-spore": {
+        "name": "Stun Spore",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user scatters a cloud of numbing powder that\r\nparalyzes the target.",
+        "power": 0,
+        "pp": 30,
+        "accuracy": 75,
+        "type": "grass"
+    },
+    "confuse-ray": {
+        "name": "Confuse Ray",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The target is exposed to a sinister ray that\r\ntriggers confusion.",
+        "power": 0,
+        "pp": 10,
+        "accuracy": 100,
+        "type": "ghost"
+    },
+    "storm-throw": {
+        "name": "Storm Throw",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user strikes the target with a fierce blow. This\r\nattack always results in a critical hit.",
+        "power": 60,
+        "pp": 10,
+        "accuracy": 100,
+        "type": "fighting"
+    },
+    "acrobatics": {
+        "name": "Acrobatics",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user nimbly strikes the target.",
+        "power": 55,
+        "pp": 15,
+        "accuracy": 100,
+        "type": "flying"
+    },
+    "sparkling-aria": {
+        "name": "Sparkling Aria",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user bursts into song, emitting many bubbles.\nAny Pok\u00e9mon suffering from a burn will be healed\nby the touch of these bubbles.",
+        "power": 90,
+        "pp": 10,
+        "accuracy": 100,
+        "type": "water"
+    },
+    "nuzzle": {
+        "name": "Nuzzle",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 100,
+        "priority": 0,
+        "description": "The user attacks by nuzzling its electrified cheeks\r\nagainst the target. This also leaves the target\r\nwith paralysis.",
+        "power": 20,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "electric"
     }
 }
