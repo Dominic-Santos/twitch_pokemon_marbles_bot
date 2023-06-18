@@ -7,6 +7,7 @@ from threading import Thread
 import traceback
 import requests
 import os
+import copy
 
 from .ChatO import ClientIRC as ClientIRCO
 from .ChatO import ChatPresence as ChatPresenceO
@@ -14,6 +15,7 @@ from .ChatO import ThreadChat as ThreadChatO
 from .ChatO import logger
 
 from .entities.Pokemon import PokemonComunityGame, CGApi, Pokedaily, get_sprite, Battle, damage_calculator
+from .entities.Pokemon.Pokedex import Move
 
 """
     TODO:
@@ -319,22 +321,94 @@ class ClientIRCPokemon(ClientIRCBase):
                 battle_thread(self.auto_battle)
 
     def find_best_move(self, attacker, attacker_moves, defender):
-        best_move = list(attacker_moves.keys())[0]
+        best_move = None
+        # best_move = list(attacker_moves.keys())[0]
         best_damage = -1
+        best_move_data = Move("struggle", {
+            "name": "Struggle",
+            "damage_class": "physical",
+            "power": 30,
+            "pp": 100,
+            "type": "Normal"
+        })
 
         for move_id in attacker_moves:
             move = attacker_moves[move_id]
 
             if move["pp"] > 0:
 
-                move_data = self.get_pokemon_move(move["id"], move["type"].title())
+                move_data = self.get_pokemon_move(move["id"], move["type"])
+
+                # attacker, move data, defender, weather, attacker burned
                 min_damage, max_damage = damage_calculator(attacker, move_data, defender, "normal", False)
 
                 if min_damage > best_damage:
                     best_damage = min_damage
                     best_move = move_id
+                    best_move_data = move_data
 
-        return best_damage, best_move
+        return {
+            "damage": best_damage,
+            "move_id": best_move,
+            "move_data": best_move_data
+        }
+
+    def matchup_winner(self, my, enemy, switched=False):
+        my_pokemon = copy.deepcopy(my)
+        enemy_pokemon = copy.deepcopy(enemy)
+        my_stats = self.get_pokemon_stats(my_pokemon["pokedex_id"])
+        enemy_stats = self.get_pokemon_stats(enemy_pokemon["pokedex_id"])
+        skip = switched
+        move = None
+
+        # run until one is dead
+        while my_pokemon["hp"] > 0 and enemy_pokemon["hp"] > 0:
+            my_move = self.find_best_move(my_stats, my_pokemon["moves"], enemy_stats)
+            enemy_move = self.find_best_move(enemy_stats, enemy_pokemon["moves"], my_stats)
+
+            if move is None:
+                move = my_move
+
+            if my_move["move_id"] is None:
+                # attacker, move data, defender, weather, attacker burned
+                my_move["damage"] = damage_calculator(my_stats, my_move["move_data"], enemy_stats, "normal", False)[0]
+            elif skip is False:
+                my_pokemon["moves"][my_move["move_id"]]["pp"] = my_pokemon["moves"][my_move["move_id"]]["pp"] - 1
+
+            if enemy_move["move_id"] is None:
+                # attacker, move data, defender, weather, attacker burned
+                enemy_move["damage"] = damage_calculator(enemy_stats, my_move["move_data"], my_stats, "normal", False)[0]
+            else:
+                enemy_pokemon["moves"][enemy_move["move_id"]]["pp"] = enemy_pokemon["moves"][enemy_move["move_id"]]["pp"] - 1
+
+            if my_move["move_data"].priority > enemy_move["move_data"].priority or (
+                my_move["move_data"].priority == enemy_move["move_data"].priority and my_stats.speed > enemy_stats.speed
+            ):
+                # I attack first
+                if skip:
+                    skip = False
+                else:
+                    enemy_pokemon["hp"] = enemy_pokemon["hp"] - my_move["damage"]
+                    if enemy_pokemon["hp"] <= 0:
+                        continue
+
+                my_pokemon["hp"] = my_pokemon["hp"] - enemy_move["damage"]
+            else:
+                # enemy attacks first
+                my_pokemon["hp"] = my_pokemon["hp"] - enemy_move["damage"]
+                if my_pokemon["hp"] <= 0:
+                    continue
+
+                if skip:
+                    skip = False
+                else:
+                    enemy_pokemon["hp"] = enemy_pokemon["hp"] - my_move["damage"]
+        return {
+            "win": my_pokemon["hp"] > 0,
+            "dealt": enemy["hp"] - enemy_pokemon["hp"],
+            "taken": my["hp"] - my_pokemon["hp"],
+            "move": move["move_id"]
+        }
 
     def do_battle(self):
         battle_data = self.pokemon_api.battle_join()
@@ -343,46 +417,80 @@ class ClientIRCPokemon(ClientIRCBase):
         while battle.state != "end":
             if battle.state == "move":
                 # submit a move or switch
-                """
-                    Strategy:
-                        - if i have a super effective move, use it
-                        - elif enemy has a super effective move
-                            - if have another pokemon that is not weak to all enemy moves
-                                - switch
-                        - else use best move
-                """
                 battle.state = "continue"
                 pokemon = battle.team["pokemon"][str(battle.team["current_pokemon"])]
-                pokemon_stats = self.get_pokemon_stats(pokemon["pokedex_id"], cached=True)
                 enemy = battle.enemy_team["pokemon"][str(battle.enemy_team["current_pokemon"])]
-                enemy_stats = self.get_pokemon_stats(enemy["pokedex_id"], cached=True)
 
-                best_damage, best_move = self.find_best_move(pokemon_stats, pokemon["moves"], enemy_stats)
+                result = self.matchup_winner(pokemon, enemy)
 
-                self.pokemon_api.battle_submit_move(battle.battle_id, best_move)
+                if result["win"]:
+                    if result["move"] is None:
+                        result["move"] = list(pokemon["moves"].keys())[0]
+                        self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
+                        continue
+                else:
+                    best_result = None
+                    best_switch_id = None
+                    for other_pokemon_id in battle.team["pokemon"]:
+                        if other_pokemon_id != str(battle.team["current_pokemon"]):
+                            other_pokemon = battle.team["pokemon"][other_pokemon_id]
+                            if other_pokemon["hp"] > 0:
+                                swap = False
+                                switch_result = self.matchup_winner(other_pokemon, enemy, True)
+
+                                if best_result is None:
+                                    swap = True
+                                elif switch_result["win"]:
+                                    if switch_result["win"] != best_result["win"]:
+                                        swap = True
+                                    elif switch_result["win"]:
+                                        if switch_result["taken"] < best_result["taken"]:
+                                            swap = True
+                                    else:
+                                        if switch_result["dealt"] > best_result["dealt"]:
+                                            swap = True
+
+                                if swap:
+                                    best_switch_id = other_pokemon_id
+                                    best_result = switch_result
+
+                    if best_result is not None:
+                        if best_result["win"]:
+                            self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
+
+                self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
 
             elif battle.state == "switch":
                 # pick a pokemon to switch to
-                enemy = battle.enemy_team["pokemon"][str(battle.enemy_team["current_pokemon"])]
-                enemy_stats = self.get_pokemon_stats(enemy["pokedex_id"], cached=True)
+                battle.state = "continue"
 
-                best_wall_id = ""
-                best_wall = 1000000000000
+                enemy = battle.enemy_team["pokemon"][str(battle.enemy_team["current_pokemon"])]
+                best_result = None
+                best_switch_id = None
                 for other_pokemon_id in battle.team["pokemon"]:
                     if other_pokemon_id != str(battle.team["current_pokemon"]):
                         other_pokemon = battle.team["pokemon"][other_pokemon_id]
-
                         if other_pokemon["hp"] > 0:
+                            swap = False
+                            switch_result = self.matchup_winner(other_pokemon, enemy, True)
 
-                            other_pokemon_stats = self.get_pokemon_stats(other_pokemon["pokedex_id"], cached=True)
-                            best_switch_damage, best_switch_move = self.find_best_move(enemy_stats, enemy["moves"], other_pokemon_stats)
+                            if best_result is None:
+                                swap = True
+                            elif switch_result["win"]:
+                                if switch_result["win"] != best_result["win"]:
+                                    swap = True
+                                elif switch_result["win"]:
+                                    if switch_result["taken"] < best_result["taken"]:
+                                        swap = True
+                                else:
+                                    if switch_result["dealt"] > best_result["dealt"]:
+                                        swap = True
 
-                            if best_switch_damage < best_wall:
-                                best_wall = best_switch_damage
-                                best_wall_id = other_pokemon_id
+                            if swap:
+                                best_switch_id = other_pokemon_id
+                                best_result = switch_result
 
-                battle.state = "continue"
-                self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_wall_id)
+                self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
 
             resp = self.pokemon_api.battle_action(battle.action, battle.battle_id, battle.player_id)
             battle.run_action(resp)
@@ -575,7 +683,7 @@ class ClientIRCPokemon(ClientIRCBase):
                         for pokemon in tradable:
                             if looking_for in pokemon["nickname"]:
                                 if missions_active:
-                                    pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"], cached=True)
+                                    pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
                                     pokemon_object.is_fish = POKEMON.pokedex.fish(pokemon["name"])
 
                                     reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
@@ -594,14 +702,14 @@ class ClientIRCPokemon(ClientIRCBase):
 
                     # pokemon_traded = random.choice(pokemon_to_trade)
                     pokemon_traded = sorted_pokemon_to_trade[0]
-                    pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"], cached=True)
+                    pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
                     reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
                     pokemon_received = self.pokemon_api.wondertrade(pokemon_traded["id"])
 
                     if "pokemon" in pokemon_received:
                         pokemon_received = pokemon_received["pokemon"]
-                        pokemon_traded_tier = self.get_pokemon_stats(pokemon_traded["pokedexId"], cached=True).tier
-                        pokemon_received_tier = self.get_pokemon_stats(pokemon_received["pokedexId"], cached=True).tier
+                        pokemon_traded_tier = self.get_pokemon_stats(pokemon_traded["pokedexId"]).tier
+                        pokemon_received_tier = self.get_pokemon_stats(pokemon_received["pokedexId"]).tier
 
                         if POKEMON.pokedex.have(pokemon_received["name"]):
                             pokemon_received_need = ""
@@ -645,7 +753,7 @@ class ClientIRCPokemon(ClientIRCBase):
         spawnables_c = []
 
         for i in range(1, POKEMON.pokedex.total + 1):
-            pokemon = self.get_pokemon_stats(i, cached=True)
+            pokemon = self.get_pokemon_stats(i)
 
             if POKEMON.pokedex.starter(pokemon.name) or POKEMON.pokedex.legendary(pokemon.name):
                 continue
@@ -796,7 +904,7 @@ Inventory: {cash}$ {coins} Battle Coins
                         nick = ""
                 else:
 
-                    tier = self.get_pokemon_stats(pokemon["pokedexId"], cached=True).tier
+                    tier = self.get_pokemon_stats(pokemon["pokedexId"]).tier
                     nick = "trade" + tier
 
                     if POKEMON.pokedex.starter(pokemon["name"]):
@@ -880,7 +988,7 @@ Inventory: {cash}$ {coins} Battle Coins
 
         return move
 
-    def get_pokemon_stats(self, pokedex_id, cached=False):
+    def get_pokemon_stats(self, pokedex_id, cached=True):
 
         pokemon = POKEMON.pokedex.stats(str(pokedex_id))
 
@@ -897,7 +1005,7 @@ Inventory: {cash}$ {coins} Battle Coins
         data = requests.get("https://poketwitch.bframework.de/info/events/last_spawn/").json()
         pokemon_id = data["pokedex_id"]
 
-        pokemon = self.get_pokemon_stats(pokemon_id)
+        pokemon = self.get_pokemon_stats(pokemon_id, cached=False)
         pokemon.is_fish = POKEMON.pokedex.fish(pokemon)
 
         self.log_file(f"{YELLOWLOG}Pokemon spawned - processing {pokemon}")

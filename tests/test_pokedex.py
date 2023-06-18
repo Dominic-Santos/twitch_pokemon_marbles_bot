@@ -5,7 +5,7 @@ from . import Pokedex
 JSON_FILE = "tests/pokedex.json"
 
 REGION_VARIANTS = ["Sin Gliscor", "His Braviary", "His Zoroark", "His Voltorb", "Hisuian Braviary", "Gal Rapidash", "Gal Darmanitan", "Gal Weezing", "Galarian Weezing"]
-FISH_POKEMON = ["Magikarp", "Kyogre", "His Gyarados"]
+FISH_POKEMON = ["Magikarp", "Kyogre", "His Gyarados", "Gyarados"]
 
 FAIL_TO_FIND = None
 pokedex = Pokedex()

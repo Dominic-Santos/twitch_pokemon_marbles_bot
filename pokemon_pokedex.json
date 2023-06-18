@@ -18142,5 +18142,23 @@
             "special_attack": 85,
             "special_defense": 40
         }
+    },
+    "10008": {
+        "pokedex_id": 10008,
+        "name": "Rotom (Heat)",
+        "description": "With a body made of plasma, it can inhabit all sorts of machines. It loves to surprise others.",
+        "weight": 0.3,
+        "generation": 4,
+        "type1": "electric",
+        "type2": "fire",
+        "tier": "A",
+        "base_stats": {
+            "hp": 50,
+            "speed": 86,
+            "attack": 65,
+            "defense": 107,
+            "special_attack": 105,
+            "special_defense": 107
+        }
     }
 }
