@@ -100,6 +100,22 @@ class Inventory(object):
                 if self.have_ball("repeatball"):
                     yield "repeatball"
 
+            if pokemon.speed >= 100:
+                if self.have_ball("fastball"):
+                    yield "fastball"
+
+            if pokemon.hp >= 100:
+                if self.have_ball("healball"):
+                    yield "healball"
+
+            if pokemon.weight >= 250:
+                if self.have_ball("heavyball"):
+                    yield "heavyball"
+
+            if pokemon.weight <= 5:
+                if self.have_ball("feather"):
+                    yield "feather"
+
         if self.have_ball("ultraball"):
             yield "ultraball"
 

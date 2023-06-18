@@ -4438,5 +4438,29 @@
         "pp": 20,
         "accuracy": 100,
         "type": "electric"
+    },
+    "icicle-crash": {
+        "name": "Icicle Crash",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 30,
+        "priority": 0,
+        "description": "The user attacks by harshly dropping large icicles\r\nonto the target. This may also make the target flinch.",
+        "power": 85,
+        "pp": 10,
+        "accuracy": 90,
+        "type": "ice"
+    },
+    "charm": {
+        "name": "Charm",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user gazes at the target rather charmingly,\r\nmaking it less wary. This harshly lowers its\r\nAttack stat.",
+        "power": 0,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "fairy"
     }
 }
