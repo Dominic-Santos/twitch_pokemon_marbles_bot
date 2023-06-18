@@ -40,6 +40,7 @@ class Pokedex(object):
         self.pokemon_moves = {}
         self._total = 898
         self.load_pokedex()
+        self.load_moves()
 
     def load_pokedex(self):
         try:

@@ -57,8 +57,8 @@ def get_sprite(sprite_type, sprite_name, shiny=False):
         elif sprite_type == "streamer":
             return get_streamer_avatar(sprite_name)
         return get_item_sprite(sprite_type, sprite_name)
-    except:
-        pass
+    except Exception as e:
+        print(e)
     return None
 
 
