@@ -426,9 +426,10 @@ class ClientIRCPokemon(ClientIRCBase):
                 if result["win"]:
                     if result["move"] is None:
                         result["move"] = list(pokemon["moves"].keys())[0]
-                        self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
-                        continue
-                else:
+                    self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
+                    continue
+
+                elif pokemon["hp"] > pokemon["max_hp"] / 2:
                     best_result = None
                     best_switch_id = None
                     for other_pokemon_id in battle.team["pokemon"]:
@@ -457,6 +458,7 @@ class ClientIRCPokemon(ClientIRCBase):
                     if best_result is not None:
                         if best_result["win"]:
                             self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
+                            continue
 
                 self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
 
