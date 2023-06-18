@@ -14,3 +14,4 @@ pytz
 beautifulsoup4
 pytest
 jwt
+PyJWT==2.6.0
