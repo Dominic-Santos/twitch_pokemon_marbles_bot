@@ -22,6 +22,11 @@ from .entities.Pokemon.Pokedex import Move
         heal pokemon when bellow a threshold between battles
         stadium battles difficulties in settings
         better ai, looking at moves, getting from api
+        heavy ball over 250kg (80%)
+        feather ball under 5kg (80%)
+        fast ball speed over 100 (80%)
+        heal ball hp over 100 (80%)
+        nest ball pokemon can evolve 2 times(90%)
 """
 
 if os.path.exists("logs") is False:
