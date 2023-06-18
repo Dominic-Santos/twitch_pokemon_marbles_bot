@@ -1,6 +1,8 @@
 import jwt
 import json
 from .Utils import check_output_folder, save_to_file
+from .Pokemon import Pokemon
+from .Pokedex import Move
 
 WEAKNESS_CHART = {
     "Normal": {"Fighting": 2, "Ghost": 0},
@@ -39,6 +41,33 @@ def weakness_resistance(attack_type, defender_types):
         effective = effective * WEAKNESS_CHART[def_type].get(attack_type, 1)
 
     return effective
+
+
+def damage_calculator(attacker: Pokemon, attack_move: Move, defender: Pokemon, weather: str, burn: bool):
+    effective = weakness_resistance(attack_move.move_type, defender.types)
+
+    if attack_move.damage_class == "status" or 0 in [attack_move.power, effective]:
+        return 0, 0
+    elif attack_move.damage_class == "physical":
+        attack = attacker.attack
+        defense = defender.defense
+        burn_mult = 0.5 if burn else 1
+    else:
+        attack = attacker.special_attack
+        defense = defender.special_defense
+        burn_mult = 1
+
+    stab = 1.5 if attack_move.move_type in attacker.types else 1
+
+    if weather == "sun" and attack_move.move_type in ["Fire", "Water"]:
+        weather_mult = 1.5 if attack_move.move_type == "Fire" else 0.5
+    elif weather == "rain" and attack_move.move_type in ["Fire", "Water"]:
+        weather_mult = 1.5 if attack_move.move_type == "Water" else 0.5
+    else:
+        weather_mult = 1
+
+    damage = ((22.0 * attack_move.power * (attack / defense)) / 50.0 + 2) * burn_mult * stab * weather_mult * effective
+    return damage * 0.85, damage
 
 
 class Battle():

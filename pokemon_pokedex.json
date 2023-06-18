@@ -18124,5 +18124,23 @@
             "special_attack": 110,
             "special_defense": 150
         }
+    },
+    "86316": {
+        "pokedex_id": 86316,
+        "name": "His Zorua",
+        "description": "Zorua sometimes transforms into a person and goes into cities to search for food. When Zorua does this, it usually takes on the form of a child.",
+        "weight": 12.5,
+        "generation": 5,
+        "type1": "normal",
+        "type2": "ghost",
+        "tier": "B",
+        "base_stats": {
+            "hp": 35,
+            "speed": 70,
+            "attack": 60,
+            "defense": 40,
+            "special_attack": 85,
+            "special_defense": 40
+        }
     }
 }
