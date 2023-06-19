@@ -662,7 +662,7 @@ class ClientIRCPokemon(ClientIRCBase):
 
                     POKEMON.wondertrade_timer = datetime.utcnow() - timedelta(minutes=minutes, hours=hours)
 
-            if POKEMON.check_wondertrade() or True:
+            if POKEMON.check_wondertrade():
                 dex = self.pokemon_api.get_pokedex()
                 POKEMON.sync_pokedex(dex)
 
@@ -1080,7 +1080,7 @@ Inventory: {cash}$ {coins} Battle Coins
                     rewards = POKEMON.increment_loyalty(twitch_channel)
                 else:
                     self.log_file(f"{REDLOG}Failed to catch {pokemon.name} ({pokemon.tier})")
-                    msg = f"I missed {pokemon.name}!"
+                    msg = f"I missed {pokemon.name} ({pokemon.tier})!"
                     pokemon_sprite = None
 
                 msg = msg + f" {ball}, because {reasons_string}"
