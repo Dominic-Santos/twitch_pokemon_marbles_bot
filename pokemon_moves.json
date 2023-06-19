@@ -4462,5 +4462,17 @@
         "pp": 20,
         "accuracy": 100,
         "type": "fairy"
+    },
+    "swords-dance": {
+        "name": "Swords Dance",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "A frenetic dance to uplift the fighting spirit.\r\nThis sharply raises the user\u2019s Attack stat.",
+        "power": 0,
+        "pp": 20,
+        "accuracy": 0,
+        "type": "normal"
     }
 }

@@ -21,7 +21,6 @@ from .entities.Pokemon.Pokedex import Move
     TODO:
         heal pokemon when bellow a threshold between battles
         stadium battles difficulties in settings
-        nest ball pokemon can evolve 2 times(90%)
 """
 
 if os.path.exists("logs") is False:
@@ -547,7 +546,7 @@ class ClientIRCPokemon(ClientIRCBase):
             self.log(f"{YELLOWLOG}Starting {battle_mode} battle")
             result = self.do_battle()
             if result and battle_mode == "challenge":
-                POKEMON.discord.post(DISCORD_ALERTS, f"Won challenge battle {team_data['challenge']['name']}")
+                POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} ⚔️")
         else:
             self.log(f"{REDLOG}Didn't meet requirements for {battle_mode} battle")
             sleep(15)
@@ -1009,6 +1008,7 @@ Inventory: {cash}$ {coins} Battle Coins
 
         pokemon = self.get_pokemon_stats(pokemon_id, cached=False)
         pokemon.is_fish = POKEMON.pokedex.fish(pokemon)
+        pokemon.is_baby = POKEMON.pokedex.baby(pokemon)
 
         self.log_file(f"{YELLOWLOG}Pokemon spawned - processing {pokemon}")
 

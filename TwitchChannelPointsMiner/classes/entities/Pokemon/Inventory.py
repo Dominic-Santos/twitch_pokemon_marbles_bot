@@ -96,6 +96,10 @@ class Inventory(object):
                 for ball in self.other_balls["Fish"]:
                     yield ball
 
+            if pokemon.is_baby:
+                if self.have_ball("nestball"):
+                    yield "nestball"
+
             if repeat:
                 if self.have_ball("repeatball"):
                     yield "repeatball"

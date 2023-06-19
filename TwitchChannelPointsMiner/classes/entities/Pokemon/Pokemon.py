@@ -20,6 +20,7 @@ class Pokemon(object):
         self.generation = data.get("generation", 0)
 
         self.is_fish = False
+        self.is_baby = False
 
     @property
     def bst(self):
