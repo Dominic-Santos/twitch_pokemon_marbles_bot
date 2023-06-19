@@ -662,48 +662,43 @@ class ClientIRCPokemon(ClientIRCBase):
 
                     POKEMON.wondertrade_timer = datetime.utcnow() - timedelta(minutes=minutes, hours=hours)
 
-            if POKEMON.check_wondertrade():
+            if POKEMON.check_wondertrade() or True:
                 dex = self.pokemon_api.get_pokedex()
                 POKEMON.sync_pokedex(dex)
 
                 tradable = [pokemon for pokemon in allpokemon if pokemon["nickname"] is not None and "trade" in pokemon["nickname"]]
-                checks = [POKEMON.missions.have_wondertrade_missions()]
+                missions_active = POKEMON.missions.have_wondertrade_missions()
                 pokemon_to_trade = []
                 reasons = []
                 best_nr_reasons = 0
 
-                if checks[0] == True:
-                    checks.append(False)
+                for tier in ["A", "B", "C"]:
+                    if len(pokemon_to_trade) > 0:
+                        break
 
-                for missions_active in checks:
-                    for tier in ["A", "B", "C"]:
-                        if len(pokemon_to_trade) > 0:
-                            break
+                    looking_for = f"trade{tier}"
+                    for pokemon in tradable:
+                        if looking_for in pokemon["nickname"]:
+                            if missions_active:
+                                pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
+                                pokemon_object.is_fish = POKEMON.pokedex.fish(pokemon["name"])
 
-                        looking_for = f"trade{tier}"
-                        for pokemon in tradable:
-                            if looking_for in pokemon["nickname"]:
-                                if missions_active:
-                                    pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
-                                    pokemon_object.is_fish = POKEMON.pokedex.fish(pokemon["name"])
+                                reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
+                                if len(reasons) < best_nr_reasons:
+                                    continue
+                                elif len(reasons) > best_nr_reasons:
+                                    pokemon_to_trade = []
+                                    best_nr_reasons = len(reasons)
 
-                                    reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
-                                    if len(reasons) == 0:
-                                        continue
-                                    elif len(reasons) > best_nr_reasons:
-                                        pokemon_to_trade = []
-                                        best_nr_reasons = len(reasons)
-
-                                pokemon_to_trade.append(pokemon)
+                            pokemon_to_trade.append(pokemon)
 
                 if len(pokemon_to_trade) == 0:
                     self.log(f"{REDLOG}Could not find a pokemon to wondertrade")
                 else:
                     sorted_pokemon_to_trade = sorted(pokemon_to_trade, key=lambda x: x["sellPrice"])
 
-                    # pokemon_traded = random.choice(pokemon_to_trade)
                     pokemon_traded = sorted_pokemon_to_trade[0]
-                    pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
+                    pokemon_object = self.get_pokemon_stats(pokemon_traded["pokedexId"])
                     reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
                     pokemon_received = self.pokemon_api.wondertrade(pokemon_traded["id"])
 
