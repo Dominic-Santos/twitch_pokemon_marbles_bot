@@ -4474,5 +4474,17 @@
         "pp": 20,
         "accuracy": 0,
         "type": "normal"
+    },
+    "charge-beam": {
+        "name": "Charge Beam",
+        "damage_class": "special",
+        "stat_chance": 70,
+        "effect_chance": 70,
+        "priority": 0,
+        "description": "The user attacks with an electric charge. The user\nmay use any remaining electricity to raise its\nSp. Atk stat.",
+        "power": 50,
+        "pp": 10,
+        "accuracy": 90,
+        "type": "electric"
     }
 }
