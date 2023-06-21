@@ -96,6 +96,10 @@ class Battle():
         check_output_folder(f"battles/{self.battle_id}_{self.battle_key}")
         save_to_file(f"battles/{self.battle_id}_{self.battle_key}/{self.action}.json", data)
 
+    def submit_move(self, move):
+        pokemon = self.team["current_pokemon"]
+        self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
+
     def run_action(self, data):
         self.state = "continue"
 
@@ -188,7 +192,7 @@ class Battle():
             if str(move) not in self.team["pokemon"][str(pokemon)]["moves"]:
                 print("-------------------Struggle", self.team["pokemon"][str(pokemon)])
                 return "Struggle"
-            self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
+            # self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
             return self.team["pokemon"][str(pokemon)]["moves"][str(move)]["name"]
         else:
             if str(move) not in self.enemy_team["pokemon"][str(pokemon)]["moves"]:
@@ -203,7 +207,9 @@ class Battle():
 
         typ = data["type"]
 
-        if typ == "ATTACK_MISSED":
+        if typ == "ALLOW_SWITCHING":
+            self.log("Switching is now allowed")
+        elif typ == "ATTACK_MISSED":
             self.log(f"Attack missed")
         elif typ == "BURN_APPLIED":
             self.log(f"{prefix} {pokemon['name']} was burned")
@@ -218,6 +224,8 @@ class Battle():
             self.log(f"{prefix} {pokemon['name']} was confused")
         elif typ == "CRITICAL_HIT":
             self.log("Critical Hit")
+        elif typ == "DISALLOW_SWITCHING":
+            self.log("Switching is not allowed")
         elif typ == "END_CONFUSION":
             self.log(f"{prefix} {pokemon['name']} is not confused anymore")
         elif typ == "END_BURN":

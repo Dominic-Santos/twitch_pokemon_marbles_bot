@@ -4966,5 +4966,17 @@
         "pp": 15,
         "accuracy": 85,
         "type": "fire"
+    },
+    "freeze-dry": {
+        "name": "Freeze-Dry",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 10,
+        "priority": 0,
+        "description": "The user rapidly cools the target. This may also\r\nleave the target frozen. This move is super effective\r\non Water types.",
+        "power": 70,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "ice"
     }
 }
