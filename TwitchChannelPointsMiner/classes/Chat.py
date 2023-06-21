@@ -502,7 +502,7 @@ class ClientIRCPokemon(ClientIRCBase):
         else:
             self.log(f"{REDLOG}Lost the battle! rewards: {battle.rewards}")
 
-        return battle.result
+        return battle.result, battle_data["unique_battle_key"]
 
     def auto_battle(self):
 
@@ -544,9 +544,9 @@ class ClientIRCPokemon(ClientIRCBase):
             team_id = team_data["teamNumber"]
             data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
             self.log(f"{YELLOWLOG}Starting {battle_mode} battle")
-            result = self.do_battle()
+            result, key = self.do_battle()
             if result and battle_mode == "challenge":
-                POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} ⚔️")
+                POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
         else:
             self.log(f"{REDLOG}Didn't meet requirements for {battle_mode} battle")
             sleep(15)
