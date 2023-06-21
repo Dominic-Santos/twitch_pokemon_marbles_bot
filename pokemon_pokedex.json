@@ -18160,5 +18160,41 @@
             "special_attack": 105,
             "special_defense": 107
         }
+    },
+    "86325": {
+        "pokedex_id": 86325,
+        "name": "His Sneasel",
+        "description": "It has a cunning yet savage disposition. It waits for parents to leave their nests, and then it sneaks in to steal their eggs.",
+        "weight": 28.0,
+        "generation": 2,
+        "type1": "fighting",
+        "type2": "poison",
+        "tier": "C",
+        "base_stats": {
+            "hp": 55,
+            "speed": 115,
+            "attack": 95,
+            "defense": 55,
+            "special_attack": 35,
+            "special_defense": 75
+        }
+    },
+    "10360": {
+        "pokedex_id": 10360,
+        "name": "Girafarig",
+        "description": "Girafarig\u2019s rear head contains a tiny brain that is too small for thinking. However, the rear head doesn\u2019t need to sleep, so it can keep watch over its surroundings 24 hours a day.",
+        "weight": 41.5,
+        "generation": 2,
+        "type1": "psychic",
+        "type2": "normal",
+        "tier": "B",
+        "base_stats": {
+            "hp": 70,
+            "speed": 85,
+            "attack": 80,
+            "defense": 65,
+            "special_attack": 90,
+            "special_defense": 65
+        }
     }
 }
