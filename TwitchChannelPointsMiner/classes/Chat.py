@@ -459,6 +459,7 @@ class ClientIRCPokemon(ClientIRCBase):
                             self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
                             continue
 
+                battle.submit_move(result["move"])
                 self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
 
             elif battle.state == "switch":
