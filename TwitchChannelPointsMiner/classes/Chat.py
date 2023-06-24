@@ -318,6 +318,7 @@ class ClientIRCPokemon(ClientIRCBase):
                 bag_stats_thread(self.stats_computer)
             if THREADCONTROLLER.battle is False and POKEMON.auto_battle:
                 battle_thread(self.auto_battle)
+                create_thread(self.get_all_pokemon_stats)
 
     def find_best_move(self, attacker, attacker_moves, defender):
         best_move = None
@@ -426,6 +427,7 @@ class ClientIRCPokemon(ClientIRCBase):
                     if result["move"] is None:
                         result["move"] = list(pokemon["moves"].keys())[0]
                     self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
+                    sleep(1)
                     continue
 
                 elif pokemon["hp"] > pokemon["max_hp"] / 2:
@@ -457,10 +459,12 @@ class ClientIRCPokemon(ClientIRCBase):
                     if best_result is not None:
                         if best_result["win"]:
                             self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
+                            sleep(1)
                             continue
 
-                battle.submit_move(result["move"])
+                # battle.submit_move(result["move"])
                 self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
+                sleep(1)
 
             elif battle.state == "switch":
                 # pick a pokemon to switch to
@@ -493,6 +497,7 @@ class ClientIRCPokemon(ClientIRCBase):
                                 best_result = switch_result
 
                 self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
+                sleep(1)
 
             resp = self.pokemon_api.battle_action(battle.action, battle.battle_id, battle.player_id)
             battle.run_action(resp)
@@ -985,16 +990,27 @@ Inventory: {cash}$ {coins} Battle Coins
 
         return move
 
+    def get_all_pokemon_stats(self):
+        for i in range(1, 1000000):
+            pokemon = self.get_pokemon_stats(i, cached=False)
+            if pokemon is not None:
+                print(f"Updated pokedex {i} - {pokemon.name}")
+            sleep(2)
+
     def get_pokemon_stats(self, pokedex_id, cached=True):
 
         pokemon = POKEMON.pokedex.stats(str(pokedex_id))
 
         if cached is False or pokemon is None:
-            pokemon_data = self.pokemon_api.get_pokedex_info(pokedex_id)["content"]
-            POKEMON.pokedex.pokemon_stats[str(pokedex_id)] = pokemon_data
-            POKEMON.pokedex.save_pokedex()
+            try:
+                pokemon_data = self.pokemon_api.get_pokedex_info(pokedex_id)["content"]
+                POKEMON.pokedex.pokemon_stats[str(pokedex_id)] = pokemon_data
+                POKEMON.pokedex.save_pokedex()
 
-            pokemon = POKEMON.pokedex.stats(str(pokedex_id))
+                pokemon = POKEMON.pokedex.stats(str(pokedex_id))
+            except Exception as e:
+                print("failed to get pokemon stats", e)
+                pokemon = None
 
         return pokemon
 

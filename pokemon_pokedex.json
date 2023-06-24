@@ -2185,7 +2185,7 @@
         "generation": 1,
         "type1": "fairy",
         "type2": "psychic",
-        "tier": "C",
+        "tier": "B",
         "base_stats": {
             "hp": 40,
             "speed": 90,
@@ -18195,6 +18195,42 @@
             "defense": 65,
             "special_attack": 90,
             "special_defense": 65
+        }
+    },
+    "10552": {
+        "pokedex_id": 10552,
+        "name": "Gal Zigzagoon",
+        "description": "Zigzagoon that adapted to regions outside Galar acquired this appearance. If you\u2019ve lost something, this Pok\u00e9mon can likely find it.",
+        "weight": 17.5,
+        "generation": 3,
+        "type1": "dark",
+        "type2": "normal",
+        "tier": "C",
+        "base_stats": {
+            "hp": 38,
+            "speed": 60,
+            "attack": 30,
+            "defense": 41,
+            "special_attack": 30,
+            "special_defense": 41
+        }
+    },
+    "10445": {
+        "pokedex_id": 10445,
+        "name": "Pyroar",
+        "description": "The temperature of its breath is over 10,000 degrees Fahrenheit, but Pyroar doesn\u2019t use it on its prey. This Pok\u00e9mon prefers to eat raw meat.",
+        "weight": 81.5,
+        "generation": 6,
+        "type1": "normal",
+        "type2": "fire",
+        "tier": "A",
+        "base_stats": {
+            "hp": 86,
+            "speed": 106,
+            "attack": 68,
+            "defense": 72,
+            "special_attack": 109,
+            "special_defense": 66
         }
     }
 }
