@@ -970,6 +970,8 @@ Inventory: {cash}$ {coins} Battle Coins
             readable_reward = reward["reward"]
             reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"])
             mission_msg = f"Completed mission - {title} - reward: {readable_reward}"
+            if reward["reward_type"] == "pokemon":
+                self.get_pokemon_stats(reward["reward_name"], cached=False)
             self.log(f"{GREENLOG}{mission_msg}")
             POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:
