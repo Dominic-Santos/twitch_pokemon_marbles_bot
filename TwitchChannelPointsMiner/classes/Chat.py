@@ -318,7 +318,6 @@ class ClientIRCPokemon(ClientIRCBase):
                 bag_stats_thread(self.stats_computer)
             if THREADCONTROLLER.battle is False and POKEMON.auto_battle:
                 battle_thread(self.auto_battle)
-                create_thread(self.get_all_pokemon_stats)
 
     def find_best_move(self, attacker, attacker_moves, defender):
         best_move = None
@@ -990,13 +989,6 @@ Inventory: {cash}$ {coins} Battle Coins
 
         return move
 
-    def get_all_pokemon_stats(self):
-        for i in range(1, 1000000):
-            pokemon = self.get_pokemon_stats(i, cached=False)
-            if pokemon is not None:
-                print(f"Updated pokedex {i} - {pokemon.name}")
-            sleep(2)
-
     def get_pokemon_stats(self, pokedex_id, cached=True):
 
         pokemon = POKEMON.pokedex.stats(str(pokedex_id))
@@ -1009,7 +1001,7 @@ Inventory: {cash}$ {coins} Battle Coins
 
                 pokemon = POKEMON.pokedex.stats(str(pokedex_id))
             except Exception as e:
-                print("failed to get pokemon stats", e)
+                print(pokedex_id, "failed to get pokemon stats", e)
                 pokemon = None
 
         return pokemon
