@@ -527,33 +527,38 @@ class ClientIRCPokemon(ClientIRCBase):
             battle_mode = "stadium"
             difficulty = "hard"
 
-        if team_data[battle_mode]["error"] == "":
-            remaining = 0
-        else:
-            time_array = team_data[battle_mode]["error"].split("(")[1].split(" ")
-            if len(time_array) == 5:
-                remaining = 60 * int(time_array[0]) + int(time_array[3])
-            elif "minutes" in time_array:
-                remaining = 60 * int(time_array[0])
+        if battle_mode in team_data:
+
+            if team_data[battle_mode]["error"] == "":
+                remaining = 0
             else:
-                remaining = int(time_array[0])
+                time_array = team_data[battle_mode]["error"].split("(")[1].split(" ")
+                if len(time_array) == 5:
+                    remaining = 60 * int(time_array[0]) + int(time_array[3])
+                elif "minutes" in time_array:
+                    remaining = 60 * int(time_array[0])
+                else:
+                    remaining = int(time_array[0])
 
-        if remaining > 0:
-            remaining_human = seconds_readable(remaining)
-            logger.info(f"{YELLOWLOG}Next {battle_mode} battle in {remaining_human}", extra={"emoji": ":speech_balloon:"})
+            if remaining > 0:
+                remaining_human = seconds_readable(remaining)
+                logger.info(f"{YELLOWLOG}Next {battle_mode} battle in {remaining_human}", extra={"emoji": ":speech_balloon:"})
 
-        sleep(remaining + 1)
+            sleep(remaining + 1)
 
-        team_data = self.pokemon_api.get_teams()
-        if team_data[battle_mode]["meet_requirements"]:
-            team_id = team_data["teamNumber"]
-            data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
-            self.log(f"{YELLOWLOG}Starting {battle_mode} battle")
-            result, key = self.do_battle()
-            if result and battle_mode == "challenge":
-                POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
+            team_data = self.pokemon_api.get_teams()
+            if team_data[battle_mode]["meet_requirements"]:
+                team_id = team_data["teamNumber"]
+                data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
+                self.log(f"{YELLOWLOG}Starting {battle_mode} battle")
+                result, key = self.do_battle()
+                if result and battle_mode == "challenge":
+                    POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
+            else:
+                self.log(f"{REDLOG}Didn't meet requirements for {battle_mode} battle")
+                sleep(15)
         else:
-            self.log(f"{REDLOG}Didn't meet requirements for {battle_mode} battle")
+            self.log(f"{REDLOG}Error: {battle_mode} not in response")
             sleep(15)
 
     def check_loyalty_info(self, client, message, argstring):
@@ -802,9 +807,9 @@ class ClientIRCPokemon(ClientIRCBase):
         for region in prefixes:
             num = len(set([pokemon["pokedexId"] for pokemon in allpokemon if pokemon["name"].startswith(prefixes[region] + " ")]))
             if num > 0:
-                region_msg_list.append((region, num))
+                region_msg_list.append((region, num, getattr(POKEMON.pokedex, region.lower())))
 
-        region_msg = "".join([f"\n    {region}: {num}" for region, num in region_msg_list])
+        region_msg = "".join([f"\n    {region}: {num}/{total}" for region, num, total in region_msg_list])
 
         tradable_total = sum([results[f"trade{tier}"] for tier in ["A", "B", "C"]])
 

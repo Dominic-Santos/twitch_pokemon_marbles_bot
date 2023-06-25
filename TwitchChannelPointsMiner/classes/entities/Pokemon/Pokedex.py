@@ -42,6 +42,13 @@ class Pokedex(object):
         self._total = 898
         self.load_pokedex()
         self.load_moves()
+        self.count_totals()
+
+    def count_totals(self):
+        self._total_sin = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("sin ")])
+        self._total_gal = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("gal ")])
+        self._total_his = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("his ")])
+        self._total_alo = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("alo ")])
 
     def load_pokedex(self):
         try:
@@ -203,3 +210,19 @@ class Pokedex(object):
     @property
     def prefixes(self):
         return REGION_PREFIX
+
+    @property
+    def galarian(self):
+        return self._total_gal
+
+    @property
+    def hisuian(self):
+        return self._total_his
+
+    @property
+    def alolan(self):
+        return self._total_alo
+
+    @property
+    def sinister(self):
+        return self._total_sin

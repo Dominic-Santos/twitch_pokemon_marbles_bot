@@ -5170,5 +5170,29 @@
         "pp": 5,
         "accuracy": 30,
         "type": "ice"
+    },
+    "baton-pass": {
+        "name": "Baton Pass",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user switches places with a party Pok\u00e9mon in\r\nwaiting and passes along any stat changes.",
+        "power": 0,
+        "pp": 40,
+        "accuracy": 0,
+        "type": "normal"
+    },
+    "head-smash": {
+        "name": "Head Smash",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user attacks the target with a hazardous,\r\nfull-power headbutt. This also damages the\r\nuser terribly.",
+        "power": 150,
+        "pp": 5,
+        "accuracy": 80,
+        "type": "rock"
     }
 }
