@@ -677,29 +677,27 @@ class ClientIRCPokemon(ClientIRCBase):
                 POKEMON.sync_pokedex(dex)
 
                 tradable = [pokemon for pokemon in allpokemon if pokemon["nickname"] is not None and "trade" in pokemon["nickname"]]
-                missions_active = POKEMON.missions.have_wondertrade_missions()
                 pokemon_to_trade = []
                 reasons = []
-                best_nr_reasons = 0
+                best_nr_reasons = -1
+                best_tier = ""
 
                 for tier in ["A", "B", "C"]:
-                    if len(pokemon_to_trade) > 0:
-                        break
-
                     looking_for = f"trade{tier}"
                     for pokemon in tradable:
                         if looking_for in pokemon["nickname"]:
-                            if missions_active:
-                                pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
-                                pokemon_object.is_fish = POKEMON.pokedex.fish(pokemon["name"])
+                            pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
+                            pokemon_object.is_fish = POKEMON.pokedex.fish(pokemon["name"])
 
-                                reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
-                                if len(reasons) < best_nr_reasons:
-                                    continue
-                                elif len(reasons) > best_nr_reasons:
-                                    pokemon_to_trade = []
-                                    best_nr_reasons = len(reasons)
-
+                            reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
+                            if len(reasons) < best_nr_reasons:
+                                continue
+                            elif len(reasons) > best_nr_reasons:
+                                pokemon_to_trade = []
+                                best_nr_reasons = len(reasons)
+                                best_tier = tier
+                            elif best_tier != tier:
+                                continue
                             pokemon_to_trade.append(pokemon)
 
                 if len(pokemon_to_trade) == 0:
