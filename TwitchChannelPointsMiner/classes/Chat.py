@@ -406,7 +406,7 @@ class ClientIRCPokemon(ClientIRCBase):
             "win": my_pokemon["hp"] > 0,
             "dealt": enemy["hp"] - enemy_pokemon["hp"],
             "taken": my["hp"] - my_pokemon["hp"],
-            "move": move["move_id"]
+            "move": "" if move is None else move["move_id"]
         }
 
     def do_battle(self):
