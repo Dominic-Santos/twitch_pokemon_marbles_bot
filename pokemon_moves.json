@@ -5194,5 +5194,17 @@
         "pp": 5,
         "accuracy": 80,
         "type": "rock"
+    },
+    "volt-switch": {
+        "name": "Volt Switch",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "After making its attack, the user rushes back to\nswitch places with a party Pok\u00e9mon in waiting.",
+        "power": 70,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "electric"
     }
 }
