@@ -16,7 +16,7 @@ from streamer_sort import main as ssort
 
 ssort()
 settings = load_settings()
-CLAIM_DROPS = True
+CLAIM_DROPS = False
 
 twitch_miner = TwitchChannelPointsMiner(
     username=settings["username"],

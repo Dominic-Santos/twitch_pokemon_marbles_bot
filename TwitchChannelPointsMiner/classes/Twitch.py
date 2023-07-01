@@ -194,15 +194,19 @@ class Twitch(object):
     def get_channel_id(self, streamer_username):
         json_data = copy.deepcopy(GQLOperations.ReportMenuItem)
         json_data["variables"] = {"channelLogin": streamer_username}
-        json_response = self.post_gql_request(json_data)
-        if (
-            "data" not in json_response
-            or "user" not in json_response["data"]
-            or json_response["data"]["user"] is None
-        ):
-            raise StreamerDoesNotExistException
-        else:
-            return json_response["data"]["user"]["id"]
+        tries = 0
+        while tries < 3:
+
+            json_response = self.post_gql_request(json_data)
+            if (
+                "data" not in json_response
+                or "user" not in json_response["data"]
+                or json_response["data"]["user"] is None
+            ):
+                tries += 1
+            else:
+                return json_response["data"]["user"]["id"]
+        raise StreamerDoesNotExistException
 
     def get_followers(
         self, limit: int = 100, order: FollowersOrder = FollowersOrder.ASC
@@ -627,19 +631,26 @@ class Twitch(object):
     def load_channel_points_context(self, streamer):
         json_data = copy.deepcopy(GQLOperations.ChannelPointsContext)
         json_data["variables"] = {"channelLogin": streamer.username}
+        tries = 0
 
-        response = self.post_gql_request(json_data)
-        if response != {}:
-            if response["data"]["community"] is None:
-                raise StreamerDoesNotExistException
-            channel = response["data"]["community"]["channel"]
-            community_points = channel["self"]["communityPoints"]
-            streamer.channel_points = community_points["balance"]
-            streamer.activeMultipliers = community_points["activeMultipliers"]
+        while tries < 3:
+            try:
+                response = self.post_gql_request(json_data)
+                if response != {}:
+                    if response["data"]["community"] is None:
+                        raise StreamerDoesNotExistException
+                    channel = response["data"]["community"]["channel"]
+                    community_points = channel["self"]["communityPoints"]
+                    streamer.channel_points = community_points["balance"]
+                    streamer.activeMultipliers = community_points["activeMultipliers"]
 
-            if community_points["availableClaim"] is not None:
-                self.claim_bonus(
-                    streamer, community_points["availableClaim"]["id"])
+                    if community_points["availableClaim"] is not None:
+                        self.claim_bonus(
+                            streamer, community_points["availableClaim"]["id"])
+            except:
+                tries += 1
+                continue
+            break
 
     def get_pokemoncg_token(self, channel_id):
         json_data = copy.deepcopy(GQLOperations.ExtensionsForChannel)
@@ -775,7 +786,7 @@ class Twitch(object):
                     for item in response["data"]["channel"]["viewerDropCampaigns"]
                 ]
             )
-        except (ValueError, KeyError):
+        except:
             return []
 
     def __get_inventory(self):
