@@ -16,11 +16,12 @@ from streamer_sort import main as ssort
 
 ssort()
 settings = load_settings()
+CLAIM_DROPS = True
 
 twitch_miner = TwitchChannelPointsMiner(
     username=settings["username"],
     password=settings["password"],           # If no password will be provided, the script will ask interactively
-    claim_drops_startup=True,                  # If you want to auto claim all drops from Twitch inventory on the startup
+    claim_drops_startup=CLAIM_DROPS,                  # If you want to auto claim all drops from Twitch inventory on the startup
     priority=[                                  # Custom priority in this case for example:
         Priority.STREAK,                        # - We want first of all to catch all watch streak from all streamers
         Priority.DROPS,                         # - When we don't have anymore watch streak to catch, wait until all drops are collected over the streamers
@@ -52,7 +53,7 @@ twitch_miner = TwitchChannelPointsMiner(
     streamer_settings=StreamerSettings(
         make_predictions=False,                  # If you want to Bet / Make prediction
         follow_raid=True,                       # Follow raid to obtain more points
-        claim_drops=True,                       # We can't filter rewards base on stream. Set to False for skip viewing counter increase and you will never obtain a drop reward from this script. Issue #21
+        claim_drops=CLAIM_DROPS,                       # We can't filter rewards base on stream. Set to False for skip viewing counter increase and you will never obtain a drop reward from this script. Issue #21
         watch_streak=True,                      # If a streamer go online change the priority of streamers array and catch the watch screak. Issue #11
         chat=ChatPresence.ONLINE,               # Join irc chat to increase watch-time [ALWAYS, NEVER, ONLINE, OFFLINE]
         bet=BetSettings(

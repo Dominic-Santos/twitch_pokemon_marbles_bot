@@ -167,7 +167,7 @@ class Twitch(object):
             GQLOperations.VideoPlayerStreamInfoOverlayChannel)
         json_data["variables"] = {"channel": streamer.username}
         response = self.post_gql_request(json_data)
-        if response != {}:
+        if response != {} and ("errors" not in response or len(response["errors"]) == 0):
             if response["data"]["user"]["stream"] is None:
                 raise StreamerIsOfflineException
             else:
