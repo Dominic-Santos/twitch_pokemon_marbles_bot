@@ -5206,5 +5206,41 @@
         "pp": 20,
         "accuracy": 100,
         "type": "electric"
+    },
+    "close-combat": {
+        "name": "Close Combat",
+        "damage_class": "physical",
+        "stat_chance": 100,
+        "effect_chance": 100,
+        "priority": 0,
+        "description": "The user fights the target up close without guarding\nitself. This also lowers the user\u2019s Defense and\nSp. Def stats.",
+        "power": 120,
+        "pp": 5,
+        "accuracy": 100,
+        "type": "fighting"
+    },
+    "spacial-rend": {
+        "name": "Spacial Rend",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user tears the target along with the space\naround it. Critical hits land more easily.",
+        "power": 100,
+        "pp": 5,
+        "accuracy": 95,
+        "type": "dragon"
+    },
+    "wrap": {
+        "name": "Wrap",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 100,
+        "priority": 0,
+        "description": "A long body, vines, or the like are used to wrap and \nsqueeze the target for four to five turns.",
+        "power": 15,
+        "pp": 20,
+        "accuracy": 90,
+        "type": "normal"
     }
 }
