@@ -94,6 +94,13 @@ class Missions(object):
                     else:
                         the_type = mission_title.split(" ")[1].title()
                         self.data.setdefault("wondertrade_type", []).append(the_type)
+                elif "stadium" in mission_title:
+                    if "easy" in mission_title:
+                        self.data["stadium"] = "easy"
+                    elif "medium" in mission_title:
+                        self.data["stadium"] = "medium"
+                    elif "hard" in mission_title:
+                        self.data["stadium"] = "hard"
                 elif "fish" in mission_title:
                     self.data["fish"] = True
                 elif "miss" in mission_title:
@@ -126,6 +133,8 @@ class Missions(object):
                     elif "with" in mission_title:
                         ball = mission_title.split("ball")[0].strip().split(" ")[-1]
                         self.data.setdefault("ball", []).append(ball)
+                    elif "mono" in mission_title:
+                        self.data["monotype"] = True
                     else:
                         the_type = mission_title.split(" ")[1].title()
                         self.data.setdefault("type", []).append(the_type)
@@ -154,6 +163,13 @@ class Missions(object):
                     return True
 
         return False
+
+    # ##### Stadium Missions ####
+    def check_stadium_mission(self):
+        return self.have_mission("stadium")
+
+    def check_stadium_difficulty(self):
+        return self.data.get("stadium", "easy")
 
     # ##### Wondertrade Missions #####
     def check_wondertrade_type_mission(self, pokemon_types):
@@ -209,6 +225,9 @@ class Missions(object):
     def check_ball_mission(self):
         return self.have_mission("ball")
 
+    def check_monotype_mission(self):
+        return self.have_mission("monotype")
+
     def check_all_missions(self, pokemon):
         reasons = []
         if self.check_type_mission(pokemon.types):
@@ -234,6 +253,9 @@ class Missions(object):
 
         if self.check_ball_mission():
             reasons.append("ball")
+
+        if len(pokemon.types) == 1 and self.check_monotype_mission():
+            reasons.append("monotype")
 
         return reasons
 
