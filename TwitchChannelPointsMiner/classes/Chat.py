@@ -511,6 +511,7 @@ class ClientIRCPokemon(ClientIRCBase):
 
     def auto_battle(self):
 
+        self.get_missions()
         data = self.pokemon_api.get_battle()
 
         if data["rejoinableBattle"]:
@@ -525,7 +526,10 @@ class ClientIRCPokemon(ClientIRCBase):
             difficulty = "medium"
         else:
             battle_mode = "stadium"
-            difficulty = "hard"
+            if POKEMON.missions.check_stadium_mission():
+                difficulty = POKEMON.missions.check_stadium_difficulty()
+            else:
+                difficulty = "hard"
 
         if battle_mode in team_data:
 
@@ -550,7 +554,8 @@ class ClientIRCPokemon(ClientIRCBase):
             if team_data[battle_mode]["meet_requirements"]:
                 team_id = team_data["teamNumber"]
                 data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
-                self.log(f"{YELLOWLOG}Starting {battle_mode} battle")
+                battle_message = f"{difficulty} {battle_mode}" if battle_mode == "stadium" else battle_mode
+                self.log(f"{YELLOWLOG}Starting {battle_message} battle")
                 result, key = self.do_battle()
                 if result and battle_mode == "challenge":
                     POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
