@@ -511,7 +511,6 @@ class ClientIRCPokemon(ClientIRCBase):
 
     def auto_battle(self):
 
-        self.get_missions()
         data = self.pokemon_api.get_battle()
 
         if data["rejoinableBattle"]:
@@ -526,10 +525,7 @@ class ClientIRCPokemon(ClientIRCBase):
             difficulty = "medium"
         else:
             battle_mode = "stadium"
-            if POKEMON.missions.check_stadium_mission():
-                difficulty = POKEMON.missions.check_stadium_difficulty()
-            else:
-                difficulty = "hard"
+            difficulty = "hard"
 
         if battle_mode in team_data:
 
@@ -549,6 +545,11 @@ class ClientIRCPokemon(ClientIRCBase):
                 logger.info(f"{YELLOWLOG}Next {battle_mode} battle in {remaining_human}", extra={"emoji": ":speech_balloon:"})
 
             sleep(remaining + 1)
+
+            if battle_mode == "stadium":
+                self.get_missions()
+                if POKEMON.missions.check_stadium_mission():
+                    difficulty = POKEMON.missions.check_stadium_difficulty()
 
             team_data = self.pokemon_api.get_teams()
             if team_data[battle_mode]["meet_requirements"]:

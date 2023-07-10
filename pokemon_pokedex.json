@@ -2540,7 +2540,7 @@
     "142": {
         "pokedex_id": 142,
         "name": "Aerodactyl",
-        "description": "The power of Mega Evolution has completely restored its genes. The rocks on its body are harder than diamond.",
+        "description": "Aerodactyl is a Pok\u00e9mon from the age of dinosaurs. It was regenerated from genetic material extracted from amber. It is imagined to have been the king of the skies in ancient times.",
         "weight": 59.0,
         "generation": 1,
         "type1": "flying",
@@ -26259,6 +26259,24 @@
             "defense": 70,
             "special_attack": 95,
             "special_defense": 55
+        }
+    },
+    "100008": {
+        "pokedex_id": 100008,
+        "name": "Vivillon",
+        "description": "The patterns on this Pok\u00e9mon\u2019s wings depend on the climate and topography of its habitat. It scatters colorful scales.",
+        "weight": 17.0,
+        "generation": 6,
+        "type1": "bug",
+        "type2": "flying",
+        "tier": "B",
+        "base_stats": {
+            "hp": 80,
+            "speed": 89,
+            "attack": 52,
+            "defense": 50,
+            "special_attack": 90,
+            "special_defense": 50
         }
     }
 }
