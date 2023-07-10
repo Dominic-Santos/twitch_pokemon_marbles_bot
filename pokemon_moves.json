@@ -5266,5 +5266,77 @@
         "pp": 10,
         "accuracy": 90,
         "type": "dragon"
+    },
+    "searing-shot": {
+        "name": "Searing Shot",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 30,
+        "priority": 0,
+        "description": "The user torches everything around it in an inferno\r\nof scarlet flames. This may also leave those it hits\r\nwith a burn.",
+        "power": 100,
+        "pp": 5,
+        "accuracy": 100,
+        "type": "fire"
+    },
+    "pay-day": {
+        "name": "Pay Day",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "Numerous coins are hurled at the target to inflict\r\ndamage.",
+        "power": 40,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "normal"
+    },
+    "inferno": {
+        "name": "Inferno",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 100,
+        "priority": 0,
+        "description": "The user attacks by engulfing the target in an\r\nintense fire. This leaves the target with a burn.",
+        "power": 100,
+        "pp": 5,
+        "accuracy": 50,
+        "type": "fire"
+    },
+    "clamp": {
+        "name": "Clamp",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 100,
+        "priority": 0,
+        "description": "The target is clamped and squeezed by the user\u2019s\nvery thick and sturdy shell for four to five turns.",
+        "power": 35,
+        "pp": 15,
+        "accuracy": 85,
+        "type": "water"
+    },
+    "pound": {
+        "name": "Pound",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The target is physically pounded with a long tail, a\nforeleg, or the like.",
+        "power": 40,
+        "pp": 35,
+        "accuracy": 100,
+        "type": "normal"
+    },
+    "parting-shot": {
+        "name": "Parting Shot",
+        "damage_class": "status",
+        "stat_chance": 100,
+        "effect_chance": 100,
+        "priority": 0,
+        "description": "With a parting threat, the user lowers the target\u2019s\r\nAttack and Sp. Atk stats. Then it switches with a\r\nparty Pok\u00e9mon.",
+        "power": 0,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "dark"
     }
 }
