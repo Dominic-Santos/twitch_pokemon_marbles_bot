@@ -135,9 +135,14 @@ def timer_thread(func):
     if THREADCONTROLLER.pokecatch is False:
         logger.info(f"{YELLOWLOG}Thread Created Spawn Timer", extra={"emoji": ":speech_balloon:"})
         THREADCONTROLLER.pokecatch = True
-        data = requests.get("https://poketwitch.bframework.de/info/events/last_spawn/").json()
-        POKEMON.delay = data["next_spawn"] + 2
-        create_thread(pokemon_timer)
+        try:
+            data = requests.get("https://poketwitch.bframework.de/info/events/last_spawn/").json()
+            POKEMON.delay = data["next_spawn"] + 2
+            create_thread(pokemon_timer)
+        except:
+            logger.info(f"{REDLOG}Thread Spawn Timer Failed", extra={"emoji": ":speech_balloon:"})
+            sleep(10)
+            THREADCONTROLLER.pokecatch = False
 
 
 def wondertrade_thread(func):

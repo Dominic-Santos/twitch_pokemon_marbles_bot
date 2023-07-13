@@ -5338,5 +5338,17 @@
         "pp": 20,
         "accuracy": 100,
         "type": "dark"
+    },
+    "techno-blast": {
+        "name": "Techno Blast",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user fires a beam of light at its target. The\nmove\u2019s type changes depending on the Drive the\nuser holds.",
+        "power": 120,
+        "pp": 5,
+        "accuracy": 100,
+        "type": "normal"
     }
 }
