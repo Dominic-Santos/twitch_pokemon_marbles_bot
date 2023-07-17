@@ -698,7 +698,6 @@ class ClientIRCPokemon(ClientIRCBase):
                     for pokemon in tradable:
                         if looking_for in pokemon["nickname"]:
                             pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
-                            pokemon_object.is_fish = POKEMON.pokedex.fish(pokemon["name"])
 
                             reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
                             if len(reasons) < best_nr_reasons:
@@ -1020,6 +1019,10 @@ Inventory: {cash}$ {coins} Battle Coins
                 print(pokedex_id, "failed to get pokemon stats", e)
                 pokemon = None
 
+        if pokemon is not None:
+            pokemon.is_fish = POKEMON.pokedex.fish(pokemon)
+            pokemon.is_baby = POKEMON.pokedex.baby(pokemon)
+
         return pokemon
 
     def check_main(self, client):
@@ -1027,8 +1030,6 @@ Inventory: {cash}$ {coins} Battle Coins
         pokemon_id = data["pokedex_id"]
 
         pokemon = self.get_pokemon_stats(pokemon_id, cached=False)
-        pokemon.is_fish = POKEMON.pokedex.fish(pokemon)
-        pokemon.is_baby = POKEMON.pokedex.baby(pokemon)
 
         self.log_file(f"{YELLOWLOG}Pokemon spawned - processing {pokemon}")
 

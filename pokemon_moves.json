@@ -5350,5 +5350,41 @@
         "pp": 5,
         "accuracy": 100,
         "type": "normal"
+    },
+    "kinesis": {
+        "name": "Kinesis",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user distracts the target by bending a spoon.\r\nThis lowers the target\u2019s accuracy.",
+        "power": 0,
+        "pp": 15,
+        "accuracy": 80,
+        "type": "psychic"
+    },
+    "double-slap": {
+        "name": "Double Slap",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The target is slapped repeatedly, back and forth,\r\ntwo to five times in a row.",
+        "power": 15,
+        "pp": 10,
+        "accuracy": 85,
+        "type": "normal"
+    },
+    "venom-drench": {
+        "name": "Venom Drench",
+        "damage_class": "status",
+        "stat_chance": 100,
+        "effect_chance": 100,
+        "priority": 0,
+        "description": "Opposing Pok\u00e9mon are drenched in an odd\r\npoisonous liquid. This lowers the Attack, Sp. Atk, and\r\nSpeed stats of a poisoned target.",
+        "power": 0,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "poison"
     }
 }
