@@ -692,12 +692,19 @@ class ClientIRCPokemon(ClientIRCBase):
                 reasons = []
                 best_nr_reasons = -1
                 best_tier = ""
+                trade_legendaries = POKEMON.wondertrade_legendaries
+                trade_starters = POKEMON.wondertrade_starters
 
                 for tier in ["A", "B", "C"]:
                     looking_for = f"trade{tier}"
                     for pokemon in tradable:
                         if looking_for in pokemon["nickname"]:
                             pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
+
+                            if pokemon_object.is_legendary and not trade_legendaries:
+                                continue
+                            if pokemon_object.is_starter and not trade_starters:
+                                continue
 
                             reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
                             if len(reasons) < best_nr_reasons:
@@ -769,7 +776,7 @@ class ClientIRCPokemon(ClientIRCBase):
         for i in range(1, POKEMON.pokedex.total + 1):
             pokemon = self.get_pokemon_stats(i)
 
-            if POKEMON.pokedex.starter(pokemon.name) or POKEMON.pokedex.legendary(pokemon.name):
+            if pokemon.is_starter or pokemon.is_legendary:
                 continue
 
             if pokemon.tier == "A":
@@ -1022,6 +1029,9 @@ Inventory: {cash}$ {coins} Battle Coins
         if pokemon is not None:
             pokemon.is_fish = POKEMON.pokedex.fish(pokemon)
             pokemon.is_baby = POKEMON.pokedex.baby(pokemon)
+            pokemon.is_legendary = POKEMON.pokedex.legendary(pokemon)
+            pokemon.is_starter = POKEMON.pokedex.starter(pokemon)
+            pokemon.is_female = POKEMON.pokedex.female(pokemon)
 
         return pokemon
 

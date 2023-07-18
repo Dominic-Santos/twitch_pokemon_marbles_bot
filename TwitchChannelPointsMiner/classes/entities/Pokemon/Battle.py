@@ -266,6 +266,8 @@ class Battle():
             self.log("Light Screen started")
         elif typ == "MIST_END":
             self.log("Mist ended")
+        elif typ == "MIST_PREVENTED":
+            self.log("Mist prevented")
         elif typ == "MIST_STARTED":
             self.log("Mist started")
         elif typ == "MOVE_EFFECTIVE":

@@ -21,6 +21,9 @@ class Pokemon(object):
 
         self.is_fish = False
         self.is_baby = False
+        self.is_starter = False
+        self.is_legendary = False
+        self.is_female = False
 
     @property
     def bst(self):
