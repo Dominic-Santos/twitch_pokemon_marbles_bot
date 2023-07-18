@@ -46,6 +46,8 @@ class PokemonComunityGame(Loyalty):
             "catch_tiers": [],
             "catch_types": [],
             "channel_priority": [],
+            "trade_legendaries": False,
+            "trade_starters": False,
         }
 
         self.discord = Discord()
@@ -224,6 +226,14 @@ class PokemonComunityGame(Loyalty):
 
     def check_wondertrade_left(self):
         return timedelta(seconds=WONDERTRADE_DELAY) - (datetime.utcnow() - self.wondertrade_timer)
+
+    @property
+    def wondertrade_legendaries(self):
+        return self.settings["trade_legendaries"]
+
+    @property
+    def wondertrade_starters(self):
+        return self.settings["trade_starters"]
 
     # ########### Battles ############
     @property
