@@ -836,7 +836,7 @@ class ClientIRCPokemon(ClientIRCBase):
         otherball = sum([value for key, value in POKEMON.inventory.balls.items() if key not in ["pokeball", "premierball", "greatball", "ultraball"]])
 
         if POKEMON.inventory.have_item("battle coin"):
-            coins = POKEMON.inventory.get_item("battle_coin")["amount"]
+            coins = POKEMON.inventory.get_item("battle coin")["amount"]
         else:
             coins = 0
 
