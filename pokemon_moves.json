@@ -5386,5 +5386,29 @@
         "pp": 20,
         "accuracy": 100,
         "type": "poison"
+    },
+    "scratch": {
+        "name": "Scratch",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "Hard, pointed, sharp claws rake the target to\ninflict damage.",
+        "power": 40,
+        "pp": 35,
+        "accuracy": 100,
+        "type": "normal"
+    },
+    "circle-throw": {
+        "name": "Circle Throw",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": -6,
+        "description": "The target is thrown, and a different Pok\u00e9mon is\ndragged out. In the wild, this ends a battle against\na single Pok\u00e9mon.",
+        "power": 60,
+        "pp": 10,
+        "accuracy": 90,
+        "type": "fighting"
     }
 }

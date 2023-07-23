@@ -834,11 +834,11 @@ class ClientIRCPokemon(ClientIRCBase):
         greatball = POKEMON.inventory.balls.get("greatball", 0)
         ultraball = POKEMON.inventory.balls.get("ultraball", 0)
         otherball = sum([value for key, value in POKEMON.inventory.balls.items() if key not in ["pokeball", "premierball", "greatball", "ultraball"]])
-        coins = 0
-        for item in POKEMON.inventory.items:
-            if item["name"].lower() == "battle coin":
-                coins = item["amount"]
-                break
+
+        if POKEMON.inventory.have_item("battle coin"):
+            coins = POKEMON.inventory.get_item("battle_coin")["amount"]
+        else:
+            coins = 0
 
         if len(spawnables_a_dont_have) == 0:
             missing_a_string = "Done"
@@ -1098,7 +1098,6 @@ Inventory: {cash}$ {coins} Battle Coins
                         caught = poke
                         break
 
-                rewards = None
                 self.log(f"{GREENLOG}Trying to catch in {twitch_channel}")
                 if caught is not None:
                     ivs = int(poke["avgIV"])
@@ -1113,7 +1112,6 @@ Inventory: {cash}$ {coins} Battle Coins
 
                     sprite = str(poke["pokedexId"])
                     pokemon_sprite = get_sprite("pokemon", sprite, shiny=poke["isShiny"])
-                    rewards = POKEMON.increment_loyalty(twitch_channel)
                 else:
                     self.log_file(f"{REDLOG}Failed to catch {pokemon.name} ({pokemon.tier})")
                     msg = f"I missed {pokemon.name} ({pokemon.tier})!"
@@ -1123,15 +1121,43 @@ Inventory: {cash}$ {coins} Battle Coins
 
                 POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
 
-                if rewards is not None:
-                    reward, next_reward = rewards
-                    rewards_msg = f"Loyalty tier completed in {twitch_channel}, new reward: {reward}"
-                    self.log(f"{GREENLOG}{rewards_msg}")
-                    if next_reward is not None:
-                        rewards_msg = rewards_msg + f"\nNext reward: {next_reward}"
-                        self.log(f"{GREENLOG}next reward: {next_reward}")
-                    sprite = get_sprite("streamer", twitch_channel)
-                    POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
+                if caught is not None:
+                    # check for hidden chat rewards (stones, candys & golden tickets)
+                    old_items = copy.deepcopy(POKEMON.inventory.items)
+                    inv = self.pokemon_api.get_inventory()
+                    POKEMON.sync_inventory(inv)
+
+                    for item_name in POKEMON.inventory.items:
+                        item = POKEMON.inventory.get_item(item_name)
+                        old_item = old_items.get(item_name, {"amount": 0})
+                        if item["category"] != "evolution" and item_name not in ["rare candy", "golden ticket"]:
+                            continue
+
+                        amount_got = item["amount"] - old_item["amount"]
+                        if amount_got < 1:
+                            continue
+
+                        item_str = item["name"]
+                        if amount_got == 1:
+                            prefix = "an" if item_name[0] in ["a", "e", "i", "o", "u"] else "a"
+                        else:
+                            prefix = amount_got
+
+                        rewards_msg = f"You got {prefix} {item_str} from your last catch!"
+                        sprite = get_sprite(item["category"], item["sprite"])
+                        POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
+
+                    # check for loyalty tier up
+                    rewards = POKEMON.increment_loyalty(twitch_channel)
+                    if rewards is not None:
+                        reward, next_reward = rewards
+                        rewards_msg = f"Loyalty tier completed in {twitch_channel}, new reward: {reward}"
+                        self.log(f"{GREENLOG}{rewards_msg}")
+                        if next_reward is not None:
+                            rewards_msg = rewards_msg + f"\nNext reward: {next_reward}"
+                            self.log(f"{GREENLOG}next reward: {next_reward}")
+                        sprite = get_sprite("streamer", twitch_channel)
+                        POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
         else:
             self.log_file(f"{REDLOG}Don't need pokemon, skipping")
 
