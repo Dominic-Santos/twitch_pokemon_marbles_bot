@@ -11,12 +11,12 @@ class Inventory(object):
     def reset(self):
         self.cash = 0
         self.balls = {}
-        self.items = []
+        self.items = {}
         self.special_balls = {}
         self.other_balls = {}
 
     def __str__(self):
-        return "Balance: $" + str(self.cash) + " " + ", ".join(["{item}: {amount}".format(item=item["name"], amount=item["amount"]) for item in self.items])
+        return "Balance: $" + str(self.cash) + " " + ", ".join(["{item}: {amount}".format(item=self.items[item]["name"], amount=self.items[item]["amount"]) for item in self.items])
 
     def set(self, inventory):
         self.reset()
@@ -39,7 +39,18 @@ class Inventory(object):
                     self.other_balls["Fish"].append(ball)
 
             else:
-                self.items.append(item)
+                self.items[item["name"].lower()] = {
+                    "name": item["name"],
+                    "sprite": item["sprite_name"],
+                    "amount": item["amount"],
+                    "category": item["category"]
+                }
+
+    def get_item(self, item_name):
+        return self.items.get(item_name.lower(), None)
+
+    def have_item(self, item_name):
+        return self.get_item(item_name) is not None
 
     def get_catch_ball(self, pokemon, repeat=False, strategy="best"):
         if strategy == "best":
