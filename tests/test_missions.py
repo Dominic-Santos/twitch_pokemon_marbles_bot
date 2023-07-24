@@ -183,6 +183,7 @@ def test_check_missions_case9():
 
     pokemon = Pokemon()
     pokemon.types = ["Rock", "Dragon"]
+    pokemon.hp = 1
     reasons = MISSIONS.check_all_missions(pokemon)
     assert "type" in reasons
     assert "monotype" not in reasons
