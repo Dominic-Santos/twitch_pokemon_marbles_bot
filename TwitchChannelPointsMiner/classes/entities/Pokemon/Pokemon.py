@@ -25,6 +25,9 @@ class Pokemon(object):
         self.is_legendary = False
         self.is_female = False
 
+        # fields for bag pokemon
+        self.level = 0
+
     @property
     def bst(self):
         return self.hp + self.speed + self.attack + self.defense + self.special_attack + self.special_defense

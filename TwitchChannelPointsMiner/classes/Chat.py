@@ -700,6 +700,7 @@ class ClientIRCPokemon(ClientIRCBase):
                     for pokemon in tradable:
                         if looking_for in pokemon["nickname"]:
                             pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
+                            pokemon_object.level = pokemon["lvl"]
 
                             if pokemon_object.is_legendary and not trade_legendaries:
                                 continue

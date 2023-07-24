@@ -81,6 +81,12 @@ class Missions(object):
                     if mission_title == "wondertrade":
                         # just wondertrade anything does not require a mission
                         pass
+                    elif "level" in mission_title or "lvl" in mission_title:
+                        the_level = int("".join([c for c in mission_title if c.isnumeric()]))
+                        if "higher" in mission_title:
+                            self.data.setdefault("wondertrade_level", []).append((the_level, 9999))
+                        else:
+                            self.data.setdefault("wondertrade_level", []).append((0, the_level))
                     elif "fish" in mission_title:
                         self.data["wondertrade_fish"] = True
                     elif "bst" in mission_title:
@@ -178,6 +184,9 @@ class Missions(object):
     def check_wondertrade_bst_mission(self, bst):
         return self._between_mission("wondertrade_bst", bst)
 
+    def check_wondertrade_level_mission(self, level):
+        return self._between_mission("wondertrade_level", level)
+
     def check_all_wondertrade_missions(self, pokemon):
         reasons = []
         if self.check_wondertrade_type_mission(pokemon.types):
@@ -185,6 +194,9 @@ class Missions(object):
 
         if self.check_wondertrade_bst_mission(pokemon.bst):
             reasons.append("bst")
+
+        if self.check_wondertrade_level_mission(pokemon.level):
+            reasons.append("level")
 
         if pokemon.is_fish and self.have_mission("wondertrade_fish"):
             reasons.append("fish")
@@ -194,6 +206,8 @@ class Missions(object):
         if self.have_mission("wondertrade_type"):
             return True
         elif self.have_mission("wondertrade_bst"):
+            return True
+        elif self.have_mission("wondertrade_level"):
             return True
         elif self.have_mission("wondertrade_fish"):
             return True
