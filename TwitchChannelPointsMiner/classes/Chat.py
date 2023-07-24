@@ -725,6 +725,7 @@ class ClientIRCPokemon(ClientIRCBase):
 
                     pokemon_traded = sorted_pokemon_to_trade[0]
                     pokemon_object = self.get_pokemon_stats(pokemon_traded["pokedexId"])
+                    pokemon_object.level = pokemon_traded["lvl"]
                     reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
                     pokemon_received = self.pokemon_api.wondertrade(pokemon_traded["id"])
 
