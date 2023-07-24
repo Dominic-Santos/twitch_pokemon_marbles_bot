@@ -699,6 +699,9 @@ class ClientIRCPokemon(ClientIRCBase):
                     looking_for = f"trade{tier}"
                     for pokemon in tradable:
                         if looking_for in pokemon["nickname"]:
+                            if pokemon["locked"]:
+                                continue
+
                             pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
                             pokemon_object.level = pokemon["lvl"]
 
