@@ -165,7 +165,7 @@ class Missions(object):
             missions = self.data.get(mission_name)
 
             for m_min, m_max in missions:
-                if unit >= m_min and unit <= m_max:
+                if unit > m_min and unit < m_max:
                     return True
 
         return False
