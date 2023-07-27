@@ -917,12 +917,14 @@ Inventory: {cash}$ {coins} Battle Coins
                         if tempnick != pokemon["name"]:
                             continue
                 if index == 0:
-                    if POKEMON.pokedex.starter(pokemon["name"]):
-                        nick = CHARACTERS["starter"] + pokemon["name"]
-                    elif POKEMON.pokedex.legendary(pokemon["name"]):
-                        nick = CHARACTERS["legendary"] + pokemon["name"]
-                    elif POKEMON.pokedex.female(pokemon["pokedexId"]):
-                        nick = pokemon["name"] + CHARACTERS["female"]
+                    if POKEMON.pokedex.starter(pokemon["name"]) or POKEMON.pokedex.legendary(pokemon["name"]) or POKEMON.pokedex.female(pokemon["pokedexId"]):
+                        nick = pokemon["name"]
+                        if POKEMON.pokedex.starter(pokemon["name"]):
+                            nick = CHARACTERS["starter"] + nick
+                        if POKEMON.pokedex.legendary(pokemon["name"]):
+                            nick = CHARACTERS["legendary"] + nick
+                        if POKEMON.pokedex.female(pokemon["pokedexId"]):
+                            nick = nick + CHARACTERS["female"]
                     elif pokemon["nickname"] is None or pokemon["nickname"].startswith("trade") is False:
                         # if not starter and not female and has nickname, dont mess
                         continue
@@ -935,9 +937,9 @@ Inventory: {cash}$ {coins} Battle Coins
 
                     if POKEMON.pokedex.starter(pokemon["name"]):
                         nick = CHARACTERS["starter"] + nick
-                    elif POKEMON.pokedex.legendary(pokemon["name"]):
+                    if POKEMON.pokedex.legendary(pokemon["name"]):
                         nick = CHARACTERS["legendary"] + nick
-                    elif POKEMON.pokedex.female(pokemon["pokedexId"]):
+                    if POKEMON.pokedex.female(pokemon["pokedexId"]):
                         nick = nick + CHARACTERS["female"]
 
                 if pokemon["nickname"] == nick:

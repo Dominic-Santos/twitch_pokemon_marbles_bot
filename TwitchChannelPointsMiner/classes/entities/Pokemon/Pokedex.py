@@ -76,9 +76,10 @@ class Pokedex(object):
 
     def set(self, dex):
         for pokemon in dex["dex"]:
-            pokename = self._clean_pokedex_name(pokemon["name"])
-            if pokename is not None:
-                self.pokemon[pokename] = pokemon["c"]
+            if pokemon["id"] < 10000:
+                pokename = self._clean_pokedex_name(pokemon["name"])
+                if pokename is not None:
+                    self.pokemon[pokename] = pokemon["c"]
         self._total = dex["totalPkm"]
 
     def set_tier(self, pokemon, tier):
