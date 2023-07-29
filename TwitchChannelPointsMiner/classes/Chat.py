@@ -20,14 +20,15 @@ from .entities.Pokemon.Pokedex import Move
 """
     TODO:
         heal pokemon when bellow a threshold between battles
-        stadium battles difficulties in settings
 """
 
 if os.path.exists("logs") is False:
     os.makedirs("logs")
 
+LOGFILE = "logs/pokemoncg.txt"
+
 formatter = logging.Formatter('%(asctime)s %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
-file_handler = logging.FileHandler("logs/pokemoncg.txt", encoding='utf-8')
+file_handler = logging.FileHandler(LOGFILE, encoding='utf-8')
 file_handler.setFormatter(formatter)
 poke_logger = logging.getLogger(__name__ + "pokemon")
 poke_logger.setLevel(logging.DEBUG)
@@ -233,7 +234,7 @@ def bag_stats_thread(func):
             cur_date = datetime.now().date()
             if cur_date != previous:
                 logger.info(f"{YELLOWLOG}Running Bag Stats", extra={"emoji": ":speech_balloon:"})
-                func()
+                func(previous, cur_date)
                 previous = cur_date
             sleep(60 * 15)  # 15 mins
 
@@ -241,6 +242,47 @@ def bag_stats_thread(func):
         logger.info(f"{YELLOWLOG}Thread Created Bag Stats", extra={"emoji": ":speech_balloon:"})
         THREADCONTROLLER.bag_stats = True
         create_thread(bag_stats_timer)
+
+
+def get_battle_logs(the_date):
+    # self.log_file(f"{GREENLOG}Won the battle! rewards: {xp}Exp and {cash}$")
+    # self.log_file(f"{REDLOG}Lost the battle! rewards: {xp}Exp and {cash}$")
+
+    total_exp = 0
+    total_cash = 0
+    total_battles = 0
+    total_wins = 0
+
+    with open(LOGFILE, mode="rb") as file:
+        for uline in file:
+            try:
+                line = uline.decode("utf-8").rstrip()
+            except:
+                continue
+
+            if "the battle!" not in line:
+                continue
+
+            linedate = parse(line.split(" ")[0])
+            if linedate.date() != the_date:
+                continue
+
+            rewards = line.split("rewards: ")[1].split(" and ")
+            exp = int(rewards[0][:-3])
+            cash = int(rewards[1][:-1])
+
+            total_exp += exp
+            total_cash += cash
+            total_battles += 1
+            if "Won" in line:
+                total_wins += 1
+
+    return {
+        "cash": total_cash,
+        "exp": total_exp,
+        "battles": total_battles,
+        "wins": total_wins,
+    }
 
 
 class ClientIRCBase(ClientIRCO):
@@ -508,9 +550,9 @@ class ClientIRCPokemon(ClientIRCBase):
             sleep(0.1)
 
         if battle.result:
-            self.log(f"{GREENLOG}Won the battle! rewards: {battle.rewards}")
+            self.log_file(f"{GREENLOG}Won the battle! rewards: {battle.rewards}")
         else:
-            self.log(f"{REDLOG}Lost the battle! rewards: {battle.rewards}")
+            self.log_file(f"{REDLOG}Lost the battle! rewards: {battle.rewards}")
 
         return battle.result, battle_data["unique_battle_key"]
 
@@ -761,7 +803,7 @@ class ClientIRCPokemon(ClientIRCBase):
         else:
             POKEMON.wondertrade_timer = None
 
-    def stats_computer(self):
+    def stats_computer(self, previous_date, current_date):
 
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
@@ -845,20 +887,25 @@ class ClientIRCPokemon(ClientIRCBase):
         else:
             coins = 0
 
+        max_show_missing = 20
+
         if len(spawnables_a_dont_have) == 0:
             missing_a_string = "Done"
         else:
-            missing_a_string = "missing: " + ", ".join(spawnables_a_dont_have) if len(spawnables_a_dont_have) in range(0, 10) else ""
+            missing_a_string = "missing: " + ", ".join(spawnables_a_dont_have) if len(spawnables_a_dont_have) in range(0, max_show_missing) else ""
 
         if len(spawnables_b_dont_have) == 0:
             missing_b_string = "Done"
         else:
-            missing_b_string = "missing: " + ", ".join(spawnables_b_dont_have) if len(spawnables_b_dont_have) in range(0, 10) else ""
+            missing_b_string = "missing: " + ", ".join(spawnables_b_dont_have) if len(spawnables_b_dont_have) in range(0, max_show_missing) else ""
 
         if len(spawnables_c_dont_have) == 0:
             missing_c_string = "Done"
         else:
-            missing_c_string = "missing: " + ", ".join(spawnables_c_dont_have) if len(spawnables_c_dont_have) in range(0, 10) else ""
+            missing_c_string = "missing: " + ", ".join(spawnables_c_dont_have) if len(spawnables_c_dont_have) in range(0, max_show_missing) else ""
+
+        battle_date = previous_date if previous_date is not None else current_date
+        battle_stats = get_battle_logs(battle_date)
 
         discord_msg = f"""Bag Summary:
 
@@ -886,6 +933,11 @@ Inventory: {cash}$ {coins} Battle Coins
     greatball: {greatball}
     ultraball: {ultraball}
     other: {otherball}
+
+Battles:
+    Wins: {battle_stats['wins']}/{battle_stats['battles']}
+    Exp: {battle_stats['exp']}
+    $: {battle_stats['cash']}
         """
 
         POKEMON.discord.post(DISCORD_ALERTS, discord_msg)

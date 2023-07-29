@@ -439,8 +439,18 @@ def read_logs():
                 data[dateh] = copy.deepcopy(DEFAULT_DICT)
 
             if "spawned" in line:
-                lastpokemon = line.split(":")[-1][3:].split(",")[0].strip()
-                lasttier = line.split("tier")[1].strip()[0]
+                lpm = line.split("processing")[1]
+                if lpm.startswith(" 20"):
+                    lastpokemon = lpm.split(":")[-1][3:].split(",")[0].strip()
+                else:
+                    lastpokemon = " ".join(lpm.split(",")[0].strip().split(" ")[1:]).strip()
+
+                if lastpokemon != "":
+                    print(">>", lastpokemon, "<<", line)
+                    lasttier = line.split("tier")[1].strip()[0]
+                else:
+                    lastpokemon = "unknown"
+                    lasttier = "unknown"
 
             elif "Trying to catch" in line:
                 usedball = line.split("with")[1].split("because")[0].strip()
