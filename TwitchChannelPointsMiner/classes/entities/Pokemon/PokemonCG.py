@@ -57,6 +57,7 @@ class PokemonComunityGame(Loyalty):
         self.computer = Computer()
 
         self.load_settings()
+        self.load_discord_settings()
 
         self.discord.connect()
         self.inventory.use_special_balls = self.settings["use_special_balls"]
@@ -75,13 +76,22 @@ class PokemonComunityGame(Loyalty):
     def load_settings(self):
         with open(SETTINGS_FILE, "r") as f:
             j = json.load(f)
-            self.set(j.get("settings", {}))
+            changes = self.set(j.get("settings", {}))
+        return changes
+
+    def load_discord_settings(self):
+        with open(SETTINGS_FILE, "r") as f:
+            j = json.load(f)
             self.discord.set(j.get("discord", {}))
 
     def set(self, settings):
+        changes = False
         for k in settings:
             if k in self.settings:
-                self.settings[k] = settings[k]
+                if self.settings[k] != settings[k]:
+                    self.settings[k] = settings[k]
+                    changes = True
+        return changes
 
     def check_catch(self):
         if (datetime.utcnow() - self.catch_timer).total_seconds() > self.delay:

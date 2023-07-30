@@ -104,6 +104,17 @@ def create_thread(func):
     worker.start()
 
 
+def reload_settings():
+    while True:
+        sleep(60)
+        changes = POKEMON.load_settings()
+        if changes:
+            logger.info(f"{GREENLOG}Settings Reloaded", extra={"emoji": ":speech_balloon:"})
+
+
+create_thread(reload_settings)
+
+
 def timer_thread(func):
     def pokemon_timer():
 
@@ -363,7 +374,7 @@ class ClientIRCPokemon(ClientIRCBase):
                 pokedaily_thread(self.pokedaily_main)
             if THREADCONTROLLER.bag_stats is False:
                 bag_stats_thread(self.stats_computer)
-            if THREADCONTROLLER.battle is False and POKEMON.auto_battle:
+            if THREADCONTROLLER.battle is False:
                 battle_thread(self.auto_battle)
 
     def find_best_move(self, attacker, attacker_moves, defender):
@@ -558,61 +569,65 @@ class ClientIRCPokemon(ClientIRCBase):
 
     def auto_battle(self):
 
-        data = self.pokemon_api.get_battle()
+        if POKEMON.auto_battle:
 
-        if data["rejoinableBattle"]:
-            self.log(f"{YELLOWLOG}Rejoining battle")
-            self.do_battle()
-            return
+            data = self.pokemon_api.get_battle()
 
-        team_data = self.pokemon_api.get_teams()
-
-        if POKEMON.auto_battle_challenge and team_data["challenge"] is not None:
-            battle_mode = "challenge"
-            difficulty = "medium"
-        else:
-            battle_mode = "stadium"
-            difficulty = "hard"
-
-        if battle_mode in team_data:
-
-            if team_data[battle_mode]["error"] == "":
-                remaining = 0
-            else:
-                time_array = team_data[battle_mode]["error"].split("(")[1].split(" ")
-                if len(time_array) == 5:
-                    remaining = 60 * int(time_array[0]) + int(time_array[3])
-                elif "minutes" in time_array:
-                    remaining = 60 * int(time_array[0])
-                else:
-                    remaining = int(time_array[0])
-
-            if remaining > 0:
-                remaining_human = seconds_readable(remaining)
-                logger.info(f"{YELLOWLOG}Next {battle_mode} battle in {remaining_human}", extra={"emoji": ":speech_balloon:"})
-
-            sleep(remaining + 1)
-
-            if battle_mode == "stadium":
-                self.get_missions()
-                if POKEMON.missions.check_stadium_mission():
-                    difficulty = POKEMON.missions.check_stadium_difficulty()
+            if data["rejoinableBattle"]:
+                self.log(f"{YELLOWLOG}Rejoining battle")
+                self.do_battle()
+                return
 
             team_data = self.pokemon_api.get_teams()
-            if team_data[battle_mode]["meet_requirements"]:
-                team_id = team_data["teamNumber"]
-                data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
-                battle_message = f"{difficulty} {battle_mode}" if battle_mode == "stadium" else battle_mode
-                self.log(f"{YELLOWLOG}Starting {battle_message} battle")
-                result, key = self.do_battle()
-                if result and battle_mode == "challenge":
-                    POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
+
+            if POKEMON.auto_battle_challenge and team_data["challenge"] is not None:
+                battle_mode = "challenge"
+                difficulty = "medium"
             else:
-                self.log(f"{REDLOG}Didn't meet requirements for {battle_mode} battle")
+                battle_mode = "stadium"
+                difficulty = "hard"
+
+            if battle_mode in team_data:
+
+                if team_data[battle_mode]["error"] == "":
+                    remaining = 0
+                else:
+                    time_array = team_data[battle_mode]["error"].split("(")[1].split(" ")
+                    if len(time_array) == 5:
+                        remaining = 60 * int(time_array[0]) + int(time_array[3])
+                    elif "minutes" in time_array:
+                        remaining = 60 * int(time_array[0])
+                    else:
+                        remaining = int(time_array[0])
+
+                if remaining > 0:
+                    remaining_human = seconds_readable(remaining)
+                    logger.info(f"{YELLOWLOG}Next {battle_mode} battle in {remaining_human}", extra={"emoji": ":speech_balloon:"})
+
+                sleep(remaining + 1)
+
+                if battle_mode == "stadium":
+                    self.get_missions()
+                    if POKEMON.missions.check_stadium_mission():
+                        difficulty = POKEMON.missions.check_stadium_difficulty()
+
+                team_data = self.pokemon_api.get_teams()
+                if team_data[battle_mode]["meet_requirements"]:
+                    team_id = team_data["teamNumber"]
+                    data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
+                    battle_message = f"{difficulty} {battle_mode}" if battle_mode == "stadium" else battle_mode
+                    self.log(f"{YELLOWLOG}Starting {battle_message} battle")
+                    result, key = self.do_battle()
+                    if result and battle_mode == "challenge":
+                        POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
+                else:
+                    self.log(f"{REDLOG}Didn't meet requirements for {battle_mode} battle")
+                    sleep(15)
+            else:
+                self.log(f"{REDLOG}Error: {battle_mode} not in response")
                 sleep(15)
         else:
-            self.log(f"{REDLOG}Error: {battle_mode} not in response")
-            sleep(15)
+            sleep(30)
 
     def check_loyalty_info(self, client, message, argstring):
         if self.username in argstring and "Your loyalty level" in argstring:
@@ -1279,7 +1294,6 @@ def leave_channel(channel):
         )
         if len(POKEMON.channel_list) == 0:
             poke_logger.info("Nobody is streaming Pokemon CG")
-            POKEMON.save_settings()
 
     if channel in POKEMON.online_channels:
         POKEMON.channel_offline(channel)
