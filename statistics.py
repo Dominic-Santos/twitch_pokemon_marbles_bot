@@ -446,7 +446,6 @@ def read_logs():
                     lastpokemon = " ".join(lpm.split(",")[0].strip().split(" ")[1:]).strip()
 
                 if lastpokemon != "":
-                    print(">>", lastpokemon, "<<", line)
                     lasttier = line.split("tier")[1].strip()[0]
                 else:
                     lastpokemon = "unknown"
