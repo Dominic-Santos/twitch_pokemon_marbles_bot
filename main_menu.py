@@ -5,27 +5,18 @@ import subprocess
 
 from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
 
-"""
-    Settings Todo:
-        Show hints button (?) -> Popup with hint? DONE
-        Values:
-            bool -> toggle True/False DONE
-            int:
-                if values exist:
-                    values is list -> dropdown
-                    values is dict -> dropdown from min to max
-                else: any int
-            str -> dropdown (no manual input so far) DONE
-            list:
-                values -> toggle (make list of all selected)
-                no values -> list of items with order (do last not priority)
-        Save / Load buttons
-"""
-
 
 def clear_widgets(app):
     for widget in app.winfo_children():
         widget.destroy()
+
+
+def getBoolText(value):
+    return "On" if value else "Off"
+
+
+def getColor(value):
+    return "green" if value else "#f0f0f0"
 
 
 class MainMenu():
@@ -95,6 +86,9 @@ class Settings():
         self.options = sorted(self.pcg.settings.keys())
 
     def run(self):
+        self.load()
+
+    def load(self):
         clear_widgets(self.app)
         self.createFrame()
         self.loadOptionsList()
@@ -139,17 +133,9 @@ class Settings():
     def toggleBool(self, option, btn):
         self.pcg.settings[option] = not self.pcg.settings[option]
         btn.config(
-            bg=self.getColor(self.pcg.settings[option]),
-            text=self.getBoolText(self.pcg.settings[option])
+            bg=getColor(self.pcg.settings[option]),
+            text=getBoolText(self.pcg.settings[option])
         )
-
-    @staticmethod
-    def getBoolText(value):
-        return "On" if value else "Off"
-
-    @staticmethod
-    def getColor(value):
-        return "green" if value else "#f0f0f0"
 
     def changeDropdown(self, option, dropdown):
         if isinstance(self.pcg.settings[option], int):
@@ -169,7 +155,6 @@ class Settings():
 
     def loadOptionsList(self):
         clear_widgets(self.list_frame)
-        self.inputs = {}
 
         page = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
 
@@ -180,10 +165,10 @@ class Settings():
 
             tkinter.Label(self.list_frame, text=option_name).grid(row=i, column=0, pady=3, padx=5)
 
-            val = tkinter.Button(self.list_frame, text="<tmp>", padx=5, command=self.doNothing)
+            val = tkinter.Label(self.list_frame, text="<not finished>", padx=5)
 
             if option_type == bool:
-                val = tkinter.Button(self.list_frame, text=self.getBoolText(option_value), padx=5, bg=self.getColor(option_value))
+                val = tkinter.Button(self.list_frame, text=getBoolText(option_value), padx=5, bg=getColor(option_value))
                 val.config(command=(lambda option=option_name, btn=val: self.toggleBool(option, btn)))
             elif option_type == str:
                 dd = DropDownValue(option_name, option_value, self.changeDropdown)
@@ -202,6 +187,16 @@ class Settings():
                         textvariable=var,
                     )
                     var.trace("w", (lambda _, __, ___, option=option_name, value=var, inp=val: self.changeIntEntry(option, value, inp)))
+            elif option_type == list:
+                if "values" in option_settings:
+                    val = tkinter.Button(
+                        self.list_frame,
+                        text=str(len(option_value)) + " Selected",
+                        padx=5,
+                        command=(lambda option=option_name: self.openMultiSelect(option))
+                    )
+                else:
+                    val = tkinter.Label(self.list_frame, text=str(len(option_value)) + " Items", padx=5)
 
             val.grid(row=i, column=1, pady=3, padx=5)
 
@@ -214,8 +209,13 @@ class Settings():
 
         self.refreshPageLabel()
 
-    def doNothing(self):
-        pass
+    def openMultiSelect(self, option):
+        ms = MultiSelect(self.app, self, option, self.pcg.default_settings[option]["values"], self.pcg.settings[option])
+        ms.run()
+
+    def multiSelectCallback(self, option, value):
+        self.pcg.settings[option] = value
+        self.load()
 
     def refreshPageLabel(self):
         self.pageLabel.config(text=f"Page: {min(self.page + 1, self.max_page + 1)}/{self.max_page + 1}")
@@ -234,6 +234,98 @@ class DropDownValue(tkinter.StringVar):
 
     def set_dropdown(self, dropdown):
         self.dropdown = dropdown
+
+
+class MultiSelect():
+    def __init__(self, app, parent, option, options, selected):
+        self.app = app
+        self.parent = parent
+        self.option = option
+        self.options = sorted(options)
+        self.selected = selected
+
+        self.page = 0
+        self.page_size = 40
+
+    def run(self):
+        self.load()
+
+    def load(self):
+        clear_widgets(self.app)
+        self.createFrame()
+        self.loadOptionsList()
+        self.app.geometry("")
+
+    def save(self):
+        self.parent.multiSelectCallback(self.option, self.selected)
+
+    def createFrame(self):
+        self.list_frame = tkinter.Frame(self.app)
+        self.list_frame.pack(pady=10, padx=10)
+
+        self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
+
+        f = tkinter.Frame(self.app)
+        tkinter.Button(f, text="Back", command=self.parent.load).grid(row=0, column=0, padx=3)
+        tkinter.Button(f, text="<", command=self.prevPage, padx=10).grid(row=0, column=1, padx=3)
+        self.pageLabel = tkinter.Label(f, text="")
+        self.pageLabel.grid(row=0, column=2, padx=3)
+        tkinter.Button(f, text=">", command=self.nextPage, padx=10).grid(row=0, column=3, padx=3)
+        tkinter.Button(f, text="Save", command=self.save).grid(row=0, column=4, padx=3)
+        f.pack(pady=10)
+
+    def nextPage(self):
+        if self.page < self.max_page:
+            self.page += 1
+        else:
+            self.page = 0
+        self.loadOptionsList()
+
+    def prevPage(self):
+        if self.page > 0:
+            self.page -= 1
+        else:
+            self.page = self.max_page
+        self.loadOptionsList()
+
+    def toggleBool(self, option, btn):
+        if option in self.selected:
+            self.selected.remove(option)
+        else:
+            self.selected.append(option)
+
+        btn.config(
+            bg=getColor(option in self.selected),
+            text=getBoolText(option in self.selected)
+        )
+
+    def loadOptionsList(self):
+        clear_widgets(self.list_frame)
+
+        pages = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
+        number_pages = 4
+
+        page_nrs = []
+        for i in range(number_pages):
+            if len(pages) > self.page_size / number_pages * i:
+                page_nrs.append(i)
+
+        for page_nr in page_nrs:
+            page = pages[int(self.page_size / number_pages * page_nr): int(self.page_size / number_pages * page_nr + self.page_size / number_pages)]
+            for i, option_name in enumerate(page):
+                option_value = option_name in self.selected
+                nr_items = 2
+
+                tkinter.Label(self.list_frame, text=option_name).grid(row=i, column=0 + nr_items * page_nr, pady=3, padx=5)
+
+                val = tkinter.Button(self.list_frame, text=getBoolText(option_value), padx=5, bg=getColor(option_value))
+                val.config(command=(lambda option=option_name, btn=val: self.toggleBool(option, btn)))
+                val.grid(row=i, column=1 + nr_items * page_nr, pady=3, padx=5)
+
+        self.refreshPageLabel()
+
+    def refreshPageLabel(self):
+        self.pageLabel.config(text=f"Page: {min(self.page + 1, self.max_page + 1)}/{self.max_page + 1}")
 
 
 if __name__ == "__main__":
