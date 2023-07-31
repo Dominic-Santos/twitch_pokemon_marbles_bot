@@ -39,7 +39,7 @@ class Pokedex(object):
         self.pokemon = {}
         self.pokemon_stats = {}
         self.pokemon_moves = {}
-        self._total = 898
+        self._total = 904
         self.load_pokedex()
         self.load_moves()
         self.count_totals()

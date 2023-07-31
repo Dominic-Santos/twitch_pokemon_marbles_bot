@@ -752,7 +752,7 @@ class ClientIRCPokemon(ClientIRCBase):
                 trade_legendaries = POKEMON.wondertrade_legendaries
                 trade_starters = POKEMON.wondertrade_starters
 
-                for tier in ["A", "B", "C"]:
+                for tier in ["S", "A", "B", "C"]:
                     looking_for = f"trade{tier}"
                     for pokemon in tradable:
                         if looking_for in pokemon["nickname"]:

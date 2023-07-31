@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import json
 
 from .Discord import Discord
-from .Missions import Missions
+from .Missions import Missions, VALID_TYPES
 from .Inventory import Inventory
 from .Pokedex import Pokedex
 from .Computer import Computer
@@ -28,33 +28,100 @@ class PokemonComunityGame(Loyalty):
         self.channel_list = []
         self.online_channels = []
 
-        self.settings = {
-            "catch_everything": False,
-            "catch_alternates": False,
-            "catch_fish": False,
-            "complete_bag": False,
-            "use_special_balls": True,
-            "catch_starters": True,
-            "catch_legendaries": True,
-            "auto_battle": False,
-            "auto_battle_challenge": True,
-            "money_saving": 0,
-            "spend_money_above": 0,
-            "spend_money_strategy": "save",
-            "spend_money_level": 0,
-            "catch": [],
-            "catch_tiers": [],
-            "catch_types": [],
-            "channel_priority": [],
-            "trade_legendaries": False,
-            "trade_starters": False,
-        }
-
         self.discord = Discord()
         self.inventory = Inventory()
         self.pokedex = Pokedex()
         self.missions = Missions()
         self.computer = Computer()
+
+        self.default_settings = {
+            "catch_everything": {
+                "value": False,
+                "hint": "Catch every pokemon that spawns",
+            },
+            "catch_alternates": {
+                "value": False,
+                "hint": "Collect one of each alternate version of a pokemon in bag",
+            },
+            "catch_fish": {
+                "value": False,
+                "hint": "Catch all Fish pokemon (used for events)",
+            },
+            "complete_bag": {
+                "value": False,
+                "hint": "Collect one of each pokemon in bag",
+            },
+            "use_special_balls": {
+                "value": True,
+                "hint": "Use all balls, not just Poke, Great, Ultra and Premier",
+            },
+            "catch_starters": {
+                "value": True,
+                "hint": "Catch all Starter pokemon",
+            },
+            "catch_legendaries": {
+                "value": True,
+                "hint": "Catch all Legendary pokemon",
+            },
+            "auto_battle": {
+                "value": False,
+                "hint": "Allow AI to battle hard stadium battles",
+            },
+            "auto_battle_challenge": {
+                "value": True,
+                "hint": "When auto_battle is active, also allow AI to attempt Challenges when available",
+            },
+            "money_saving": {
+                "value": 0,
+                "hint": "When cash is bellow this amount, save Ultraballs for A tiers and Greatballs for B tiers",
+            },
+            "spend_money_above": {
+                "value": 0,
+                "hint": "When cash is above this amount, catch any pokemon that spawns, set to 0 to disable",
+            },
+            "spend_money_strategy": {
+                "value": "save",
+                "hint": "When spend_money_above is active, chose what catch strategy to apply:\n -best ball available\n -worst ball available\n -save Ultraballs for A tiers and Greatballs for B tiers",
+                "values": ["save", "best", "worst"],
+            },
+            "spend_money_level": {
+                "value": 0,
+                "hint": "Only spend money when a streamer above this level is online:\n  2 = featured\n  1 = Deemonrider/Jonaswagern\n  0 = all",
+                "values": {
+                    "max": 2,
+                    "min": 0,
+                },
+            },
+            "catch": {
+                "value": [],
+                "hint": "Catch any of the selected pokemon",
+                "values": [self.pokedex.stats(str(x)).name for x in range(1, self.pokedex.total + 1)],
+            },
+            "catch_tiers": {
+                "value": [],
+                "hint": "Catch any pokemon of the selected tiers",
+                "values": ["S", "A", "B", "C"],
+            },
+            "catch_types": {
+                "value": [],
+                "hint": "Catch any pokemon of the selected types",
+                "values": VALID_TYPES,
+            },
+            "channel_priority": {
+                "value": [],
+                "hint": "Priority channels in order of most important to least",
+            },
+            "trade_legendaries": {
+                "value": False,
+                "hint": "Trade duplicate legendaries",
+            },
+            "trade_starters": {
+                "value": False,
+                "hint": "Trade duplicate starters",
+            },
+        }
+
+        self.settings = {key: self.default_settings[key]["value"] for key in self.default_settings}
 
         self.load_settings()
         self.load_discord_settings()
