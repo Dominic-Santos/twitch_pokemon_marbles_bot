@@ -80,10 +80,11 @@ class Settings():
         self.app = app
         self.parent = parent
         self.pcg = PokemonComunityGame()
+        self.options = sorted(self.pcg.settings.keys())
 
         self.page = 0
-        self.page_size = 10
-        self.options = sorted(self.pcg.settings.keys())
+        self.page_size = 20
+        self.columns = 2
 
     def run(self):
         self.load()
@@ -156,56 +157,68 @@ class Settings():
     def loadOptionsList(self):
         clear_widgets(self.list_frame)
 
-        page = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
+        pages = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
 
-        for i, option_name in enumerate(page):
-            option_value = self.pcg.settings[option_name]
-            option_settings = self.pcg.default_settings[option_name]
-            option_type = type(option_value)
+        page_nrs = []
+        for i in range(self.columns):
+            if len(pages) > self.page_size / self.columns * i:
+                page_nrs.append(i)
 
-            tkinter.Label(self.list_frame, text=option_name).grid(row=i, column=0, pady=3, padx=5)
+        for page_nr in page_nrs:
+            page = pages[int(self.page_size / self.columns * page_nr): int(self.page_size / self.columns * page_nr + self.page_size / self.columns)]
 
-            val = tkinter.Label(self.list_frame, text="<not finished>", padx=5)
+            # page = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
 
-            if option_type == bool:
-                val = tkinter.Button(self.list_frame, text=getBoolText(option_value), padx=5, bg=getColor(option_value))
-                val.config(command=(lambda option=option_name, btn=val: self.toggleBool(option, btn)))
-            elif option_type == str:
-                dd = DropDownValue(option_name, option_value, self.changeDropdown)
-                val = tkinter.OptionMenu(self.list_frame, dd, *option_settings["values"])
-                dd.set_dropdown(val)
-            elif option_type == int:
-                if "values" in option_settings:
+            for i, option_name in enumerate(page):
+                option_value = self.pcg.settings[option_name]
+                option_settings = self.pcg.default_settings[option_name]
+                option_type = type(option_value)
+                offset = 3 * page_nr
+
+                tkinter.Label(self.list_frame, text=option_name).grid(row=i, column=0 + offset, pady=3, padx=5)
+
+                val = tkinter.Label(self.list_frame, text="<not finished>", padx=5)
+
+                if option_type == bool:
+                    val = tkinter.Button(self.list_frame, text=getBoolText(option_value), padx=5, bg=getColor(option_value))
+                    val.config(command=(lambda option=option_name, btn=val: self.toggleBool(option, btn)))
+                elif option_type == str:
                     dd = DropDownValue(option_name, option_value, self.changeDropdown)
-                    val = tkinter.OptionMenu(self.list_frame, dd, *list(range(option_settings["values"]["min"], option_settings["values"]["max"] + 1)))
+                    val = tkinter.OptionMenu(self.list_frame, dd, *option_settings["values"])
                     dd.set_dropdown(val)
-                else:
-                    var = tkinter.StringVar()
-                    var.set(option_value)
-                    val = tkinter.Entry(
-                        self.list_frame,
-                        textvariable=var,
-                    )
-                    var.trace("w", (lambda _, __, ___, option=option_name, value=var, inp=val: self.changeIntEntry(option, value, inp)))
-            elif option_type == list:
-                if "values" in option_settings:
-                    val = tkinter.Button(
-                        self.list_frame,
-                        text=str(len(option_value)) + " Selected",
-                        padx=5,
-                        command=(lambda option=option_name: self.openMultiSelect(option))
-                    )
-                else:
-                    val = tkinter.Label(self.list_frame, text=str(len(option_value)) + " Items", padx=5)
+                elif option_type == int:
+                    if "values" in option_settings:
+                        dd = DropDownValue(option_name, option_value, self.changeDropdown)
+                        val = tkinter.OptionMenu(self.list_frame, dd, *list(range(option_settings["values"]["min"], option_settings["values"]["max"] + 1)))
+                        dd.set_dropdown(val)
+                    else:
+                        var = tkinter.StringVar()
+                        var.set(option_value)
+                        val = tkinter.Entry(
+                            self.list_frame,
+                            textvariable=var,
+                        )
+                        var.trace("w", (lambda _, __, ___, option=option_name, value=var, inp=val: self.changeIntEntry(option, value, inp)))
+                elif option_type == list:
+                    if "values" in option_settings:
+                        val = tkinter.Button(
+                            self.list_frame,
+                            text=str(len(option_value)) + " Selected",
+                            padx=5,
+                            command=(lambda option=option_name: self.openMultiSelect(option))
+                        )
+                    else:
+                        val = tkinter.Label(self.list_frame, text=str(len(option_value)) + " Items", padx=5)
 
-            val.grid(row=i, column=1, pady=3, padx=5)
+                if val is not None:
+                    val.grid(row=i, column=1 + offset, pady=3, padx=5)
 
-            tkinter.Button(
-                self.list_frame,
-                text="?",
-                padx=5,
-                command=(lambda title=option_name, text=option_settings["hint"]: self.showHint(title, text))
-            ).grid(row=i, column=2, pady=3, padx=5)
+                tkinter.Button(
+                    self.list_frame,
+                    text="?",
+                    padx=5,
+                    command=(lambda title=option_name, text=option_settings["hint"]: self.showHint(title, text))
+                ).grid(row=i, column=2 + offset, pady=3, padx=5)
 
         self.refreshPageLabel()
 
@@ -246,6 +259,7 @@ class MultiSelect():
 
         self.page = 0
         self.page_size = 40
+        self.columns = 4
 
     def run(self):
         self.load()
@@ -303,24 +317,23 @@ class MultiSelect():
         clear_widgets(self.list_frame)
 
         pages = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
-        number_pages = 4
 
         page_nrs = []
-        for i in range(number_pages):
-            if len(pages) > self.page_size / number_pages * i:
+        for i in range(self.columns):
+            if len(pages) > self.page_size / self.columns * i:
                 page_nrs.append(i)
 
         for page_nr in page_nrs:
-            page = pages[int(self.page_size / number_pages * page_nr): int(self.page_size / number_pages * page_nr + self.page_size / number_pages)]
+            page = pages[int(self.page_size / self.columns * page_nr): int(self.page_size / self.columns * page_nr + self.page_size / self.columns)]
             for i, option_name in enumerate(page):
                 option_value = option_name in self.selected
-                nr_items = 2
+                offset = 2 * page_nr
 
-                tkinter.Label(self.list_frame, text=option_name).grid(row=i, column=0 + nr_items * page_nr, pady=3, padx=5)
+                tkinter.Label(self.list_frame, text=option_name).grid(row=i, column=0 + offset, pady=3, padx=5)
 
                 val = tkinter.Button(self.list_frame, text=getBoolText(option_value), padx=5, bg=getColor(option_value))
                 val.config(command=(lambda option=option_name, btn=val: self.toggleBool(option, btn)))
-                val.grid(row=i, column=1 + nr_items * page_nr, pady=3, padx=5)
+                val.grid(row=i, column=1 + offset, pady=3, padx=5)
 
         self.refreshPageLabel()
 
