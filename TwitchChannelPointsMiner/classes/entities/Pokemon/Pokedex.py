@@ -221,6 +221,9 @@ class Pokedex(object):
 
         return move
 
+    def clean_name(self, pokemon):
+        return self._get_pokemon_name(pokemon)
+
     @property
     def total(self):
         return self._total

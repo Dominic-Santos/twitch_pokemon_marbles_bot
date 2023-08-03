@@ -63,3 +63,10 @@ def test_baby():
     poke = Pokemon()
     poke.pokedex_id = 10  # Caterpie
     assert pokedex.baby(poke)
+
+
+def test_clean_name():
+    assert pokedex.clean_name("Gal Rapidash") == "Rapidash"
+    poke = Pokemon()
+    poke.name = "His Caterpie"
+    assert pokedex.clean_name(poke) == "Caterpie"

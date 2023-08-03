@@ -119,6 +119,11 @@ class PokemonComunityGame(Loyalty):
                 "value": False,
                 "hint": "Trade duplicate starters",
             },
+            "trade_keep": {
+                "value": [],
+                "hint": "Won't wondertrade any of the selected pokemon",
+                "values": [self.pokedex.stats(str(x)).name for x in range(1, self.pokedex.total + 1)],
+            }
         }
 
         self.settings = {key: self.default_settings[key]["value"] for key in self.default_settings}
@@ -203,9 +208,8 @@ class PokemonComunityGame(Loyalty):
         for mission in missions:
             reasons.append(mission)
 
-        for catch in self.settings["catch"]:
-            if pokemon.name.startswith(catch):
-                reasons.append("catch")
+        if self.pokedex.clean_name(pokemon) in self.settings["catch"]:
+            reasons.append("catch")
 
         for poke_type in pokemon.types:
             if poke_type in self.settings["catch_types"]:
@@ -311,6 +315,9 @@ class PokemonComunityGame(Loyalty):
     @property
     def wondertrade_starters(self):
         return self.settings["trade_starters"]
+
+    def wondertrade_keep(self, pokemon):
+        return self.pokedex.clean_name(pokemon) in self.settings["trade_keep"]
 
     # ########### Battles ############
     @property
