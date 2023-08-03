@@ -1,6 +1,6 @@
 import json
 
-from . import Pokedex
+from . import Pokedex, Pokemon
 
 JSON_FILE = "tests/pokedex.json"
 
@@ -56,6 +56,10 @@ def test_have_extra():
 
 def test_baby():
     assert pokedex.baby("Pichu")
-    assert pokedex.baby("Charmander")
-    assert pokedex.baby("Charmeleon") == False
     assert pokedex.baby("Caterpie")
+    assert pokedex.baby("Lugia") == False
+    assert pokedex.baby("Charmander")
+    assert pokedex.baby("Metapod") == False
+    poke = Pokemon()
+    poke.pokedex_id = 10  # Caterpie
+    assert pokedex.baby(poke)

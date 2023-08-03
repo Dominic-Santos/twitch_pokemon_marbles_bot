@@ -9,7 +9,7 @@ STARTER_POKEMON = ["Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon
 LEGENDARY_POKEMON = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Lugia", "Ho-Oh", "Celebi", "Regirock", "Regice", "Registeel", "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Cresselia", "Phione", "Manaphy", "Darkrai", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Reshiram", "Zekrom", "Landorus", "Kyurem", "Keldeo", "Meloetta", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Diancie", "Hoopa", "Volcanion", "Type: Null", "Silvally", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", "Cosmoem", "Solgaleo", "Lunala", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Necrozma", "Magearna", "Marshadow", "Poipole", "Naganadel", "Stakataka", "Blacephalon", "Zeraora", "Meltan", "Melmetal", "Zacian", "Zamazenta", "Eternatus", "Kubfu", "Urshifu", "Zarude", "Regieleki", "Regidrago", "Glastrier", "Spectrier", "Calyrex", "Wyrdeer", "Kleavor", "Ursaluna", "Basculegion", "Sneasler", "Overqwil", "Type: Null"]
 FISH_POKEMON = ["Alomomola", "Angerphish", "Arctovish", "Arrokuda", "Barboach", "Barbubble", "Barraskewda", "Basculegion", "Basculin", "Blaufisch", "Bruxish", "Bubbayou", "Carvanha", "Chinchou", "Dragalge", "Eelektrik", "Elektross", "Feebas", "Finneon", "Goldeen", "Gorebyss", "Gyarados", "Horsea", "Huntail", "Kingdra", "Kyogre", "Lanturn", "Lumineon", "Luvdisc", "Magikarp", "Mantine", "Mantyke", "Milotic", "Mudkip", "Overqwil", "Qwilfish", "Relicanth", "Remoraid", "Seadra", "Seaking", "Sharpedo", "Skrelp", "Stunfisk", "Tynamo", "Wailmer", "Wailord", "Whiscash", "Wishiwashi", "Wooper", "Dracovish", "Clauncher", "Clawitzer"]
 FEMALE_POKEMON = [10025, 86320, 10143, 10144, 10262, 10284, 10285, 10286, 10287, 10288, 10292, 10295, 10302, 10309, 10316, 10319, 10325, 10340, 10350, 10352, 10359, 10360, 10361, 10362, 10365, 10368, 10370, 10372, 10373, 10375, 10378, 10379, 10381, 10382, 10384, 10385, 10387, 10388, 10391, 10392, 10396, 10404, 10418, 10422, 10423, 10424, 10427, 10429, 10438, 10441, 10442, 10445, 10446, 10449, 10451, 10452, 10453, 10454, 10455, 10456, 10467, 10468, 10470, 10471, 10540, 10543, 10544, 10545, 10553, 10331, 10369, 10505, 10303]
-THREE_EVOS = ["Bulbasaur", "Charmander", "Squirtle", "Caterpie", "Weedle", "Pidgey", "Pichu", "Nidoran-male", "Nidoran-female", "Cleffa", "Igglybuff", "Zubat", "Oddish", "Mankey", "Poliwag", "Abra", "Machop", "Bellsprout", "Geodude", "Magnemite", "Rhyhorn", "Happiny", "Horsea", "Mime Jr.", "Elekid", "Magby", "Porygon", "Dratini", "Chikorita", "Cyndaquil", "Totodile", "Togepi", "Mareep", "Azurill", "Hoppip", "Teddiursa", "Swinub", "Larvitar", "Treecko", "Torchic", "Mudkip", "Wurmple", "Lotad", "Seedot", "Ralts", "Slakoth", "Whismur", "Aron", "Budew", "Trapinch", "Duskull", "Spheal", "Bagon", "Beldum", "Turtwig", "Chimchar", "Piplup", "Starly", "Shinx", "Gible", "Snivey", "Tepig", "Oshawott", "Lillipup", "Pidove", "Roggenrola", "Timbur", "Tympole", "Sewaddle", "Venipede", "Sandile", "Gothita", "Solosis", "Vanillite", "Klink", "Tynamo", "Litwick", "Axew", "Pawniard", "Deino", "Chespin", "Fennekin", "Froakie", "Fletchling", "Scatterbug", "Flabébé", "Honedge", "Goomy", "Rowlet", "Litten", "Popplio", "Pipipek", "Grubbin", "Bounsweet", "Jangmo-o", "Cosmog", "Grookey", "Scorbunny", "Sobble", "Rookidee", "Blipbug", "Rolycoly", "Hatenna", "Impidimp", "Dreepy", "Sprigatito", "Fuecoco", "Quaxly", "Pawmi", "Smoliv", "Nacli", "Tinkatink", "Frigibax"]
+# THREE_EVOS = ["Bulbasaur", "Charmander", "Squirtle", "Caterpie", "Weedle", "Pidgey", "Pichu", "Nidoran-male", "Nidoran-female", "Cleffa", "Igglybuff", "Zubat", "Oddish", "Mankey", "Poliwag", "Abra", "Machop", "Bellsprout", "Geodude", "Magnemite", "Rhyhorn", "Happiny", "Horsea", "Mime Jr.", "Elekid", "Magby", "Porygon", "Dratini", "Chikorita", "Cyndaquil", "Totodile", "Togepi", "Mareep", "Azurill", "Hoppip", "Teddiursa", "Swinub", "Larvitar", "Treecko", "Torchic", "Mudkip", "Wurmple", "Lotad", "Seedot", "Ralts", "Slakoth", "Whismur", "Aron", "Budew", "Trapinch", "Duskull", "Spheal", "Bagon", "Beldum", "Turtwig", "Chimchar", "Piplup", "Starly", "Shinx", "Gible", "Snivey", "Tepig", "Oshawott", "Lillipup", "Pidove", "Roggenrola", "Timbur", "Tympole", "Sewaddle", "Venipede", "Sandile", "Gothita", "Solosis", "Vanillite", "Klink", "Tynamo", "Litwick", "Axew", "Pawniard", "Deino", "Chespin", "Fennekin", "Froakie", "Fletchling", "Scatterbug", "Flabébé", "Honedge", "Goomy", "Rowlet", "Litten", "Popplio", "Pipipek", "Grubbin", "Bounsweet", "Jangmo-o", "Cosmog", "Grookey", "Scorbunny", "Sobble", "Rookidee", "Blipbug", "Rolycoly", "Hatenna", "Impidimp", "Dreepy", "Sprigatito", "Fuecoco", "Quaxly", "Pawmi", "Smoliv", "Nacli", "Tinkatink", "Frigibax"]
 
 REGION_PREFIX = {
     "Galarian": "Gal",
@@ -124,11 +124,18 @@ class Pokedex(object):
 
         return pokename
 
-    @staticmethod
-    def _get_pokemon_id(pokemon):
-        if isinstance(pokemon, Pokemon):
-            return pokemon.pokedex_id
-        return pokemon
+    def _get_pokemon_id(self, pokemon):
+        if isinstance(pokemon, Pokemon) is False:
+            for poke_id in self.pokemon_stats.keys():
+                pokeobj = self.stats(poke_id)
+                if pokeobj.name == pokemon:
+                    pokemon = pokeobj
+                    break
+
+        if isinstance(pokemon, Pokemon) is False:
+            return 0
+
+        return pokemon.pokedex_id
 
     def have(self, pokemon):
         poke_name = self._get_pokemon_name(pokemon)
@@ -156,8 +163,16 @@ class Pokedex(object):
         return poke_id in FEMALE_POKEMON
 
     def baby(self, pokemon):
-        poke_name = self._get_pokemon_name(pokemon)
-        return poke_name in THREE_EVOS
+        poke_id = self._get_pokemon_id(pokemon)
+        if poke_id is not None:
+            pokemon = self.stats(poke_id)
+            if pokemon is not None and pokemon.evolve_to is not None:
+                for evolution_id in pokemon.evolve_to.keys():
+                    evolution = self.stats(evolution_id)
+                    if evolution is not None and evolution.evolve_to is not None:
+                        if len(evolution.evolve_to.keys()) > 0:
+                            return True
+        return False
 
     @staticmethod
     def remove_region(pokemon):
@@ -169,10 +184,11 @@ class Pokedex(object):
         return poke_name
 
     def stats(self, pokemon_id):
-        if pokemon_id not in self.pokemon_stats:
+        poke_id = str(pokemon_id)
+        if poke_id not in self.pokemon_stats:
             return None
 
-        poke = Pokemon(self.pokemon_stats[pokemon_id])
+        poke = Pokemon(self.pokemon_stats[poke_id])
 
         return poke
 

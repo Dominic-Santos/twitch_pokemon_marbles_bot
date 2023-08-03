@@ -55,7 +55,26 @@
         },
         "evolves_from": [
             "1"
-        ]
+        ],
+        "evolves_to": {
+            "3": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Poison"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Grass"
+                    }
+                ]
+            }
+        }
     },
     "3": {
         "pokedex_id": 3,
@@ -73,7 +92,11 @@
             "defense": 83,
             "special_attack": 100,
             "special_defense": 100
-        }
+        },
+        "evolves_from": [
+            "2"
+        ],
+        "evolves_to": {}
     },
     "4": {
         "pokedex_id": 4,
@@ -127,7 +150,22 @@
         },
         "evolves_from": [
             "4"
-        ]
+        ],
+        "evolves_to": {
+            "6": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Fire"
+                    }
+                ]
+            }
+        }
     },
     "6": {
         "pokedex_id": 6,
@@ -145,7 +183,11 @@
             "defense": 78,
             "special_attack": 109,
             "special_defense": 85
-        }
+        },
+        "evolves_from": [
+            "5"
+        ],
+        "evolves_to": {}
     },
     "7": {
         "pokedex_id": 7,
@@ -202,7 +244,7 @@
         ],
         "evolves_to": {
             "9": {
-                "level": 36,
+                "level": 32,
                 "stones": [
                     {
                         "amount": 2,
@@ -235,7 +277,8 @@
         },
         "evolves_from": [
             "8"
-        ]
+        ],
+        "evolves_to": {}
     },
     "10": {
         "pokedex_id": 10,
@@ -4080,7 +4123,8 @@
             "defense": 100,
             "special_attack": 95,
             "special_defense": 125
-        }
+        },
+        "evolves_to": {}
     },
     "145": {
         "pokedex_id": 145,
@@ -4098,7 +4142,8 @@
             "defense": 85,
             "special_attack": 125,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "146": {
         "pokedex_id": 146,
@@ -4116,7 +4161,8 @@
             "defense": 90,
             "special_attack": 125,
             "special_defense": 85
-        }
+        },
+        "evolves_to": {}
     },
     "147": {
         "pokedex_id": 147,
@@ -4221,7 +4267,8 @@
             "defense": 90,
             "special_attack": 154,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "151": {
         "pokedex_id": 151,
@@ -4239,7 +4286,8 @@
             "defense": 100,
             "special_attack": 100,
             "special_defense": 100
-        }
+        },
+        "evolves_to": {}
     },
     "152": {
         "pokedex_id": 152,
@@ -4293,7 +4341,22 @@
         },
         "evolves_from": [
             "152"
-        ]
+        ],
+        "evolves_to": {
+            "154": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Grass"
+                    }
+                ]
+            }
+        }
     },
     "154": {
         "pokedex_id": 154,
@@ -4311,7 +4374,11 @@
             "defense": 100,
             "special_attack": 83,
             "special_defense": 100
-        }
+        },
+        "evolves_from": [
+            "153"
+        ],
+        "evolves_to": {}
     },
     "155": {
         "pokedex_id": 155,
@@ -4329,6 +4396,21 @@
             "defense": 43,
             "special_attack": 60,
             "special_defense": 50
+        },
+        "evolves_to": {
+            "156": {
+                "level": 16,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Fire"
+                    }
+                ]
+            }
         }
     },
     "156": {
@@ -4347,6 +4429,24 @@
             "defense": 58,
             "special_attack": 80,
             "special_defense": 65
+        },
+        "evolves_from": [
+            "155"
+        ],
+        "evolves_to": {
+            "157": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Fire"
+                    }
+                ]
+            }
         }
     },
     "157": {
@@ -4365,7 +4465,11 @@
             "defense": 78,
             "special_attack": 109,
             "special_defense": 85
-        }
+        },
+        "evolves_from": [
+            "156"
+        ],
+        "evolves_to": {}
     },
     "158": {
         "pokedex_id": 158,
@@ -4386,7 +4490,7 @@
         },
         "evolves_to": {
             "159": {
-                "level": 18,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
@@ -4419,7 +4523,22 @@
         },
         "evolves_from": [
             "158"
-        ]
+        ],
+        "evolves_to": {
+            "160": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Water"
+                    }
+                ]
+            }
+        }
     },
     "160": {
         "pokedex_id": 160,
@@ -4437,7 +4556,11 @@
             "defense": 100,
             "special_attack": 79,
             "special_defense": 83
-        }
+        },
+        "evolves_from": [
+            "159"
+        ],
+        "evolves_to": {}
     },
     "161": {
         "pokedex_id": 161,
@@ -6642,7 +6765,8 @@
             "defense": 75,
             "special_attack": 115,
             "special_defense": 100
-        }
+        },
+        "evolves_to": {}
     },
     "244": {
         "pokedex_id": 244,
@@ -6660,7 +6784,8 @@
             "defense": 85,
             "special_attack": 90,
             "special_defense": 75
-        }
+        },
+        "evolves_to": {}
     },
     "245": {
         "pokedex_id": 245,
@@ -6678,7 +6803,8 @@
             "defense": 115,
             "special_attack": 90,
             "special_defense": 115
-        }
+        },
+        "evolves_to": {}
     },
     "246": {
         "pokedex_id": 246,
@@ -6787,7 +6913,8 @@
             "defense": 130,
             "special_attack": 90,
             "special_defense": 154
-        }
+        },
+        "evolves_to": {}
     },
     "250": {
         "pokedex_id": 250,
@@ -6805,7 +6932,8 @@
             "defense": 90,
             "special_attack": 110,
             "special_defense": 154
-        }
+        },
+        "evolves_to": {}
     },
     "251": {
         "pokedex_id": 251,
@@ -6823,7 +6951,8 @@
             "defense": 100,
             "special_attack": 100,
             "special_defense": 100
-        }
+        },
+        "evolves_to": {}
     },
     "252": {
         "pokedex_id": 252,
@@ -6877,7 +7006,22 @@
         },
         "evolves_from": [
             "252"
-        ]
+        ],
+        "evolves_to": {
+            "254": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Grass"
+                    }
+                ]
+            }
+        }
     },
     "254": {
         "pokedex_id": 254,
@@ -6895,7 +7039,11 @@
             "defense": 65,
             "special_attack": 105,
             "special_defense": 85
-        }
+        },
+        "evolves_from": [
+            "253"
+        ],
+        "evolves_to": {}
     },
     "255": {
         "pokedex_id": 255,
@@ -6923,11 +7071,7 @@
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 1,
-                        "stone": "Fighting"
-                    },
-                    {
-                        "amount": 1,
+                        "amount": 2,
                         "stone": "Fire"
                     }
                 ]
@@ -6953,7 +7097,26 @@
         },
         "evolves_from": [
             "255"
-        ]
+        ],
+        "evolves_to": {
+            "257": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Fighting"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Fire"
+                    }
+                ]
+            }
+        }
     },
     "257": {
         "pokedex_id": 257,
@@ -6971,7 +7134,11 @@
             "defense": 70,
             "special_attack": 110,
             "special_defense": 70
-        }
+        },
+        "evolves_from": [
+            "256"
+        ],
+        "evolves_to": {}
     },
     "258": {
         "pokedex_id": 258,
@@ -6999,11 +7166,7 @@
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 1,
-                        "stone": "Ground"
-                    },
-                    {
-                        "amount": 1,
+                        "amount": 2,
                         "stone": "Water"
                     }
                 ]
@@ -7029,7 +7192,26 @@
         },
         "evolves_from": [
             "258"
-        ]
+        ],
+        "evolves_to": {
+            "260": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Ground"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Water"
+                    }
+                ]
+            }
+        }
     },
     "260": {
         "pokedex_id": 260,
@@ -7047,7 +7229,11 @@
             "defense": 90,
             "special_attack": 85,
             "special_defense": 90
-        }
+        },
+        "evolves_from": [
+            "259"
+        ],
+        "evolves_to": {}
     },
     "261": {
         "pokedex_id": 261,
@@ -10270,7 +10456,8 @@
             "defense": 80,
             "special_attack": 130,
             "special_defense": 110
-        }
+        },
+        "evolves_to": {}
     },
     "382": {
         "pokedex_id": 382,
@@ -10307,7 +10494,8 @@
             "defense": 140,
             "special_attack": 100,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "384": {
         "pokedex_id": 384,
@@ -10325,7 +10513,8 @@
             "defense": 90,
             "special_attack": 150,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "385": {
         "pokedex_id": 385,
@@ -10343,7 +10532,8 @@
             "defense": 100,
             "special_attack": 100,
             "special_defense": 100
-        }
+        },
+        "evolves_to": {}
     },
     "386": {
         "pokedex_id": 386,
@@ -10361,7 +10551,8 @@
             "defense": 50,
             "special_attack": 150,
             "special_defense": 50
-        }
+        },
+        "evolves_to": {}
     },
     "387": {
         "pokedex_id": 387,
@@ -10382,7 +10573,7 @@
         },
         "evolves_to": {
             "388": {
-                "level": 18,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
@@ -10425,11 +10616,7 @@
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 2,
-                        "stone": "Ground"
-                    },
-                    {
-                        "amount": 2,
+                        "amount": 4,
                         "stone": "Grass"
                     }
                 ]
@@ -10455,7 +10642,8 @@
         },
         "evolves_from": [
             "388"
-        ]
+        ],
+        "evolves_to": {}
     },
     "390": {
         "pokedex_id": 390,
@@ -10476,18 +10664,14 @@
         },
         "evolves_to": {
             "391": {
-                "level": 14,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 1,
-                        "stone": "Fighting"
-                    },
-                    {
-                        "amount": 1,
+                        "amount": 2,
                         "stone": "Fire"
                     }
                 ]
@@ -10516,7 +10700,7 @@
         ],
         "evolves_to": {
             "392": {
-                "level": 36,
+                "level": 32,
                 "stones": [
                     {
                         "amount": 2,
@@ -10553,7 +10737,8 @@
         },
         "evolves_from": [
             "391"
-        ]
+        ],
+        "evolves_to": {}
     },
     "393": {
         "pokedex_id": 393,
@@ -10607,7 +10792,22 @@
         },
         "evolves_from": [
             "393"
-        ]
+        ],
+        "evolves_to": {
+            "395": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Water"
+                    }
+                ]
+            }
+        }
     },
     "395": {
         "pokedex_id": 395,
@@ -10625,7 +10825,11 @@
             "defense": 88,
             "special_attack": 111,
             "special_defense": 101
-        }
+        },
+        "evolves_from": [
+            "394"
+        ],
+        "evolves_to": {}
     },
     "396": {
         "pokedex_id": 396,
@@ -12845,7 +13049,8 @@
             "defense": 130,
             "special_attack": 75,
             "special_defense": 130
-        }
+        },
+        "evolves_to": {}
     },
     "481": {
         "pokedex_id": 481,
@@ -12863,7 +13068,8 @@
             "defense": 105,
             "special_attack": 105,
             "special_defense": 105
-        }
+        },
+        "evolves_to": {}
     },
     "482": {
         "pokedex_id": 482,
@@ -12881,7 +13087,8 @@
             "defense": 70,
             "special_attack": 125,
             "special_defense": 70
-        }
+        },
+        "evolves_to": {}
     },
     "483": {
         "pokedex_id": 483,
@@ -12918,7 +13125,8 @@
             "defense": 100,
             "special_attack": 150,
             "special_defense": 120
-        }
+        },
+        "evolves_to": {}
     },
     "485": {
         "pokedex_id": 485,
@@ -12936,7 +13144,8 @@
             "defense": 106,
             "special_attack": 130,
             "special_defense": 106
-        }
+        },
+        "evolves_to": {}
     },
     "486": {
         "pokedex_id": 486,
@@ -12973,7 +13182,8 @@
             "defense": 120,
             "special_attack": 100,
             "special_defense": 120
-        }
+        },
+        "evolves_to": {}
     },
     "488": {
         "pokedex_id": 488,
@@ -12991,7 +13201,8 @@
             "defense": 120,
             "special_attack": 75,
             "special_defense": 130
-        }
+        },
+        "evolves_to": {}
     },
     "489": {
         "pokedex_id": 489,
@@ -13047,7 +13258,8 @@
             "defense": 90,
             "special_attack": 135,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "492": {
         "pokedex_id": 492,
@@ -13065,7 +13277,8 @@
             "defense": 100,
             "special_attack": 100,
             "special_defense": 100
-        }
+        },
+        "evolves_to": {}
     },
     "493": {
         "pokedex_id": 493,
@@ -13083,7 +13296,8 @@
             "defense": 120,
             "special_attack": 120,
             "special_defense": 120
-        }
+        },
+        "evolves_to": {}
     },
     "494": {
         "pokedex_id": 494,
@@ -13101,7 +13315,8 @@
             "defense": 100,
             "special_attack": 100,
             "special_defense": 100
-        }
+        },
+        "evolves_to": {}
     },
     "495": {
         "pokedex_id": 495,
@@ -13122,7 +13337,7 @@
         },
         "evolves_to": {
             "496": {
-                "level": 17,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
@@ -13155,7 +13370,22 @@
         },
         "evolves_from": [
             "495"
-        ]
+        ],
+        "evolves_to": {
+            "497": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Grass"
+                    }
+                ]
+            }
+        }
     },
     "497": {
         "pokedex_id": 497,
@@ -13173,7 +13403,11 @@
             "defense": 95,
             "special_attack": 75,
             "special_defense": 95
-        }
+        },
+        "evolves_from": [
+            "496"
+        ],
+        "evolves_to": {}
     },
     "498": {
         "pokedex_id": 498,
@@ -13194,18 +13428,14 @@
         },
         "evolves_to": {
             "499": {
-                "level": 17,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 1,
-                        "stone": "Fighting"
-                    },
-                    {
-                        "amount": 1,
+                        "amount": 2,
                         "stone": "Fire"
                     }
                 ]
@@ -13234,7 +13464,7 @@
         ],
         "evolves_to": {
             "500": {
-                "level": 36,
+                "level": 32,
                 "stones": [
                     {
                         "amount": 2,
@@ -13271,7 +13501,8 @@
         },
         "evolves_from": [
             "499"
-        ]
+        ],
+        "evolves_to": {}
     },
     "501": {
         "pokedex_id": 501,
@@ -13292,7 +13523,7 @@
         },
         "evolves_to": {
             "502": {
-                "level": 17,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
@@ -13325,7 +13556,22 @@
         },
         "evolves_from": [
             "501"
-        ]
+        ],
+        "evolves_to": {
+            "503": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Water"
+                    }
+                ]
+            }
+        }
     },
     "503": {
         "pokedex_id": 503,
@@ -13343,7 +13589,11 @@
             "defense": 85,
             "special_attack": 108,
             "special_defense": 70
-        }
+        },
+        "evolves_from": [
+            "502"
+        ],
+        "evolves_to": {}
     },
     "504": {
         "pokedex_id": 504,
@@ -16949,7 +17199,8 @@
             "defense": 129,
             "special_attack": 90,
             "special_defense": 72
-        }
+        },
+        "evolves_to": {}
     },
     "639": {
         "pokedex_id": 639,
@@ -16967,7 +17218,8 @@
             "defense": 90,
             "special_attack": 72,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "640": {
         "pokedex_id": 640,
@@ -16985,7 +17237,8 @@
             "defense": 72,
             "special_attack": 90,
             "special_defense": 129
-        }
+        },
+        "evolves_to": {}
     },
     "641": {
         "pokedex_id": 641,
@@ -17003,7 +17256,8 @@
             "defense": 70,
             "special_attack": 125,
             "special_defense": 80
-        }
+        },
+        "evolves_to": {}
     },
     "642": {
         "pokedex_id": 642,
@@ -17021,7 +17275,8 @@
             "defense": 70,
             "special_attack": 125,
             "special_defense": 80
-        }
+        },
+        "evolves_to": {}
     },
     "643": {
         "pokedex_id": 643,
@@ -17039,7 +17294,8 @@
             "defense": 100,
             "special_attack": 150,
             "special_defense": 120
-        }
+        },
+        "evolves_to": {}
     },
     "644": {
         "pokedex_id": 644,
@@ -17057,7 +17313,8 @@
             "defense": 120,
             "special_attack": 120,
             "special_defense": 100
-        }
+        },
+        "evolves_to": {}
     },
     "645": {
         "pokedex_id": 645,
@@ -17075,7 +17332,8 @@
             "defense": 90,
             "special_attack": 115,
             "special_defense": 80
-        }
+        },
+        "evolves_to": {}
     },
     "646": {
         "pokedex_id": 646,
@@ -17093,7 +17351,8 @@
             "defense": 90,
             "special_attack": 130,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "647": {
         "pokedex_id": 647,
@@ -17111,7 +17370,8 @@
             "defense": 90,
             "special_attack": 129,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "648": {
         "pokedex_id": 648,
@@ -17129,7 +17389,8 @@
             "defense": 77,
             "special_attack": 128,
             "special_defense": 128
-        }
+        },
+        "evolves_to": {}
     },
     "649": {
         "pokedex_id": 649,
@@ -17147,7 +17408,8 @@
             "defense": 95,
             "special_attack": 120,
             "special_defense": 95
-        }
+        },
+        "evolves_to": {}
     },
     "650": {
         "pokedex_id": 650,
@@ -17165,6 +17427,21 @@
             "defense": 65,
             "special_attack": 48,
             "special_defense": 45
+        },
+        "evolves_to": {
+            "651": {
+                "level": 16,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Grass"
+                    }
+                ]
+            }
         }
     },
     "651": {
@@ -17183,6 +17460,24 @@
             "defense": 95,
             "special_attack": 56,
             "special_defense": 58
+        },
+        "evolves_from": [
+            "650"
+        ],
+        "evolves_to": {
+            "652": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Grass"
+                    }
+                ]
+            }
         }
     },
     "652": {
@@ -17201,7 +17496,11 @@
             "defense": 122,
             "special_attack": 74,
             "special_defense": 75
-        }
+        },
+        "evolves_from": [
+            "651"
+        ],
+        "evolves_to": {}
     },
     "653": {
         "pokedex_id": 653,
@@ -17255,7 +17554,22 @@
         },
         "evolves_from": [
             "653"
-        ]
+        ],
+        "evolves_to": {
+            "655": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Fire"
+                    }
+                ]
+            }
+        }
     },
     "655": {
         "pokedex_id": 655,
@@ -17273,7 +17587,11 @@
             "defense": 72,
             "special_attack": 114,
             "special_defense": 100
-        }
+        },
+        "evolves_from": [
+            "654"
+        ],
+        "evolves_to": {}
     },
     "656": {
         "pokedex_id": 656,
@@ -17330,18 +17648,14 @@
         ],
         "evolves_to": {
             "658": {
-                "level": 36,
+                "level": 32,
                 "stones": [
                     {
                         "amount": 2,
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 2,
-                        "stone": "Dark"
-                    },
-                    {
-                        "amount": 2,
+                        "amount": 4,
                         "stone": "Water"
                     }
                 ]
@@ -18965,7 +19279,8 @@
             "defense": 95,
             "special_attack": 131,
             "special_defense": 98
-        }
+        },
+        "evolves_to": {}
     },
     "717": {
         "pokedex_id": 717,
@@ -19002,7 +19317,8 @@
             "defense": 121,
             "special_attack": 81,
             "special_defense": 95
-        }
+        },
+        "evolves_to": {}
     },
     "719": {
         "pokedex_id": 719,
@@ -19020,7 +19336,8 @@
             "defense": 150,
             "special_attack": 100,
             "special_defense": 150
-        }
+        },
+        "evolves_to": {}
     },
     "720": {
         "pokedex_id": 720,
@@ -19038,7 +19355,8 @@
             "defense": 60,
             "special_attack": 150,
             "special_defense": 130
-        }
+        },
+        "evolves_to": {}
     },
     "721": {
         "pokedex_id": 721,
@@ -19056,7 +19374,8 @@
             "defense": 120,
             "special_attack": 130,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "722": {
         "pokedex_id": 722,
@@ -19077,7 +19396,7 @@
         },
         "evolves_to": {
             "723": {
-                "level": 17,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
@@ -19114,7 +19433,26 @@
         },
         "evolves_from": [
             "722"
-        ]
+        ],
+        "evolves_to": {
+            "724": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Flying"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Grass"
+                    }
+                ]
+            }
+        }
     },
     "724": {
         "pokedex_id": 724,
@@ -19133,7 +19471,10 @@
             "special_attack": 100,
             "special_defense": 100
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "evolves_from": [
+            "723"
+        ]
     },
     "725": {
         "pokedex_id": 725,
@@ -19154,7 +19495,7 @@
         },
         "evolves_to": {
             "726": {
-                "level": 17,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
@@ -19187,7 +19528,22 @@
         },
         "evolves_from": [
             "725"
-        ]
+        ],
+        "evolves_to": {
+            "727": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Fire"
+                    }
+                ]
+            }
+        }
     },
     "727": {
         "pokedex_id": 727,
@@ -19205,7 +19561,11 @@
             "defense": 90,
             "special_attack": 80,
             "special_defense": 90
-        }
+        },
+        "evolves_from": [
+            "726"
+        ],
+        "evolves_to": {}
     },
     "728": {
         "pokedex_id": 728,
@@ -19226,7 +19586,7 @@
         },
         "evolves_to": {
             "729": {
-                "level": 17,
+                "level": 16,
                 "stones": [
                     {
                         "amount": 1,
@@ -19259,7 +19619,22 @@
         },
         "evolves_from": [
             "728"
-        ]
+        ],
+        "evolves_to": {
+            "730": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Water"
+                    }
+                ]
+            }
+        }
     },
     "730": {
         "pokedex_id": 730,
@@ -19277,7 +19652,11 @@
             "defense": 74,
             "special_attack": 126,
             "special_defense": 116
-        }
+        },
+        "evolves_from": [
+            "729"
+        ],
+        "evolves_to": {}
     },
     "731": {
         "pokedex_id": 731,
@@ -20723,7 +21102,8 @@
             "defense": 115,
             "special_attack": 85,
             "special_defense": 95
-        }
+        },
+        "evolves_to": {}
     },
     "788": {
         "pokedex_id": 788,
@@ -20741,7 +21121,8 @@
             "defense": 115,
             "special_attack": 95,
             "special_defense": 130
-        }
+        },
+        "evolves_to": {}
     },
     "789": {
         "pokedex_id": 789,
@@ -20759,7 +21140,8 @@
             "defense": 31,
             "special_attack": 29,
             "special_defense": 31
-        }
+        },
+        "evolves_to": {}
     },
     "790": {
         "pokedex_id": 790,
@@ -20777,7 +21159,8 @@
             "defense": 131,
             "special_attack": 29,
             "special_defense": 131
-        }
+        },
+        "evolves_to": {}
     },
     "791": {
         "pokedex_id": 791,
@@ -20795,7 +21178,8 @@
             "defense": 107,
             "special_attack": 113,
             "special_defense": 89
-        }
+        },
+        "evolves_to": {}
     },
     "792": {
         "pokedex_id": 792,
@@ -20813,7 +21197,8 @@
             "defense": 89,
             "special_attack": 137,
             "special_defense": 107
-        }
+        },
+        "evolves_to": {}
     },
     "793": {
         "pokedex_id": 793,
@@ -20831,7 +21216,8 @@
             "defense": 47,
             "special_attack": 127,
             "special_defense": 131
-        }
+        },
+        "evolves_to": {}
     },
     "794": {
         "pokedex_id": 794,
@@ -20849,7 +21235,8 @@
             "defense": 139,
             "special_attack": 53,
             "special_defense": 53
-        }
+        },
+        "evolves_to": {}
     },
     "795": {
         "pokedex_id": 795,
@@ -20905,7 +21292,8 @@
             "defense": 103,
             "special_attack": 107,
             "special_defense": 101
-        }
+        },
+        "evolves_to": {}
     },
     "798": {
         "pokedex_id": 798,
@@ -20923,7 +21311,8 @@
             "defense": 131,
             "special_attack": 59,
             "special_defense": 31
-        }
+        },
+        "evolves_to": {}
     },
     "799": {
         "pokedex_id": 799,
@@ -20941,7 +21330,8 @@
             "defense": 53,
             "special_attack": 97,
             "special_defense": 53
-        }
+        },
+        "evolves_to": {}
     },
     "800": {
         "pokedex_id": 800,
@@ -20959,7 +21349,8 @@
             "defense": 101,
             "special_attack": 127,
             "special_defense": 89
-        }
+        },
+        "evolves_to": {}
     },
     "801": {
         "pokedex_id": 801,
@@ -20977,7 +21368,8 @@
             "defense": 115,
             "special_attack": 130,
             "special_defense": 115
-        }
+        },
+        "evolves_to": {}
     },
     "802": {
         "pokedex_id": 802,
@@ -20995,7 +21387,8 @@
             "defense": 80,
             "special_attack": 90,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "803": {
         "pokedex_id": 803,
@@ -21013,7 +21406,8 @@
             "defense": 67,
             "special_attack": 73,
             "special_defense": 67
-        }
+        },
+        "evolves_to": {}
     },
     "804": {
         "pokedex_id": 804,
@@ -21050,7 +21444,8 @@
             "defense": 211,
             "special_attack": 53,
             "special_defense": 101
-        }
+        },
+        "evolves_to": {}
     },
     "806": {
         "pokedex_id": 806,
@@ -21068,7 +21463,8 @@
             "defense": 53,
             "special_attack": 151,
             "special_defense": 79
-        }
+        },
+        "evolves_to": {}
     },
     "807": {
         "pokedex_id": 807,
@@ -21086,7 +21482,8 @@
             "defense": 75,
             "special_attack": 102,
             "special_defense": 80
-        }
+        },
+        "evolves_to": {}
     },
     "808": {
         "pokedex_id": 808,
@@ -21104,7 +21501,8 @@
             "defense": 65,
             "special_attack": 55,
             "special_defense": 35
-        }
+        },
+        "evolves_to": {}
     },
     "809": {
         "pokedex_id": 809,
@@ -21122,7 +21520,8 @@
             "defense": 143,
             "special_attack": 80,
             "special_defense": 65
-        }
+        },
+        "evolves_to": {}
     },
     "810": {
         "pokedex_id": 810,
@@ -21176,7 +21575,22 @@
         },
         "evolves_from": [
             "810"
-        ]
+        ],
+        "evolves_to": {
+            "812": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Grass"
+                    }
+                ]
+            }
+        }
     },
     "812": {
         "pokedex_id": 812,
@@ -21194,7 +21608,11 @@
             "defense": 90,
             "special_attack": 60,
             "special_defense": 70
-        }
+        },
+        "evolves_from": [
+            "811"
+        ],
+        "evolves_to": {}
     },
     "813": {
         "pokedex_id": 813,
@@ -21212,6 +21630,21 @@
             "defense": 40,
             "special_attack": 40,
             "special_defense": 40
+        },
+        "evolves_to": {
+            "814": {
+                "level": 16,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Fire"
+                    }
+                ]
+            }
         }
     },
     "814": {
@@ -21230,6 +21663,24 @@
             "defense": 60,
             "special_attack": 55,
             "special_defense": 60
+        },
+        "evolves_from": [
+            "813"
+        ],
+        "evolves_to": {
+            "815": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Fire"
+                    }
+                ]
+            }
         }
     },
     "815": {
@@ -21248,7 +21699,11 @@
             "defense": 75,
             "special_attack": 65,
             "special_defense": 75
-        }
+        },
+        "evolves_from": [
+            "814"
+        ],
+        "evolves_to": {}
     },
     "816": {
         "pokedex_id": 816,
@@ -21302,7 +21757,22 @@
         },
         "evolves_from": [
             "816"
-        ]
+        ],
+        "evolves_to": {
+            "818": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Shimmering"
+                    },
+                    {
+                        "amount": 4,
+                        "stone": "Water"
+                    }
+                ]
+            }
+        }
     },
     "818": {
         "pokedex_id": 818,
@@ -21320,7 +21790,11 @@
             "defense": 65,
             "special_attack": 125,
             "special_defense": 65
-        }
+        },
+        "evolves_from": [
+            "817"
+        ],
+        "evolves_to": {}
     },
     "819": {
         "pokedex_id": 819,
@@ -23092,7 +23566,8 @@
             "defense": 115,
             "special_attack": 80,
             "special_defense": 115
-        }
+        },
+        "evolves_to": {}
     },
     "889": {
         "pokedex_id": 889,
@@ -23110,7 +23585,8 @@
             "defense": 115,
             "special_attack": 80,
             "special_defense": 115
-        }
+        },
+        "evolves_to": {}
     },
     "890": {
         "pokedex_id": 890,
@@ -23128,7 +23604,8 @@
             "defense": 95,
             "special_attack": 145,
             "special_defense": 95
-        }
+        },
+        "evolves_to": {}
     },
     "891": {
         "pokedex_id": 891,
@@ -23146,7 +23623,8 @@
             "defense": 60,
             "special_attack": 53,
             "special_defense": 50
-        }
+        },
+        "evolves_to": {}
     },
     "892": {
         "pokedex_id": 892,
@@ -23164,7 +23642,8 @@
             "defense": 100,
             "special_attack": 63,
             "special_defense": 60
-        }
+        },
+        "evolves_to": {}
     },
     "893": {
         "pokedex_id": 893,
@@ -23182,7 +23661,8 @@
             "defense": 105,
             "special_attack": 70,
             "special_defense": 95
-        }
+        },
+        "evolves_to": {}
     },
     "894": {
         "pokedex_id": 894,
@@ -23200,7 +23680,8 @@
             "defense": 50,
             "special_attack": 100,
             "special_defense": 50
-        }
+        },
+        "evolves_to": {}
     },
     "895": {
         "pokedex_id": 895,
@@ -23218,7 +23699,8 @@
             "defense": 50,
             "special_attack": 100,
             "special_defense": 50
-        }
+        },
+        "evolves_to": {}
     },
     "896": {
         "pokedex_id": 896,
@@ -23236,7 +23718,8 @@
             "defense": 130,
             "special_attack": 65,
             "special_defense": 110
-        }
+        },
+        "evolves_to": {}
     },
     "897": {
         "pokedex_id": 897,
@@ -23254,7 +23737,8 @@
             "defense": 60,
             "special_attack": 145,
             "special_defense": 80
-        }
+        },
+        "evolves_to": {}
     },
     "898": {
         "pokedex_id": 898,
@@ -23272,7 +23756,8 @@
             "defense": 80,
             "special_attack": 80,
             "special_defense": 80
-        }
+        },
+        "evolves_to": {}
     },
     "899": {
         "pokedex_id": 899,
@@ -23315,7 +23800,8 @@
         },
         "evolves_from": [
             "123"
-        ]
+        ],
+        "evolves_to": {}
     },
     "901": {
         "pokedex_id": 901,
@@ -23336,7 +23822,8 @@
         },
         "evolves_from": [
             "217"
-        ]
+        ],
+        "evolves_to": {}
     },
     "902": {
         "pokedex_id": 902,

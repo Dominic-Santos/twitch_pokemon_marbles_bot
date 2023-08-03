@@ -373,7 +373,6 @@ class ClientIRCPokemon(ClientIRCBase):
                 bag_stats_thread(self.stats_computer)
             if THREADCONTROLLER.battle is False:
                 battle_thread(self.auto_battle)
-                create_thread(self.check_evolutions)
 
     def find_best_move(self, attacker, attacker_moves, defender):
         best_move = None
@@ -827,9 +826,6 @@ class ClientIRCPokemon(ClientIRCBase):
         return pokemon_data
 
     def check_evolutions(self):
-        all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
-
         for pokemon in POKEMON.computer.pokemon:
             pokemon_obj = self.get_pokemon_stats(pokemon["pokedexId"])
             if pokemon_obj.evolve_to is None:
@@ -841,6 +837,8 @@ class ClientIRCPokemon(ClientIRCBase):
 
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
+
+        self.check_evolutions()
 
         dex = self.pokemon_api.get_pokedex()
         POKEMON.sync_pokedex(dex)
@@ -1002,14 +1000,17 @@ Battles:
                             tempnick = tempnick.replace(character, "")
                         if tempnick != pokemon["name"]:
                             continue
+
+                pokemon_obj = self.get_pokemon_stats(pokemon["pokedexId"])
+
                 if index == 0:
-                    if POKEMON.pokedex.starter(pokemon["name"]) or POKEMON.pokedex.legendary(pokemon["name"]) or POKEMON.pokedex.female(pokemon["pokedexId"]):
+                    if pokemon_obj.is_starter or pokemon_obj.is_legendary or pokemon_obj.is_female:
                         nick = pokemon["name"]
-                        if POKEMON.pokedex.starter(pokemon["name"]):
+                        if pokemon_obj.is_starter:
                             nick = CHARACTERS["starter"] + nick
-                        if POKEMON.pokedex.legendary(pokemon["name"]):
+                        if pokemon_obj.is_legendary:
                             nick = CHARACTERS["legendary"] + nick
-                        if POKEMON.pokedex.female(pokemon["pokedexId"]):
+                        if pokemon_obj.is_female:
                             nick = nick + CHARACTERS["female"]
                     elif pokemon["nickname"] is None or pokemon["nickname"].startswith("trade") is False:
                         # if not starter and not female and has nickname, dont mess
@@ -1018,14 +1019,13 @@ Battles:
                         nick = ""
                 else:
 
-                    tier = self.get_pokemon_stats(pokemon["pokedexId"]).tier
-                    nick = "trade" + tier
+                    nick = "trade" + pokemon_obj.tier
 
-                    if POKEMON.pokedex.starter(pokemon["name"]):
+                    if pokemon_obj.is_starter:
                         nick = CHARACTERS["starter"] + nick
-                    if POKEMON.pokedex.legendary(pokemon["name"]):
+                    if pokemon_obj.is_legendary:
                         nick = CHARACTERS["legendary"] + nick
-                    if POKEMON.pokedex.female(pokemon["pokedexId"]):
+                    if pokemon_obj.is_female:
                         nick = nick + CHARACTERS["female"]
 
                 if pokemon["nickname"] == nick:
