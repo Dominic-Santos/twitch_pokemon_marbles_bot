@@ -843,7 +843,7 @@ class ClientIRCPokemon(ClientIRCBase):
         can_evolve = []
         missing_pre_evo = []
         stones = {}
-        required_eevees = 0  # 133
+        required_pokemon = {}
         for i in range(1, POKEMON.pokedex.total + 1):
             pokemon = self.get_pokemon_stats(i)
 
@@ -858,12 +858,8 @@ class ClientIRCPokemon(ClientIRCBase):
             for pre_evolve in pokemon.evolve_from:
                 pre_pokemon = self.get_pokemon_stats(pre_evolve)
                 hits = POKEMON.computer.get_pokemon(pre_pokemon)
-                if len(hits) > 0:
-                    if pre_evolve == "133":
-                        if len(hits) > required_eevees:
-                            required_eevees += 1
-                        else:
-                            break
+                if len(hits) > required_pokemon.get(pre_pokemon, 0):
+                    required_pokemon[pre_pokemon] = required_pokemon.get(pre_pokemon, 0) + 1
                     have_pre_to_evolve = True
                     for evolve_into in pre_pokemon.evolve_to:
                         if evolve_into == str(pokemon.pokedex_id):
