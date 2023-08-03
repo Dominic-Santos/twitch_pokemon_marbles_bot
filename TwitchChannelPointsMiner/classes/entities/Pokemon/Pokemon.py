@@ -25,6 +25,10 @@ class Pokemon(object):
         self.is_legendary = False
         self.is_female = False
 
+        # evolution data, None = hasnt been added yet
+        self.evolve_to = data.get("evolves_to", None)
+        self.evolve_from = data.get("evolves_from", [])
+
         # fields for bag pokemon
         self.level = 0
 
