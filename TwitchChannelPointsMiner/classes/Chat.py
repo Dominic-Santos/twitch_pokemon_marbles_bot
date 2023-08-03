@@ -894,9 +894,9 @@ class ClientIRCPokemon(ClientIRCBase):
                 stone_have = 0 if inv_stone is None else inv_stone["amount"]
                 discord_msg += f"\n        {stone}: {stone_have}/{stone_need}"
                 if stone_have >= stone_need:
-                    got_enough_stones = False
-                else:
                     discord_msg += " :white_check_mark:"
+                else:
+                    got_enough_stones = False
 
         if len(must_catch) == 0 and len(missing_pre_evo) == 0 and got_enough_stones:
             discord_msg += "\n\n    POKEDEX CAN BE COMPLETED!"
