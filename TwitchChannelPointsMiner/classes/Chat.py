@@ -765,6 +765,8 @@ class ClientIRCPokemon(ClientIRCBase):
                                 continue
                             if pokemon_object.is_starter and not trade_starters:
                                 continue
+                            if POKEMON.wondertrade_keep(pokemon_object):
+                                continue
 
                             reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
                             if len(reasons) < best_nr_reasons:
