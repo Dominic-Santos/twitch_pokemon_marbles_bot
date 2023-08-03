@@ -256,9 +256,6 @@ def bag_stats_thread(func):
 
 
 def get_battle_logs(the_date):
-    # self.log_file(f"{GREENLOG}Won the battle! rewards: {xp}Exp and {cash}$")
-    # self.log_file(f"{REDLOG}Lost the battle! rewards: {xp}Exp and {cash}$")
-
     total_exp = 0
     total_cash = 0
     total_battles = 0
@@ -376,6 +373,7 @@ class ClientIRCPokemon(ClientIRCBase):
                 bag_stats_thread(self.stats_computer)
             if THREADCONTROLLER.battle is False:
                 battle_thread(self.auto_battle)
+                create_thread(self.check_evolutions)
 
     def find_best_move(self, attacker, attacker_moves, defender):
         best_move = None
@@ -721,7 +719,7 @@ class ClientIRCPokemon(ClientIRCBase):
 
             if POKEMON.wondertrade_timer is None:
                 # get the timer from a pokemon
-                pokemon = self.pokemon_api.get_pokemon(allpokemon[0]["id"])
+                pokemon = self.update_evolutions(allpokemon[0]["id"], allpokemon[0]["pokedexId"])
 
                 can_trade_in = pokemon["tradable"]
                 if can_trade_in is None:
@@ -796,6 +794,8 @@ class ClientIRCPokemon(ClientIRCBase):
                         pokemon_traded_tier = self.get_pokemon_stats(pokemon_traded["pokedexId"]).tier
                         pokemon_received_tier = self.get_pokemon_stats(pokemon_received["pokedexId"]).tier
 
+                        self.update_evolutions(pokemon_received["id"], pokemon_received["pokedexId"])
+
                         if POKEMON.pokedex.have(pokemon_received["name"]):
                             pokemon_received_need = ""
                             pokemon_sprite = None
@@ -819,6 +819,23 @@ class ClientIRCPokemon(ClientIRCBase):
                 self.log(f"{YELLOWLOG}Wondertrade available in {time_str}")
         else:
             POKEMON.wondertrade_timer = None
+
+    def update_evolutions(self, pokemon_id, pokedex_id):
+        pokemon_data = self.pokemon_api.get_pokemon(pokemon_id)
+        POKEMON.pokedex.set_evolutions(pokedex_id, pokemon_data["evolutionData"])
+        POKEMON.pokedex.save_pokedex()
+        return pokemon_data
+
+    def check_evolutions(self):
+        all_pokemon = self.pokemon_api.get_all_pokemon()
+        POKEMON.sync_computer(all_pokemon)
+
+        for pokemon in POKEMON.computer.pokemon:
+            pokemon_obj = self.get_pokemon_stats(pokemon["pokedexId"])
+            if pokemon_obj.evolve_to is None:
+                self.update_evolutions(pokemon["id"], pokemon["pokedexId"])
+                self.log(f"{YELLOWLOG}Updated evolutions for{pokemon['pokedexId']}")
+                sleep(1)
 
     def stats_computer(self, previous_date, current_date):
 
@@ -1067,6 +1084,8 @@ Battles:
             reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"])
             mission_msg = f"Completed mission - {title} - reward: {readable_reward}"
             if reward["reward_type"] == "pokemon":
+                if POKEMON.pokedex.have(reward["reward_name"]) is False:
+                    mission_msg = missions + " - needed"
                 self.get_pokemon_stats(reward["reward_name"], cached=False)
             self.log(f"{GREENLOG}{mission_msg}")
             POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
@@ -1094,7 +1113,7 @@ Battles:
         if cached is False or pokemon is None:
             try:
                 pokemon_data = self.pokemon_api.get_pokedex_info(pokedex_id)["content"]
-                POKEMON.pokedex.pokemon_stats[str(pokedex_id)] = pokemon_data
+                POKEMON.pokedex.pokemon_stats.setdefault(str(pokedex_id), {}).update(pokemon_data)
                 POKEMON.pokedex.save_pokedex()
 
                 pokemon = POKEMON.pokedex.stats(str(pokedex_id))
@@ -1182,7 +1201,7 @@ Battles:
                     self.log_file(f"{GREENLOG}Caught{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV")
                     msg = f"I caught a{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV!"
                     if pokemon.is_fish and FISH_EVENT:
-                        caught_pokemon = self.pokemon_api.get_pokemon(poke["id"])
+                        caught_pokemon = self.update_evolutions(poke["id"], pokemon_id)
                         if "🐟" in caught_pokemon["description"]:
                             msg += "\n" + caught_pokemon["description"].split("Your fish is ")[-1].split("Your fish has ")[-1]
 
