@@ -370,7 +370,7 @@ class ClientIRCPokemon(ClientIRCBase):
                 self.pokedaily_setup()
                 pokedaily_thread(self.pokedaily_main)
             if THREADCONTROLLER.bag_stats is False:
-                bag_stats_thread(self.stats_computer)
+                bag_stats_thread(self.daily_tasks)
             if THREADCONTROLLER.battle is False:
                 battle_thread(self.auto_battle)
 
@@ -833,12 +833,80 @@ class ClientIRCPokemon(ClientIRCBase):
                 self.log(f"{YELLOWLOG}Updated evolutions for{pokemon['pokedexId']}")
                 sleep(1)
 
+    def daily_tasks(self, previous_date, current_date):
+        self.stats_computer(previous_date, current_date)
+        self.check_evolutions()
+        self.check_finish_pokedex()
+
+    def check_finish_pokedex(self):
+        must_catch = []
+        can_evolve = []
+        missing_pre_evo = []
+        stones = {}
+        required_eevees = 0  # 133
+        for i in range(1, POKEMON.pokedex.total + 1):
+            pokemon = self.get_pokemon_stats(i)
+
+            if pokemon.is_starter or pokemon.is_legendary or POKEMON.pokedex.have(pokemon):
+                continue
+
+            if len(pokemon.evolve_from) == 0:
+                must_catch.append(pokemon.name)
+                continue
+
+            have_pre_to_evolve = False
+            for pre_evolve in pokemon.evolve_from:
+                pre_pokemon = self.get_pokemon_stats(pre_evolve)
+                hits = POKEMON.computer.get_pokemon(pre_pokemon)
+                if len(hits) > 0:
+                    if pre_evolve == "133":
+                        if len(hits) > required_eevees:
+                            required_eevees += 1
+                        else:
+                            break
+                    have_pre_to_evolve = True
+                    for evolve_into in pre_pokemon.evolve_to:
+                        if evolve_into == str(pokemon.pokedex_id):
+                            for stone in pre_pokemon.evolve_to[evolve_into]["stones"]:
+                                stones[stone["stone"]] = stones.get(stone["stone"], 0) + stone["amount"]
+                            break
+                    break
+
+            if have_pre_to_evolve:
+                can_evolve.append(pokemon.name)
+            else:
+                missing_pre_evo.append(pokemon.name)
+
+        discord_msg = "Pokedex Progress:"
+        if len(must_catch) > 0:
+            discord_msg += f"\n    Must Catch: {len(must_catch)} (" + ",".join(must_catch) + ")"
+        if len(missing_pre_evo) > 0:
+            discord_msg += f"\n    Missing Evo: {len(missing_pre_evo)} (" + ",".join(missing_pre_evo) + ")"
+        if len(can_evolve) > 0:
+            discord_msg += f"\n    Can Evolve: {len(can_evolve)} (" + ",".join(can_evolve) + ")"
+
+        got_enough_stones = True
+        if len(stones.keys()) > 0:
+            discord_msg += "\n    Stone Requirements:"
+            for stone in sorted(stones.keys()):
+                stone_need = stones[stone]
+                inv_stone = POKEMON.inventory.get_item(stone + " stone")
+                stone_have = 0 if inv_stone is None else inv_stone["amount"]
+                discord_msg += f"\n        {stone}: {stone_have}/{stone_need}"
+                if stone_have >= stone_need:
+                    got_enough_stones = False
+                else:
+                    discord_msg += " :white_check_mark:"
+
+        if len(must_catch) == 0 and len(missing_pre_evo) == 0 and got_enough_stones:
+            discord_msg += "\n\n    POKEDEX CAN BE COMPLETED!"
+
+        POKEMON.discord.post(DISCORD_ALERTS, discord_msg)
+
     def stats_computer(self, previous_date, current_date):
 
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
-
-        self.check_evolutions()
 
         dex = self.pokemon_api.get_pokedex()
         POKEMON.sync_pokedex(dex)
