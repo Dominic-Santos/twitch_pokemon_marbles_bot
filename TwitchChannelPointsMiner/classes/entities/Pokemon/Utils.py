@@ -32,7 +32,7 @@ def save_to_json(func):
     return wrapped
 
 
-def get_pokemon_sprite(sprite_name, shiny=False):
+def get_pokemon_battle_sprite(sprite_name, shiny=False, path=False):
     check_output_folder(f"sprites/pokemon/shiny")
 
     is_shiny = "-shiny" if shiny else ""
@@ -47,26 +47,58 @@ def get_pokemon_sprite(sprite_name, shiny=False):
     with open(file_path, "wb") as o:
         o.write(content)
 
+    if path:
+        return file_path
+
     return open(file_path, "rb")
 
 
-def get_sprite(sprite_type, sprite_name, shiny=False):
+def get_pokemon_menu_sprite(sprite_name, shiny=False, path=False):
+    check_output_folder(f"sprites/menu_pokemon/shiny")
+
+    is_shiny = "/shiny" if shiny else ""
+    url = f"https://dev.bframework.de/static/pokedex/png-sprites/pokemon{is_shiny}/{sprite_name}.png"
+
+    res = requests.get(url)
+    content = res.content
+
+    file_path = f"sprites/menu_pokemon{is_shiny}/{sprite_name}.png"
+
+    with open(file_path, "wb") as o:
+        o.write(content)
+
+    if path:
+        return file_path
+
+    return open(file_path, "rb")
+
+
+def get_pokemon_sprite(sprite_name, shiny=False, battle=True, path=False):
+    if battle:
+        return get_pokemon_battle_sprite(sprite_name, shiny, path)
+
+    return get_pokemon_menu_sprite(sprite_name, shiny, path)
+
+
+def get_sprite(sprite_type, sprite_name, shiny=False, battle=True, path=False):
     try:
         if sprite_type == "pokemon":
-            return get_pokemon_sprite(sprite_name, shiny)
+            return get_pokemon_sprite(sprite_name, shiny, battle, path)
         elif sprite_type == "streamer":
-            return get_streamer_avatar(sprite_name)
-        return get_item_sprite(sprite_type, sprite_name)
+            return get_streamer_avatar(sprite_name, path)
+        return get_item_sprite(sprite_type, sprite_name, path)
     except Exception as e:
         print(e)
     return None
 
 
-def get_streamer_avatar(streamer):
+def get_streamer_avatar(streamer, path=False):
     check_output_folder(f"sprites/avatars")
     file_path = f"sprites/avatars/{streamer}.png"
 
     if os.path.isfile(file_path):
+        if path:
+            return file_path
         return open(file_path, "rb")
 
     res = requests.get(f"https://www.twitch.tv/{streamer}")
@@ -81,15 +113,20 @@ def get_streamer_avatar(streamer):
     im = im.resize((64, 64))
     im.save(file_path)
 
+    if path:
+        return file_path
+
     return open(file_path, "rb")
 
 
-def get_item_sprite(sprite_type, sprite_name):
+def get_item_sprite(sprite_type, sprite_name, path=False):
     check_output_folder(f"sprites/{sprite_type}")
 
     file_path = f"sprites/{sprite_type}/{sprite_name}"
 
     if os.path.isfile(file_path + ".png"):
+        if path:
+            return file_path + ".png"
         return open(file_path + ".png", "rb")
 
     url = f"https://poketwitch.bframework.de/static/twitchextension/items/{sprite_type}/{sprite_name}"
@@ -134,5 +171,8 @@ def get_item_sprite(sprite_type, sprite_name):
         im = Image.open(file_path)
         im = im.resize((64, 64))
         im.save(file_path)
+
+    if path:
+        return file_path + ".png"
 
     return open(file_path, "rb")

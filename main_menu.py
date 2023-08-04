@@ -3,8 +3,6 @@ import tkinter
 from tkinter import font as TKFont
 from tkinter.messagebox import showinfo
 import subprocess
-from PIL import Image, ImageTk
-import io
 
 from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
 from TwitchChannelPointsMiner.classes.entities.Pokemon.Utils import get_sprite
@@ -124,6 +122,8 @@ class Settings():
         f.pack(pady=10)
 
     def nextPage(self):
+        if self.max_page <= 1:
+            return
         if self.page < self.max_page:
             self.page += 1
         else:
@@ -131,6 +131,8 @@ class Settings():
         self.loadOptionsList()
 
     def prevPage(self):
+        if self.max_page <= 1:
+            return
         if self.page > 0:
             self.page -= 1
         else:
@@ -292,6 +294,8 @@ class Missions():
         f.pack(pady=10)
 
     def nextPage(self):
+        if self.max_page <= 1:
+            return
         if self.page < self.max_page:
             self.page += 1
         else:
@@ -299,6 +303,8 @@ class Missions():
         self.loadOptionsList()
 
     def prevPage(self):
+        if self.max_page <= 1:
+            return
         if self.page > 0:
             self.page -= 1
         else:
@@ -317,19 +323,19 @@ class Missions():
             do_mission = mission_name not in self.pcg.settings["skip_missions"]
 
             if mission["rewardPokemon"] is not None:
-                f = get_sprite("pokemon", str(mission["rewardPokemon"]["id"]))
+                img_path = get_sprite("pokemon", str(mission["rewardPokemon"]["id"]), battle=False, path=True)
                 reward = mission["rewardPokemon"]["name"]
+
             else:
-                f = get_sprite(mission["rewardItem"]["category"], str(mission["rewardItem"]["sprite_name"]))
+                img_path = get_sprite(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"], path=True)
                 reward = str(mission["rewardItem"]["amount"]) + "x " + mission["rewardItem"]["name"]
 
-            img = Image.open(io.BytesIO(f.read()))
-            tkimg = ImageTk.PhotoImage(img)
-
+            tkimg = tkinter.PhotoImage(file=img_path)
             reward_frame = tkinter.Frame(self.list_frame)
-            label = tkinter.Label(reward_frame, image=tkimg)
-            label.image = tkimg
-            label.grid(row=0, column=0)
+            canvas = tkinter.Canvas(reward_frame, width=96, height=96)
+            canvas.image = tkimg
+            canvas.create_image(96 / 2, 96 / 2, image=tkimg)
+            canvas.grid(row=0, column=0)
             tkinter.Label(reward_frame, text=reward).grid(row=1, column=0)
 
             tkinter.Label(self.list_frame, text=mission["name"], font=font).grid(row=i, column=0, pady=3, padx=5)
@@ -415,6 +421,8 @@ class MultiSelect():
         f.pack(pady=10)
 
     def nextPage(self):
+        if self.max_page <= 1:
+            return
         if self.page < self.max_page:
             self.page += 1
         else:
@@ -422,6 +430,8 @@ class MultiSelect():
         self.loadOptionsList()
 
     def prevPage(self):
+        if self.max_page <= 1:
+            return
         if self.page > 0:
             self.page -= 1
         else:
