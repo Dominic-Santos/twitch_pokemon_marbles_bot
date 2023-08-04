@@ -32,6 +32,7 @@ class PokemonComunityGame(Loyalty):
         self.inventory = Inventory()
         self.pokedex = Pokedex()
         self.missions = Missions()
+        self.missions.new_missions_callback = self.save_settings
         self.computer = Computer()
 
         self.default_settings = {
@@ -123,6 +124,15 @@ class PokemonComunityGame(Loyalty):
                 "value": [],
                 "hint": "Won't wondertrade any of the selected pokemon",
                 "values": [self.pokedex.stats(str(x)).name for x in range(1, self.pokedex.total + 1)],
+            },
+            "skip_missions": {
+                # requires special way to toggle each mission
+                "value": [],
+                "hint": "Skip missions selected missions",
+            },
+            "skip_missions_default": {
+                "value": False,
+                "hint": "Skip new missions by default",
             }
         }
 
@@ -132,7 +142,6 @@ class PokemonComunityGame(Loyalty):
         self.load_discord_settings()
 
         self.discord.connect()
-        self.inventory.use_special_balls = self.settings["use_special_balls"]
 
     def reset_timer(self):
         self.catch_timer = datetime.utcnow()
@@ -149,6 +158,11 @@ class PokemonComunityGame(Loyalty):
         with open(SETTINGS_FILE, "r") as f:
             j = json.load(f)
             changes = self.set(j.get("settings", {}))
+
+        self.inventory.use_special_balls = self.settings["use_special_balls"]
+        self.missions.skip = self.settings["skip_missions"]
+        self.missions.skip_default = self.settings["skip_missions_default"]
+
         return changes
 
     def load_discord_settings(self):

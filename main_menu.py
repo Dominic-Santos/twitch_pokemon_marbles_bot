@@ -1,9 +1,13 @@
+import json
 import tkinter
 from tkinter import font as TKFont
 from tkinter.messagebox import showinfo
 import subprocess
+from PIL import Image, ImageTk
+import io
 
 from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
+from TwitchChannelPointsMiner.classes.entities.Pokemon.Utils import get_sprite
 
 
 def clear_widgets(app):
@@ -36,7 +40,7 @@ class MainMenu():
 
     def page_main_menu(self):
         clear_widgets(self.app)
-        self.app.geometry("350x250")
+        self.app.geometry("350x350")
         f = tkinter.Frame(self.app)
         f2 = tkinter.Frame(self.app)
         padding = {
@@ -47,6 +51,7 @@ class MainMenu():
         tkinter.Button(f, text="Update", command=self.run_update, **self.button_conf).grid(row=0, column=1, **padding)
         tkinter.Button(f, text="Stats", command=self.run_stats, **self.button_conf).grid(row=1, column=0, **padding)
         tkinter.Button(f, text="Settings", command=self.page_settings, **self.button_conf).grid(row=1, column=1, **padding)
+        tkinter.Button(f, text="Missions", command=self.page_missions, **self.button_conf).grid(row=2, column=0, **padding)
         tkinter.Button(f2, text="Exit", command=self.close, **self.button_conf).grid(row=0, column=0, **padding)
         f.pack(anchor="center")
         f2.pack(anchor="center")
@@ -71,6 +76,9 @@ class MainMenu():
     def page_settings(self):
         Settings(self.app, self).run()
 
+    def page_missions(self):
+        Missions(self.app, self).run()
+
     def load(self):
         self.page_main_menu()
 
@@ -80,7 +88,8 @@ class Settings():
         self.app = app
         self.parent = parent
         self.pcg = PokemonComunityGame()
-        self.options = sorted(self.pcg.settings.keys())
+        self.skip_options = ["skip_missions"]
+        self.options = sorted(k for k in self.pcg.settings.keys() if k not in self.skip_options)
 
         self.page = 0
         self.page_size = 20
@@ -229,6 +238,123 @@ class Settings():
     def multiSelectCallback(self, option, value):
         self.pcg.settings[option] = value
         self.load()
+
+    def refreshPageLabel(self):
+        self.pageLabel.config(text=f"Page: {min(self.page + 1, self.max_page + 1)}/{self.max_page + 1}")
+
+
+class Missions():
+    def __init__(self, app, parent):
+        self.app = app
+        self.parent = parent
+        self.pcg = PokemonComunityGame()
+        try:
+            with open("results/API/get_missions.json") as f:
+                self.options = json.load(f)["missions"]
+        except Exception as e:
+            print(e)
+            self.options = []
+
+        mission_names = [self.pcg.missions.get_unique_id(mission) for mission in self.options]
+        self.pcg.settings["skip_missions"] = [x for x in self.pcg.settings["skip_missions"] if x in mission_names]
+
+        self.options = sorted(self.options, key=lambda x: x["name"])
+
+        self.page = 0
+        self.page_size = 10
+
+    def run(self):
+        self.load()
+
+    def load(self):
+        clear_widgets(self.app)
+        self.createFrame()
+        self.loadOptionsList()
+        self.app.geometry("")
+
+    def save(self):
+        self.pcg.save_settings()
+        self.parent.load()
+
+    def createFrame(self):
+        self.list_frame = tkinter.Frame(self.app)
+        self.list_frame.pack(pady=10, padx=10)
+
+        self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
+
+        f = tkinter.Frame(self.app)
+        tkinter.Button(f, text="Back", command=self.parent.load).grid(row=0, column=0, padx=3)
+        tkinter.Button(f, text="<", command=self.prevPage, padx=10).grid(row=0, column=1, padx=3)
+        self.pageLabel = tkinter.Label(f, text="")
+        self.pageLabel.grid(row=0, column=2, padx=3)
+        tkinter.Button(f, text=">", command=self.nextPage, padx=10).grid(row=0, column=3, padx=3)
+        tkinter.Button(f, text="Save", command=self.save).grid(row=0, column=4, padx=3)
+        f.pack(pady=10)
+
+    def nextPage(self):
+        if self.page < self.max_page:
+            self.page += 1
+        else:
+            self.page = 0
+        self.loadOptionsList()
+
+    def prevPage(self):
+        if self.page > 0:
+            self.page -= 1
+        else:
+            self.page = self.max_page
+        self.loadOptionsList()
+
+    def loadOptionsList(self):
+        clear_widgets(self.list_frame)
+        font = TKFont.Font(size=12)
+
+        page = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
+
+        for i, mission in enumerate(page):
+            mission_name = self.pcg.missions.get_unique_id(mission)
+            mission_complete = mission["goal"] <= mission["progress"]
+            do_mission = mission_name not in self.pcg.settings["skip_missions"]
+
+            if mission["rewardPokemon"] is not None:
+                f = get_sprite("pokemon", str(mission["rewardPokemon"]["id"]))
+                reward = mission["rewardPokemon"]["name"]
+            else:
+                f = get_sprite(mission["rewardItem"]["category"], str(mission["rewardItem"]["sprite_name"]))
+                reward = str(mission["rewardItem"]["amount"]) + "x " + mission["rewardItem"]["name"]
+
+            img = Image.open(io.BytesIO(f.read()))
+            tkimg = ImageTk.PhotoImage(img)
+
+            reward_frame = tkinter.Frame(self.list_frame)
+            label = tkinter.Label(reward_frame, image=tkimg)
+            label.image = tkimg
+            label.grid(row=0, column=0)
+            tkinter.Label(reward_frame, text=reward).grid(row=1, column=0)
+
+            tkinter.Label(self.list_frame, text=mission["name"], font=font).grid(row=i, column=0, pady=3, padx=5)
+            tkinter.Label(self.list_frame, text=f"{mission['progress']}/{mission['goal']}", padx=10, pady=10, font=font, bg=getColor(mission_complete)).grid(row=i, column=1, pady=3, padx=5)
+
+            reward_frame.grid(row=i, column=2, pady=3, padx=5)
+
+            val = tkinter.Button(self.list_frame, text=getBoolText(do_mission), padx=10, pady=10, font=font, bg=getColor(do_mission))
+            val.config(command=(lambda option=mission_name, btn=val: self.toggleBool(option, btn)))
+            val.grid(row=i, column=3, pady=3, padx=5)
+
+        self.refreshPageLabel()
+
+    def toggleBool(self, option, btn):
+        if option in self.pcg.settings["skip_missions"]:
+            self.pcg.settings["skip_missions"].remove(option)
+            do_mission = True
+        else:
+            self.pcg.settings["skip_missions"].append(option)
+            do_mission = False
+
+        btn.config(
+            bg=getColor(do_mission),
+            text=getBoolText(do_mission)
+        )
 
     def refreshPageLabel(self):
         self.pageLabel.config(text=f"Page: {min(self.page + 1, self.max_page + 1)}/{self.max_page + 1}")

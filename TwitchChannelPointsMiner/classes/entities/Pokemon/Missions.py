@@ -5,13 +5,20 @@ VALID_TYPES = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire',
 class Missions(object):
     def __init__(self):
         self.data = {}
+        self.prev_data = {}
         self.prev_progress = {}
         self.progress = {}
+        self.skip = []
+        self.skip_default = False
 
     def reset(self):
-        self.data = {}
         self.prev_progress = self.progress
+        self.prev_data = self.data
         self.progress = {}
+        self.data = {}
+
+    def new_missions_callback(self):
+        pass
 
     @staticmethod
     def get_reward(mission):
@@ -65,14 +72,27 @@ class Missions(object):
 
         return completed
 
+    @staticmethod
+    def get_unique_id(mission):
+        return mission["name"] + "_" + str(mission["goal"])
+
     def set(self, missions):
         self.reset()
+        new_missions = False
         for mission in missions["missions"]:
             self.add_progress(mission)
 
             if mission["progress"] >= mission["goal"]:
                 continue
             try:
+                mission_unique = self.get_unique_id(mission)
+                if mission_unique in self.skip:
+                    continue
+                if mission_unique not in self.prev_data and self.skip_default:
+                    # new mission detected
+                    new_missions = True
+                    self.skip.append(mission_unique)
+
                 mission_title = mission["name"].lower().replace("[flash]", " ").replace("[event]", " ").replace("é", "e").replace("wonder trade", "wondertrade").strip()
                 mission_title = "".join([c for c in mission_title if c.isalnum() or c == " "]).strip()
                 mission_title = " ".join([w for w in mission_title.split(" ") if w != ""])
@@ -146,6 +166,9 @@ class Missions(object):
                         self.data.setdefault("type", []).append(the_type)
             except Exception as e:
                 print(mission["name"], "parse fail", str(e))
+
+        if new_missions:
+            self.new_missions_callback()
 
     def have_mission(self, mission_name):
         return mission_name in self.data
