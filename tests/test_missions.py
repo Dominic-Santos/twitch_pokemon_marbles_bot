@@ -241,3 +241,27 @@ def test_check_missions_case11():
 
     reasons = MISSIONS.check_all_wondertrade_missions(pokemon)
     assert "level" not in reasons
+
+
+def test_check_missions_skipping():
+    MISSIONS.skip = ["Wondertrade with a level higher than 13_14"]
+    MISSIONS.set(MISSIONS_JSON_11)
+    missions = MISSIONS.data
+    MISSIONS.skip = []
+
+    assert MISSIONS.have_wondertrade_missions() is False
+    assert MISSIONS.have_mission("wondertrade_level") is False
+
+    wondertrade_level = missions.get("wondertrade_level", [])
+    assert len(wondertrade_level) == 0
+
+    pokemon = Pokemon()
+    pokemon.types = ["Rock", "Dragon"]
+    pokemon.level = 15
+    reasons = MISSIONS.check_all_wondertrade_missions(pokemon)
+    assert "level" not in reasons
+
+    pokemon.level = 5
+
+    reasons = MISSIONS.check_all_wondertrade_missions(pokemon)
+    assert "level" not in reasons
