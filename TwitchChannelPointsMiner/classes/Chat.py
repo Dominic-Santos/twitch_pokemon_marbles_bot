@@ -45,6 +45,7 @@ GREENLOG = "\x1b[32;20m"
 YELLOWLOG = "\x1b[36;20m"
 
 ALERTS_CHANNEL = 1072557550526013440
+STATS_CHANNEL = 1137163122063450162
 POKEDAILY_CHANNEL = 800433942695247872
 POKEDAILY_GUILD = 711921837503938640
 
@@ -52,6 +53,7 @@ POKEMON = PokemonComunityGame()
 
 DISCORD_BASE = "https://discord.com/api/v9/"
 DISCORD_ALERTS = f"{DISCORD_BASE}channels/{ALERTS_CHANNEL}/messages"
+DISCORD_STATS = f"{DISCORD_BASE}channels/{STATS_CHANNEL}/messages"
 DISCORD_POKEDAILY = f"{DISCORD_BASE}channels/{POKEDAILY_CHANNEL}/messages"
 DISCORD_POKEDAILY_SEARCH = f"{DISCORD_BASE}guilds/{POKEDAILY_GUILD}/messages/search?channel_id={POKEDAILY_CHANNEL}&mentions=" + "{discord_id}"
 
@@ -899,7 +901,7 @@ class ClientIRCPokemon(ClientIRCBase):
         if len(must_catch) == 0 and len(missing_pre_evo) == 0 and got_enough_stones:
             discord_msg += "\n\n    POKEDEX CAN BE COMPLETED!"
 
-        POKEMON.discord.post(DISCORD_ALERTS, discord_msg)
+        POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
     def stats_computer(self, previous_date, current_date):
 
@@ -1038,7 +1040,7 @@ Battles:
     $: {battle_stats['cash']}
         """
 
-        POKEMON.discord.post(DISCORD_ALERTS, discord_msg)
+        POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
     def sort_computer(self):
 

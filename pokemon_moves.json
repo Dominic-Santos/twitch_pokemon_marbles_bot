@@ -5434,5 +5434,17 @@
         "pp": 10,
         "accuracy": 75,
         "type": "normal"
+    },
+    "fairy-wind": {
+        "name": "Fairy Wind",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user stirs up a fairy wind and strikes the target\r\nwith it.",
+        "power": 40,
+        "pp": 30,
+        "accuracy": 100,
+        "type": "fairy"
     }
 }

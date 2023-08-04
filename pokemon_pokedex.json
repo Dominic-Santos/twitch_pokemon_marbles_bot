@@ -17648,14 +17648,18 @@
         ],
         "evolves_to": {
             "658": {
-                "level": 32,
+                "level": 36,
                 "stones": [
                     {
                         "amount": 2,
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 4,
+                        "amount": 2,
+                        "stone": "Dark"
+                    },
+                    {
+                        "amount": 2,
                         "stone": "Water"
                     }
                 ]
