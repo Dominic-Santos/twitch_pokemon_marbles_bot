@@ -77,7 +77,7 @@ def test_clean_name():
 def test_dogs():
     for pokemon in DOG_POKEMON:
         assert pokedex.dog(pokemon)
-    assert pokedex.cat("Pidgey") == False
+    assert pokedex.dog("Pidgey") == False
 
 
 def test_cats():
