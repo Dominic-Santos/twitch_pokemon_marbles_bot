@@ -1192,6 +1192,8 @@ Battles:
 
         if pokemon is not None:
             pokemon.is_fish = POKEMON.pokedex.fish(pokemon)
+            pokemon.is_cat = POKEMON.pokedex.cat(pokemon)
+            pokemon.is_dog = POKEMON.pokedex.dog(pokemon)
             pokemon.is_baby = POKEMON.pokedex.baby(pokemon)
             pokemon.is_legendary = POKEMON.pokedex.legendary(pokemon)
             pokemon.is_starter = POKEMON.pokedex.starter(pokemon)

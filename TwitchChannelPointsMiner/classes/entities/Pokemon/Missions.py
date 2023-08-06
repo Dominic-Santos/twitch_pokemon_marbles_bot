@@ -107,8 +107,12 @@ class Missions(object):
                             self.data.setdefault("wondertrade_level", []).append((the_level, 9999))
                         else:
                             self.data.setdefault("wondertrade_level", []).append((0, the_level))
-                    elif "fish" in mission_title:
+                    elif " fish " in mission_title:
                         self.data["wondertrade_fish"] = True
+                    elif " cat " in mission_title:
+                        self.data["wondertrade_cat"] = True
+                    elif " dog " in mission_title:
+                        self.data["wondertrade_dog"] = True
                     elif "bst" in mission_title:
                         the_bst = int("".join([c for c in mission_title if c.isnumeric()]))
                         if "less than" in mission_title:
@@ -127,8 +131,12 @@ class Missions(object):
                         self.data["stadium"] = "medium"
                     elif "hard" in mission_title:
                         self.data["stadium"] = "hard"
-                elif "fish" in mission_title:
+                elif " fish " in mission_title:
                     self.data["fish"] = True
+                elif " cat " in mission_title:
+                    self.data["cat"] = True
+                elif " dog " in mission_title:
+                    self.data["dog"] = True
                 elif "miss" in mission_title:
                     miss_list = mission_title.split(" ")
                     just_miss = True
@@ -223,6 +231,12 @@ class Missions(object):
 
         if pokemon.is_fish and self.have_mission("wondertrade_fish"):
             reasons.append("fish")
+
+        if pokemon.is_cat and self.have_mission("wondertrade_cat"):
+            reasons.append("cat")
+
+        if pokemon.is_dog and self.have_mission("wondertrade_dog"):
+            reasons.append("dog")
         return reasons
 
     def have_wondertrade_missions(self):
@@ -234,6 +248,10 @@ class Missions(object):
             return True
         elif self.have_mission("wondertrade_fish"):
             return True
+        elif self.have_mission("wondertrade_dog"):
+            return True
+        elif self.have_mission("wondertrade_cat"):
+            return True
         return False
 
     # ##### Regular Missions #####
@@ -243,6 +261,12 @@ class Missions(object):
 
     def check_fish_mission(self):
         return self.have_mission("fish")
+
+    def check_dog_mission(self):
+        return self.have_mission("dog")
+
+    def check_cat_mission(self):
+        return self.have_mission("cat")
 
     def check_miss_mission(self):
         return self.have_mission("miss")
@@ -278,6 +302,12 @@ class Missions(object):
 
         if pokemon.is_fish and self.check_fish_mission():
             reasons.append("fish")
+
+        if pokemon.is_dog and self.check_dog_mission():
+            reasons.append("dog")
+
+        if pokemon.is_cat and self.check_cat_mission():
+            reasons.append("cat")
 
         if self.check_miss_mission():
             reasons.append("miss")

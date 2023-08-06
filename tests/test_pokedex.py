@@ -6,6 +6,8 @@ JSON_FILE = "tests/pokedex.json"
 
 REGION_VARIANTS = ["Sin Gliscor", "His Braviary", "His Zoroark", "His Voltorb", "Hisuian Braviary", "Gal Rapidash", "Gal Darmanitan", "Gal Weezing", "Galarian Weezing"]
 FISH_POKEMON = ["Magikarp", "Kyogre", "His Gyarados", "Gyarados"]
+CAT_POKEMON = ["Meowth", "Persian"]
+DOG_POKEMON = ["Growlithe", "Arcanine"]
 
 FAIL_TO_FIND = None
 pokedex = Pokedex()
@@ -70,3 +72,15 @@ def test_clean_name():
     poke = Pokemon()
     poke.name = "His Caterpie"
     assert pokedex.clean_name(poke) == "Caterpie"
+
+
+def test_dogs():
+    for pokemon in DOG_POKEMON:
+        assert pokedex.dog(pokemon)
+    assert pokedex.cat("Pidgey") == False
+
+
+def test_cats():
+    for pokemon in CAT_POKEMON:
+        assert pokedex.cat(pokemon)
+    assert pokedex.cat("Pidgey") == False
