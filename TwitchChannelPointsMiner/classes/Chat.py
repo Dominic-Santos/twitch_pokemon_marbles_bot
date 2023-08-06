@@ -205,6 +205,7 @@ def battle_thread(func):
             logger.info(f"{REDLOG}Battle func failed - {str_ex}", extra={"emoji": ":speech_balloon:"})
             print(traceback.format_exc())
 
+            sleep(10)
             if len(POKEMON.channel_list) == 0:
                 THREADCONTROLLER.battle = False
 
