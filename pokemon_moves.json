@@ -5446,5 +5446,17 @@
         "pp": 30,
         "accuracy": 100,
         "type": "fairy"
+    },
+    "snore": {
+        "name": "Snore",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 30,
+        "priority": 0,
+        "description": "This attack can be used only if the user is asleep.\r\nThe harsh noise may also make the target flinch.",
+        "power": 50,
+        "pp": 15,
+        "accuracy": 100,
+        "type": "normal"
     }
 }
