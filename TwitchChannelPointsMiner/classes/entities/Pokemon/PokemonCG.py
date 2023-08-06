@@ -48,6 +48,14 @@ class PokemonComunityGame(Loyalty):
                 "value": False,
                 "hint": "Catch all Fish pokemon (used for events)",
             },
+            "catch_dogs": {
+                "value": False,
+                "hint": "Catch all Dog pokemon (used for events)",
+            },
+            "catch_cats": {
+                "value": False,
+                "hint": "Catch all Cat pokemon (used for events)",
+            },
             "complete_bag": {
                 "value": False,
                 "hint": "Collect one of each pokemon in bag",
@@ -241,6 +249,12 @@ class PokemonComunityGame(Loyalty):
 
         if self.settings["catch_fish"] and pokemon.is_fish:
             reasons.append("all_fish")
+
+        if self.settings["catch_dogs"] and pokemon.is_dog:
+            reasons.append("all_dogs")
+
+        if self.settings["catch_cats"] and pokemon.is_cat:
+            reasons.append("all_cats")
 
         if self.settings["catch_everything"]:
             # catch anything:
