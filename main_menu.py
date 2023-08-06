@@ -263,7 +263,7 @@ class Missions():
         self.options = sorted(self.options, key=lambda x: x["name"])
 
         self.page = 0
-        self.page_size = 10
+        self.page_size = 5
 
     def run(self):
         self.load()
@@ -330,11 +330,14 @@ class Missions():
                 img_path = get_sprite(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"], path=True)
                 reward = str(mission["rewardItem"]["amount"]) + "x " + mission["rewardItem"]["name"]
 
-            tkimg = tkinter.PhotoImage(file=img_path)
             reward_frame = tkinter.Frame(self.list_frame)
             canvas = tkinter.Canvas(reward_frame, width=96, height=96)
-            canvas.image = tkimg
-            canvas.create_image(96 / 2, 96 / 2, image=tkimg)
+            try:
+                tkimg = tkinter.PhotoImage(file=img_path)
+                canvas.image = tkimg
+                canvas.create_image(96 / 2, 96 / 2, image=tkimg)
+            except Exception as e:
+                print(e)
             canvas.grid(row=0, column=0)
             tkinter.Label(reward_frame, text=reward).grid(row=1, column=0)
 

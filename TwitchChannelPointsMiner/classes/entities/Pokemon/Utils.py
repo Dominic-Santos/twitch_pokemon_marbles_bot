@@ -173,6 +173,6 @@ def get_item_sprite(sprite_type, sprite_name, path=False):
         im.save(file_path)
 
     if path:
-        return file_path + ".png"
+        return file_path
 
     return open(file_path, "rb")
