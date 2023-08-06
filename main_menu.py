@@ -122,7 +122,7 @@ class Settings():
         f.pack(pady=10)
 
     def nextPage(self):
-        if self.max_page <= 1:
+        if self.max_page == 0:
             return
         if self.page < self.max_page:
             self.page += 1
@@ -131,7 +131,7 @@ class Settings():
         self.loadOptionsList()
 
     def prevPage(self):
-        if self.max_page <= 1:
+        if self.max_page == 0:
             return
         if self.page > 0:
             self.page -= 1
@@ -294,7 +294,7 @@ class Missions():
         f.pack(pady=10)
 
     def nextPage(self):
-        if self.max_page <= 1:
+        if self.max_page == 0:
             return
         if self.page < self.max_page:
             self.page += 1
@@ -303,7 +303,7 @@ class Missions():
         self.loadOptionsList()
 
     def prevPage(self):
-        if self.max_page <= 1:
+        if self.max_page == 0:
             return
         if self.page > 0:
             self.page -= 1
@@ -421,7 +421,7 @@ class MultiSelect():
         f.pack(pady=10)
 
     def nextPage(self):
-        if self.max_page <= 1:
+        if self.max_page == 0:
             return
         if self.page < self.max_page:
             self.page += 1
@@ -430,7 +430,7 @@ class MultiSelect():
         self.loadOptionsList()
 
     def prevPage(self):
-        if self.max_page <= 1:
+        if self.max_page == 0:
             return
         if self.page > 0:
             self.page -= 1
