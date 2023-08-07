@@ -1290,7 +1290,7 @@ Battles:
 
                 # check for hidden chat rewards (stones, candys & golden tickets)
                 completed_missions = self.get_missions()
-                item_rewards = [reward for reward in completed_missions if reward["reward_type"] != "pokemon"]
+                item_rewards = [reward for (_, reward) in completed_missions if reward["reward_type"] != "pokemon"]
                 mission_items = {reward["item_name"].lower(): reward["item_amount"] for reward in item_rewards}
 
                 old_items = copy.deepcopy(POKEMON.inventory.items)
@@ -1336,7 +1336,7 @@ Battles:
             client.privmsg("#" + twitch_channel, "!pokecheck")
             self.log(f"{GREENLOG}Pokecheck in {twitch_channel}")
 
-        self.get_missions()
+            self.get_missions()
 
 
 class ClientIRC(ClientIRCMarbles, ClientIRCPokemon):
