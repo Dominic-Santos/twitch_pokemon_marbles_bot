@@ -1219,7 +1219,7 @@ Battles:
 
         self.check_inventory()
 
-        completed_missions = self.get_missions()
+        self.get_missions()
 
         # find reasons to catch the pokemon
         catch_reasons, strategy = POKEMON.need_pokemon(pokemon)
@@ -1289,6 +1289,7 @@ Battles:
                 POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
 
                 # check for hidden chat rewards (stones, candys & golden tickets)
+                completed_missions = self.get_missions()
                 item_rewards = [reward for reward in completed_missions if reward["reward_type"] != "pokemon"]
                 mission_items = {reward["item_name"].lower(): reward["item_amount"] for reward in item_rewards}
 
