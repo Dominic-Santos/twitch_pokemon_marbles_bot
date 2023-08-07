@@ -323,7 +323,7 @@ class Missions():
             do_mission = mission_name not in self.pcg.settings["skip_missions"]
 
             if mission["rewardPokemon"] is not None:
-                img_path = get_sprite("pokemon", str(mission["rewardPokemon"]["id"]), battle=False, path=True)
+                img_path = get_sprite("pokemon", str(mission["rewardPokemon"]["id"]), battle=True, path=True)
                 reward = mission["rewardPokemon"]["name"]
 
             else:
@@ -338,6 +338,7 @@ class Missions():
                 canvas.create_image(96 / 2, 96 / 2, image=tkimg)
             except Exception as e:
                 print(e)
+
             canvas.grid(row=0, column=0)
             tkinter.Label(reward_frame, text=reward).grid(row=1, column=0)
 
