@@ -33,8 +33,8 @@ class Missions(object):
         else:
             reward = {
                 "reward_type": "pokemon",
-                "reward_name": mission["rewardPokemon"]["id"],
-                "reward": mission["rewardPokemon"]["name"]
+                "reward_id": mission["rewardPokemon"]["id"],
+                "reward_name": mission["rewardPokemon"]["name"]
             }
         return reward
 
