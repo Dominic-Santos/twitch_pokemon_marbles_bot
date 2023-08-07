@@ -113,12 +113,12 @@ class Settings():
         self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
 
         f = tkinter.Frame(self.app)
-        tkinter.Button(f, text="Back", command=self.parent.load).grid(row=0, column=0, padx=3)
+        tkinter.Button(f, text="Back", command=self.parent.load, padx=5).grid(row=0, column=0, padx=3)
         tkinter.Button(f, text="<", command=self.prevPage, padx=10).grid(row=0, column=1, padx=3)
         self.pageLabel = tkinter.Label(f, text="")
         self.pageLabel.grid(row=0, column=2, padx=3)
         tkinter.Button(f, text=">", command=self.nextPage, padx=10).grid(row=0, column=3, padx=3)
-        tkinter.Button(f, text="Save", command=self.save).grid(row=0, column=4, padx=3)
+        tkinter.Button(f, text="Save", command=self.save, padx=5).grid(row=0, column=4, padx=3)
         f.pack(pady=10)
 
     def nextPage(self):
@@ -285,12 +285,12 @@ class Missions():
         self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
 
         f = tkinter.Frame(self.app)
-        tkinter.Button(f, text="Back", command=self.parent.load).grid(row=0, column=0, padx=3)
+        tkinter.Button(f, text="Back", command=self.parent.load, padx=5).grid(row=0, column=0, padx=3)
         tkinter.Button(f, text="<", command=self.prevPage, padx=10).grid(row=0, column=1, padx=3)
         self.pageLabel = tkinter.Label(f, text="")
         self.pageLabel.grid(row=0, column=2, padx=3)
         tkinter.Button(f, text=">", command=self.nextPage, padx=10).grid(row=0, column=3, padx=3)
-        tkinter.Button(f, text="Save", command=self.save).grid(row=0, column=4, padx=3)
+        tkinter.Button(f, text="Save", command=self.save, padx=5).grid(row=0, column=4, padx=3)
         f.pack(pady=10)
 
     def nextPage(self):
@@ -340,14 +340,14 @@ class Missions():
                 print(e)
 
             canvas.grid(row=0, column=0)
-            tkinter.Label(reward_frame, text=reward).grid(row=1, column=0)
+            tkinter.Label(reward_frame, font=font, text=reward).grid(row=1, column=0)
 
             tkinter.Label(self.list_frame, text=mission["name"], font=font).grid(row=i, column=0, pady=3, padx=5)
             tkinter.Label(self.list_frame, text=f"{mission['progress']}/{mission['goal']}", padx=10, pady=10, font=font, bg=getColor(mission_complete)).grid(row=i, column=1, pady=3, padx=5)
 
             reward_frame.grid(row=i, column=2, pady=3, padx=5)
 
-            val = tkinter.Button(self.list_frame, text=getBoolText(do_mission), padx=10, pady=10, font=font, bg=getColor(do_mission))
+            val = tkinter.Button(self.list_frame, text=getBoolText(do_mission), padx=10, pady=5, font=font, bg=getColor(do_mission))
             val.config(command=(lambda option=mission_name, btn=val: self.toggleBool(option, btn)))
             val.grid(row=i, column=3, pady=3, padx=5)
 
@@ -416,12 +416,12 @@ class MultiSelect():
         self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
 
         f = tkinter.Frame(self.app)
-        tkinter.Button(f, text="Back", command=self.parent.load).grid(row=0, column=0, padx=3)
+        tkinter.Button(f, text="Back", command=self.parent.load, padx=5).grid(row=0, column=0, padx=3)
         tkinter.Button(f, text="<", command=self.prevPage, padx=10).grid(row=0, column=1, padx=3)
         self.pageLabel = tkinter.Label(f, text="")
         self.pageLabel.grid(row=0, column=2, padx=3)
         tkinter.Button(f, text=">", command=self.nextPage, padx=10).grid(row=0, column=3, padx=3)
-        tkinter.Button(f, text="Save", command=self.save).grid(row=0, column=4, padx=3)
+        tkinter.Button(f, text="Save", command=self.save, padx=5).grid(row=0, column=4, padx=3)
         f.pack(pady=10)
 
     def nextPage(self):
