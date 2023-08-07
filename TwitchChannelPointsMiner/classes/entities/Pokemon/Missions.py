@@ -28,13 +28,15 @@ class Missions(object):
             reward = {
                 "reward_type": mission["rewardItem"]["category"],
                 "reward_name": mission["rewardItem"]["sprite_name"],
-                "reward": f"{amount}{item}"
+                "reward": f"{amount}{item}",
+                "item_name": item,
+                "item_amount": mission["rewardItem"]["amount"]
             }
         else:
             reward = {
                 "reward_type": "pokemon",
-                "reward_id": mission["rewardPokemon"]["id"],
-                "reward_name": mission["rewardPokemon"]["name"]
+                "reward_name": mission["rewardPokemon"]["id"],
+                "reward": mission["rewardPokemon"]["name"]
             }
         return reward
 
