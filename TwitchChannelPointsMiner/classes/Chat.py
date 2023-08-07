@@ -1150,18 +1150,17 @@ Battles:
         completed = POKEMON.missions.get_completed()
         for title, reward in completed:
             readable_reward = reward["reward"]
+            reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"])
             mission_msg = f"Completed mission - {title} - reward: {readable_reward}"
             if reward["reward_type"] == "pokemon":
-                reward_sprite = get_sprite(reward["reward_type"], reward["reward_id"])
-                if POKEMON.pokedex.have(reward["reward_name"]) is False:
+                if POKEMON.pokedex.have(reward["reward"]) is False:
                     mission_msg = missions + " - needed"
-                self.get_pokemon_stats(reward["reward_id"], cached=False)
-            else:
-                reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"])
+                self.get_pokemon_stats(reward["reward_name"], cached=False)
             self.log(f"{GREENLOG}{mission_msg}")
             POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:
                 reward_sprite.close()
+        return completed
 
     def get_pokemon_move(self, move_name, move_type="None"):
 
@@ -1220,7 +1219,7 @@ Battles:
 
         self.check_inventory()
 
-        self.get_missions()
+        completed_missions = self.get_missions()
 
         # find reasons to catch the pokemon
         catch_reasons, strategy = POKEMON.need_pokemon(pokemon)
@@ -1290,6 +1289,9 @@ Battles:
                 POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
 
                 # check for hidden chat rewards (stones, candys & golden tickets)
+                item_rewards = [reward for reward in completed_missions if reward["reward_type"] != "pokemon"]
+                mission_items = {reward["item_name"].lower(): reward["item_amount"] for reward in item_rewards}
+
                 old_items = copy.deepcopy(POKEMON.inventory.items)
                 inv = self.pokemon_api.get_inventory()
                 POKEMON.sync_inventory(inv)
@@ -1300,7 +1302,7 @@ Battles:
                     if item["category"] != "evolution" and item_name not in ["rare candy", "golden ticket"]:
                         continue
 
-                    amount_got = item["amount"] - old_item["amount"]
+                    amount_got = item["amount"] - old_item["amount"] - mission_items.get(item_name, 0)
                     if amount_got < 1:
                         continue
 
