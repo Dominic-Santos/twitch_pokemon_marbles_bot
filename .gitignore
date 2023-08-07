@@ -164,3 +164,11 @@ battle
 battles
 statistics.txt
 pokemon_loyalty.txt
+catch_graph.png
+catch_graph_data.json
+money_graph.png
+money_graph_data.json
+pokemon_auth_token.txt
+pokemon_computer.json
+pokemon_loyalty_data.json
+twitch_login.json
