@@ -334,14 +334,15 @@ class ClientIRCMarbles(ClientIRCBase):
 
 
 class ClientIRCPokemon(ClientIRCBase):
-    def __init__(self, username, token, channel, get_pokemon_token):
+    def __init__(self, username, token, channel, get_pokemon_token, pcg):
         ClientIRCBase.__init__(self, username, token, channel)
-        self.init(username, get_pokemon_token)
+        self.init(username, get_pokemon_token, pcg)
 
-    def init(self, username, get_pokemon_token):
+    def init(self, username, get_pokemon_token, pcg):
         self.username = username.lower()
         self.at_username = "@" + self.username
 
+        self.pcg = pcg
         self.pokemon_active = False
         self.pokemon_disabled = False
         self.pokemon_api = CGApi()
@@ -356,26 +357,27 @@ class ClientIRCPokemon(ClientIRCBase):
         self.pokemon_disabled = False
 
     def on_pubmsg(self, client, message):
-        argstring = " ".join(message.arguments)
+        if self.pcg:
+            argstring = " ".join(message.arguments)
 
-        if "pokemoncommunitygame" in message.source:
-            self.check_pokemon_active(client, message, argstring)
-            self.check_loyalty_info(client, message, argstring)
+            if "pokemoncommunitygame" in message.source:
+                self.check_pokemon_active(client, message, argstring)
+                self.check_loyalty_info(client, message, argstring)
 
-        THREADCONTROLLER.clients[self.channel[1:]] = client
+            THREADCONTROLLER.clients[self.channel[1:]] = client
 
-        if len(POKEMON.channel_list) > 0:
-            if THREADCONTROLLER.pokecatch is False:
-                timer_thread(self.check_main)
-            if THREADCONTROLLER.wondertrade is False:
-                wondertrade_thread(self.wondertrade_main)
-            if THREADCONTROLLER.pokedaily is False:
-                self.pokedaily_setup()
-                pokedaily_thread(self.pokedaily_main)
-            if THREADCONTROLLER.bag_stats is False:
-                bag_stats_thread(self.daily_tasks)
-            if THREADCONTROLLER.battle is False:
-                battle_thread(self.auto_battle)
+            if len(POKEMON.channel_list) > 0:
+                if THREADCONTROLLER.pokecatch is False:
+                    timer_thread(self.check_main)
+                if THREADCONTROLLER.wondertrade is False:
+                    wondertrade_thread(self.wondertrade_main)
+                if THREADCONTROLLER.pokedaily is False:
+                    self.pokedaily_setup()
+                    pokedaily_thread(self.pokedaily_main)
+                if THREADCONTROLLER.bag_stats is False:
+                    bag_stats_thread(self.daily_tasks)
+                if THREADCONTROLLER.battle is False:
+                    battle_thread(self.auto_battle)
 
     def find_best_move(self, attacker, attacker_moves, defender):
         best_move = None
@@ -1340,9 +1342,9 @@ Battles:
 
 
 class ClientIRC(ClientIRCMarbles, ClientIRCPokemon):
-    def __init__(self, username, token, channel, get_pokemoncg_token, marbles):
+    def __init__(self, username, token, channel, get_pokemoncg_token, marbles, pcg):
         ClientIRCMarbles.__init__(self, username, token, channel, marbles)
-        ClientIRCPokemon.init(self, username, get_pokemoncg_token)
+        ClientIRCPokemon.init(self, username, get_pokemoncg_token, pcg)
 
     def on_pubmsg(self, client, message):
         ClientIRCMarbles.on_pubmsg(self, client, message)
@@ -1355,9 +1357,10 @@ class ClientIRC(ClientIRCMarbles, ClientIRCPokemon):
 
 
 class ThreadChat(ThreadChatO):
-    def __init__(self, username, token, channel, channel_id, get_pokemoncg_token, marbles):
+    def __init__(self, username, token, channel, channel_id, get_pokemoncg_token, marbles, pcg):
         ThreadChatO.__init__(self, username, token, channel)
         self.marbles = marbles
+        self.pcg = pcg
         self.channel_id = channel_id
         self.get_pokemoncg_token_func = get_pokemoncg_token
 
@@ -1370,7 +1373,8 @@ class ThreadChat(ThreadChatO):
             self.token,
             self.channel,
             self.get_pokemoncg_token,
-            self.marbles
+            self.marbles,
+            self.pcg
         )
         logger.info(
             f"Join IRC Chat: {self.channel}", extra={"emoji": ":speech_balloon:"}

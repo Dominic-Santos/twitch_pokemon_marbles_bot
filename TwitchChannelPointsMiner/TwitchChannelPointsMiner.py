@@ -285,6 +285,7 @@ class TwitchChannelPointsMiner:
                                 streamer.channel_id,
                                 self.twitch.get_pokemoncg_token,
                                 streamer.settings.marbles,
+                                streamer.settings.pcg,
                             )
                         self.streamers.append(streamer)
                     except StreamerDoesNotExistException:

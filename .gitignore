@@ -156,7 +156,6 @@ keep_replit_alive.py
 .replit
 replit.nix
 
-settings.json
 pokemon.json
 sprites
 results

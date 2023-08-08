@@ -12,7 +12,8 @@ class StreamerSettings(StreamerSettingsO):
         "watch_streak",
         "bet",
         "chat",
-        "marbles"
+        "marbles",
+        "pcg"
     ]
 
     def __init__(
@@ -23,19 +24,24 @@ class StreamerSettings(StreamerSettingsO):
         claim_moments: bool = None,
         watch_streak: bool = None,
         marbles: bool = None,
+        pcg: bool = None,
         bet: BetSettings = None,
         chat: ChatPresence = None,
     ):
         super().__init__(make_predictions, follow_raid, claim_drops, claim_moments, watch_streak, bet, chat)
         self.marbles = marbles
+        self.pcg = pcg
 
     def default(self):
         super().default()
         if self.marbles is None:
             self.marbles = False
 
+        if self.pcg is None:
+            self.pcg = False
+
     def __repr__(self):
-        return super().__repr__(self) + f", marbles={self.marbles})"
+        return super().__repr__(self)[:-1] + f", marbles={self.marbles}, pcg={self.pcg})"
 
 
 class Streamer(StreamerO):
@@ -52,4 +58,5 @@ class Streamer(StreamerO):
                 self.irc_chat.channel_id,
                 self.irc_chat.get_pokemoncg_token_func,
                 self.irc_chat.marbles,
+                self.irc_chat.pcg,
             )
