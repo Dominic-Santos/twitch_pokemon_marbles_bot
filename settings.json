@@ -1,0 +1,28 @@
+{
+    "streamers": {
+        "theswedishfishofficial": {"goal": 3000, "priority": 2, "marbles": true},
+        "stedyhandz": {"goal": 50000, "priority": 3},
+        "ovidiuz94": {"goal": 1000000, "priority": 4},
+        "nailguns": {"goal": 1000000, "priority": 5},
+        "berto_n_yetis_joint": {"goal": 1000000, "priority": 5},
+        "msdopesauce": {"goal": 1000000, "priority": 5, "marbles": true},
+        "deemonrider": {"goal": 1000000, "priority": 6},
+        "jonaswagern": {"goal": 1000000, "priority": 6},
+        "2lives1stream": {"goal": 1000000, "priority": 1000},
+        "highhopestv": {"goal": 1000000, "priority": 1000},
+        "itsedekit": {"goal": 1000000, "priority": 1000},
+        "broly_bro": {"goal": 1000000, "priority": 1000},
+        "lllsquish": {"goal": 1000000, "priority": 1000},
+        "bellatje": {"goal": 1000000, "priority": 1000},
+        "renanlinns": {"goal": 1000000, "priority": 1000},
+        "kaceyoshi": {"goal": 1000000, "priority": 1000},
+        "zerroa": {"goal": 1000000, "priority": 1000},
+        "crumbreon": {"goal": 1000000, "priority": 1000},
+        "nljayt": {"goal": 1000000, "priority": 1000},
+        "mslaracing": {"goal": 1000000, "priority": 1000, "marbles": true},
+        "spooo": {"goal": 1000000, "priority": 1000, "marbles": true},
+        "averageapestudios": {"goal": 1000000, "priority": 1000},
+        "empyrealnomad": {"goal": 1000000, "priority": 1000},
+        "maxim2224": {"goal": 1000000, "priority": 1000}
+    }
+}
