@@ -31534,7 +31534,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "10346": {
         "pokedex_id": 10346,
@@ -31606,7 +31607,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "10351": {
         "pokedex_id": 10351,
