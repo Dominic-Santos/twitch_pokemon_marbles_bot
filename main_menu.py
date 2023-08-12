@@ -3,6 +3,7 @@ import tkinter
 from tkinter import font as TKFont
 from tkinter.messagebox import showinfo
 import subprocess
+from time import sleep
 
 from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
 from TwitchChannelPointsMiner.classes.entities.Pokemon.Utils import get_sprite
@@ -32,6 +33,7 @@ class MainMenu():
             "width": 10,
             "font": font
         }
+        self.can_update = False
 
     def close(self):
         self.app.destroy()
@@ -45,8 +47,9 @@ class MainMenu():
             "pady": 10,
             "padx": 10
         }
+        update_state = "normal" if self.can_update else "disabled"
         tkinter.Button(f, text="Run PCG", command=self.run_pcg, **self.button_conf).grid(row=0, column=0, **padding)
-        tkinter.Button(f, text="Update", command=self.run_update, **self.button_conf).grid(row=0, column=1, **padding)
+        tkinter.Button(f, text="Update", command=self.run_update, state=update_state, **self.button_conf).grid(row=0, column=1, **padding)
         tkinter.Button(f, text="Stats", command=self.run_stats, **self.button_conf).grid(row=1, column=0, **padding)
         tkinter.Button(f, text="Settings", command=self.page_settings, **self.button_conf).grid(row=1, column=1, **padding)
         tkinter.Button(f, text="Missions", command=self.page_missions, **self.button_conf).grid(row=2, column=0, **padding)
@@ -67,6 +70,8 @@ class MainMenu():
 
     def run_update(self):
         self.run_bat("update.bat")
+        sleep(2)
+        self.load()
 
     def run_pcg(self):
         self.run_bat("run_pcg.bat")
@@ -78,7 +83,12 @@ class MainMenu():
         Missions(self.app, self).run()
 
     def load(self):
+        self.check_updates()
         self.page_main_menu()
+
+    def check_updates(self):
+        git_status = subprocess.run(["git", "status"], stdout=subprocess.PIPE, text=True)
+        self.can_update = "behind" in git_status.stdout
 
 
 class Settings():
