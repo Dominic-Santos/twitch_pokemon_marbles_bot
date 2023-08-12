@@ -87,6 +87,7 @@ class MainMenu():
         self.page_main_menu()
 
     def check_updates(self):
+        subprocess.run(["git", "fetch"], stdout=subprocess.PIPE, text=True)
         git_status = subprocess.run(["git", "status"], stdout=subprocess.PIPE, text=True)
         self.can_update = "behind" in git_status.stdout
 
