@@ -13,5 +13,8 @@ pytz
 4validators4
 beautifulsoup4
 pytest
+<<<<<<< HEAD
 jwt
+=======
+>>>>>>> 3f55746 (test commit)
 PyJWT==2.6.0
