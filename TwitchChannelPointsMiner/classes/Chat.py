@@ -582,25 +582,31 @@ class ClientIRCPokemon(ClientIRCBase):
 
             team_data = self.pokemon_api.get_teams()
 
+            battle_mode = "stadium"
+            difficulty = "hard"
+
             if POKEMON.auto_battle_challenge and team_data["challenge"] is not None:
-                battle_mode = "challenge"
-                difficulty = "medium"
-            else:
-                battle_mode = "stadium"
-                difficulty = "hard"
+                if team_data["challenge"]["error"] == "" or "Try again in" in team_data["challenge"]["error"]:
+                    battle_mode = "challenge"
+                    difficulty = "medium"
+                else:
+                    self.log(f"{REDLOG}Didn't meet requirements for challenge battle, switching to stadium")
 
             if battle_mode in team_data:
 
                 if team_data[battle_mode]["error"] == "":
                     remaining = 0
                 else:
-                    time_array = team_data[battle_mode]["error"].split("(")[1].split(" ")
-                    if len(time_array) == 5:
-                        remaining = 60 * int(time_array[0]) + int(time_array[3])
-                    elif "minutes" in time_array:
-                        remaining = 60 * int(time_array[0])
-                    else:
-                        remaining = int(time_array[0])
+                    try:
+                        time_array = team_data[battle_mode]["error"].split("(")[1].split(" ")
+                        if len(time_array) == 5:
+                            remaining = 60 * int(time_array[0]) + int(time_array[3])
+                        elif "minutes" in time_array:
+                            remaining = 60 * int(time_array[0])
+                        else:
+                            remaining = int(time_array[0])
+                    except:
+                        remaining = 0
 
                 if remaining > 0:
                     remaining_human = seconds_readable(remaining)
@@ -956,13 +962,33 @@ class ClientIRCPokemon(ClientIRCBase):
         spawnables_c_per = int(spawnables_c_have * 10000.0 / spawnables_c_total) / 100.0
 
         results = {
-            "shiny": len([pokemon for pokemon in allpokemon if pokemon["isShiny"]]),
-            "starter": len(set([pokemon["pokedexId"] for pokemon in allpokemon if POKEMON.pokedex.starter(pokemon["name"])])),
-            "female": len(set([pokemon["pokedexId"] for pokemon in allpokemon if POKEMON.pokedex.female(pokemon["pokedexId"])])),
-            "legendary": len(set([pokemon["pokedexId"] for pokemon in allpokemon if POKEMON.pokedex.legendary(pokemon["name"])])),
-            "bag_regular": len(set([pokemon["pokedexId"] for pokemon in allpokemon if pokemon["pokedexId"] <= POKEMON.pokedex.total])),
-            "bag_special": len(set([pokemon["pokedexId"] for pokemon in allpokemon if pokemon["pokedexId"] > POKEMON.pokedex.total])),
+            "shiny": [],
+            "starter": [],
+            "female": [],
+            "legendary": [],
+            "bag_regular": [],
+            "bag_special": [],
         }
+
+        for pokemon in allpokemon:
+            if pokemon["isShiny"]:
+                results["shiny"].append(pokemon)
+
+            pokeobj = self.get_pokemon_stats(pokemon["pokedexId"])
+            if pokeobj.is_starter:
+                results["starter"].append(pokeobj.pokedex_id)
+            if pokeobj.is_female:
+                results["female"].append(pokeobj.pokedex_id)
+            if pokeobj.is_legendary:
+                results["legendary"].append(pokeobj.pokedex_id)
+            if pokeobj.pokedex_id <= POKEMON.pokedex.total:
+                results["bag_regular"].append(pokeobj.pokedex_id)
+            else:
+                results["bag_special"].append(pokeobj.pokedex_id)
+
+        results["shiny"] = len(results["shiny"])
+        for k in ["starter", "female", "legendary", "bag_regular", "bag_special"]:
+            results[k] = len(set(results[k]))
 
         for tier in ["S", "A", "B", "C"]:
             results[f"trade{tier}"] = len([pokemon for pokemon in allpokemon if pokemon["nickname"] is not None and f"trade{tier}" in pokemon["nickname"]])
