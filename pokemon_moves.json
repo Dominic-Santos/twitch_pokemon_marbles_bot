@@ -5494,5 +5494,29 @@
         "pp": 20,
         "accuracy": 100,
         "type": "dark"
+    },
+    "fusion-bolt": {
+        "name": "Fusion Bolt",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user throws down a giant lightning bolt. This\nmove\u2019s power is increased when influenced by an\nenormous flame.",
+        "power": 100,
+        "pp": 5,
+        "accuracy": 100,
+        "type": "electric"
+    },
+    "multi-attack": {
+        "name": "Multi-Attack",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "Cloaking itself in high energy, the user slams into the\r\ntarget. The memory held determines the move\u2019s type.",
+        "power": 120,
+        "pp": 10,
+        "accuracy": 100,
+        "type": "normal"
     }
 }

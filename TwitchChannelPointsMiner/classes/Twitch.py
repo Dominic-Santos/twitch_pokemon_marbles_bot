@@ -44,6 +44,7 @@ from ..utils import (
     create_chunks,
     internet_connection_available,
 )
+from .entities.Pokemon.Utils import save_pcg_auth
 
 logger = logging.getLogger(__name__)
 
@@ -659,6 +660,7 @@ class Twitch(object):
         extensions = response["data"]["user"]["channel"]["selfInstalledExtensions"]
         for extension in extensions:
             if extension["installation"]["extension"]["name"] == "PokemonCommunityGame":
+                save_pcg_auth(extension["token"]["jwt"])
                 return extension["token"]["jwt"]
 
         return None
