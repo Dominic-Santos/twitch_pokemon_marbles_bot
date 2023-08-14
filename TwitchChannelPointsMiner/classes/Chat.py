@@ -17,11 +17,6 @@ from .ChatO import logger
 from .entities.Pokemon import PokemonComunityGame, CGApi, Pokedaily, get_sprite, Battle, damage_calculator
 from .entities.Pokemon.Pokedex import Move
 
-"""
-    TODO:
-        heal pokemon when bellow a threshold between battles
-"""
-
 if os.path.exists("logs") is False:
     os.makedirs("logs")
 
@@ -1088,7 +1083,7 @@ Battles:
                 pokedict.setdefault(pokemon["pokedexId"], []).append(pokemon)
 
         for pokeid in pokedict.keys():
-            ordered = sorted(pokedict[pokeid], key=lambda x: (-x["avgIV"], -x["lvl"]))
+            ordered = sorted(pokedict[pokeid], key=lambda x: (-x["avgIV"], -x["sellPrice"], -x["lvl"]))
             for index, pokemon in enumerate(ordered):
                 if pokemon["nickname"] is not None:
                     if "trade" not in pokemon["nickname"]:

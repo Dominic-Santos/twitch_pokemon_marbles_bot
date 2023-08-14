@@ -7,6 +7,8 @@ from PIL import Image
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 
+PCG_AUTH = "pokemon_auth_token.txt"
+
 
 def check_output_folder(folder):
     if os.path.exists(folder) is False:
@@ -30,6 +32,16 @@ def save_to_json(func):
 
         return result
     return wrapped
+
+
+def save_pcg_auth(pcgauth):
+    with open(PCG_AUTH, "w") as f:
+        f.write(pcgauth)
+
+
+def load_pcg_auth():
+    with open(PCG_AUTH, "r") as f:
+        return f.readlines()[0].strip()
 
 
 def get_pokemon_battle_sprite(sprite_name, shiny=False, path=False):

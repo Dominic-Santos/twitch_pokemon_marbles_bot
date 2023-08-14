@@ -7,6 +7,12 @@ from time import sleep
 
 from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
 from TwitchChannelPointsMiner.classes.entities.Pokemon.Utils import get_sprite
+from TwitchChannelPointsMiner.classes.entities.Pokemon.CGApi import API as PCGApi
+
+
+POKEMON = PokemonComunityGame()
+POKEMON_API = PCGApi()
+POKEMON_API.refresh_auth()
 
 
 def clear_widgets(app):
@@ -96,9 +102,9 @@ class Settings():
     def __init__(self, app, parent):
         self.app = app
         self.parent = parent
-        self.pcg = PokemonComunityGame()
+
         self.skip_options = ["skip_missions"]
-        self.options = sorted(k for k in self.pcg.settings.keys() if k not in self.skip_options)
+        self.options = sorted(k for k in POKEMON.settings.keys() if k not in self.skip_options)
 
         self.page = 0
         self.page_size = 20
@@ -114,7 +120,7 @@ class Settings():
         self.app.geometry("")
 
     def save(self):
-        self.pcg.save_settings()
+        POKEMON.save_settings()
         self.parent.load()
 
     def createFrame(self):
@@ -154,23 +160,23 @@ class Settings():
         showinfo(title, text)
 
     def toggleBool(self, option, btn):
-        self.pcg.settings[option] = not self.pcg.settings[option]
+        POKEMON.settings[option] = not POKEMON.settings[option]
         btn.config(
-            bg=getColor(self.pcg.settings[option]),
-            text=getBoolText(self.pcg.settings[option])
+            bg=getColor(POKEMON.settings[option]),
+            text=getBoolText(POKEMON.settings[option])
         )
 
     def changeDropdown(self, option, dropdown):
-        if isinstance(self.pcg.settings[option], int):
-            self.pcg.settings[option] = int(dropdown.get())
+        if isinstance(POKEMON.settings[option], int):
+            POKEMON.settings[option] = int(dropdown.get())
         else:
-            self.pcg.settings[option] = dropdown.get()
+            POKEMON.settings[option] = dropdown.get()
 
     def changeIntEntry(self, option, entry, inp):
         val = entry.get()
         if val.isnumeric():
             inp.config(bg="white")
-            self.pcg.settings[option] = int(val)
+            POKEMON.settings[option] = int(val)
             if str(int(val)) != val:
                 entry.set(int(val))
         else:
@@ -192,8 +198,8 @@ class Settings():
             # page = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
 
             for i, option_name in enumerate(page):
-                option_value = self.pcg.settings[option_name]
-                option_settings = self.pcg.default_settings[option_name]
+                option_value = POKEMON.settings[option_name]
+                option_settings = POKEMON.default_settings[option_name]
                 option_type = type(option_value)
                 offset = 3 * page_nr
 
@@ -245,11 +251,11 @@ class Settings():
         self.refreshPageLabel()
 
     def openMultiSelect(self, option):
-        ms = MultiSelect(self.app, self, option, self.pcg.default_settings[option]["values"], self.pcg.settings[option])
+        ms = MultiSelect(self.app, self, option, POKEMON.default_settings[option]["values"], POKEMON.settings[option])
         ms.run()
 
     def multiSelectCallback(self, option, value):
-        self.pcg.settings[option] = value
+        POKEMON.settings[option] = value
         self.load()
 
     def refreshPageLabel(self):
@@ -260,16 +266,12 @@ class Missions():
     def __init__(self, app, parent):
         self.app = app
         self.parent = parent
-        self.pcg = PokemonComunityGame()
-        try:
-            with open("results/API/get_missions.json") as f:
-                self.options = json.load(f)["missions"]
-        except Exception as e:
-            print(e)
-            self.options = []
+        missions = POKEMON_API.get_missions()
+        POKEMON.sync_missions(missions)
+        self.options = missions["missions"]
 
-        mission_names = [self.pcg.missions.get_unique_id(mission) for mission in self.options]
-        self.pcg.settings["skip_missions"] = [x for x in self.pcg.settings["skip_missions"] if x in mission_names]
+        mission_names = [POKEMON.missions.get_unique_id(mission) for mission in self.options]
+        POKEMON.settings["skip_missions"] = [x for x in POKEMON.settings["skip_missions"] if x in mission_names]
 
         self.options = sorted(self.options, key=lambda x: x["name"])
 
@@ -286,7 +288,7 @@ class Missions():
         self.app.geometry("")
 
     def save(self):
-        self.pcg.save_settings()
+        POKEMON.save_settings()
         self.parent.load()
 
     def createFrame(self):
@@ -329,9 +331,9 @@ class Missions():
         page = self.options[self.page_size * self.page: self.page_size * (self.page + 1)]
 
         for i, mission in enumerate(page):
-            mission_name = self.pcg.missions.get_unique_id(mission)
+            mission_name = POKEMON.missions.get_unique_id(mission)
             mission_complete = mission["goal"] <= mission["progress"]
-            do_mission = mission_name not in self.pcg.settings["skip_missions"]
+            do_mission = mission_name not in POKEMON.settings["skip_missions"]
 
             if mission["rewardPokemon"] is not None:
                 img_path = get_sprite("pokemon", str(mission["rewardPokemon"]["id"]), battle=True, path=True)
@@ -365,11 +367,11 @@ class Missions():
         self.refreshPageLabel()
 
     def toggleBool(self, option, btn):
-        if option in self.pcg.settings["skip_missions"]:
-            self.pcg.settings["skip_missions"].remove(option)
+        if option in POKEMON.settings["skip_missions"]:
+            POKEMON.settings["skip_missions"].remove(option)
             do_mission = True
         else:
-            self.pcg.settings["skip_missions"].append(option)
+            POKEMON.settings["skip_missions"].append(option)
             do_mission = False
 
         btn.config(

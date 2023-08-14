@@ -31516,7 +31516,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "evolves_to": {}
     },
     "10345": {
         "pokedex_id": 10345,
@@ -33002,7 +33003,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "evolves_to": {}
     },
     "10479": {
         "pokedex_id": 10479,
@@ -34510,6 +34512,25 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
+        },
+        "evolves_to": {}
+    },
+    "100009": {
+        "pokedex_id": 100009,
+        "name": "Arcanine",
+        "description": "A Pok\u00e9mon that has long been admired for its beauty. It runs agilely as if on wings.",
+        "weight": 155.0,
+        "generation": 1,
+        "type1": "fire",
+        "type2": "none",
+        "tier": "A",
+        "base_stats": {
+            "hp": 90,
+            "speed": 95,
+            "attack": 110,
+            "defense": 80,
+            "special_attack": 100,
+            "special_defense": 80
         },
         "evolves_to": {}
     }

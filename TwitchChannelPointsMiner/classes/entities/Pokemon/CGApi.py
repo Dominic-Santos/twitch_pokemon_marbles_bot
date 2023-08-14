@@ -1,6 +1,6 @@
 import requests
 
-from .Utils import save_to_json
+from .Utils import save_to_json, load_pcg_auth
 
 BASE_URL = "https://poketwitch.bframework.de/api/game/ext/"
 TRAINER_URL = f"{BASE_URL}trainer/"
@@ -24,8 +24,8 @@ class API(object):
         }
 
     def get_auth_token(self):
-        # placeholder to be replaced
-        pass
+        # replace with twitch method
+        return load_pcg_auth()
 
     def refresh_auth(self):
         self.auth = self.get_auth_token()
