@@ -25,7 +25,10 @@ class API(object):
 
     def get_auth_token(self):
         # replace with twitch method
-        return load_pcg_auth()
+        try:
+            return load_pcg_auth()
+        except:
+            return None
 
     def refresh_auth(self):
         self.auth = self.get_auth_token()
