@@ -549,7 +549,9 @@ class ClientIRCPokemon(ClientIRCBase):
                             if swap:
                                 best_switch_id = other_pokemon_id
                                 best_result = switch_result
-
+                if best_result is None:
+                    battle.state = "move"
+                    continue
                 self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
                 sleep(1)
 
