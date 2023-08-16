@@ -1,4 +1,3 @@
-import json
 import tkinter
 from tkinter import font as TKFont
 from tkinter.messagebox import showinfo
@@ -9,10 +8,33 @@ from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonC
 from TwitchChannelPointsMiner.classes.entities.Pokemon.Utils import get_sprite
 from TwitchChannelPointsMiner.classes.entities.Pokemon.CGApi import API as PCGApi
 
-
 POKEMON = PokemonComunityGame()
 POKEMON_API = PCGApi()
 POKEMON_API.refresh_auth()
+IMAGES = {}
+IMAGE_PATHS = {}
+
+
+def get_image(img_path):
+    if img_path in IMAGES:
+        return IMAGES[img_path]
+    tkimg = tkinter.PhotoImage(file=img_path)
+    IMAGES[img_path] = tkimg
+    return tkimg
+
+
+def get_sprite_cached(sprite_type, sprite_name):
+    look_for = f"{sprite_type}_{sprite_name}"
+    if look_for in IMAGE_PATHS:
+        return IMAGE_PATHS[look_for]
+
+    if sprite_type == "pokemon":
+        img_path = get_sprite("pokemon", sprite_name, battle=True, path=True)
+    else:
+        img_path = get_sprite(sprite_type, sprite_name, path=True)
+
+    IMAGE_PATHS[look_for] = img_path
+    return img_path
 
 
 def clear_widgets(app):
@@ -123,6 +145,10 @@ class Settings():
         POKEMON.save_settings()
         self.parent.load()
 
+    def back(self):
+        POKEMON.load_settings()
+        self.parent.load()
+
     def createFrame(self):
         self.list_frame = tkinter.Frame(self.app)
         self.list_frame.pack(pady=10, padx=10)
@@ -130,7 +156,7 @@ class Settings():
         self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
 
         f = tkinter.Frame(self.app)
-        tkinter.Button(f, text="Back", command=self.parent.load, padx=5).grid(row=0, column=0, padx=3)
+        tkinter.Button(f, text="Back", command=self.back, padx=5).grid(row=0, column=0, padx=3)
         tkinter.Button(f, text="<", command=self.prevPage, padx=10).grid(row=0, column=1, padx=3)
         self.pageLabel = tkinter.Label(f, text="")
         self.pageLabel.grid(row=0, column=2, padx=3)
@@ -266,17 +292,39 @@ class Missions():
     def __init__(self, app, parent):
         self.app = app
         self.parent = parent
-        missions = POKEMON_API.get_missions()
-        POKEMON.sync_missions(missions)
-        self.options = missions["missions"]
-
-        mission_names = [POKEMON.missions.get_unique_id(mission) for mission in self.options]
-        POKEMON.settings["skip_missions"] = [x for x in POKEMON.settings["skip_missions"] if x in mission_names]
-
-        self.options = sorted(self.options, key=lambda x: x["name"])
-
         self.page = 0
         self.page_size = 5
+        self.mode = "all"
+
+        self.loadMissions()
+        self.filterOptions()
+
+    def filterOptions(self):
+        if self.mode == "all":
+            options = self.missions
+        elif self.mode == "complete":
+            options = [mission for mission in self.missions if mission["goal"] <= mission["progress"]]
+        elif self.mode == "incomplete":
+            options = [mission for mission in self.missions if mission["goal"] > mission["progress"]]
+        elif self.mode == "on":
+            options = [mission for mission in self.missions if POKEMON.missions.get_unique_id(mission) not in POKEMON.settings["skip_missions"]]
+        elif self.mode == "off":
+            options = [mission for mission in self.missions if POKEMON.missions.get_unique_id(mission) in POKEMON.settings["skip_missions"]]
+        self.options = sorted(options, key=lambda x: x["name"])
+
+    def loadMissions(self):
+        missions = POKEMON_API.get_missions()
+        POKEMON.sync_missions(missions)
+        self.missions = missions["missions"]
+
+        mission_names = [POKEMON.missions.get_unique_id(mission) for mission in self.missions]
+        POKEMON.settings["skip_missions"] = [x for x in POKEMON.settings["skip_missions"] if x in mission_names]
+
+        for mission in self.missions:
+            if mission["rewardPokemon"] is not None:
+                get_sprite_cached("pokemon", str(mission["rewardPokemon"]["id"]))
+            else:
+                get_sprite_cached(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"])
 
     def run(self):
         self.load()
@@ -291,14 +339,42 @@ class Missions():
         POKEMON.save_settings()
         self.parent.load()
 
+    def back(self):
+        POKEMON.load_settings()
+        self.parent.load()
+
+    def filterButton(self, mode):
+        if self.mode == mode:
+            self.mode = "all"
+        else:
+            self.mode = mode
+        self.page = 0
+        self.filterOptions()
+        self.loadOptionsList()
+        self.completeBtn.config(bg=getColor(self.mode == "complete"))
+        self.incompleteBtn.config(bg=getColor(self.mode == "incomplete"))
+        self.onBtn.config(bg=getColor(self.mode == "on"))
+        self.offBtn.config(bg=getColor(self.mode == "off"))
+
     def createFrame(self):
+        f = tkinter.Frame(self.app)
+        self.completeBtn = tkinter.Button(f, text="Complete", command=lambda: self.filterButton("complete"), padx=5)
+        self.completeBtn.grid(row=0, column=0, padx=3)
+        self.incompleteBtn = tkinter.Button(f, text="Incomplete", command=lambda: self.filterButton("incomplete"), padx=5)
+        self.incompleteBtn.grid(row=0, column=1, padx=3)
+        self.onBtn = tkinter.Button(f, text="On", command=lambda: self.filterButton("on"), padx=5)
+        self.onBtn.grid(row=0, column=2, padx=3)
+        self.offBtn = tkinter.Button(f, text="Off", command=lambda: self.filterButton("off"), padx=5)
+        self.offBtn.grid(row=0, column=3, padx=3)
+        f.pack(pady=10)
+
         self.list_frame = tkinter.Frame(self.app)
         self.list_frame.pack(pady=10, padx=10)
 
         self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
 
         f = tkinter.Frame(self.app)
-        tkinter.Button(f, text="Back", command=self.parent.load, padx=5).grid(row=0, column=0, padx=3)
+        tkinter.Button(f, text="Back", command=self.back, padx=5).grid(row=0, column=0, padx=3)
         tkinter.Button(f, text="<", command=self.prevPage, padx=10).grid(row=0, column=1, padx=3)
         self.pageLabel = tkinter.Label(f, text="")
         self.pageLabel.grid(row=0, column=2, padx=3)
@@ -336,17 +412,18 @@ class Missions():
             do_mission = mission_name not in POKEMON.settings["skip_missions"]
 
             if mission["rewardPokemon"] is not None:
-                img_path = get_sprite("pokemon", str(mission["rewardPokemon"]["id"]), battle=True, path=True)
+                img_path = get_sprite_cached("pokemon", str(mission["rewardPokemon"]["id"]))
                 reward = mission["rewardPokemon"]["name"]
 
             else:
-                img_path = get_sprite(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"], path=True)
+                img_path = get_sprite_cached(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"])
                 reward = str(mission["rewardItem"]["amount"]) + "x " + mission["rewardItem"]["name"]
 
             reward_frame = tkinter.Frame(self.list_frame)
             canvas = tkinter.Canvas(reward_frame, width=96, height=96)
             try:
-                tkimg = tkinter.PhotoImage(file=img_path)
+                tkimg = get_image(img_path)
+                # tkimg = tkinter.PhotoImage(file=img_path)
                 canvas.image = tkimg
                 canvas.create_image(96 / 2, 96 / 2, image=tkimg)
             except Exception as e:
