@@ -40,6 +40,7 @@ class Move(object):
 class Pokedex(object):
     def __init__(self):
         self.pokemon = {}
+        self.pokemon_ids = {}
         self.pokemon_stats = {}
         self.pokemon_moves = {}
         self._total = 904
@@ -80,10 +81,11 @@ class Pokedex(object):
 
     def set(self, dex):
         for pokemon in dex["dex"]:
-            if pokemon["id"] < 10000:
+            if pokemon["id"] <= dex["totalPkm"]:
                 pokename = self._clean_pokedex_name(pokemon["name"])
                 if pokename is not None:
                     self.pokemon[pokename] = pokemon["c"]
+            self.pokemon_ids[pokemon["id"]] = pokemon["c"]
         self._total = dex["totalPkm"]
 
     def set_tier(self, pokemon, tier):
@@ -129,16 +131,6 @@ class Pokedex(object):
         return pokename
 
     def _get_pokemon_id(self, pokemon):
-        if isinstance(pokemon, Pokemon) is False:
-            for poke_id in self.pokemon_stats.keys():
-                pokeobj = self._stats(poke_id)
-                if pokeobj.name == pokemon:
-                    pokemon = pokeobj
-                    break
-
-        if isinstance(pokemon, Pokemon) is False:
-            return 0
-
         return pokemon.pokedex_id
 
     def have(self, pokemon):
