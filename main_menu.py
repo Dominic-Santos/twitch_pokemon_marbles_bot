@@ -311,6 +311,7 @@ class Missions():
         elif self.mode == "off":
             options = [mission for mission in self.missions if POKEMON.missions.get_unique_id(mission) in POKEMON.settings["skip_missions"]]
         self.options = sorted(options, key=lambda x: x["name"])
+        self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
 
     def loadMissions(self):
         missions = POKEMON_API.get_missions()
@@ -370,8 +371,6 @@ class Missions():
 
         self.list_frame = tkinter.Frame(self.app)
         self.list_frame.pack(pady=10, padx=10)
-
-        self.max_page = (len(self.options) // self.page_size) - 1 + (1 if len(self.options) % self.page_size != 0 else 0)
 
         f = tkinter.Frame(self.app)
         tkinter.Button(f, text="Back", command=self.back, padx=5).grid(row=0, column=0, padx=3)
