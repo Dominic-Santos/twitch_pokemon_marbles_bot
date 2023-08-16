@@ -6,7 +6,8 @@ POKEDEX_FILE = "pokemon_pokedex.json"
 POKEMOVE_FILE = "pokemon_moves.json"
 
 STARTER_POKEMON = ["Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard", "Squirtle", "Wartortle", "Blastoise", "Chikorita", "Bayleef", "Meganium", "Cyndaquil", "Quilava", "Typhlosion", "Totodile", "Croconaw", "Feraligatr", "Treecko", "Grovyle", "Sceptile", "Torchic", "Combusken", "Blaziken", "Mudkip", "Marshtomp", "Swampert", "Turtwig", "Grotle", "Torterra", "Chimchar", "Monferno", "Infernape", "Piplup", "Prinplup", "Empoleon", "Snivy", "Servine", "Serperior", "Tepig", "Pignite", "Emboar", "Oshawott", "Dewott", "Samurott", "Chespin", "Quilladin", "Chesnaught", "Fennekin", "Braixen", "Delphox", "Froakie", "Frogadier", "Greninja", "Rowlet", "Dartrix", "Decidueye", "Litten", "Torracat", "Incineroar", "Popplio", "Brionne", "Primarina", "Grookey", "Thwackey", "Rillaboom", "Scorbunny", "Raboot", "Cinderace", "Sobble", "Drizzile", "Inteleon"]
-LEGENDARY_POKEMON = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Lugia", "Ho-Oh", "Celebi", "Regirock", "Regice", "Registeel", "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Cresselia", "Phione", "Manaphy", "Darkrai", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Reshiram", "Zekrom", "Landorus", "Kyurem", "Keldeo", "Meloetta", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Diancie", "Hoopa", "Volcanion", "Type: Null", "Silvally", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", "Cosmoem", "Solgaleo", "Lunala", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Necrozma", "Magearna", "Marshadow", "Poipole", "Naganadel", "Stakataka", "Blacephalon", "Zeraora", "Meltan", "Melmetal", "Zacian", "Zamazenta", "Eternatus", "Kubfu", "Urshifu", "Zarude", "Regieleki", "Regidrago", "Glastrier", "Spectrier", "Calyrex", "Wyrdeer", "Kleavor", "Ursaluna", "Basculegion", "Sneasler", "Overqwil", "Type: Null"]
+LEGENDARY_POKEMON = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Lugia", "Ho-Oh", "Celebi", "Regirock", "Regice", "Registeel", "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Cresselia", "Phione", "Manaphy", "Darkrai", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Reshiram", "Zekrom", "Landorus", "Kyurem", "Keldeo", "Meloetta", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Diancie", "Hoopa", "Volcanion", "Type: Null", "Silvally", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", "Cosmoem", "Solgaleo", "Lunala", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Necrozma", "Magearna", "Marshadow", "Poipole", "Naganadel", "Stakataka", "Blacephalon", "Zeraora", "Meltan", "Melmetal", "Zacian", "Zamazenta", "Eternatus", "Kubfu", "Urshifu", "Zarude", "Regieleki", "Regidrago", "Glastrier", "Spectrier", "Calyrex", "Type: Null"]
+NON_SPAWNABLE_POKEMON = [899, 900, 901, 902, 903, 904]
 FISH_POKEMON = ["Alomomola", "Angerphish", "Arctovish", "Arrokuda", "Barboach", "Barbubble", "Barraskewda", "Basculegion", "Basculin", "Blaufisch", "Bruxish", "Bubbayou", "Carvanha", "Chinchou", "Dragalge", "Eelektrik", "Elektross", "Feebas", "Finneon", "Goldeen", "Gorebyss", "Gyarados", "Horsea", "Huntail", "Kingdra", "Kyogre", "Lanturn", "Lumineon", "Luvdisc", "Magikarp", "Mantine", "Mantyke", "Milotic", "Mudkip", "Overqwil", "Qwilfish", "Relicanth", "Remoraid", "Seadra", "Seaking", "Sharpedo", "Skrelp", "Stunfisk", "Tynamo", "Wailmer", "Wailord", "Whiscash", "Wishiwashi", "Wooper", "Dracovish", "Clauncher", "Clawitzer"]
 CAT_POKEMON = [52, 53, 134, 135, 136, 196, 215, 300, 301, 335, 403, 404, 405, 431, 432, 461, 470, 471, 509, 510, 667, 668, 677, 678, 700, 725, 726, 727, 807, 863, 903, 10025, 10107, 10108, 10387, 10388, 10399, 10400, 10401, 10445, 10471, 10493, 10540, 86325]
 DOG_POKEMON = [37, 38, 58, 59, 133, 135, 197, 209, 210, 228, 229, 235, 243, 244, 261, 262, 309, 310, 359, 447, 448, 492, 506, 507, 508, 570, 571, 676, 744, 745, 773, 827, 828, 835, 836, 888, 889, 10006, 10048, 10055, 10057, 10059, 10116, 10117, 10320, 10321, 10341, 10342, 10343, 10344, 10345, 10346, 10347, 10348, 10349, 10372, 10472, 10473, 10474, 10475, 10476, 10477, 10478, 10479, 10480, 10481, 10482, 10483, 10484, 10485, 10486, 10487, 10488, 10548, 10549, 86316, 86319, 86322, 86323, 100009]
@@ -17,6 +18,7 @@ REGION_PREFIX = {
     "Hisuian": "His",
     "Alolan": "Alo",
     "Sinister": "Sin",
+    "PCG": "PCG"
 }
 
 
@@ -50,6 +52,7 @@ class Pokedex(object):
         self._total_gal = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("gal ")])
         self._total_his = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("his ")])
         self._total_alo = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("alo ")])
+        self._total_pcg = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("pcg ")])
 
     def load_pokedex(self):
         try:
@@ -128,7 +131,7 @@ class Pokedex(object):
     def _get_pokemon_id(self, pokemon):
         if isinstance(pokemon, Pokemon) is False:
             for poke_id in self.pokemon_stats.keys():
-                pokeobj = self.stats(poke_id)
+                pokeobj = self._stats(poke_id)
                 if pokeobj.name == pokemon:
                     pokemon = pokeobj
                     break
@@ -155,6 +158,10 @@ class Pokedex(object):
         poke_name = self._get_pokemon_name(pokemon)
         return poke_name in LEGENDARY_POKEMON
 
+    def non_spawnable(self, pokemon):
+        poke_id = self._get_pokemon_id(pokemon)
+        return poke_id in NON_SPAWNABLE_POKEMON
+
     def fish(self, pokemon):
         poke_name = self._get_pokemon_name(pokemon)
         return poke_name in FISH_POKEMON
@@ -174,10 +181,10 @@ class Pokedex(object):
     def baby(self, pokemon):
         poke_id = self._get_pokemon_id(pokemon)
         if poke_id is not None:
-            pokemon = self.stats(poke_id)
+            pokemon = self._stats(poke_id)
             if pokemon is not None and pokemon.evolve_to is not None:
                 for evolution_id in pokemon.evolve_to.keys():
-                    evolution = self.stats(evolution_id)
+                    evolution = self._stats(evolution_id)
                     if evolution is not None and evolution.evolve_to is not None:
                         if len(evolution.evolve_to.keys()) > 0:
                             return True
@@ -192,12 +199,27 @@ class Pokedex(object):
             poke_name = poke_name.replace(f"{prefix} ", "").strip()
         return poke_name
 
-    def stats(self, pokemon_id):
+    def _stats(self, pokemon_id):
         poke_id = str(pokemon_id)
         if poke_id not in self.pokemon_stats:
             return None
 
         poke = Pokemon(self.pokemon_stats[poke_id])
+        return poke
+
+    def stats(self, pokemon_id):
+        poke = self._stats(pokemon_id)
+        if poke is None:
+            return poke
+
+        poke.is_fish = self.fish(poke)
+        poke.is_cat = self.cat(poke)
+        poke.is_dog = self.dog(poke)
+        poke.is_baby = self.baby(poke)
+        poke.is_legendary = self.legendary(poke)
+        poke.is_starter = self.starter(poke)
+        poke.is_female = self.female(poke)
+        poke.is_non_spawnable = self.non_spawnable(poke)
 
         return poke
 
@@ -254,8 +276,8 @@ class Pokedex(object):
         return len(FEMALE_POKEMON)
 
     @property
-    def fishes(self):
-        return len(FISH_POKEMON)
+    def non_spawnables(self):
+        return len(NON_SPAWNABLE_POKEMON)
 
     @property
     def prefixes(self):
@@ -276,3 +298,7 @@ class Pokedex(object):
     @property
     def sinister(self):
         return self._total_sin
+
+    @property
+    def pcg(self):
+        return self._total_pcg

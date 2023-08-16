@@ -5518,5 +5518,17 @@
         "pp": 10,
         "accuracy": 100,
         "type": "normal"
+    },
+    "teleport": {
+        "name": "Teleport",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": -6,
+        "description": "Use it to flee from any wild Pok\u00e9mon.",
+        "power": 0,
+        "pp": 20,
+        "accuracy": 0,
+        "type": "psychic"
     }
 }

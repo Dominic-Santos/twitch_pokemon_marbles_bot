@@ -6,6 +6,7 @@ class Pokemon(object):
         self.pokedex_id = data.get("pokedex_id", 0)
         self.tier = data.get("tier", "NA")
         self.types = [t for t in [data.get("type1", "none").title(), data.get("type2", "none").title()] if t != "None"]
+        self.order = data.get("order", 0)  # this is the actual pokedex id the pokemon counts for when caught
 
         base_stats = data.get("base_stats", {})
         self.hp = base_stats.get("hp", 0)
@@ -26,6 +27,7 @@ class Pokemon(object):
         self.is_starter = False
         self.is_legendary = False
         self.is_female = False
+        self.is_non_spawnable = False
 
         # evolution data, None = hasnt been added yet
         self.evolve_to = data.get("evolves_to", None)
