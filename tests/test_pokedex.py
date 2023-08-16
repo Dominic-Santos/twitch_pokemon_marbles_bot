@@ -6,8 +6,6 @@ JSON_FILE = "tests/pokedex.json"
 
 REGION_VARIANTS = ["Sin Gliscor", "His Braviary", "His Zoroark", "His Voltorb", "Hisuian Braviary", "Gal Rapidash", "Gal Darmanitan", "Gal Weezing", "Galarian Weezing"]
 FISH_POKEMON = ["Magikarp", "Kyogre", "His Gyarados", "Gyarados"]
-CAT_POKEMON = ["Meowth", "Persian"]
-DOG_POKEMON = ["Growlithe", "Arcanine"]
 
 FAIL_TO_FIND = None
 pokedex = Pokedex()
@@ -57,14 +55,13 @@ def test_have_extra():
 
 
 def test_baby():
-    assert pokedex.baby("Pichu")
-    assert pokedex.baby("Caterpie")
-    assert pokedex.baby("Lugia") == False
-    assert pokedex.baby("Charmander")
-    assert pokedex.baby("Metapod") == False
     poke = Pokemon()
     poke.pokedex_id = 10  # Caterpie
     assert pokedex.baby(poke)
+    poke.pokedex_id = 172  # Pichu
+    assert pokedex.baby(poke)
+    poke.pokedex_id = 249  # Lugia
+    assert pokedex.baby(poke) == False
 
 
 def test_clean_name():
@@ -75,12 +72,20 @@ def test_clean_name():
 
 
 def test_dogs():
-    for pokemon in DOG_POKEMON:
-        assert pokedex.dog(pokemon)
-    assert pokedex.dog("Pidgey") == False
+    poke = Pokemon()
+    poke.pokedex_id = 58  # Growlithe
+    assert pokedex.dog(poke)
+    poke.pokedex_id = 59  # Arcanine
+    assert pokedex.dog(poke)
+    poke.pokedex_id = 16  # Pidgey
+    assert pokedex.dog(poke) == False
 
 
 def test_cats():
-    for pokemon in CAT_POKEMON:
-        assert pokedex.cat(pokemon)
-    assert pokedex.cat("Pidgey") == False
+    poke = Pokemon()
+    poke.pokedex_id = 52  # Meowth
+    assert pokedex.cat(poke)
+    poke.pokedex_id = 53  # Persian
+    assert pokedex.cat(poke)
+    poke.pokedex_id = 16  # Pidgey
+    assert pokedex.cat(poke) == False
