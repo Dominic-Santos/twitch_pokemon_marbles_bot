@@ -833,17 +833,29 @@ class ClientIRCPokemon(ClientIRCBase):
         POKEMON.pokedex.save_pokedex()
         return pokemon_data
 
-    def check_evolutions(self):
+    def check_bag_pokemon(self):
         for pokemon in POKEMON.computer.pokemon:
             pokemon_obj = self.get_pokemon_stats(pokemon["pokedexId"])
+            updated = False
+
+            if pokemon["name"] != pokemon_obj.name:
+                POKEMON.pokedex.pokemon_stats[str(pokemon["pokedexId"])]["name"] = pokemon["name"]
+                updated = True
+
+            if pokemon["order"] != pokemon_obj.order:
+                POKEMON.pokedex.pokemon_stats[str(pokemon["pokedexId"])]["order"] = pokemon["order"]
+                updated = True
+
             if pokemon_obj.evolve_to is None:
                 self.update_evolutions(pokemon["id"], pokemon["pokedexId"])
                 self.log(f"{YELLOWLOG}Updated evolutions for{pokemon['pokedexId']}")
                 sleep(1)
+            elif updated:
+                POKEMON.pokedex.save_pokedex()
 
     def daily_tasks(self, previous_date, current_date):
         self.stats_computer(previous_date, current_date)
-        self.check_evolutions()
+        self.check_bag_pokemon()
         self.check_finish_pokedex()
 
     def check_finish_pokedex(self):
@@ -855,7 +867,7 @@ class ClientIRCPokemon(ClientIRCBase):
         for i in range(1, POKEMON.pokedex.total + 1):
             pokemon = self.get_pokemon_stats(i)
 
-            if pokemon.is_starter or pokemon.is_legendary or POKEMON.pokedex.have(pokemon):
+            if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable or POKEMON.pokedex.have(pokemon):
                 continue
 
             if len(pokemon.evolve_from) == 0:
@@ -927,7 +939,7 @@ class ClientIRCPokemon(ClientIRCBase):
         for i in range(1, POKEMON.pokedex.total + 1):
             pokemon = self.get_pokemon_stats(i)
 
-            if pokemon.is_starter or pokemon.is_legendary:
+            if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable:
                 continue
 
             if pokemon.tier == "A":
@@ -961,6 +973,7 @@ class ClientIRCPokemon(ClientIRCBase):
             "starter": [],
             "female": [],
             "legendary": [],
+            "non_spawnable": [],
             "bag_regular": [],
             "bag_special": [],
         }
@@ -976,13 +989,15 @@ class ClientIRCPokemon(ClientIRCBase):
                 results["female"].append(pokeobj.pokedex_id)
             if pokeobj.is_legendary:
                 results["legendary"].append(pokeobj.pokedex_id)
+            if pokeobj.is_non_spawnable:
+                results["non_spawnable"].append(pokeobj.pokedex_id)
             if pokeobj.pokedex_id <= POKEMON.pokedex.total:
                 results["bag_regular"].append(pokeobj.pokedex_id)
             else:
                 results["bag_special"].append(pokeobj.pokedex_id)
 
         results["shiny"] = len(results["shiny"])
-        for k in ["starter", "female", "legendary", "bag_regular", "bag_special"]:
+        for k in ["starter", "female", "legendary", "bag_regular", "bag_special", "non_spawnable"]:
             results[k] = len(set(results[k]))
 
         for tier in ["S", "A", "B", "C"]:
@@ -1033,8 +1048,9 @@ class ClientIRCPokemon(ClientIRCBase):
 
         discord_msg = f"""Bag Summary:
 
-Starters: {results["starter"]}/{POKEMON.pokedex.starters}
-Legendary: {results["legendary"]}/{POKEMON.pokedex.legendaries}
+Starters: {results["starter"]}
+Legendary: {results["legendary"]}
+Non-Spawnables: {results["non_spawnable"]}/{POKEMON.pokedex.non_spawnables}
 Shiny: {results["shiny"]}
 
 Normal Version: {results["bag_regular"]}/{POKEMON.pokedex.total}
@@ -1213,15 +1229,6 @@ Battles:
             except Exception as e:
                 print(pokedex_id, "failed to get pokemon stats", e)
                 pokemon = None
-
-        if pokemon is not None:
-            pokemon.is_fish = POKEMON.pokedex.fish(pokemon)
-            pokemon.is_cat = POKEMON.pokedex.cat(pokemon)
-            pokemon.is_dog = POKEMON.pokedex.dog(pokemon)
-            pokemon.is_baby = POKEMON.pokedex.baby(pokemon)
-            pokemon.is_legendary = POKEMON.pokedex.legendary(pokemon)
-            pokemon.is_starter = POKEMON.pokedex.starter(pokemon)
-            pokemon.is_female = POKEMON.pokedex.female(pokemon)
 
         return pokemon
 
