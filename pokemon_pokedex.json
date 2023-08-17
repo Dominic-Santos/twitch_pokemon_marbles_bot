@@ -75,7 +75,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 2
     },
     "3": {
         "pokedex_id": 3,
@@ -97,7 +98,8 @@
         "evolves_from": [
             "2"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 3
     },
     "4": {
         "pokedex_id": 4,
@@ -167,7 +169,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 5
     },
     "6": {
         "pokedex_id": 6,
@@ -189,7 +192,8 @@
         "evolves_from": [
             "5"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 6
     },
     "7": {
         "pokedex_id": 7,
@@ -282,7 +286,8 @@
         "evolves_from": [
             "8"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 9
     },
     "10": {
         "pokedex_id": 10,
@@ -4262,7 +4267,8 @@
             "special_attack": 95,
             "special_defense": 125
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 144
     },
     "145": {
         "pokedex_id": 145,
@@ -4281,7 +4287,8 @@
             "special_attack": 125,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 145
     },
     "146": {
         "pokedex_id": 146,
@@ -4300,7 +4307,8 @@
             "special_attack": 125,
             "special_defense": 85
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 146
     },
     "147": {
         "pokedex_id": 147,
@@ -4409,7 +4417,8 @@
             "special_attack": 154,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 150
     },
     "151": {
         "pokedex_id": 151,
@@ -4428,7 +4437,8 @@
             "special_attack": 100,
             "special_defense": 100
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 151
     },
     "152": {
         "pokedex_id": 152,
@@ -4498,7 +4508,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 153
     },
     "154": {
         "pokedex_id": 154,
@@ -4520,7 +4531,8 @@
         "evolves_from": [
             "153"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 154
     },
     "155": {
         "pokedex_id": 155,
@@ -4613,7 +4625,8 @@
         "evolves_from": [
             "156"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 157
     },
     "158": {
         "pokedex_id": 158,
@@ -4683,7 +4696,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 159
     },
     "160": {
         "pokedex_id": 160,
@@ -4705,7 +4719,8 @@
         "evolves_from": [
             "159"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 160
     },
     "161": {
         "pokedex_id": 161,
@@ -6993,7 +7008,8 @@
             "special_attack": 115,
             "special_defense": 100
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 243
     },
     "244": {
         "pokedex_id": 244,
@@ -7012,7 +7028,8 @@
             "special_attack": 90,
             "special_defense": 75
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 244
     },
     "245": {
         "pokedex_id": 245,
@@ -7031,7 +7048,8 @@
             "special_attack": 90,
             "special_defense": 115
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 245
     },
     "246": {
         "pokedex_id": 246,
@@ -7144,7 +7162,8 @@
             "special_attack": 90,
             "special_defense": 154
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 249
     },
     "250": {
         "pokedex_id": 250,
@@ -7163,7 +7182,8 @@
             "special_attack": 110,
             "special_defense": 154
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 250
     },
     "251": {
         "pokedex_id": 251,
@@ -7182,7 +7202,8 @@
             "special_attack": 100,
             "special_defense": 100
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 251
     },
     "252": {
         "pokedex_id": 252,
@@ -7252,7 +7273,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 253
     },
     "254": {
         "pokedex_id": 254,
@@ -7274,7 +7296,8 @@
         "evolves_from": [
             "253"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 254
     },
     "255": {
         "pokedex_id": 255,
@@ -7348,7 +7371,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 256
     },
     "257": {
         "pokedex_id": 257,
@@ -7370,7 +7394,8 @@
         "evolves_from": [
             "256"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 257
     },
     "258": {
         "pokedex_id": 258,
@@ -7444,7 +7469,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 259
     },
     "260": {
         "pokedex_id": 260,
@@ -7466,7 +7492,8 @@
         "evolves_from": [
             "259"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 260
     },
     "261": {
         "pokedex_id": 261,
@@ -10810,7 +10837,8 @@
             "special_attack": 130,
             "special_defense": 110
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 381
     },
     "382": {
         "pokedex_id": 382,
@@ -10849,7 +10877,8 @@
             "special_attack": 100,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 383
     },
     "384": {
         "pokedex_id": 384,
@@ -10868,7 +10897,8 @@
             "special_attack": 150,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 384
     },
     "385": {
         "pokedex_id": 385,
@@ -10887,7 +10917,8 @@
             "special_attack": 100,
             "special_defense": 100
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 385
     },
     "386": {
         "pokedex_id": 386,
@@ -10906,7 +10937,8 @@
             "special_attack": 150,
             "special_defense": 50
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 386
     },
     "387": {
         "pokedex_id": 387,
@@ -10999,7 +11031,8 @@
         "evolves_from": [
             "388"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 389
     },
     "390": {
         "pokedex_id": 390,
@@ -11096,7 +11129,8 @@
         "evolves_from": [
             "391"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 392
     },
     "393": {
         "pokedex_id": 393,
@@ -11166,7 +11200,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 394
     },
     "395": {
         "pokedex_id": 395,
@@ -11188,7 +11223,8 @@
         "evolves_from": [
             "394"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 395
     },
     "396": {
         "pokedex_id": 396,
@@ -13473,7 +13509,8 @@
             "defense": 77,
             "special_attack": 95,
             "special_defense": 77
-        }
+        },
+        "order": 479
     },
     "480": {
         "pokedex_id": 480,
@@ -13492,7 +13529,8 @@
             "special_attack": 75,
             "special_defense": 130
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 480
     },
     "481": {
         "pokedex_id": 481,
@@ -13511,7 +13549,8 @@
             "special_attack": 105,
             "special_defense": 105
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 481
     },
     "482": {
         "pokedex_id": 482,
@@ -13530,7 +13569,8 @@
             "special_attack": 125,
             "special_defense": 70
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 482
     },
     "483": {
         "pokedex_id": 483,
@@ -13569,7 +13609,8 @@
             "special_attack": 150,
             "special_defense": 120
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 484
     },
     "485": {
         "pokedex_id": 485,
@@ -13588,7 +13629,8 @@
             "special_attack": 130,
             "special_defense": 106
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 485
     },
     "486": {
         "pokedex_id": 486,
@@ -13627,7 +13669,8 @@
             "special_attack": 100,
             "special_defense": 120
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 487
     },
     "488": {
         "pokedex_id": 488,
@@ -13646,7 +13689,8 @@
             "special_attack": 75,
             "special_defense": 130
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 488
     },
     "489": {
         "pokedex_id": 489,
@@ -13705,7 +13749,8 @@
             "special_attack": 135,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 491
     },
     "492": {
         "pokedex_id": 492,
@@ -13724,7 +13769,8 @@
             "special_attack": 100,
             "special_defense": 100
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 492
     },
     "493": {
         "pokedex_id": 493,
@@ -13743,7 +13789,8 @@
             "special_attack": 120,
             "special_defense": 120
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 493
     },
     "494": {
         "pokedex_id": 494,
@@ -13762,7 +13809,8 @@
             "special_attack": 100,
             "special_defense": 100
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 494
     },
     "495": {
         "pokedex_id": 495,
@@ -13832,7 +13880,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 496
     },
     "497": {
         "pokedex_id": 497,
@@ -13854,7 +13903,8 @@
         "evolves_from": [
             "496"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 497
     },
     "498": {
         "pokedex_id": 498,
@@ -13951,7 +14001,8 @@
         "evolves_from": [
             "499"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 500
     },
     "501": {
         "pokedex_id": 501,
@@ -14021,7 +14072,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 502
     },
     "503": {
         "pokedex_id": 503,
@@ -14043,7 +14095,8 @@
         "evolves_from": [
             "502"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 503
     },
     "504": {
         "pokedex_id": 504,
@@ -17784,7 +17837,8 @@
             "special_attack": 90,
             "special_defense": 72
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 638
     },
     "639": {
         "pokedex_id": 639,
@@ -17803,7 +17857,8 @@
             "special_attack": 72,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 639
     },
     "640": {
         "pokedex_id": 640,
@@ -17822,7 +17877,8 @@
             "special_attack": 90,
             "special_defense": 129
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 640
     },
     "641": {
         "pokedex_id": 641,
@@ -17841,7 +17897,8 @@
             "special_attack": 125,
             "special_defense": 80
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 641
     },
     "642": {
         "pokedex_id": 642,
@@ -17860,7 +17917,8 @@
             "special_attack": 125,
             "special_defense": 80
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 642
     },
     "643": {
         "pokedex_id": 643,
@@ -17879,7 +17937,8 @@
             "special_attack": 150,
             "special_defense": 120
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 643
     },
     "644": {
         "pokedex_id": 644,
@@ -17898,7 +17957,8 @@
             "special_attack": 120,
             "special_defense": 100
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 644
     },
     "645": {
         "pokedex_id": 645,
@@ -17917,7 +17977,8 @@
             "special_attack": 115,
             "special_defense": 80
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 645
     },
     "646": {
         "pokedex_id": 646,
@@ -17936,7 +17997,8 @@
             "special_attack": 130,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 646
     },
     "647": {
         "pokedex_id": 647,
@@ -17955,7 +18017,8 @@
             "special_attack": 129,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 647
     },
     "648": {
         "pokedex_id": 648,
@@ -17974,7 +18037,8 @@
             "special_attack": 128,
             "special_defense": 128
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 648
     },
     "649": {
         "pokedex_id": 649,
@@ -17993,7 +18057,8 @@
             "special_attack": 120,
             "special_defense": 95
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 649
     },
     "650": {
         "pokedex_id": 650,
@@ -18026,7 +18091,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 650
     },
     "651": {
         "pokedex_id": 651,
@@ -18062,7 +18128,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 651
     },
     "652": {
         "pokedex_id": 652,
@@ -18084,7 +18151,8 @@
         "evolves_from": [
             "651"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 652
     },
     "653": {
         "pokedex_id": 653,
@@ -18154,7 +18222,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 654
     },
     "655": {
         "pokedex_id": 655,
@@ -18176,7 +18245,8 @@
         "evolves_from": [
             "654"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 655
     },
     "656": {
         "pokedex_id": 656,
@@ -19929,7 +19999,8 @@
             "special_attack": 131,
             "special_defense": 98
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 716
     },
     "717": {
         "pokedex_id": 717,
@@ -19968,7 +20039,8 @@
             "special_attack": 81,
             "special_defense": 95
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 718
     },
     "719": {
         "pokedex_id": 719,
@@ -19987,7 +20059,8 @@
             "special_attack": 100,
             "special_defense": 150
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 719
     },
     "720": {
         "pokedex_id": 720,
@@ -20006,7 +20079,8 @@
             "special_attack": 150,
             "special_defense": 130
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 720
     },
     "721": {
         "pokedex_id": 721,
@@ -20025,7 +20099,8 @@
             "special_attack": 130,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 721
     },
     "722": {
         "pokedex_id": 722,
@@ -20103,7 +20178,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 723
     },
     "724": {
         "pokedex_id": 724,
@@ -20196,7 +20272,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 726
     },
     "727": {
         "pokedex_id": 727,
@@ -20218,7 +20295,8 @@
         "evolves_from": [
             "726"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 727
     },
     "728": {
         "pokedex_id": 728,
@@ -20288,7 +20366,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 729
     },
     "730": {
         "pokedex_id": 730,
@@ -20310,7 +20389,8 @@
         "evolves_from": [
             "729"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 730
     },
     "731": {
         "pokedex_id": 731,
@@ -21813,7 +21893,8 @@
             "special_attack": 85,
             "special_defense": 95
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 787
     },
     "788": {
         "pokedex_id": 788,
@@ -21832,7 +21913,8 @@
             "special_attack": 95,
             "special_defense": 130
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 788
     },
     "789": {
         "pokedex_id": 789,
@@ -21851,7 +21933,8 @@
             "special_attack": 29,
             "special_defense": 31
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 789
     },
     "790": {
         "pokedex_id": 790,
@@ -21870,7 +21953,8 @@
             "special_attack": 29,
             "special_defense": 131
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 790
     },
     "791": {
         "pokedex_id": 791,
@@ -21889,7 +21973,8 @@
             "special_attack": 113,
             "special_defense": 89
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 791
     },
     "792": {
         "pokedex_id": 792,
@@ -21908,7 +21993,8 @@
             "special_attack": 137,
             "special_defense": 107
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 792
     },
     "793": {
         "pokedex_id": 793,
@@ -21927,7 +22013,8 @@
             "special_attack": 127,
             "special_defense": 131
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 793
     },
     "794": {
         "pokedex_id": 794,
@@ -21946,7 +22033,8 @@
             "special_attack": 53,
             "special_defense": 53
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 794
     },
     "795": {
         "pokedex_id": 795,
@@ -22005,7 +22093,8 @@
             "special_attack": 107,
             "special_defense": 101
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 797
     },
     "798": {
         "pokedex_id": 798,
@@ -22024,7 +22113,8 @@
             "special_attack": 59,
             "special_defense": 31
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 798
     },
     "799": {
         "pokedex_id": 799,
@@ -22043,7 +22133,8 @@
             "special_attack": 97,
             "special_defense": 53
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 799
     },
     "800": {
         "pokedex_id": 800,
@@ -22062,7 +22153,8 @@
             "special_attack": 127,
             "special_defense": 89
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 800
     },
     "801": {
         "pokedex_id": 801,
@@ -22081,7 +22173,8 @@
             "special_attack": 130,
             "special_defense": 115
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 801
     },
     "802": {
         "pokedex_id": 802,
@@ -22100,7 +22193,8 @@
             "special_attack": 90,
             "special_defense": 90
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 802
     },
     "803": {
         "pokedex_id": 803,
@@ -22119,7 +22213,8 @@
             "special_attack": 73,
             "special_defense": 67
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 803
     },
     "804": {
         "pokedex_id": 804,
@@ -22158,7 +22253,8 @@
             "special_attack": 53,
             "special_defense": 101
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 805
     },
     "806": {
         "pokedex_id": 806,
@@ -22177,7 +22273,8 @@
             "special_attack": 151,
             "special_defense": 79
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 806
     },
     "807": {
         "pokedex_id": 807,
@@ -22196,7 +22293,8 @@
             "special_attack": 102,
             "special_defense": 80
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 807
     },
     "808": {
         "pokedex_id": 808,
@@ -22215,7 +22313,8 @@
             "special_attack": 55,
             "special_defense": 35
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 808
     },
     "809": {
         "pokedex_id": 809,
@@ -22234,7 +22333,8 @@
             "special_attack": 80,
             "special_defense": 65
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 809
     },
     "810": {
         "pokedex_id": 810,
@@ -22304,7 +22404,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 811
     },
     "812": {
         "pokedex_id": 812,
@@ -22326,7 +22427,8 @@
         "evolves_from": [
             "811"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 812
     },
     "813": {
         "pokedex_id": 813,
@@ -22359,7 +22461,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 813
     },
     "814": {
         "pokedex_id": 814,
@@ -22395,7 +22498,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 814
     },
     "815": {
         "pokedex_id": 815,
@@ -22417,7 +22521,8 @@
         "evolves_from": [
             "814"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 815
     },
     "816": {
         "pokedex_id": 816,
@@ -22487,7 +22592,8 @@
                     }
                 ]
             }
-        }
+        },
+        "order": 817
     },
     "818": {
         "pokedex_id": 818,
@@ -22509,7 +22615,8 @@
         "evolves_from": [
             "817"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 818
     },
     "819": {
         "pokedex_id": 819,
@@ -24391,7 +24498,8 @@
             "special_attack": 145,
             "special_defense": 95
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 890
     },
     "891": {
         "pokedex_id": 891,
@@ -24410,7 +24518,8 @@
             "special_attack": 53,
             "special_defense": 50
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 891
     },
     "892": {
         "pokedex_id": 892,
@@ -24429,7 +24538,8 @@
             "special_attack": 63,
             "special_defense": 60
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 892
     },
     "893": {
         "pokedex_id": 893,
@@ -24448,7 +24558,8 @@
             "special_attack": 70,
             "special_defense": 95
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 893
     },
     "894": {
         "pokedex_id": 894,
@@ -24467,7 +24578,8 @@
             "special_attack": 100,
             "special_defense": 50
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 894
     },
     "895": {
         "pokedex_id": 895,
@@ -24486,7 +24598,8 @@
             "special_attack": 100,
             "special_defense": 50
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 895
     },
     "896": {
         "pokedex_id": 896,
@@ -24505,7 +24618,8 @@
             "special_attack": 65,
             "special_defense": 110
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 896
     },
     "897": {
         "pokedex_id": 897,
@@ -24524,7 +24638,8 @@
             "special_attack": 145,
             "special_defense": 80
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 897
     },
     "898": {
         "pokedex_id": 898,
@@ -24543,7 +24658,8 @@
             "special_attack": 80,
             "special_defense": 80
         },
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 898
     },
     "899": {
         "pokedex_id": 899,
@@ -24588,7 +24704,8 @@
         "evolves_from": [
             "123"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 900
     },
     "901": {
         "pokedex_id": 901,
@@ -24610,7 +24727,8 @@
         "evolves_from": [
             "217"
         ],
-        "evolves_to": {}
+        "evolves_to": {},
+        "order": 901
     },
     "902": {
         "pokedex_id": 902,
@@ -26753,7 +26871,8 @@
         },
         "evolves_from": [
             "439"
-        ]
+        ],
+        "order": 122
     },
     "10466": {
         "pokedex_id": 10466,
@@ -28729,7 +28848,8 @@
             "defense": 35,
             "special_attack": 25,
             "special_defense": 35
-        }
+        },
+        "order": 19
     },
     "10092": {
         "pokedex_id": 10092,
@@ -28747,7 +28867,8 @@
             "defense": 70,
             "special_attack": 40,
             "special_defense": 80
-        }
+        },
+        "order": 20
     },
     "10093": {
         "pokedex_id": 10093,
@@ -28891,7 +29012,8 @@
             "defense": 90,
             "special_attack": 10,
             "special_defense": 35
-        }
+        },
+        "order": 28
     },
     "10102": {
         "pokedex_id": 10102,
@@ -28909,7 +29031,8 @@
             "defense": 120,
             "special_attack": 25,
             "special_defense": 65
-        }
+        },
+        "order": 28
     },
     "10104": {
         "pokedex_id": 10104,
@@ -28930,7 +29053,8 @@
         },
         "evolves_from": [
             "10103"
-        ]
+        ],
+        "order": 38
     },
     "10105": {
         "pokedex_id": 10105,
@@ -28948,7 +29072,8 @@
             "defense": 30,
             "special_attack": 35,
             "special_defense": 45
-        }
+        },
+        "order": 50
     },
     "10107": {
         "pokedex_id": 10107,
@@ -28966,7 +29091,8 @@
             "defense": 35,
             "special_attack": 50,
             "special_defense": 40
-        }
+        },
+        "order": 52
     },
     "10110": {
         "pokedex_id": 10110,
@@ -28987,7 +29113,8 @@
         },
         "evolves_from": [
             "10109"
-        ]
+        ],
+        "order": 75
     },
     "10111": {
         "pokedex_id": 10111,
@@ -29005,7 +29132,8 @@
             "defense": 130,
             "special_attack": 55,
             "special_defense": 65
-        }
+        },
+        "order": 76
     },
     "10119": {
         "pokedex_id": 10119,
@@ -29023,7 +29151,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10120": {
         "pokedex_id": 10120,
@@ -29041,7 +29170,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10121": {
         "pokedex_id": 10121,
@@ -29059,7 +29189,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10123": {
         "pokedex_id": 10123,
@@ -29077,7 +29208,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10124": {
         "pokedex_id": 10124,
@@ -29095,7 +29227,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10130": {
         "pokedex_id": 10130,
@@ -29113,7 +29246,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10131": {
         "pokedex_id": 10131,
@@ -29131,7 +29265,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10134": {
         "pokedex_id": 10134,
@@ -29149,7 +29284,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10135": {
         "pokedex_id": 10135,
@@ -29167,7 +29303,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10136": {
         "pokedex_id": 10136,
@@ -29185,7 +29322,8 @@
             "defense": 50,
             "special_attack": 90,
             "special_defense": 50
-        }
+        },
+        "order": 666
     },
     "10139": {
         "pokedex_id": 10139,
@@ -29203,7 +29341,8 @@
             "defense": 85,
             "special_attack": 125,
             "special_defense": 100
-        }
+        },
+        "order": 144
     },
     "10143": {
         "pokedex_id": 10143,
@@ -31689,7 +31828,8 @@
             "defense": 45,
             "special_attack": 29,
             "special_defense": 45
-        }
+        },
+        "order": 412
     },
     "10290": {
         "pokedex_id": 10290,
@@ -31707,7 +31847,8 @@
             "defense": 45,
             "special_attack": 29,
             "special_defense": 45
-        }
+        },
+        "order": 412
     },
     "10291": {
         "pokedex_id": 10291,
@@ -31928,7 +32069,8 @@
             "defense": 95,
             "special_attack": 65,
             "special_defense": 95
-        }
+        },
+        "order": 222
     },
     "10306": {
         "pokedex_id": 10306,
@@ -31964,7 +32106,8 @@
             "defense": 55,
             "special_attack": 85,
             "special_defense": 95
-        }
+        },
+        "order": 845
     },
     "10311": {
         "pokedex_id": 10311,
@@ -32000,7 +32143,8 @@
             "defense": 45,
             "special_attack": 15,
             "special_defense": 45
-        }
+        },
+        "order": 554
     },
     "10317": {
         "pokedex_id": 10317,
@@ -32126,7 +32270,8 @@
             "defense": 55,
             "special_attack": 58,
             "special_defense": 62
-        }
+        },
+        "order": 83
     },
     "10326": {
         "pokedex_id": 10326,
@@ -32360,7 +32505,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "order": 676
     },
     "10342": {
         "pokedex_id": 10342,
@@ -32378,7 +32524,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "order": 676
     },
     "10343": {
         "pokedex_id": 10343,
@@ -32396,7 +32543,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "order": 676
     },
     "10344": {
         "pokedex_id": 10344,
@@ -32454,7 +32602,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "order": 676
     },
     "10347": {
         "pokedex_id": 10347,
@@ -32472,7 +32621,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "order": 676
     },
     "10348": {
         "pokedex_id": 10348,
@@ -32490,7 +32640,8 @@
             "defense": 60,
             "special_attack": 65,
             "special_defense": 90
-        }
+        },
+        "order": 676
     },
     "10349": {
         "pokedex_id": 10349,
@@ -32765,7 +32916,8 @@
         },
         "evolves_from": [
             "10552"
-        ]
+        ],
+        "order": 264
     },
     "10389": {
         "pokedex_id": 10389,
@@ -32894,7 +33046,8 @@
             "defense": 35,
             "special_attack": 40,
             "special_defense": 40
-        }
+        },
+        "order": 52
     },
     "10401": {
         "pokedex_id": 10401,
@@ -33490,7 +33643,8 @@
             "defense": 55,
             "special_attack": 65,
             "special_defense": 65
-        }
+        },
+        "order": 77
     },
     "10446": {
         "pokedex_id": 10446,
@@ -33688,7 +33842,8 @@
             "defense": 70,
             "special_attack": 60,
             "special_defense": 70
-        }
+        },
+        "order": 586
     },
     "10467": {
         "pokedex_id": 10467,
@@ -33742,7 +33897,8 @@
             "defense": 48,
             "special_attack": 57,
             "special_defense": 62
-        }
+        },
+        "order": 422
     },
     "10470": {
         "pokedex_id": 10470,
@@ -33796,7 +33952,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10473": {
         "pokedex_id": 10473,
@@ -33814,7 +33971,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10474": {
         "pokedex_id": 10474,
@@ -33852,7 +34010,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10476": {
         "pokedex_id": 10476,
@@ -33870,7 +34029,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10477": {
         "pokedex_id": 10477,
@@ -33888,7 +34048,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10478": {
         "pokedex_id": 10478,
@@ -33926,7 +34087,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10480": {
         "pokedex_id": 10480,
@@ -33944,7 +34106,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10481": {
         "pokedex_id": 10481,
@@ -33962,7 +34125,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10482": {
         "pokedex_id": 10482,
@@ -33980,7 +34144,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10483": {
         "pokedex_id": 10483,
@@ -33998,7 +34163,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10484": {
         "pokedex_id": 10484,
@@ -34016,7 +34182,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10485": {
         "pokedex_id": 10485,
@@ -34034,7 +34201,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10486": {
         "pokedex_id": 10486,
@@ -34052,7 +34220,8 @@
             "defense": 95,
             "special_attack": 95,
             "special_defense": 95
-        }
+        },
+        "order": 773
     },
     "10489": {
         "pokedex_id": 10489,
@@ -34088,7 +34257,8 @@
             "defense": 95,
             "special_attack": 100,
             "special_defense": 70
-        }
+        },
+        "order": 80
     },
     "10491": {
         "pokedex_id": 10491,
@@ -34106,7 +34276,8 @@
             "defense": 80,
             "special_attack": 110,
             "special_defense": 110
-        }
+        },
+        "order": 199
     },
     "10492": {
         "pokedex_id": 10492,
@@ -34124,7 +34295,8 @@
             "defense": 65,
             "special_attack": 40,
             "special_defense": 40
-        }
+        },
+        "order": 79
     },
     "10493": {
         "pokedex_id": 10493,
@@ -34402,7 +34574,8 @@
             "defense": 70,
             "special_attack": 114,
             "special_defense": 70
-        }
+        },
+        "order": 849
     },
     "10509": {
         "pokedex_id": 10509,
@@ -35231,7 +35404,8 @@
         },
         "evolves_from": [
             "86322"
-        ]
+        ],
+        "order": 59
     },
     "86324": {
         "pokedex_id": 86324,
@@ -35252,7 +35426,8 @@
         },
         "evolves_from": [
             "548"
-        ]
+        ],
+        "order": 549
     },
     "86326": {
         "pokedex_id": 86326,
@@ -35270,7 +35445,8 @@
             "defense": 85,
             "special_attack": 55,
             "special_defense": 55
-        }
+        },
+        "order": 211
     },
     "86327": {
         "pokedex_id": 86327,
@@ -35311,7 +35487,8 @@
             "defense": 110,
             "special_attack": 50,
             "special_defense": 80
-        }
+        },
+        "order": 105
     },
     "100001": {
         "pokedex_id": 100001,
@@ -35329,7 +35506,8 @@
             "defense": 31,
             "special_attack": 29,
             "special_defense": 31
-        }
+        },
+        "order": 789
     },
     "100002": {
         "pokedex_id": 100002,
@@ -35347,7 +35525,8 @@
             "defense": 110,
             "special_attack": 100,
             "special_defense": 75
-        }
+        },
+        "order": 770
     },
     "100003": {
         "pokedex_id": 100003,
@@ -35365,7 +35544,8 @@
             "defense": 40,
             "special_attack": 30,
             "special_defense": 40
-        }
+        },
+        "order": 744
     },
     "100004": {
         "pokedex_id": 100004,
@@ -35383,7 +35563,8 @@
             "defense": 131,
             "special_attack": 59,
             "special_defense": 31
-        }
+        },
+        "order": 798
     },
     "100005": {
         "pokedex_id": 100005,
@@ -35444,5 +35625,43 @@
         },
         "evolves_to": {},
         "order": 59
+    },
+    "86328": {
+        "pokedex_id": 86328,
+        "name": "His Electrode",
+        "description": "Stores electrical energy inside its body. Even the slightest shock could trigger a huge explosion.",
+        "weight": 71.0,
+        "generation": 1,
+        "type1": "grass",
+        "type2": "electric",
+        "tier": "A",
+        "base_stats": {
+            "hp": 60,
+            "speed": 150,
+            "attack": 50,
+            "defense": 70,
+            "special_attack": 80,
+            "special_defense": 80
+        },
+        "order": 101
+    },
+    "86329": {
+        "pokedex_id": 86329,
+        "name": "His Sliggoo",
+        "description": "The lump on its back contains its tiny brain. It thinks only of food and escaping its enemies.",
+        "weight": 17.5,
+        "generation": 6,
+        "type1": "dragon",
+        "type2": "steel",
+        "tier": "A",
+        "base_stats": {
+            "hp": 58,
+            "speed": 40,
+            "attack": 75,
+            "defense": 83,
+            "special_attack": 83,
+            "special_defense": 113
+        },
+        "order": 705
     }
 }
