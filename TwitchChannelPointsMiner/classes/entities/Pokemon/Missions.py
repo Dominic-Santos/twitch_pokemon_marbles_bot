@@ -76,7 +76,12 @@ class Missions(object):
 
     @staticmethod
     def get_unique_id(mission):
-        return mission["name"] + "_" + str(mission["goal"])
+        unique_id = mission["name"] + "_" + str(mission["goal"])
+        if mission["rewardItem"] is None:
+            unique_id = unique_id + "_" + str(mission["rewardPokemon"]["id"])
+        else:
+            unique_id = unique_id + "_" + str(mission["rewardItem"]["id"]) + "_" + str(mission["rewardItem"]["amount"])
+        return unique_id
 
     def set(self, missions):
         self.reset()

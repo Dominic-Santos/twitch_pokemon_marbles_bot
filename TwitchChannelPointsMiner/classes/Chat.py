@@ -1108,7 +1108,7 @@ Battles:
                 pokedict.setdefault(pokemon["pokedexId"], []).append(pokemon)
 
         for pokeid in pokedict.keys():
-            ordered = sorted(pokedict[pokeid], key=lambda x: (-x["avgIV"], -x["sellPrice"], -x["lvl"]))
+            ordered = sorted(pokedict[pokeid], key=lambda x: (-x["avgIV"], -x["sellPrice"], -x["lvl"], -x["id"]))
             for index, pokemon in enumerate(ordered):
                 if pokemon["nickname"] is not None:
                     if "trade" not in pokemon["nickname"]:
