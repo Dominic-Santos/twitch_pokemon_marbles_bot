@@ -244,7 +244,8 @@ def test_check_missions_case11():
 
 
 def test_check_missions_skipping():
-    MISSIONS.skip = ["Wondertrade with a level higher than 13_14"]
+    # name_goal_itemID_amount
+    MISSIONS.skip = ["Wondertrade with a level higher than 13_14_27_6"]
     MISSIONS.set(MISSIONS_JSON_11)
     missions = MISSIONS.data
     MISSIONS.skip = []

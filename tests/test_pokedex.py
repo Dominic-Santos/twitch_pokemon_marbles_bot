@@ -66,6 +66,10 @@ def test_dogs():
     assert pokedex.dog(poke)
     poke.pokedex_id = 16  # Pidgey
     assert pokedex.dog(poke) == False
+    for poke_id in [10116, 10117, 10341, 10342, 10343, 10344, 10345, 10346, 10347, 10348, 10349, 10372, 10472, 10473, 10474, 10475, 10476, 10477, 10478, 10479, 10480, 10481, 10482, 10483, 10484, 10485, 10486, 10487, 10488, 86316, 86319, 86322, 86323, 100009]:
+        pokeobj = pokedex.stats(poke_id)
+        assert pokeobj.is_dog
+        assert pokedex.dog(pokeobj)
 
 
 def test_cats():
@@ -76,3 +80,29 @@ def test_cats():
     assert pokedex.cat(poke)
     poke.pokedex_id = 16  # Pidgey
     assert pokedex.cat(poke) == False
+
+    # alt cats
+    for poke_id in [10025, 10107, 10108, 10387, 10388, 10400, 10445, 86325]:
+        pokeobj = pokedex.stats(poke_id)
+        assert pokeobj.is_cat
+        assert pokedex.cat(pokeobj)
+
+
+def test_starter():
+    poke = Pokemon()
+    poke.pokedex_id = 1  # Bulabasaur
+    assert pokedex.starter(poke)
+    poke.pokedex_id = 906  # Sprigatito
+    assert pokedex.starter(poke)
+    poke.pokedex_id = 16  # Pidgey
+    assert pokedex.starter(poke) == False
+
+
+def test_legendary():
+    poke = Pokemon()
+    poke.pokedex_id = 151  # Mew
+    assert pokedex.legendary(poke)
+    poke.pokedex_id = 898  # Calyrex
+    assert pokedex.legendary(poke)
+    poke.pokedex_id = 16  # Pidgey
+    assert pokedex.legendary(poke) == False

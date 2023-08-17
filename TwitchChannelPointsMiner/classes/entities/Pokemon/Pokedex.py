@@ -5,12 +5,12 @@ from .Pokemon import Pokemon
 POKEDEX_FILE = "pokemon_pokedex.json"
 POKEMOVE_FILE = "pokemon_moves.json"
 
-STARTER_POKEMON = ["Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard", "Squirtle", "Wartortle", "Blastoise", "Chikorita", "Bayleef", "Meganium", "Cyndaquil", "Quilava", "Typhlosion", "Totodile", "Croconaw", "Feraligatr", "Treecko", "Grovyle", "Sceptile", "Torchic", "Combusken", "Blaziken", "Mudkip", "Marshtomp", "Swampert", "Turtwig", "Grotle", "Torterra", "Chimchar", "Monferno", "Infernape", "Piplup", "Prinplup", "Empoleon", "Snivy", "Servine", "Serperior", "Tepig", "Pignite", "Emboar", "Oshawott", "Dewott", "Samurott", "Chespin", "Quilladin", "Chesnaught", "Fennekin", "Braixen", "Delphox", "Froakie", "Frogadier", "Greninja", "Rowlet", "Dartrix", "Decidueye", "Litten", "Torracat", "Incineroar", "Popplio", "Brionne", "Primarina", "Grookey", "Thwackey", "Rillaboom", "Scorbunny", "Raboot", "Cinderace", "Sobble", "Drizzile", "Inteleon"]
-LEGENDARY_POKEMON = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew", "Raikou", "Entei", "Suicune", "Lugia", "Ho-Oh", "Celebi", "Regirock", "Regice", "Registeel", "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza", "Jirachi", "Deoxys", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Cresselia", "Phione", "Manaphy", "Darkrai", "Shaymin", "Arceus", "Victini", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Reshiram", "Zekrom", "Landorus", "Kyurem", "Keldeo", "Meloetta", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Diancie", "Hoopa", "Volcanion", "Type: Null", "Silvally", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", "Cosmoem", "Solgaleo", "Lunala", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Necrozma", "Magearna", "Marshadow", "Poipole", "Naganadel", "Stakataka", "Blacephalon", "Zeraora", "Meltan", "Melmetal", "Zacian", "Zamazenta", "Eternatus", "Kubfu", "Urshifu", "Zarude", "Regieleki", "Regidrago", "Glastrier", "Spectrier", "Calyrex", "Type: Null"]
+STARTER_POKEMON = [y for x in (1, 152, 252, 387, 495, 650, 722, 810, 906) for y in range(x, x + 9)]
+LEGENDARY_POKEMON = [z for x, y in ((144, 3), (150, 2), (243, 3), (249, 3), (377, 10), (480, 15), (638, 12), (716, 6), (772, 2), (785, 25), (888, 11)) for z in range(x, x + y)]
 NON_SPAWNABLE_POKEMON = [899, 900, 901, 902, 903, 904]
 FISH_POKEMON = ["Alomomola", "Angerphish", "Arctovish", "Arrokuda", "Barboach", "Barbubble", "Barraskewda", "Basculegion", "Basculin", "Blaufisch", "Bruxish", "Bubbayou", "Carvanha", "Chinchou", "Dragalge", "Eelektrik", "Elektross", "Feebas", "Finneon", "Goldeen", "Gorebyss", "Gyarados", "Horsea", "Huntail", "Kingdra", "Kyogre", "Lanturn", "Lumineon", "Luvdisc", "Magikarp", "Mantine", "Mantyke", "Milotic", "Mudkip", "Overqwil", "Qwilfish", "Relicanth", "Remoraid", "Seadra", "Seaking", "Sharpedo", "Skrelp", "Stunfisk", "Tynamo", "Wailmer", "Wailord", "Whiscash", "Wishiwashi", "Wooper", "Dracovish", "Clauncher", "Clawitzer"]
-CAT_POKEMON = [52, 53, 134, 135, 136, 196, 215, 300, 301, 335, 403, 404, 405, 431, 432, 461, 470, 471, 509, 510, 667, 668, 677, 678, 700, 725, 726, 727, 807, 863, 903, 10025, 10107, 10108, 10387, 10388, 10399, 10400, 10401, 10445, 10471, 10493, 10540, 86325]
-DOG_POKEMON = [37, 38, 58, 59, 133, 135, 197, 209, 210, 228, 229, 235, 243, 244, 261, 262, 309, 310, 359, 447, 448, 492, 506, 507, 508, 570, 571, 676, 744, 745, 773, 827, 828, 835, 836, 888, 889, 10006, 10048, 10055, 10057, 10059, 10116, 10117, 10320, 10321, 10341, 10342, 10343, 10344, 10345, 10346, 10347, 10348, 10349, 10372, 10472, 10473, 10474, 10475, 10476, 10477, 10478, 10479, 10480, 10481, 10482, 10483, 10484, 10485, 10486, 10487, 10488, 10548, 10549, 86316, 86319, 86322, 86323, 100009]
+CAT_POKEMON = [52, 53, 134, 135, 136, 196, 215, 300, 301, 335, 403, 404, 405, 431, 432, 461, 470, 471, 509, 510, 667, 668, 677, 678, 700, 725, 726, 727, 807, 863, 903]
+DOG_POKEMON = [37, 38, 58, 59, 133, 135, 197, 209, 210, 228, 229, 235, 243, 244, 261, 262, 309, 310, 359, 447, 448, 492, 506, 507, 508, 570, 571, 676, 744, 745, 773, 827, 828, 835, 836, 888, 889]
 FEMALE_POKEMON = [10025, 86320, 10143, 10144, 10262, 10284, 10285, 10286, 10287, 10288, 10292, 10295, 10302, 10309, 10316, 10319, 10325, 10340, 10350, 10352, 10359, 10360, 10361, 10362, 10365, 10368, 10370, 10372, 10373, 10375, 10378, 10379, 10381, 10382, 10384, 10385, 10387, 10388, 10391, 10392, 10396, 10404, 10418, 10422, 10423, 10424, 10427, 10429, 10438, 10441, 10442, 10445, 10446, 10449, 10451, 10452, 10453, 10454, 10455, 10456, 10467, 10468, 10470, 10471, 10540, 10543, 10544, 10545, 10553, 10331, 10369, 10505, 10303]
 
 REGION_PREFIX = {
@@ -131,6 +131,8 @@ class Pokedex(object):
         return pokename
 
     def _get_pokemon_id(self, pokemon: Pokemon):
+        if pokemon.order != 0:
+            return pokemon.order
         return pokemon.pokedex_id
 
     def have_alt(self, pokemon: Pokemon):
@@ -140,14 +142,10 @@ class Pokedex(object):
         return self.have_alt(pokemon) is False
 
     def have(self, pokemon: Pokemon):
-        if pokemon.order != 0:
-            # check by order because have it
-            result = self.pokemon_ids.get(pokemon.order, None)
-            if result is not None:
-                return result
+        pokedex_id = self._get_pokemon_id(pokemon)
 
         # check by id if not alt
-        if pokemon.pokedex_id <= self._total:
+        if pokedex_id <= self._total:
             result = self.pokemon_ids.get(pokemon.pokedex_id, None)
             if result is not None:
                 return result
@@ -164,11 +162,11 @@ class Pokedex(object):
         return self.have(pokemon) is False
 
     def starter(self, pokemon):
-        poke_name = self._get_pokemon_name(pokemon)
+        poke_name = self._get_pokemon_id(pokemon)
         return poke_name in STARTER_POKEMON
 
     def legendary(self, pokemon):
-        poke_name = self._get_pokemon_name(pokemon)
+        poke_name = self._get_pokemon_id(pokemon)
         return poke_name in LEGENDARY_POKEMON
 
     def non_spawnable(self, pokemon):
