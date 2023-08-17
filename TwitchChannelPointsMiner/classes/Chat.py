@@ -801,11 +801,12 @@ class ClientIRCPokemon(ClientIRCBase):
                     if "pokemon" in pokemon_received:
                         pokemon_received = pokemon_received["pokemon"]
                         pokemon_traded_tier = self.get_pokemon_stats(pokemon_traded["pokedexId"]).tier
-                        pokemon_received_tier = self.get_pokemon_stats(pokemon_received["pokedexId"]).tier
+                        pokemon_received_obj = self.get_pokemon_stats(pokemon_received["pokedexId"])
+                        pokemon_received_tier = pokemon_received_obj.tier
 
                         self.update_evolutions(pokemon_received["id"], pokemon_received["pokedexId"])
 
-                        if POKEMON.pokedex.have(pokemon_received["name"]):
+                        if POKEMON.pokedex.have(pokemon_received_obj):
                             pokemon_received_need = ""
                             pokemon_sprite = None
                         else:
@@ -945,11 +946,11 @@ class ClientIRCPokemon(ClientIRCBase):
                 continue
 
             if pokemon.tier == "A":
-                spawnables_a.append(pokemon.name)
+                spawnables_a.append(pokemon)
             elif pokemon.tier == "B":
-                spawnables_b.append(pokemon.name)
+                spawnables_b.append(pokemon)
             elif pokemon.tier == "C":
-                spawnables_c.append(pokemon.name)
+                spawnables_c.append(pokemon)
 
         spawnables_a_total = len(spawnables_a)
         spawnables_b_total = len(spawnables_b)
@@ -1032,18 +1033,24 @@ class ClientIRCPokemon(ClientIRCBase):
 
         if len(spawnables_a_dont_have) == 0:
             missing_a_string = "Done"
+        elif len(spawnables_a_dont_have) in range(0, max_show_missing):
+            missing_a_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_a_dont_have])
         else:
-            missing_a_string = "missing: " + ", ".join(spawnables_a_dont_have) if len(spawnables_a_dont_have) in range(0, max_show_missing) else ""
+            missing_a_string = ""
 
         if len(spawnables_b_dont_have) == 0:
             missing_b_string = "Done"
+        elif len(spawnables_b_dont_have) in range(0, max_show_missing):
+            missing_b_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_b_dont_have])
         else:
-            missing_b_string = "missing: " + ", ".join(spawnables_b_dont_have) if len(spawnables_b_dont_have) in range(0, max_show_missing) else ""
+            missing_b_string = ""
 
         if len(spawnables_c_dont_have) == 0:
             missing_c_string = "Done"
+        elif len(spawnables_c_dont_have) in range(0, max_show_missing):
+            missing_c_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_c_dont_have])
         else:
-            missing_c_string = "missing: " + ", ".join(spawnables_c_dont_have) if len(spawnables_c_dont_have) in range(0, max_show_missing) else ""
+            missing_c_string = ""
 
         battle_date = previous_date if previous_date is not None else current_date
         battle_stats = get_battle_logs(battle_date)
@@ -1194,9 +1201,9 @@ Battles:
             reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"])
             mission_msg = f"Completed mission - {title} - reward: {readable_reward}"
             if reward["reward_type"] == "pokemon":
-                if POKEMON.pokedex.have(reward["reward"]) is False:
+                pokemonobj = self.get_pokemon_stats(reward["reward_name"], cached=False)
+                if POKEMON.pokedex.have(pokemonobj) is False:
                     mission_msg = mission_msg + " - needed"
-                self.get_pokemon_stats(reward["reward_name"], cached=False)
             self.log(f"{GREENLOG}{mission_msg}")
             POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:

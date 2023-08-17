@@ -42,7 +42,7 @@ class PokemonComunityGame(Loyalty):
             },
             "catch_alternates": {
                 "value": False,
-                "hint": "Collect one of each alternate version of a pokemon in bag",
+                "hint": "Try to complete the alt pokedex",
             },
             "catch_fish": {
                 "value": False,
@@ -58,7 +58,7 @@ class PokemonComunityGame(Loyalty):
             },
             "complete_bag": {
                 "value": False,
-                "hint": "Collect one of each pokemon in bag",
+                "hint": "Collect one of each pokemon in bag, including alt versions (even if not in alt pokedex)",
             },
             "use_special_balls": {
                 "value": True,
@@ -223,7 +223,7 @@ class PokemonComunityGame(Loyalty):
                 reasons.append("bag")
 
         if self.settings["catch_alternates"]:
-            if pokemon.pokedex_id > self.pokedex.total and self.computer.need(pokemon):
+            if self.pokedex.need_alt(pokemon):
                 reasons.append("alt")
 
         missions = self.missions.check_all_missions(pokemon)

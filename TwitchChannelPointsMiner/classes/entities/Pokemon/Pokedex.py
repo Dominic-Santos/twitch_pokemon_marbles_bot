@@ -130,14 +130,35 @@ class Pokedex(object):
 
         return pokename
 
-    def _get_pokemon_id(self, pokemon):
+    def _get_pokemon_id(self, pokemon: Pokemon):
         return pokemon.pokedex_id
 
-    def have(self, pokemon):
+    def have_alt(self, pokemon: Pokemon):
+        return self.pokemon_ids.get(pokemon.pokedex_id, True)
+
+    def need_alt(self, pokemon):
+        return self.have_alt(pokemon) is False
+
+    def have(self, pokemon: Pokemon):
+        if pokemon.order != 0:
+            # check by order because have it
+            result = self.pokemon_ids.get(pokemon.order, None)
+            if result is not None:
+                return result
+
+        # check by id if not alt
+        if pokemon.pokedex_id <= self._total:
+            result = self.pokemon_ids.get(pokemon.pokedex_id, None)
+            if result is not None:
+                return result
+
+        # try to get by name instead
         poke_name = self._get_pokemon_name(pokemon)
-        if poke_name is None:
-            return None
-        return self.pokemon.get(poke_name, None)
+
+        if poke_name is not None:
+            result = self.pokemon.get(poke_name, None)
+
+        return None
 
     def need(self, pokemon):
         return self.have(pokemon) is False
