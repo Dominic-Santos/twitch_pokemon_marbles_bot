@@ -186,8 +186,7 @@ class Pokedex(object):
         return poke_id in DOG_POKEMON
 
     def female(self, pokemon):
-        poke_id = self._get_pokemon_id(pokemon)
-        return poke_id in FEMALE_POKEMON
+        return pokemon.pokedex_id in FEMALE_POKEMON
 
     def baby(self, pokemon):
         poke_id = self._get_pokemon_id(pokemon)
