@@ -2,57 +2,34 @@ from datetime import datetime, timedelta
 from time import sleep
 from dateutil.parser import parse
 import random
-import logging
 from threading import Thread
 import traceback
 import requests
-import os
 import copy
 
 from .ChatO import ClientIRC as ClientIRCO
 from .ChatO import ChatPresence as ChatPresenceO
 from .ChatO import ThreadChat as ThreadChatO
-from .ChatO import logger
 
-from .entities.Pokemon import PokemonComunityGame, CGApi, Pokedaily, get_sprite, Battle, damage_calculator
+from .ChatUtils import (
+    log,
+    log_file,
+    LOGFILE,
+    ITEM_MIN_AMOUNT,
+    ITEM_MIN_PURCHASE,
+    MARBLES_DELAY,
+    MARBLES_TRIGGER_COUNT,
+    POKEMON,
+    DISCORD_ALERTS,
+    DISCORD_STATS,
+    DISCORD_POKEDAILY,
+    DISCORD_POKEDAILY_SEARCH,
+    FISH_EVENT,
+    CHARACTERS,
+)
+
+from .entities.Pokemon import CGApi, Pokedaily, get_sprite, Battle, damage_calculator
 from .entities.Pokemon.Pokedex import Move
-
-if os.path.exists("logs") is False:
-    os.makedirs("logs")
-
-LOGFILE = "logs/pokemoncg.txt"
-
-formatter = logging.Formatter('%(asctime)s %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
-file_handler = logging.FileHandler(LOGFILE, encoding='utf-8')
-file_handler.setFormatter(formatter)
-poke_logger = logging.getLogger(__name__ + "pokemon")
-poke_logger.setLevel(logging.DEBUG)
-poke_logger.addHandler(file_handler)
-
-ITEM_MIN_AMOUNT = 10
-ITEM_MIN_PURCHASE = 10
-
-MARBLES_DELAY = 60 * 3  # seconds
-MARBLES_TRIGGER_COUNT = 3
-
-REDLOG = "\x1b[31;20m"
-GREENLOG = "\x1b[32;20m"
-YELLOWLOG = "\x1b[36;20m"
-
-ALERTS_CHANNEL = 1072557550526013440
-STATS_CHANNEL = 1137163122063450162
-POKEDAILY_CHANNEL = 800433942695247872
-POKEDAILY_GUILD = 711921837503938640
-
-POKEMON = PokemonComunityGame()
-
-DISCORD_BASE = "https://discord.com/api/v9/"
-DISCORD_ALERTS = f"{DISCORD_BASE}channels/{ALERTS_CHANNEL}/messages"
-DISCORD_STATS = f"{DISCORD_BASE}channels/{STATS_CHANNEL}/messages"
-DISCORD_POKEDAILY = f"{DISCORD_BASE}channels/{POKEDAILY_CHANNEL}/messages"
-DISCORD_POKEDAILY_SEARCH = f"{DISCORD_BASE}guilds/{POKEDAILY_GUILD}/messages/search?channel_id={POKEDAILY_CHANNEL}&mentions=" + "{discord_id}"
-
-FISH_EVENT = False
 
 
 class ThreadController(object):
@@ -84,12 +61,6 @@ class ThreadController(object):
 
 THREADCONTROLLER = ThreadController()
 
-CHARACTERS = {
-    "starter": "⭐",
-    "female": "♀",
-    "legendary": "💪"
-}
-
 
 def seconds_readable(seconds):
     return str(timedelta(seconds=seconds)).split(".")[0]
@@ -106,7 +77,7 @@ def reload_settings():
         sleep(60)
         changes = POKEMON.load_settings()
         if changes:
-            logger.info(f"{GREENLOG}Settings Reloaded", extra={"emoji": ":speech_balloon:"})
+            log("green", "Settings Reloaded")
 
 
 create_thread(reload_settings)
@@ -116,7 +87,7 @@ def timer_thread(func):
     def pokemon_timer():
 
         remaining_human = seconds_readable(POKEMON.delay)
-        logger.info(f"{YELLOWLOG}Waiting for {remaining_human}", extra={"emoji": ":speech_balloon:"})
+        log("yellow", f"Waiting for {remaining_human}")
         sleep(POKEMON.delay)
 
         try:
@@ -130,7 +101,7 @@ def timer_thread(func):
             return
         except Exception as ex:
             str_ex = str(ex)
-            logger.info(f"{REDLOG}Timer func failed - {str_ex}", extra={"emoji": ":speech_balloon:"})
+            log("red", f"Timer func failed - {str_ex}")
             THREADCONTROLLER.remove_client(client_channel)
             POKEMON.delay = 5
             print(traceback.format_exc())
@@ -142,14 +113,14 @@ def timer_thread(func):
             create_thread(pokemon_timer)
 
     if THREADCONTROLLER.pokecatch is False:
-        logger.info(f"{YELLOWLOG}Thread Created Spawn Timer", extra={"emoji": ":speech_balloon:"})
+        log("yellow", f"Thread Created Spawn Timer")
         THREADCONTROLLER.pokecatch = True
         try:
             data = requests.get("https://poketwitch.bframework.de/info/events/last_spawn/").json()
             POKEMON.delay = data["next_spawn"] + 2
             create_thread(pokemon_timer)
         except:
-            logger.info(f"{REDLOG}Thread Spawn Timer Failed", extra={"emoji": ":speech_balloon:"})
+            log("red", f"Thread Spawn Timer Failed")
             sleep(10)
             THREADCONTROLLER.pokecatch = False
 
@@ -164,7 +135,7 @@ def wondertrade_thread(func):
             remaining = POKEMON.check_wondertrade_left().total_seconds()
 
         remaining_human = seconds_readable(remaining)
-        logger.info(f"{YELLOWLOG}Waiting for {remaining_human}", extra={"emoji": ":speech_balloon:"})
+        log("yellow", f"Waiting for {remaining_human}")
 
         sleep(min(remaining, max_wait))
         if remaining <= max_wait:
@@ -174,7 +145,7 @@ def wondertrade_thread(func):
                 return
             except Exception as ex:
                 str_ex = str(ex)
-                logger.info(f"{REDLOG}Wondertrade func failed - {str_ex}", extra={"emoji": ":speech_balloon:"})
+                log("red", f"Wondertrade func failed - {str_ex}")
                 POKEMON.wondertrade_timer = None
                 print(traceback.format_exc())
 
@@ -184,7 +155,7 @@ def wondertrade_thread(func):
         create_thread(wondertrade_timer)
 
     if THREADCONTROLLER.wondertrade is False:
-        logger.info(f"{YELLOWLOG}Thread Created Wondertrade", extra={"emoji": ":speech_balloon:"})
+        log("yellow", f"Thread Created Wondertrade")
         THREADCONTROLLER.wondertrade = True
         create_thread(wondertrade_timer)
 
@@ -197,7 +168,7 @@ def battle_thread(func):
             return
         except Exception as ex:
             str_ex = str(ex)
-            logger.info(f"{REDLOG}Battle func failed - {str_ex}", extra={"emoji": ":speech_balloon:"})
+            log("red", f"Battle func failed - {str_ex}")
             print(traceback.format_exc())
 
             sleep(10)
@@ -207,7 +178,7 @@ def battle_thread(func):
         create_thread(battle_timer)
 
     if THREADCONTROLLER.battle is False:
-        logger.info(f"{YELLOWLOG}Thread Created Battle", extra={"emoji": ":speech_balloon:"})
+        log("yellow", f"Thread Created Battle")
         THREADCONTROLLER.battle = True
         create_thread(battle_timer)
 
@@ -222,7 +193,7 @@ def pokedaily_thread(func):
             remaining = POKEMON.check_pokedaily_left().total_seconds()
 
         remaining_human = seconds_readable(remaining)
-        logger.info(f"{YELLOWLOG}Waiting for {remaining_human}", extra={"emoji": ":speech_balloon:"})
+        log("yellow", f"Waiting for {remaining_human}")
 
         sleep(max(min(remaining, max_wait), 1))
         if remaining <= max_wait:
@@ -231,7 +202,7 @@ def pokedaily_thread(func):
         create_thread(pokedaily_timer)
 
     if THREADCONTROLLER.pokedaily is False:
-        logger.info(f"{YELLOWLOG}Thread Created Pokedaily", extra={"emoji": ":speech_balloon:"})
+        log("yellow", f"Thread Created Pokedaily")
         THREADCONTROLLER.pokedaily = True
         create_thread(pokedaily_timer)
 
@@ -242,13 +213,13 @@ def bag_stats_thread(func):
         while True:
             cur_date = datetime.now().date()
             if cur_date != previous:
-                logger.info(f"{YELLOWLOG}Running Bag Stats", extra={"emoji": ":speech_balloon:"})
+                log("yellow", f"Running Bag Stats")
                 func(previous, cur_date)
                 previous = cur_date
             sleep(60 * 15)  # 15 mins
 
     if THREADCONTROLLER.bag_stats is False:
-        logger.info(f"{YELLOWLOG}Thread Created Bag Stats", extra={"emoji": ":speech_balloon:"})
+        log("yellow", f"Thread Created Bag Stats")
         THREADCONTROLLER.bag_stats = True
         create_thread(bag_stats_timer)
 
@@ -295,10 +266,6 @@ class ClientIRCBase(ClientIRCO):
     def __init__(self, username, token, channel):
         ClientIRCO.__init__(self, username, token, channel)
 
-    @staticmethod
-    def log(msg):
-        logger.info(msg, extra={"emoji": ":speech_balloon:"})
-
 
 class ClientIRCMarbles(ClientIRCBase):
     def __init__(self, username, token, channel, marbles):
@@ -325,7 +292,7 @@ class ClientIRCMarbles(ClientIRCBase):
         if self.marbles_counter == MARBLES_TRIGGER_COUNT:
             sleep(random.randint(0, 60))
             client.privmsg(message.target, "!play")
-            self.log(f"Joined Marbles for {message.target[1:]}")
+            log(text=f"Joined Marbles for {message.target[1:]}")
 
 
 class ClientIRCPokemon(ClientIRCBase):
@@ -342,10 +309,6 @@ class ClientIRCPokemon(ClientIRCBase):
         self.pokemon_disabled = False
         self.pokemon_api = CGApi()
         self.pokemon_api.get_auth_token = get_pokemon_token
-
-    @staticmethod
-    def log_file(msg):
-        poke_logger.info(msg)
 
     def die(self):
         self.pokemon_active = False
@@ -560,9 +523,9 @@ class ClientIRCPokemon(ClientIRCBase):
             sleep(0.1)
 
         if battle.result:
-            self.log_file(f"{GREENLOG}Won the battle! rewards: {battle.rewards}")
+            log_file("green", f"Won the battle! rewards: {battle.rewards}")
         else:
-            self.log_file(f"{REDLOG}Lost the battle! rewards: {battle.rewards}")
+            log_file("red", f"Lost the battle! rewards: {battle.rewards}")
 
         return battle.result, battle_data["unique_battle_key"]
 
@@ -573,7 +536,7 @@ class ClientIRCPokemon(ClientIRCBase):
             data = self.pokemon_api.get_battle()
 
             if data["rejoinableBattle"]:
-                self.log(f"{YELLOWLOG}Rejoining battle")
+                log("yellow", f"Rejoining battle")
                 self.do_battle()
                 return
 
@@ -587,7 +550,7 @@ class ClientIRCPokemon(ClientIRCBase):
                     battle_mode = "challenge"
                     difficulty = "medium"
                 else:
-                    self.log(f"{REDLOG}Didn't meet requirements for challenge battle, switching to stadium")
+                    log("red", f"Didn't meet requirements for challenge battle, switching to stadium")
 
             if battle_mode in team_data:
 
@@ -607,7 +570,7 @@ class ClientIRCPokemon(ClientIRCBase):
 
                 if remaining > 0:
                     remaining_human = seconds_readable(remaining)
-                    logger.info(f"{YELLOWLOG}Next {battle_mode} battle in {remaining_human}", extra={"emoji": ":speech_balloon:"})
+                    log("yellow", f"Next {battle_mode} battle in {remaining_human}")
 
                 sleep(remaining + 1)
 
@@ -621,15 +584,15 @@ class ClientIRCPokemon(ClientIRCBase):
                     team_id = team_data["teamNumber"]
                     data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
                     battle_message = f"{difficulty} {battle_mode}" if battle_mode == "stadium" else battle_mode
-                    self.log(f"{YELLOWLOG}Starting {battle_message} battle")
+                    log("yellow", f"Starting {battle_message} battle")
                     result, key = self.do_battle()
                     if result and battle_mode == "challenge":
                         POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
                 else:
-                    self.log(f"{REDLOG}Didn't meet requirements for {battle_mode} battle")
+                    log("red", f"Didn't meet requirements for {battle_mode} battle")
                     sleep(15)
             else:
-                self.log(f"{REDLOG}Error: {battle_mode} not in response")
+                log("red", f"Error: {battle_mode} not in response")
                 sleep(15)
         else:
             sleep(30)
@@ -641,7 +604,7 @@ class ClientIRCPokemon(ClientIRCBase):
             loyalty_limits = argstring.split("(")[1].split(")")[0]
             current_points = int(loyalty_limits.split("/")[0])
             level_points = int(loyalty_limits.split("/")[1])
-            self.log(f"{YELLOWLOG}{channel} loyalty {current_points}/{level_points}, level {loyalty_level}")
+            log("yellow", f"{channel} loyalty {current_points}/{level_points}, level {loyalty_level}")
 
             POKEMON.set_loyalty(channel, loyalty_level, current_points, level_points)
 
@@ -650,19 +613,19 @@ class ClientIRCPokemon(ClientIRCBase):
             if self.pokemon_disabled is False:
                 self.pokemon_disabled = True
                 self.pokemon_active = False
-                logger.info(f"Pokemon Disabled: {self.channel}", extra={"emoji": ":speech_balloon:"})
+                log(f"Pokemon Disabled: {self.channel}")
                 leave_channel(self.channel[1:])
 
         elif self.pokemon_active is False:
             if self.pokemon_disabled is False or (" has been caught by:" in argstring or " escaped." in argstring):
                 self.pokemon_active = True
                 self.pokemon_disabled = False
-                self.log(f"{YELLOWLOG}Joined Pokemon for {message.target[1:]}")
+                log("yellow", f"Joined Pokemon for {message.target[1:]}")
                 POKEMON.add_channel(self.channel[1:])
 
                 if self.channel[1:] not in POKEMON.loyalty_data:
                     sleep(5)
-                    self.log(f"{YELLOWLOG}{self.channel[1:]} loyalty request")
+                    log("yellow", f"{self.channel[1:]} loyalty request")
                     client.privmsg("#" + self.channel[1:], "!pokeloyalty")
 
     def pokedaily_setup(self):
@@ -684,14 +647,14 @@ class ClientIRCPokemon(ClientIRCBase):
         )
 
         POKEMON.pokedaily_timer = datetime.utcnow() - last_redeemed
-        self.log(f"{YELLOWLOG}Last Pokedaily at {POKEMON.pokedaily_timer}")
+        log("yellow", f"Last Pokedaily at {POKEMON.pokedaily_timer}")
 
     def pokedaily_main(self):
         POKEMON.discord.post(DISCORD_POKEDAILY, "!pokedaily")
 
         if POKEMON.discord.data["user"] is None:
             POKEMON.discord.post(DISCORD_ALERTS, "Pokedaily, no user configured")
-            self.log(f"{GREENLOG}Pokedaily, no user configured")
+            log("green", f"Pokedaily, no user configured")
             return
 
         sleep(60 * 2)
@@ -706,13 +669,13 @@ class ClientIRCPokemon(ClientIRCBase):
                 seconds=message.last_redeemed["seconds"]
             )
 
-            self.log(f"{REDLOG}Pokedaily not ready")
+            log("red", f"Pokedaily not ready")
             POKEMON.pokedaily_timer = datetime.utcnow() - last_redeemed
 
         else:
             POKEMON.reset_pokedaily_timer()
             POKEMON.discord.post(DISCORD_ALERTS, f"Pokedaily rewards ({message.rarity}):\n" + "\n".join(message.rewards))
-            self.log(f"{GREENLOG}Pokedaily ({message.rarity}) rewards " + ", ".join(message.rewards))
+            log("green", f"Pokedaily ({message.rarity}) rewards " + ", ".join(message.rewards))
 
     def wondertrade_main(self):
         self.get_missions()
@@ -788,7 +751,7 @@ class ClientIRCPokemon(ClientIRCBase):
                             pokemon_to_trade.append(pokemon)
 
                 if len(pokemon_to_trade) == 0:
-                    self.log(f"{REDLOG}Could not find a pokemon to wondertrade")
+                    log("red", f"Could not find a pokemon to wondertrade")
                 else:
                     sorted_pokemon_to_trade = sorted(pokemon_to_trade, key=lambda x: x["sellPrice"])
 
@@ -817,16 +780,16 @@ class ClientIRCPokemon(ClientIRCBase):
                         reasons_string = "" if len(reasons) == 0 else " ({})".format(", ".join(reasons))
 
                         wondertrade_msg = f"Wondertraded {pokemon_traded['name']} ({pokemon_traded_tier}){reasons_string} for {pokemon_received['name']} ({pokemon_received_tier}){pokemon_received_need}"
-                        self.log(f"{GREENLOG}{wondertrade_msg}")
+                        log("green", f"{wondertrade_msg}")
                         POKEMON.discord.post(DISCORD_ALERTS, wondertrade_msg, file=pokemon_sprite)
                         POKEMON.reset_wondertrade_timer()
                     else:
-                        self.log(f"{REDLOG}Wondertrade {pokemon_traded['name']} failed {pokemon_received}")
+                        log("red", f"Wondertrade {pokemon_traded['name']} failed {pokemon_received}")
                         POKEMON.wondertrade_timer = None
             else:
                 time_remaining = POKEMON.check_wondertrade_left()
                 time_str = str(time_remaining).split(".")[0]
-                self.log(f"{YELLOWLOG}Wondertrade available in {time_str}")
+                log("yellow", f"Wondertrade available in {time_str}")
         else:
             POKEMON.wondertrade_timer = None
 
@@ -851,7 +814,7 @@ class ClientIRCPokemon(ClientIRCBase):
 
             if pokemon_obj.evolve_to is None:
                 self.update_evolutions(pokemon["id"], pokemon["pokedexId"])
-                self.log(f"{YELLOWLOG}Updated evolutions for{pokemon['pokedexId']}")
+                log("yellow", f"Updated evolutions for{pokemon['pokedexId']}")
                 sleep(1)
             elif updated:
                 POKEMON.pokedex.save_pokedex()
@@ -1121,6 +1084,7 @@ Battles:
                 pokemon_obj = self.get_pokemon_stats(pokemon["pokedexId"])
 
                 if index == 0:
+                    nick = ""
                     if pokemon_obj.is_starter or pokemon_obj.is_legendary or pokemon_obj.is_female:
                         nick = pokemon["name"]
                         if pokemon_obj.is_starter:
@@ -1129,11 +1093,8 @@ Battles:
                             nick = CHARACTERS["legendary"] + nick
                         if pokemon_obj.is_female:
                             nick = nick + CHARACTERS["female"]
-                    elif pokemon["nickname"] is None or pokemon["nickname"].startswith("trade") is False:
-                        # if not starter and not female and has nickname, dont mess
+                    elif pokemon["nickname"] is None:
                         continue
-                    else:
-                        nick = ""
                 else:
 
                     nick = "trade" + pokemon_obj.tier
@@ -1155,10 +1116,10 @@ Battles:
 
         for poke_id, new_name, real_name, old_name in changes:
             if new_name is not None and len(new_name) > 12:
-                self.log_file(f"{YELLOWLOG}Wont rename {real_name} from {old_name} to {new_name}, name too long")
+                log_file("yellow", f"Wont rename {real_name} from {old_name} to {new_name}, name too long")
                 continue
             self.pokemon_api.set_name(poke_id, new_name)
-            self.log_file(f"{YELLOWLOG}Renamed {real_name} from {old_name} to {new_name}")
+            log_file("yellow", f"Renamed {real_name} from {old_name} to {new_name}")
             sleep(0.5)
 
     def check_inventory(self):
@@ -1185,7 +1146,7 @@ Battles:
                     resp = self.pokemon_api.buy_item(ball["name"], buying)
                     if "cash" in resp:
                         POKEMON.inventory.cash = resp["cash"]
-                        self.log(f"{GREENLOG}Purchased {buying} {ball['displayName']}s")
+                        log("green", f"Purchased {buying} {ball['displayName']}s")
 
         if changes:
             inv = self.pokemon_api.get_inventory()
@@ -1204,7 +1165,7 @@ Battles:
                 pokemonobj = self.get_pokemon_stats(reward["reward_name"], cached=False)
                 if POKEMON.pokedex.have(pokemonobj) is False:
                     mission_msg = mission_msg + " - needed"
-            self.log(f"{GREENLOG}{mission_msg}")
+            log("green", f"{mission_msg}")
             POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:
                 reward_sprite.close()
@@ -1247,7 +1208,7 @@ Battles:
 
         pokemon = self.get_pokemon_stats(pokemon_id, cached=False)
 
-        self.log_file(f"{YELLOWLOG}Pokemon spawned - processing {pokemon}")
+        log_file("yellow", f"Pokemon spawned - processing {pokemon}")
 
         # sync everything
         dex = self.pokemon_api.get_pokedex()
@@ -1282,14 +1243,14 @@ Battles:
                 ball = POKEMON.inventory.get_catch_ball(pokemon, repeat=repeat, strategy=strategy)
 
             if ball is None:
-                self.log_file(f"{REDLOG}Won't catch {pokemon.name} ran out of balls (strategy: {strategy})")
+                log_file("red", f"Won't catch {pokemon.name} ran out of balls (strategy: {strategy})")
             else:
                 twitch_channel = POKEMON.get_channel()
                 message = f"!pokecatch {ball}"
                 client.privmsg("#" + twitch_channel, message)
 
                 reasons_string = ", ".join(catch_reasons)
-                self.log_file(f"{GREENLOG}Trying to catch {pokemon.name} with {ball} because {reasons_string}")
+                log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
 
                 sleep(5)
 
@@ -1304,12 +1265,12 @@ Battles:
                         caught = poke
                         break
 
-                self.log(f"{GREENLOG}Trying to catch in {twitch_channel}")
+                log("green", f"Trying to catch in {twitch_channel}")
                 if caught is not None:
                     ivs = int(poke["avgIV"])
                     lvl = poke['lvl']
                     shiny = " Shiny" if poke["isShiny"] else ""
-                    self.log_file(f"{GREENLOG}Caught{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV")
+                    log_file("green", f"Caught{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV")
                     msg = f"I caught a{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV!"
                     if pokemon.is_fish and FISH_EVENT:
                         caught_pokemon = self.update_evolutions(poke["id"], pokemon_id)
@@ -1319,7 +1280,7 @@ Battles:
                     sprite = str(poke["pokedexId"])
                     pokemon_sprite = get_sprite("pokemon", sprite, shiny=poke["isShiny"])
                 else:
-                    self.log_file(f"{REDLOG}Failed to catch {pokemon.name} ({pokemon.tier})")
+                    log_file("red", f"Failed to catch {pokemon.name} ({pokemon.tier})")
                     msg = f"I missed {pokemon.name} ({pokemon.tier})!"
                     pokemon_sprite = None
 
@@ -1362,18 +1323,18 @@ Battles:
                     if rewards is not None:
                         reward, next_reward = rewards
                         rewards_msg = f"Loyalty tier completed in {twitch_channel}, new reward: {reward}"
-                        self.log(f"{GREENLOG}{rewards_msg}")
+                        log("green", f"{rewards_msg}")
                         if next_reward is not None:
                             rewards_msg = rewards_msg + f"\nNext reward: {next_reward}"
-                            self.log(f"{GREENLOG}next reward: {next_reward}")
+                            log("green", f"next reward: {next_reward}")
                         sprite = get_sprite("streamer", twitch_channel)
                         POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
         else:
-            self.log_file(f"{REDLOG}Don't need pokemon, skipping")
+            log_file("red", f"Don't need pokemon, skipping")
 
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
             client.privmsg("#" + twitch_channel, "!pokecheck")
-            self.log(f"{GREENLOG}Pokecheck in {twitch_channel}")
+            log("green", f"Pokecheck in {twitch_channel}")
 
             self.get_missions()
 
@@ -1413,9 +1374,7 @@ class ThreadChat(ThreadChatO):
             self.marbles,
             self.pcg
         )
-        logger.info(
-            f"Join IRC Chat: {self.channel}", extra={"emoji": ":speech_balloon:"}
-        )
+        log(text=f"Join IRC Chat: {self.channel}")
         POKEMON.channel_online(self.channel)
         self.chat_irc.start()
 
@@ -1427,11 +1386,9 @@ class ThreadChat(ThreadChatO):
 def leave_channel(channel):
     if channel in POKEMON.channel_list:
         POKEMON.remove_channel(channel)
-        logger.info(
-            f"Leaving Pokemon: {channel}", extra={"emoji": ":speech_balloon:"}
-        )
+        log(text=f"Leaving Pokemon: {channel}")
         if len(POKEMON.channel_list) == 0:
-            poke_logger.info("Nobody is streaming Pokemon CG")
+            log_file(text="Nobody is streaming Pokemon CG")
 
     if channel in POKEMON.online_channels:
         POKEMON.channel_offline(channel)
