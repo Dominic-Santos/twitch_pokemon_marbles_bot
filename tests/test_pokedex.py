@@ -35,23 +35,10 @@ def test_fish():
 
 
 def test_have():
+    poke = Pokemon()
     for pokemon in dex_json["dex"]:
-        assert pokedex.have(pokemon["name"])
-
-
-def test_have_extra():
-    assert pokedex.have("Wormadam (Sandy)")
-    pokedex.pokemon["Wormadam"] = False
-    assert pokedex.have("Wormadam (Sandy)") == False
-    assert pokedex.have("Aegislash (Blade)")
-    assert pokedex.have("Aegislash (Shield)")
-    pokedex.pokemon["Aegislash"] = False
-    assert pokedex.have("Aegislash (Blade)") == False
-    assert pokedex.have("Aegislash (Shield)") == False
-    assert pokedex.have("Ho-Oh")
-    assert pokedex.have("Indeedee")
-    assert pokedex.have("garbage") == FAIL_TO_FIND
-    assert pokedex.have("Mime Jr.")
+        poke.pokedex_id = pokemon["pokedexId"]
+        assert pokedex.have(poke)
 
 
 def test_baby():
