@@ -41,4 +41,10 @@ class Pokemon(object):
         return self.hp + self.speed + self.attack + self.defense + self.special_attack + self.special_defense
 
     def __str__(self):
-        return f"{self.pokedex_id} {self.name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}"
+        real_id = "" if self.pokedex_id == self.order else f" ({self.order})"
+        atts = []
+        for att in ["fish", "cat", "dog", "baby", "starter", "legendary", "female", "non_spawnable"]:
+            if getattr(self, "is_" + att):
+                atts.append(att)
+        atts = "" if len(atts) == 0 else " [" + ", ".join(atts) + "]"
+        return f"{self.pokedex_id}{real_id} {self.name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}{atts}"
