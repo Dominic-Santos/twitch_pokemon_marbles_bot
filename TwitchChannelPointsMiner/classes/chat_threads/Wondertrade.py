@@ -229,7 +229,5 @@ class Wondertrade(object):
                 wondertrade_msg = f"Wondertraded {pokemon_traded['name']} ({pokemon_traded_tier}){reasons_string} for {pokemon_received['name']} ({pokemon_received_tier}){pokemon_received_need}"
                 log("green", f"{wondertrade_msg}")
                 POKEMON.discord.post(DISCORD_ALERTS, wondertrade_msg, file=pokemon_sprite)
-                POKEMON.reset_wondertrade_timer()
             else:
                 log("red", f"Wondertrade {pokemon_traded['name']} failed {pokemon_received}")
-                POKEMON.wondertrade_timer = None
