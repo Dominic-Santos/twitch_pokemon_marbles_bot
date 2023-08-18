@@ -48,3 +48,6 @@ class Pokemon(object):
                 atts.append(att)
         atts = "" if len(atts) == 0 else " [" + ", ".join(atts) + "]"
         return f"{self.pokedex_id}{real_id} {self.name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}{atts}"
+
+    def __repr__(self):
+        return self.__str__()

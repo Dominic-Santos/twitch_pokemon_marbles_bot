@@ -43,8 +43,10 @@ def test_fish():
 def test_have():
     poke = Pokemon()
     for pokemon in dex_json["dex"]:
-        poke.pokedex_id = pokemon["pokedexId"]
+        poke = pokedex.stats(pokemon["pokedexId"])
         assert pokedex.have(poke)
+        if pokemon["pokedexId"] > pokedex.total:
+            assert pokedex.have_alt(poke) is False
 
 
 def test_baby():
@@ -67,6 +69,8 @@ def test_clean_name():
     poke = Pokemon()
     poke.name = "His Caterpie"
     assert pokedex.clean_name(poke) == "Caterpie"
+    poke.name = "His Arcanine"
+    assert pokedex.clean_name(poke) == "Arcanine"
 
 
 def test_dogs():
