@@ -102,6 +102,10 @@ class Inventory(object):
         return None
 
     def _recomended_balls_iter(self, pokemon, repeat=False):
+        if pokemon.is_legendary and repeat is False:
+            if self.have_ball("masterball"):
+                yield "masterball"
+
         if self.use_special_balls:
             if pokemon.is_fish and "Fish" in self.other_balls:
                 for ball in self.other_balls["Fish"]:
