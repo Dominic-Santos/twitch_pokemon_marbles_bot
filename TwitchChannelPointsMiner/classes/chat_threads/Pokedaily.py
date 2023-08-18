@@ -3,6 +3,7 @@ import traceback
 from datetime import datetime
 from dateutil.parser import parse
 
+from ..entities.Pokemon.Pokedaily import parse_next_available
 
 from ..ChatUtils import (
     DISCORD_ALERTS,
@@ -21,10 +22,14 @@ class Pokedaily(object):
         resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
         latest_message = resp["messages"][0][0]
 
+        next_available = parse_next_available(latest_message["content"])
         timestamp = parse(latest_message["timestamp"])
         now = datetime.now()
 
-        next_redeem = int(POKEDAILY_DELAY - (now.timestamp() - timestamp.timestamp()))
+        if next_available == 0:
+            next_redeem = int(POKEDAILY_DELAY - (now.timestamp() - timestamp.timestamp()))
+        else:
+            next_redeem = int(timestamp.timestamp() + next_available - now.timestamp())
         return next_redeem
 
     def pokedaily_timer(self):
