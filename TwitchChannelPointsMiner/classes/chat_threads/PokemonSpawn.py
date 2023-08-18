@@ -112,6 +112,7 @@ class PokemonSpawn(object):
 
                 reasons_string = ", ".join(catch_reasons)
                 log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
+                log("green", f"Trying to catch in {twitch_channel}")
 
                 message = f"!pokecatch {ball}"
                 client.privmsg("#" + twitch_channel, message)
@@ -129,7 +130,6 @@ class PokemonSpawn(object):
                         caught = poke
                         break
 
-                log("green", f"Trying to catch in {twitch_channel}")
                 if caught is not None:
                     ivs = int(poke["avgIV"])
                     lvl = poke['lvl']
@@ -194,7 +194,8 @@ class PokemonSpawn(object):
                         sprite = get_sprite("streamer", twitch_channel)
                         POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
         else:
-            log_file("green", f"Don't need pokemon, Pokecheck in {twitch_channel}")
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
+            log_file("green", f"Don't need pokemon, Pokecheck in {twitch_channel}")
+
             client.privmsg("#" + twitch_channel, "!pokecheck")
             self.get_missions()

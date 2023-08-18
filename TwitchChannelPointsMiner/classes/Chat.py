@@ -103,7 +103,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             if self.pokemon_disabled is False:
                 self.pokemon_disabled = True
                 self.pokemon_active = False
-                log(f"Pokemon Disabled: {self.channel}")
+                log(text=f"Pokemon Disabled: {self.channel}")
                 leave_channel(self.channel[1:])
 
         elif self.pokemon_active is False:
