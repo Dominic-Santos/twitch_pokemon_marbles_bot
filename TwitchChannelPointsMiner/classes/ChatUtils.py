@@ -1,5 +1,8 @@
 import logging
 import os
+from datetime import timedelta
+from threading import Thread
+
 
 from .ChatO import logger
 
@@ -22,6 +25,9 @@ ITEM_MIN_PURCHASE = 10
 
 MARBLES_DELAY = 60 * 3  # seconds
 MARBLES_TRIGGER_COUNT = 3
+WONDERTRADE_DELAY = 60 * 60 * 3 + 60  # 3 hours and 1 min (just in case)
+POKEDAILY_DELAY = 60 * 60 * 20 + 60  # 20 hours and 1 min
+
 
 REDLOG = "\x1b[31;20m"
 GREENLOG = "\x1b[32;20m"
@@ -68,3 +74,39 @@ def log(level="none", text=""):
 
 def log_file(level="none", text=""):
     poke_logger.info(_clean_text(level, text))
+
+
+def seconds_readable(seconds):
+    return str(timedelta(seconds=seconds)).split(".")[0]
+
+
+class ThreadController(object):
+    def __init__(self):
+        self.client_channel = None
+        self.clients = {}
+        self.started = False
+
+    def remove_client(self, channel):
+        self.clients.pop(channel, None)
+        if self.client_channel == channel:
+            self.client_channel = None
+
+    def chose_client(self):
+        client_keys = list(self.clients.keys())
+        if len(client_keys) > 0:
+            self.client_channel = client_keys[0]
+
+    def get_client(self):
+        if self.client_channel is None:
+            self.chose_client()
+
+        return self.client_channel, self.clients.get(self.client_channel, None)
+
+
+THREADCONTROLLER = ThreadController()
+
+
+def create_thread(func):
+    worker = Thread(target=func)
+    worker.setDaemon(True)
+    worker.start()
