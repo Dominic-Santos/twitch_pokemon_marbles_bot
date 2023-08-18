@@ -68,6 +68,7 @@ def parse_next_available(content):
 
     return hours * 60 * 60 + minutes * 60 + seconds
 
+
 def parse_message(content):
     message = Message()
 
