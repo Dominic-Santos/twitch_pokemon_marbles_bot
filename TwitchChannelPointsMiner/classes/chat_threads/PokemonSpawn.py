@@ -109,11 +109,12 @@ class PokemonSpawn(object):
                 log_file("red", f"Won't catch {pokemon.name} ran out of balls (strategy: {strategy})")
             else:
                 twitch_channel = POKEMON.get_channel()
-                message = f"!pokecatch {ball}"
-                client.privmsg("#" + twitch_channel, message)
 
                 reasons_string = ", ".join(catch_reasons)
                 log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
+
+                message = f"!pokecatch {ball}"
+                client.privmsg("#" + twitch_channel, message)
 
                 sleep(5)
 
@@ -193,10 +194,7 @@ class PokemonSpawn(object):
                         sprite = get_sprite("streamer", twitch_channel)
                         POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
         else:
-            log_file("red", f"Don't need pokemon, skipping")
-
+            log_file("green", f"Don't need pokemon, Pokecheck in {twitch_channel}")
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
             client.privmsg("#" + twitch_channel, "!pokecheck")
-            log("green", f"Pokecheck in {twitch_channel}")
-
             self.get_missions()

@@ -91,6 +91,5 @@ class Pokedaily(object):
         if message.repeat:
             log("red", f"Pokedaily not ready")
         else:
-            POKEMON.reset_pokedaily_timer()
             POKEMON.discord.post(DISCORD_ALERTS, f"Pokedaily rewards ({message.rarity}):\n" + "\n".join(message.rewards))
             log("green", f"Pokedaily ({message.rarity}) rewards " + ", ".join(message.rewards))
