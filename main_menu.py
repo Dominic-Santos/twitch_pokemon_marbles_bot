@@ -7,12 +7,25 @@ from time import sleep
 from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
 from TwitchChannelPointsMiner.classes.entities.Pokemon.Utils import get_sprite
 from TwitchChannelPointsMiner.classes.entities.Pokemon.CGApi import API as PCGApi
+from TwitchChannelPointsMiner.classes.chat_threads.DailyTasks import stats_computer
+from TwitchChannelPointsMiner.classes.ChatUtils import DISCORD_STATS
 
 POKEMON = PokemonComunityGame()
 POKEMON_API = PCGApi()
 POKEMON_API.refresh_auth()
 IMAGES = {}
 IMAGE_PATHS = {}
+
+
+def sync_all():
+    all_pokemon = POKEMON_API.get_all_pokemon()
+    POKEMON.sync_computer(all_pokemon)
+
+    dex = POKEMON_API.get_pokedex()
+    POKEMON.sync_pokedex(dex)
+
+    inv = POKEMON_API.get_inventory()
+    POKEMON.sync_inventory(inv)
 
 
 def get_image(img_path):
@@ -81,6 +94,7 @@ class MainMenu():
         tkinter.Button(f, text="Stats", command=self.run_stats, **self.button_conf).grid(row=1, column=0, **padding)
         tkinter.Button(f, text="Settings", command=self.page_settings, **self.button_conf).grid(row=1, column=1, **padding)
         tkinter.Button(f, text="Missions", command=self.page_missions, **self.button_conf).grid(row=2, column=0, **padding)
+        tkinter.Button(f, text="Bag Stats", command=self.bag_stats, **self.button_conf).grid(row=2, column=1, **padding)
         tkinter.Button(f2, text="Exit", command=self.close, **self.button_conf).grid(row=0, column=0, **padding)
         f.pack(anchor="center")
         f2.pack(anchor="center")
@@ -109,6 +123,11 @@ class MainMenu():
 
     def page_missions(self):
         Missions(self.app, self).run()
+
+    def bag_stats(self):
+        sync_all()
+        discord_msg = stats_computer(POKEMON, POKEMON.pokedex.stats)
+        POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
     def load(self):
         self.check_updates()

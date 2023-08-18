@@ -51,6 +51,159 @@ def get_battle_logs(the_date):
     }
 
 
+def stats_computer(Pokemon, get_stats_func):
+    allpokemon = Pokemon.computer.pokemon
+
+    spawnables_a = []
+    spawnables_b = []
+    spawnables_c = []
+
+    for i in range(1, Pokemon.pokedex.total + 1):
+        pokemon = get_stats_func(i)
+
+        if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable:
+            continue
+
+        if pokemon.tier == "A":
+            spawnables_a.append(pokemon)
+        elif pokemon.tier == "B":
+            spawnables_b.append(pokemon)
+        elif pokemon.tier == "C":
+            spawnables_c.append(pokemon)
+
+    spawnables_a_total = len(spawnables_a)
+    spawnables_b_total = len(spawnables_b)
+    spawnables_c_total = len(spawnables_c)
+
+    spawnables_total = spawnables_a_total + spawnables_b_total + spawnables_c_total
+
+    spawnables_a_have = len([pokemon for pokemon in spawnables_a if Pokemon.pokedex.have(pokemon)])
+    spawnables_b_have = len([pokemon for pokemon in spawnables_b if Pokemon.pokedex.have(pokemon)])
+    spawnables_c_have = len([pokemon for pokemon in spawnables_c if Pokemon.pokedex.have(pokemon)])
+    spawnables_a_dont_have = [pokemon for pokemon in spawnables_a if Pokemon.pokedex.have(pokemon) is False]
+    spawnables_b_dont_have = [pokemon for pokemon in spawnables_b if Pokemon.pokedex.have(pokemon) is False]
+    spawnables_c_dont_have = [pokemon for pokemon in spawnables_c if Pokemon.pokedex.have(pokemon) is False]
+    spawnables_have = spawnables_a_have + spawnables_b_have + spawnables_c_have
+
+    spawnables_per = int(spawnables_have * 10000.0 / spawnables_total) / 100.0
+    spawnables_a_per = int(spawnables_a_have * 10000.0 / spawnables_a_total) / 100.0
+    spawnables_b_per = int(spawnables_b_have * 10000.0 / spawnables_b_total) / 100.0
+    spawnables_c_per = int(spawnables_c_have * 10000.0 / spawnables_c_total) / 100.0
+
+    results = {
+        "shiny": [],
+        "starter": [],
+        "female": [],
+        "legendary": [],
+        "non_spawnable": [],
+        "bag_regular": [],
+        "bag_special": [],
+    }
+
+    for pokemon in allpokemon:
+        if pokemon["isShiny"]:
+            results["shiny"].append(pokemon)
+
+        pokeobj = get_stats_func(pokemon["pokedexId"])
+        if pokeobj is None:
+            continue
+        if pokeobj.is_starter:
+            results["starter"].append(pokeobj.pokedex_id)
+        if pokeobj.is_female:
+            results["female"].append(pokeobj.pokedex_id)
+        if pokeobj.is_legendary:
+            results["legendary"].append(pokeobj.pokedex_id)
+        if pokeobj.is_non_spawnable:
+            results["non_spawnable"].append(pokeobj.pokedex_id)
+        if pokeobj.pokedex_id <= Pokemon.pokedex.total:
+            results["bag_regular"].append(pokeobj.pokedex_id)
+        else:
+            results["bag_special"].append(pokeobj.pokedex_id)
+
+    results["shiny"] = len(results["shiny"])
+    for k in ["starter", "female", "legendary", "bag_regular", "bag_special", "non_spawnable"]:
+        results[k] = len(set(results[k]))
+
+    for tier in ["S", "A", "B", "C"]:
+        results[f"trade{tier}"] = len([pokemon for pokemon in allpokemon if pokemon["nickname"] is not None and f"trade{tier}" in pokemon["nickname"]])
+
+    region_msg_list = []
+    prefixes = Pokemon.pokedex.prefixes
+    for region in prefixes:
+        num = len(set([pokemon["pokedexId"] for pokemon in allpokemon if pokemon["name"].startswith(prefixes[region] + " ")]))
+        if num > 0:
+            region_msg_list.append((region, num, getattr(Pokemon.pokedex, region.lower())))
+
+    region_msg = "".join([f"\n    {region}: {num}/{total}" for region, num, total in region_msg_list])
+
+    tradable_total = sum([results[f"trade{tier}"] for tier in ["A", "B", "C"]])
+
+    cash = Pokemon.inventory.cash
+    pokeball = Pokemon.inventory.balls.get("pokeball", 0)
+    premierball = Pokemon.inventory.balls.get("premierball", 0)
+    greatball = Pokemon.inventory.balls.get("greatball", 0)
+    ultraball = Pokemon.inventory.balls.get("ultraball", 0)
+    otherball = sum([value for key, value in Pokemon.inventory.balls.items() if key not in ["pokeball", "premierball", "greatball", "ultraball"]])
+
+    if Pokemon.inventory.have_item("battle coin"):
+        coins = Pokemon.inventory.get_item("battle coin")["amount"]
+    else:
+        coins = 0
+
+    max_show_missing = 20
+
+    if len(spawnables_a_dont_have) == 0:
+        missing_a_string = "Done"
+    elif len(spawnables_a_dont_have) in range(0, max_show_missing):
+        missing_a_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_a_dont_have])
+    else:
+        missing_a_string = ""
+
+    if len(spawnables_b_dont_have) == 0:
+        missing_b_string = "Done"
+    elif len(spawnables_b_dont_have) in range(0, max_show_missing):
+        missing_b_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_b_dont_have])
+    else:
+        missing_b_string = ""
+
+    if len(spawnables_c_dont_have) == 0:
+        missing_c_string = "Done"
+    elif len(spawnables_c_dont_have) in range(0, max_show_missing):
+        missing_c_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_c_dont_have])
+    else:
+        missing_c_string = ""
+
+    msg = f"""Bag Summary:
+
+Starters: {results["starter"]}
+Legendary: {results["legendary"]}
+Non-Spawnables: {results["non_spawnable"]}/{Pokemon.pokedex.non_spawnables}
+Shiny: {results["shiny"]}
+
+Normal Version: {results["bag_regular"]}/{Pokemon.pokedex.total}
+Alt Version: {results["bag_special"]}
+    {CHARACTERS["female"]}: {results["female"]}/{Pokemon.pokedex.females}{region_msg}
+
+Spawnables: {spawnables_have}/{spawnables_total} ({spawnables_per}%)
+    A: {spawnables_a_have}/{spawnables_a_total} ({spawnables_a_per}%) {missing_a_string}
+    B: {spawnables_b_have}/{spawnables_b_total} ({spawnables_b_per}%) {missing_b_string}
+    C: {spawnables_c_have}/{spawnables_c_total} ({spawnables_c_per}%) {missing_c_string}
+
+Tradables: {tradable_total}
+    A: {results["tradeA"]}
+    B: {results["tradeB"]}
+    C: {results["tradeC"]}
+
+Inventory: {cash}$ {coins} Battle Coins
+    pokeball: {pokeball}
+    premierball: {premierball}
+    greatball: {greatball}
+    ultraball: {ultraball}
+    other: {otherball}"""
+
+    return msg
+
+
 class DailyTasks(object):
 
     def daily_task_timer(self):
@@ -77,12 +230,13 @@ class DailyTasks(object):
 
     def daily_tasks(self, previous_date, current_date):
         log("yellow", f"Running Daily Tasks")
-        self.stats_computer(previous_date, current_date)
+        stats_date = previous_date if previous_date is not None else current_date
+        self.stats_computer()
+        self.battle_summary(stats_date)
         self.check_bag_pokemon()
         self.check_finish_pokedex()
 
-    def stats_computer(self, previous_date, current_date):
-
+    def stats_computer(self):
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
 
@@ -92,161 +246,17 @@ class DailyTasks(object):
         inv = self.pokemon_api.get_inventory()
         POKEMON.sync_inventory(inv)
 
-        allpokemon = POKEMON.computer.pokemon
+        discord_msg = stats_computer(POKEMON, self.get_pokemon_stats)
 
-        spawnables_a = []
-        spawnables_b = []
-        spawnables_c = []
+        POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
-        for i in range(1, POKEMON.pokedex.total + 1):
-            pokemon = self.get_pokemon_stats(i)
-
-            if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable:
-                continue
-
-            if pokemon.tier == "A":
-                spawnables_a.append(pokemon)
-            elif pokemon.tier == "B":
-                spawnables_b.append(pokemon)
-            elif pokemon.tier == "C":
-                spawnables_c.append(pokemon)
-
-        spawnables_a_total = len(spawnables_a)
-        spawnables_b_total = len(spawnables_b)
-        spawnables_c_total = len(spawnables_c)
-
-        spawnables_total = spawnables_a_total + spawnables_b_total + spawnables_c_total
-
-        spawnables_a_have = len([pokemon for pokemon in spawnables_a if POKEMON.pokedex.have(pokemon)])
-        spawnables_b_have = len([pokemon for pokemon in spawnables_b if POKEMON.pokedex.have(pokemon)])
-        spawnables_c_have = len([pokemon for pokemon in spawnables_c if POKEMON.pokedex.have(pokemon)])
-        spawnables_a_dont_have = [pokemon for pokemon in spawnables_a if POKEMON.pokedex.have(pokemon) is False]
-        spawnables_b_dont_have = [pokemon for pokemon in spawnables_b if POKEMON.pokedex.have(pokemon) is False]
-        spawnables_c_dont_have = [pokemon for pokemon in spawnables_c if POKEMON.pokedex.have(pokemon) is False]
-        spawnables_have = spawnables_a_have + spawnables_b_have + spawnables_c_have
-
-        spawnables_per = int(spawnables_have * 10000.0 / spawnables_total) / 100.0
-        spawnables_a_per = int(spawnables_a_have * 10000.0 / spawnables_a_total) / 100.0
-        spawnables_b_per = int(spawnables_b_have * 10000.0 / spawnables_b_total) / 100.0
-        spawnables_c_per = int(spawnables_c_have * 10000.0 / spawnables_c_total) / 100.0
-
-        results = {
-            "shiny": [],
-            "starter": [],
-            "female": [],
-            "legendary": [],
-            "non_spawnable": [],
-            "bag_regular": [],
-            "bag_special": [],
-        }
-
-        for pokemon in allpokemon:
-            if pokemon["isShiny"]:
-                results["shiny"].append(pokemon)
-
-            pokeobj = self.get_pokemon_stats(pokemon["pokedexId"])
-            if pokeobj.is_starter:
-                results["starter"].append(pokeobj.pokedex_id)
-            if pokeobj.is_female:
-                results["female"].append(pokeobj.pokedex_id)
-            if pokeobj.is_legendary:
-                results["legendary"].append(pokeobj.pokedex_id)
-            if pokeobj.is_non_spawnable:
-                results["non_spawnable"].append(pokeobj.pokedex_id)
-            if pokeobj.pokedex_id <= POKEMON.pokedex.total:
-                results["bag_regular"].append(pokeobj.pokedex_id)
-            else:
-                results["bag_special"].append(pokeobj.pokedex_id)
-
-        results["shiny"] = len(results["shiny"])
-        for k in ["starter", "female", "legendary", "bag_regular", "bag_special", "non_spawnable"]:
-            results[k] = len(set(results[k]))
-
-        for tier in ["S", "A", "B", "C"]:
-            results[f"trade{tier}"] = len([pokemon for pokemon in allpokemon if pokemon["nickname"] is not None and f"trade{tier}" in pokemon["nickname"]])
-
-        region_msg_list = []
-        prefixes = POKEMON.pokedex.prefixes
-        for region in prefixes:
-            num = len(set([pokemon["pokedexId"] for pokemon in allpokemon if pokemon["name"].startswith(prefixes[region] + " ")]))
-            if num > 0:
-                region_msg_list.append((region, num, getattr(POKEMON.pokedex, region.lower())))
-
-        region_msg = "".join([f"\n    {region}: {num}/{total}" for region, num, total in region_msg_list])
-
-        tradable_total = sum([results[f"trade{tier}"] for tier in ["A", "B", "C"]])
-
-        cash = POKEMON.inventory.cash
-        pokeball = POKEMON.inventory.balls.get("pokeball", 0)
-        premierball = POKEMON.inventory.balls.get("premierball", 0)
-        greatball = POKEMON.inventory.balls.get("greatball", 0)
-        ultraball = POKEMON.inventory.balls.get("ultraball", 0)
-        otherball = sum([value for key, value in POKEMON.inventory.balls.items() if key not in ["pokeball", "premierball", "greatball", "ultraball"]])
-
-        if POKEMON.inventory.have_item("battle coin"):
-            coins = POKEMON.inventory.get_item("battle coin")["amount"]
-        else:
-            coins = 0
-
-        max_show_missing = 20
-
-        if len(spawnables_a_dont_have) == 0:
-            missing_a_string = "Done"
-        elif len(spawnables_a_dont_have) in range(0, max_show_missing):
-            missing_a_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_a_dont_have])
-        else:
-            missing_a_string = ""
-
-        if len(spawnables_b_dont_have) == 0:
-            missing_b_string = "Done"
-        elif len(spawnables_b_dont_have) in range(0, max_show_missing):
-            missing_b_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_b_dont_have])
-        else:
-            missing_b_string = ""
-
-        if len(spawnables_c_dont_have) == 0:
-            missing_c_string = "Done"
-        elif len(spawnables_c_dont_have) in range(0, max_show_missing):
-            missing_c_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_c_dont_have])
-        else:
-            missing_c_string = ""
-
-        battle_date = previous_date if previous_date is not None else current_date
+    def battle_summary(self, battle_date):
         battle_stats = get_battle_logs(battle_date)
 
-        discord_msg = f"""Bag Summary:
-
-Starters: {results["starter"]}
-Legendary: {results["legendary"]}
-Non-Spawnables: {results["non_spawnable"]}/{POKEMON.pokedex.non_spawnables}
-Shiny: {results["shiny"]}
-
-Normal Version: {results["bag_regular"]}/{POKEMON.pokedex.total}
-Alt Version: {results["bag_special"]}
-    {CHARACTERS["female"]}: {results["female"]}/{POKEMON.pokedex.females}{region_msg}
-
-Spawnables: {spawnables_have}/{spawnables_total} ({spawnables_per}%)
-    A: {spawnables_a_have}/{spawnables_a_total} ({spawnables_a_per}%) {missing_a_string}
-    B: {spawnables_b_have}/{spawnables_b_total} ({spawnables_b_per}%) {missing_b_string}
-    C: {spawnables_c_have}/{spawnables_c_total} ({spawnables_c_per}%) {missing_c_string}
-
-Tradables: {tradable_total}
-    A: {results["tradeA"]}
-    B: {results["tradeB"]}
-    C: {results["tradeC"]}
-
-Inventory: {cash}$ {coins} Battle Coins
-    pokeball: {pokeball}
-    premierball: {premierball}
-    greatball: {greatball}
-    ultraball: {ultraball}
-    other: {otherball}
-
-Battles:
+        discord_msg = f"""Battle Summary - {battle_date}:
     Wins: {battle_stats['wins']}/{battle_stats['battles']}
     Exp: {battle_stats['exp']}
-    $: {battle_stats['cash']}
-        """
+    $: {battle_stats['cash']}"""
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
