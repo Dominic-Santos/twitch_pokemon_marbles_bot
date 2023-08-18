@@ -6311,7 +6311,7 @@
             "name": "Basculegion",
             "id": 902,
             "c": true,
-            "order": 550,
+            "order": 902,
             "pokedexId": 902
         },
         {
@@ -6327,11 +6327,1013 @@
             "c": true,
             "order": 904,
             "pokedexId": 904
+        },
+        {
+            "name": "Wormadam (Sandy)",
+            "id": 10004,
+            "c": false,
+            "order": 413,
+            "pokedexId": 10004
+        },
+        {
+            "name": "Wormadam (Trash)",
+            "id": 10005,
+            "c": false,
+            "order": 413,
+            "pokedexId": 10005
+        },
+        {
+            "name": "Rotom (Heat)",
+            "id": 10008,
+            "c": false,
+            "order": 479,
+            "pokedexId": 10008
+        },
+        {
+            "name": "Rotom (Wash)",
+            "id": 10009,
+            "c": false,
+            "order": 479,
+            "pokedexId": 10009
+        },
+        {
+            "name": "Rotom (Frost)",
+            "id": 10010,
+            "c": false,
+            "order": 479,
+            "pokedexId": 10010
+        },
+        {
+            "name": "Rotom (Fan)",
+            "id": 10011,
+            "c": false,
+            "order": 479,
+            "pokedexId": 10011
+        },
+        {
+            "name": "Rotom (Mow)",
+            "id": 10012,
+            "c": false,
+            "order": 479,
+            "pokedexId": 10012
+        },
+        {
+            "name": "Castform (Sunny)",
+            "id": 10013,
+            "c": false,
+            "order": 351,
+            "pokedexId": 10013
+        },
+        {
+            "name": "Castform (Rainy)",
+            "id": 10014,
+            "c": false,
+            "order": 351,
+            "pokedexId": 10014
+        },
+        {
+            "name": "Castform (Snowy)",
+            "id": 10015,
+            "c": false,
+            "order": 351,
+            "pokedexId": 10015
+        },
+        {
+            "name": "Basculin",
+            "id": 10016,
+            "c": false,
+            "order": 550,
+            "pokedexId": 10016
+        },
+        {
+            "name": "Aegislash (Blade)",
+            "id": 10026,
+            "c": false,
+            "order": 681,
+            "pokedexId": 10026
+        },
+        {
+            "name": "Alo Rattata",
+            "id": 10091,
+            "c": false,
+            "order": 19,
+            "pokedexId": 10091
+        },
+        {
+            "name": "Alo Raticate",
+            "id": 10092,
+            "c": false,
+            "order": 20,
+            "pokedexId": 10092
+        },
+        {
+            "name": "Alo Raichu",
+            "id": 10100,
+            "c": false,
+            "order": 26,
+            "pokedexId": 10100
+        },
+        {
+            "name": "Alo Sandshrew",
+            "id": 10101,
+            "c": false,
+            "order": 28,
+            "pokedexId": 10101
+        },
+        {
+            "name": "Alo Sandslash",
+            "id": 10102,
+            "c": false,
+            "order": 28,
+            "pokedexId": 10102
+        },
+        {
+            "name": "Alo Vulpix",
+            "id": 10103,
+            "c": false,
+            "order": 37,
+            "pokedexId": 10103
+        },
+        {
+            "name": "Alo Ninetales",
+            "id": 10104,
+            "c": false,
+            "order": 38,
+            "pokedexId": 10104
+        },
+        {
+            "name": "Alo Diglett",
+            "id": 10105,
+            "c": false,
+            "order": 50,
+            "pokedexId": 10105
+        },
+        {
+            "name": "Alo Dugtrio",
+            "id": 10106,
+            "c": false,
+            "order": 51,
+            "pokedexId": 10106
+        },
+        {
+            "name": "Alo Meowth",
+            "id": 10107,
+            "c": false,
+            "order": 52,
+            "pokedexId": 10107
+        },
+        {
+            "name": "Alo Persian",
+            "id": 10108,
+            "c": false,
+            "order": 53,
+            "pokedexId": 10108
+        },
+        {
+            "name": "Alo Geodude",
+            "id": 10109,
+            "c": false,
+            "order": 74,
+            "pokedexId": 10109
+        },
+        {
+            "name": "Alo Graveler",
+            "id": 10110,
+            "c": false,
+            "order": 75,
+            "pokedexId": 10110
+        },
+        {
+            "name": "Alo Golem",
+            "id": 10111,
+            "c": false,
+            "order": 76,
+            "pokedexId": 10111
+        },
+        {
+            "name": "Alo Grimer",
+            "id": 10112,
+            "c": false,
+            "order": 88,
+            "pokedexId": 10112
+        },
+        {
+            "name": "Alo Muk",
+            "id": 10113,
+            "c": false,
+            "order": 89,
+            "pokedexId": 10113
+        },
+        {
+            "name": "Alo Exeggutor",
+            "id": 10114,
+            "c": false,
+            "order": 103,
+            "pokedexId": 10114
+        },
+        {
+            "name": "Alo Marowak",
+            "id": 10115,
+            "c": false,
+            "order": 105,
+            "pokedexId": 10115
+        },
+        {
+            "name": "Lycanroc (Midnight)",
+            "id": 10116,
+            "c": false,
+            "order": 745,
+            "pokedexId": 10116
+        },
+        {
+            "name": "Lycanroc (Dusk)",
+            "id": 10117,
+            "c": false,
+            "order": 745,
+            "pokedexId": 10117
+        },
+        {
+            "name": "Vivillon",
+            "id": 10118,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10118
+        },
+        {
+            "name": "Vivillon",
+            "id": 10119,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10119
+        },
+        {
+            "name": "Vivillon",
+            "id": 10120,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10120
+        },
+        {
+            "name": "Vivillon",
+            "id": 10121,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10121
+        },
+        {
+            "name": "Vivillon",
+            "id": 10122,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10122
+        },
+        {
+            "name": "Vivillon",
+            "id": 10123,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10123
+        },
+        {
+            "name": "Vivillon",
+            "id": 10124,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10124
+        },
+        {
+            "name": "Vivillon",
+            "id": 10125,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10125
+        },
+        {
+            "name": "Vivillon",
+            "id": 10126,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10126
+        },
+        {
+            "name": "Vivillon",
+            "id": 10127,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10127
+        },
+        {
+            "name": "Vivillon",
+            "id": 10128,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10128
+        },
+        {
+            "name": "Vivillon",
+            "id": 10129,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10129
+        },
+        {
+            "name": "Vivillon",
+            "id": 10130,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10130
+        },
+        {
+            "name": "Vivillon",
+            "id": 10131,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10131
+        },
+        {
+            "name": "Vivillon",
+            "id": 10132,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10132
+        },
+        {
+            "name": "Vivillon",
+            "id": 10133,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10133
+        },
+        {
+            "name": "Vivillon",
+            "id": 10134,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10134
+        },
+        {
+            "name": "Vivillon",
+            "id": 10135,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10135
+        },
+        {
+            "name": "Vivillon",
+            "id": 10136,
+            "c": false,
+            "order": 666,
+            "pokedexId": 10136
+        },
+        {
+            "name": "Oricorio (Sensu)",
+            "id": 10137,
+            "c": false,
+            "order": 741,
+            "pokedexId": 10137
+        },
+        {
+            "name": "Gal Rapidash",
+            "id": 10138,
+            "c": false,
+            "order": 78,
+            "pokedexId": 10138
+        },
+        {
+            "name": "Gal Articuno",
+            "id": 10139,
+            "c": false,
+            "order": 144,
+            "pokedexId": 10139
+        },
+        {
+            "name": "Alcremie",
+            "id": 10140,
+            "c": false,
+            "order": 869,
+            "pokedexId": 10140
+        },
+        {
+            "name": "Oricorio (Pom-Pom)",
+            "id": 10141,
+            "c": false,
+            "order": 741,
+            "pokedexId": 10141
+        },
+        {
+            "name": "Oricorio (Pau)",
+            "id": 10142,
+            "c": false,
+            "order": 741,
+            "pokedexId": 10142
+        },
+        {
+            "name": "Burmy",
+            "id": 10289,
+            "c": false,
+            "order": 412,
+            "pokedexId": 10289
+        },
+        {
+            "name": "Burmy",
+            "id": 10290,
+            "c": false,
+            "order": 412,
+            "pokedexId": 10290
+        },
+        {
+            "name": "Cherrim",
+            "id": 10300,
+            "c": false,
+            "order": 421,
+            "pokedexId": 10300
+        },
+        {
+            "name": "Gal Corsola",
+            "id": 10305,
+            "c": false,
+            "order": 222,
+            "pokedexId": 10305
+        },
+        {
+            "name": "Cramorant (Gorging)",
+            "id": 10307,
+            "c": false,
+            "order": 845,
+            "pokedexId": 10307
+        },
+        {
+            "name": "Cramorant",
+            "id": 10308,
+            "c": false,
+            "order": 845,
+            "pokedexId": 10308
+        },
+        {
+            "name": "Gal Darmanitan",
+            "id": 10310,
+            "c": false,
+            "order": 555,
+            "pokedexId": 10310
+        },
+        {
+            "name": "Gal Darumaka",
+            "id": 10312,
+            "c": false,
+            "order": 554,
+            "pokedexId": 10312
+        },
+        {
+            "name": "Deerling",
+            "id": 10313,
+            "c": false,
+            "order": 585,
+            "pokedexId": 10313
+        },
+        {
+            "name": "Deerling",
+            "id": 10314,
+            "c": false,
+            "order": 585,
+            "pokedexId": 10314
+        },
+        {
+            "name": "Deerling",
+            "id": 10315,
+            "c": false,
+            "order": 585,
+            "pokedexId": 10315
+        },
+        {
+            "name": "Gal Farfetch\u2019d",
+            "id": 10324,
+            "c": false,
+            "order": 83,
+            "pokedexId": 10324
+        },
+        {
+            "name": "Furfrou",
+            "id": 10341,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10341
+        },
+        {
+            "name": "Furfrou",
+            "id": 10342,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10342
+        },
+        {
+            "name": "Furfrou",
+            "id": 10343,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10343
+        },
+        {
+            "name": "Furfrou",
+            "id": 10344,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10344
+        },
+        {
+            "name": "Furfrou",
+            "id": 10345,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10345
+        },
+        {
+            "name": "Furfrou",
+            "id": 10346,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10346
+        },
+        {
+            "name": "Furfrou",
+            "id": 10347,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10347
+        },
+        {
+            "name": "Furfrou",
+            "id": 10348,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10348
+        },
+        {
+            "name": "Furfrou",
+            "id": 10349,
+            "c": false,
+            "order": 676,
+            "pokedexId": 10349
+        },
+        {
+            "name": "Gastrodon",
+            "id": 10353,
+            "c": false,
+            "order": 423,
+            "pokedexId": 10353
+        },
+        {
+            "name": "Gal Linoone",
+            "id": 10383,
+            "c": false,
+            "order": 264,
+            "pokedexId": 10383
+        },
+        {
+            "name": "Gal Meowth",
+            "id": 10400,
+            "c": false,
+            "order": 52,
+            "pokedexId": 10400
+        },
+        {
+            "name": "Minior (Blue)",
+            "id": 10408,
+            "c": false,
+            "order": 774,
+            "pokedexId": 10408
+        },
+        {
+            "name": "Minior (Green)",
+            "id": 10409,
+            "c": false,
+            "order": 774,
+            "pokedexId": 10409
+        },
+        {
+            "name": "Minior (Indigo)",
+            "id": 10410,
+            "c": false,
+            "order": 774,
+            "pokedexId": 10410
+        },
+        {
+            "name": "Minior (Pink)",
+            "id": 10411,
+            "c": false,
+            "order": 774,
+            "pokedexId": 10411
+        },
+        {
+            "name": "Minior (Orange)",
+            "id": 10412,
+            "c": false,
+            "order": 774,
+            "pokedexId": 10412
+        },
+        {
+            "name": "Minior (Violet)",
+            "id": 10413,
+            "c": false,
+            "order": 774,
+            "pokedexId": 10413
+        },
+        {
+            "name": "Minior (Yellow)",
+            "id": 10414,
+            "c": false,
+            "order": 774,
+            "pokedexId": 10414
+        },
+        {
+            "name": "Gal Mr. Mime",
+            "id": 10417,
+            "c": false,
+            "order": 122,
+            "pokedexId": 10417
+        },
+        {
+            "name": "Gal Ponyta",
+            "id": 10444,
+            "c": false,
+            "order": 77,
+            "pokedexId": 10444
+        },
+        {
+            "name": "Sawsbuck",
+            "id": 10464,
+            "c": false,
+            "order": 586,
+            "pokedexId": 10464
+        },
+        {
+            "name": "Sawsbuck",
+            "id": 10465,
+            "c": false,
+            "order": 586,
+            "pokedexId": 10465
+        },
+        {
+            "name": "Sawsbuck",
+            "id": 10466,
+            "c": false,
+            "order": 586,
+            "pokedexId": 10466
+        },
+        {
+            "name": "Shellos",
+            "id": 10469,
+            "c": false,
+            "order": 422,
+            "pokedexId": 10469
+        },
+        {
+            "name": "Silvally",
+            "id": 10472,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10472
+        },
+        {
+            "name": "Silvally",
+            "id": 10473,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10473
+        },
+        {
+            "name": "Silvally",
+            "id": 10474,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10474
+        },
+        {
+            "name": "Silvally",
+            "id": 10475,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10475
+        },
+        {
+            "name": "Silvally",
+            "id": 10476,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10476
+        },
+        {
+            "name": "Silvally",
+            "id": 10477,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10477
+        },
+        {
+            "name": "Silvally",
+            "id": 10478,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10478
+        },
+        {
+            "name": "Silvally",
+            "id": 10479,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10479
+        },
+        {
+            "name": "Silvally",
+            "id": 10480,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10480
+        },
+        {
+            "name": "Silvally",
+            "id": 10481,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10481
+        },
+        {
+            "name": "Silvally",
+            "id": 10482,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10482
+        },
+        {
+            "name": "Silvally",
+            "id": 10483,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10483
+        },
+        {
+            "name": "Silvally",
+            "id": 10484,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10484
+        },
+        {
+            "name": "Silvally",
+            "id": 10485,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10485
+        },
+        {
+            "name": "Silvally",
+            "id": 10486,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10486
+        },
+        {
+            "name": "Silvally",
+            "id": 10487,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10487
+        },
+        {
+            "name": "Silvally",
+            "id": 10488,
+            "c": false,
+            "order": 773,
+            "pokedexId": 10488
+        },
+        {
+            "name": "Gal Slowbro",
+            "id": 10490,
+            "c": false,
+            "order": 80,
+            "pokedexId": 10490
+        },
+        {
+            "name": "Gal Slowking",
+            "id": 10491,
+            "c": false,
+            "order": 199,
+            "pokedexId": 10491
+        },
+        {
+            "name": "Gal Slowpoke",
+            "id": 10492,
+            "c": false,
+            "order": 79,
+            "pokedexId": 10492
+        },
+        {
+            "name": "Gal Stunfisk",
+            "id": 10500,
+            "c": false,
+            "order": 618,
+            "pokedexId": 10500
+        },
+        {
+            "name": "Toxtricity",
+            "id": 10508,
+            "c": false,
+            "order": 849,
+            "pokedexId": 10508
+        },
+        {
+            "name": "Gal Weezing",
+            "id": 10541,
+            "c": false,
+            "order": 110,
+            "pokedexId": 10541
+        },
+        {
+            "name": "Gal Yamask",
+            "id": 10547,
+            "c": false,
+            "order": 562,
+            "pokedexId": 10547
+        },
+        {
+            "name": "Gal Zigzagoon",
+            "id": 10552,
+            "c": false,
+            "order": 263,
+            "pokedexId": 10552
+        },
+        {
+            "name": "His Braviary",
+            "id": 86315,
+            "c": false,
+            "order": 628,
+            "pokedexId": 86315
+        },
+        {
+            "name": "His Zorua",
+            "id": 86316,
+            "c": false,
+            "order": 570,
+            "pokedexId": 86316
+        },
+        {
+            "name": "His Goodra",
+            "id": 86318,
+            "c": false,
+            "order": 706,
+            "pokedexId": 86318
+        },
+        {
+            "name": "His Zoroark",
+            "id": 86319,
+            "c": false,
+            "order": 571,
+            "pokedexId": 86319
+        },
+        {
+            "name": "His Voltorb",
+            "id": 86321,
+            "c": false,
+            "order": 100,
+            "pokedexId": 86321
+        },
+        {
+            "name": "His Growlithe",
+            "id": 86322,
+            "c": false,
+            "order": 58,
+            "pokedexId": 86322
+        },
+        {
+            "name": "His Arcanine",
+            "id": 86323,
+            "c": false,
+            "order": 59,
+            "pokedexId": 86323
+        },
+        {
+            "name": "His Lilligant",
+            "id": 86324,
+            "c": false,
+            "order": 549,
+            "pokedexId": 86324
+        },
+        {
+            "name": "His Sneasel",
+            "id": 86325,
+            "c": false,
+            "order": 215,
+            "pokedexId": 86325
+        },
+        {
+            "name": "His Qwilfish",
+            "id": 86326,
+            "c": false,
+            "order": 211,
+            "pokedexId": 86326
+        },
+        {
+            "name": "His Avalugg",
+            "id": 86327,
+            "c": false,
+            "order": 713,
+            "pokedexId": 86327
+        },
+        {
+            "name": "His Electrode",
+            "id": 86328,
+            "c": false,
+            "order": 101,
+            "pokedexId": 86328
+        },
+        {
+            "name": "His Sliggoo",
+            "id": 86329,
+            "c": false,
+            "order": 705,
+            "pokedexId": 86329
+        },
+        {
+            "name": "Basculin",
+            "id": 90003,
+            "c": false,
+            "order": 550,
+            "pokedexId": 90003
+        },
+        {
+            "name": "Sin Alo Marowak",
+            "id": 100000,
+            "c": false,
+            "order": 105,
+            "pokedexId": 100000
+        },
+        {
+            "name": "Sin Cosmog",
+            "id": 100001,
+            "c": false,
+            "order": 789,
+            "pokedexId": 100001
+        },
+        {
+            "name": "Sin Palossand",
+            "id": 100002,
+            "c": false,
+            "order": 770,
+            "pokedexId": 100002
+        },
+        {
+            "name": "Sin Rockruff",
+            "id": 100003,
+            "c": false,
+            "order": 744,
+            "pokedexId": 100003
+        },
+        {
+            "name": "Sin Kartana",
+            "id": 100004,
+            "c": false,
+            "order": 798,
+            "pokedexId": 100004
+        },
+        {
+            "name": "PCG Magnemite",
+            "id": 100005,
+            "c": false,
+            "order": 81,
+            "pokedexId": 100005
+        },
+        {
+            "name": "PCG Gliscor",
+            "id": 100006,
+            "c": false,
+            "order": 472,
+            "pokedexId": 100006
+        },
+        {
+            "name": "PCG Ninetales",
+            "id": 100007,
+            "c": false,
+            "order": 38,
+            "pokedexId": 100007
+        },
+        {
+            "name": "PCG Vivillon",
+            "id": 100008,
+            "c": false,
+            "order": 666,
+            "pokedexId": 100008
+        },
+        {
+            "name": "PCG Arcanine",
+            "id": 100009,
+            "c": false,
+            "order": 59,
+            "pokedexId": 100009
         }
     ],
-    "progress": 766,
-    "catchableProgress": 726,
+    "progress": 779,
+    "catchableProgress": 725,
     "totalPkm": 904,
+    "shinyCharmAmount": 2,
     "catchablePkm": 734,
-    "shinyCharmClaimed": true
+    "shinyCharmClaimed": false
 }

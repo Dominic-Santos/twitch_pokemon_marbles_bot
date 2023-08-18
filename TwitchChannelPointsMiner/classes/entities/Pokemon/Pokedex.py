@@ -146,7 +146,7 @@ class Pokedex(object):
 
         # check by id if not alt
         if pokedex_id <= self._total:
-            result = self.pokemon_ids.get(pokemon.pokedex_id, None)
+            result = self.pokemon_ids.get(pokedex_id, None)
             if result is not None:
                 return result
 
