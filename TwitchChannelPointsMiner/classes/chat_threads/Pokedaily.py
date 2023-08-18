@@ -3,7 +3,7 @@ import traceback
 from datetime import datetime
 from dateutil.parser import parse
 
-from ..entities.Pokemon.Pokedaily import parse_next_available
+from ..entities.Pokemon.Pokedaily import parse_next_available, parse_message
 
 from ..ChatUtils import (
     DISCORD_ALERTS,
@@ -86,7 +86,7 @@ class Pokedaily(object):
         sleep(60 * 2)
         resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
         content = resp["messages"][0][0]["content"]
-        message = Pokedaily.parse_message(content)
+        message = parse_message(content)
 
         if message.repeat:
             log("red", f"Pokedaily not ready")
