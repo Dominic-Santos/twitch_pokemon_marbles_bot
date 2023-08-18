@@ -47,6 +47,27 @@ class Message(object):
             self.last_redeemed["hours"] = self.last_redeemed["hours"] + hours
 
 
+def parse_next_available(content):
+    if "You already have claimed" not in content:
+        return 0
+
+    # already claimed this one
+    time_content = content.split("Please come back in ")[1].split(".")[0]
+
+    result = re.findall(r'\d{1,}', time_content)
+    hours = 0
+    minutes = 0
+    seconds = 0
+
+    if "hour" in time_content:
+        hours = int(result.pop(0))
+    if "minute" in time_content:
+        minutes = int(result.pop(0))
+    if "second" in time_content:
+        seconds = int(result.pop(0))
+
+    return hours * 60 * 60 + minutes * 60 + seconds
+
 def parse_message(content):
     message = Message()
 
