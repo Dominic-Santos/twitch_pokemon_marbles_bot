@@ -17,7 +17,6 @@ from ..ChatUtils import (
 
 
 class Pokedaily(object):
-
     def get_next_pokedaily(self):
         resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
         latest_message = resp["messages"][0][0]

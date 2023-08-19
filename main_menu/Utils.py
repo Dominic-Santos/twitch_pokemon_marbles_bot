@@ -1,8 +1,8 @@
 import tkinter
 
+from TwitchChannelPointsMiner.classes.entities.Pokemon.CGApi import API as PCGApi
 from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
 from TwitchChannelPointsMiner.classes.entities.Pokemon.Utils import get_sprite
-from TwitchChannelPointsMiner.classes.entities.Pokemon.CGApi import API as PCGApi
 
 POKEMON = PokemonComunityGame()
 POKEMON_API = PCGApi()
@@ -36,9 +36,9 @@ def get_sprite_cached(sprite_type, sprite_name):
         return IMAGE_PATHS[look_for]
 
     if sprite_type == "pokemon":
-        img_path = get_sprite("pokemon", sprite_name, battle=True, path=True)
+        img_path = get_sprite("pokemon", sprite_name, battle=True, path=True, use_cache=True)
     else:
-        img_path = get_sprite(sprite_type, sprite_name, path=True)
+        img_path = get_sprite(sprite_type, sprite_name, path=True, use_cache=True)
 
     IMAGE_PATHS[look_for] = img_path
     return img_path

@@ -1,11 +1,11 @@
-import tkinter
+from datetime import datetime
+from time import sleep
 from tkinter import font as TKFont
 import subprocess
-from time import sleep
-from datetime import datetime
+import tkinter
 
-from TwitchChannelPointsMiner.classes.ChatUtils import DISCORD_STATS
 from TwitchChannelPointsMiner.classes.chat_threads.DailyTasks import stats_computer, battle_summary, check_finish_pokedex
+from TwitchChannelPointsMiner.classes.ChatUtils import DISCORD_STATS
 
 from .Utils import (
     clear_widgets,

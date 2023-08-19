@@ -1,8 +1,7 @@
-from time import sleep
-import traceback
 from datetime import datetime
 from dateutil.parser import parse
-
+from time import sleep
+import traceback
 
 from ..ChatUtils import (
     CHARACTERS,

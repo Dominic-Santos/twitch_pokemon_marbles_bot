@@ -1,10 +1,9 @@
-import traceback
 from time import sleep
 import copy
+import traceback
 
 from ..entities.Pokemon import Battle, damage_calculator
 from ..entities.Pokemon.Pokedex import Move
-
 
 from ..ChatUtils import (
     DISCORD_ALERTS,

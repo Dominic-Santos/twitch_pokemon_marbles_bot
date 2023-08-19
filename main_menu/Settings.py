@@ -1,5 +1,5 @@
-import tkinter
 from tkinter.messagebox import showinfo
+import tkinter
 
 from .Classes import DropDownValue, MultiSelect
 from .Utils import (

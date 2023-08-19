@@ -1,11 +1,11 @@
-import os
-import json
-import base64
-import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
+from svglib.svglib import svg2rlg
+import base64
+import json
+import os
+import requests
 
 PCG_AUTH = "pokemon_auth_token.txt"
 
@@ -44,20 +44,20 @@ def load_pcg_auth():
         return f.readlines()[0].strip()
 
 
-def get_pokemon_battle_sprite(sprite_name, shiny=False, path=False):
+def get_pokemon_battle_sprite(sprite_name, shiny=False, path=False, use_cache=False):
     check_output_folder(f"sprites/pokemon/shiny")
 
     is_shiny = "-shiny" if shiny else ""
     url = f"https://dev.bframework.de/static/pokedex/sprites/front{is_shiny}/{sprite_name}.gif"
-
-    res = requests.get(url)
-    content = res.content
-
     shiny_prefix = "shiny/" if shiny else ""
     file_path = f"sprites/pokemon/{shiny_prefix}{sprite_name}.gif"
 
-    with open(file_path, "wb") as o:
-        o.write(content)
+    if use_cache is False or os.path.isfile(file_path) is False:
+        res = requests.get(url)
+        content = res.content
+
+        with open(file_path, "wb") as o:
+            o.write(content)
 
     if path:
         return file_path
@@ -65,19 +65,19 @@ def get_pokemon_battle_sprite(sprite_name, shiny=False, path=False):
     return open(file_path, "rb")
 
 
-def get_pokemon_menu_sprite(sprite_name, shiny=False, path=False):
+def get_pokemon_menu_sprite(sprite_name, shiny=False, path=False, use_cache=False):
     check_output_folder(f"sprites/menu_pokemon/shiny")
 
     is_shiny = "/shiny" if shiny else ""
     url = f"https://dev.bframework.de/static/pokedex/png-sprites/pokemon{is_shiny}/{sprite_name}.png"
-
-    res = requests.get(url)
-    content = res.content
-
     file_path = f"sprites/menu_pokemon{is_shiny}/{sprite_name}.png"
 
-    with open(file_path, "wb") as o:
-        o.write(content)
+    if use_cache is False or os.path.isfile(file_path) is False:
+        res = requests.get(url)
+        content = res.content
+
+        with open(file_path, "wb") as o:
+            o.write(content)
 
     if path:
         return file_path
@@ -85,17 +85,17 @@ def get_pokemon_menu_sprite(sprite_name, shiny=False, path=False):
     return open(file_path, "rb")
 
 
-def get_pokemon_sprite(sprite_name, shiny=False, battle=True, path=False):
+def get_pokemon_sprite(sprite_name, shiny=False, battle=True, path=False, use_cache=False):
     if battle:
-        return get_pokemon_battle_sprite(sprite_name, shiny, path)
+        return get_pokemon_battle_sprite(sprite_name, shiny, path, use_cache)
 
-    return get_pokemon_menu_sprite(sprite_name, shiny, path)
+    return get_pokemon_menu_sprite(sprite_name, shiny, path, use_cache)
 
 
-def get_sprite(sprite_type, sprite_name, shiny=False, battle=True, path=False):
+def get_sprite(sprite_type, sprite_name, shiny=False, battle=True, path=False, use_cache=False):
     try:
         if sprite_type == "pokemon":
-            return get_pokemon_sprite(sprite_name, shiny, battle, path)
+            return get_pokemon_sprite(sprite_name, shiny, battle, path, use_cache)
         elif sprite_type == "streamer":
             return get_streamer_avatar(sprite_name, path)
         return get_item_sprite(sprite_type, sprite_name, path)

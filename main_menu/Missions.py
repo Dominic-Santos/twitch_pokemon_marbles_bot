@@ -1,5 +1,5 @@
-import tkinter
 from tkinter import font as TKFont
+import tkinter
 
 from .Utils import (
     clear_widgets,

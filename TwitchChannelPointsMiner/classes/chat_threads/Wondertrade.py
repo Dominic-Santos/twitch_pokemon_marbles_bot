@@ -1,6 +1,7 @@
 from time import sleep
 import traceback
 
+from ..entities.Pokemon import get_sprite
 
 from ..ChatUtils import (
     CHARACTERS,
@@ -11,7 +12,6 @@ from ..ChatUtils import (
     seconds_readable,
     WONDERTRADE_DELAY,
 )
-from ..entities.Pokemon import get_sprite
 
 
 class Wondertrade(object):
