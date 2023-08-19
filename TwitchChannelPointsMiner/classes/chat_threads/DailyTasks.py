@@ -51,44 +51,46 @@ def get_battle_logs(the_date):
     }
 
 
+def battle_summary(battle_date):
+    battle_stats = get_battle_logs(battle_date)
+
+    discord_msg = f"""Battle Summary - {battle_date}:
+    Wins: {battle_stats['wins']}/{battle_stats['battles']}
+    Exp: {battle_stats['exp']}
+    $: {battle_stats['cash']}"""
+
+    return discord_msg
+
+
 def stats_computer(Pokemon, get_stats_func):
     allpokemon = Pokemon.computer.pokemon
 
-    spawnables_a = []
-    spawnables_b = []
-    spawnables_c = []
-
+    spawnables = {tier + suffix: [] for tier in ["S", "A", "B", "C"] for suffix in ["_have", "_dont_have"]}
     for i in range(1, Pokemon.pokedex.total + 1):
         pokemon = get_stats_func(i)
 
         if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable:
             continue
 
-        if pokemon.tier == "A":
-            spawnables_a.append(pokemon)
-        elif pokemon.tier == "B":
-            spawnables_b.append(pokemon)
-        elif pokemon.tier == "C":
-            spawnables_c.append(pokemon)
+        if Pokemon.pokedex.have(pokemon):
+            spawnables[pokemon.tier + "_have"].append(pokemon)
+        else:
+            spawnables[pokemon.tier + "_dont_have"].append(pokemon)
 
-    spawnables_a_total = len(spawnables_a)
-    spawnables_b_total = len(spawnables_b)
-    spawnables_c_total = len(spawnables_c)
+    for k in spawnables:
+        if "dont" not in k:
+            spawnables[k] = len(spawnables[k])
 
-    spawnables_total = spawnables_a_total + spawnables_b_total + spawnables_c_total
+    spawnables["have"] = sum(y for x, y in spawnables.items() if "dont" not in x)
 
-    spawnables_a_have = len([pokemon for pokemon in spawnables_a if Pokemon.pokedex.have(pokemon)])
-    spawnables_b_have = len([pokemon for pokemon in spawnables_b if Pokemon.pokedex.have(pokemon)])
-    spawnables_c_have = len([pokemon for pokemon in spawnables_c if Pokemon.pokedex.have(pokemon)])
-    spawnables_a_dont_have = [pokemon for pokemon in spawnables_a if Pokemon.pokedex.have(pokemon) is False]
-    spawnables_b_dont_have = [pokemon for pokemon in spawnables_b if Pokemon.pokedex.have(pokemon) is False]
-    spawnables_c_dont_have = [pokemon for pokemon in spawnables_c if Pokemon.pokedex.have(pokemon) is False]
-    spawnables_have = spawnables_a_have + spawnables_b_have + spawnables_c_have
-
-    spawnables_per = int(spawnables_have * 10000.0 / spawnables_total) / 100.0
-    spawnables_a_per = int(spawnables_a_have * 10000.0 / spawnables_a_total) / 100.0
-    spawnables_b_per = int(spawnables_b_have * 10000.0 / spawnables_b_total) / 100.0
-    spawnables_c_per = int(spawnables_c_have * 10000.0 / spawnables_c_total) / 100.0
+    spawnables_per = {}
+    for tier in ["S", "A", "B", "C"]:
+        total = Pokemon.pokedex.tier(tier)
+        if total == 0:
+            spawnables_per[tier] = 100
+        else:
+            spawnables_per[tier] = int(spawnables.get(tier + "_have", 0) * 10000.0 / total) / 100.0
+    spawnables_per["total"] = int(spawnables["have"] * 10000.0 / Pokemon.pokedex.spawnables) / 100.0
 
     results = {
         "shiny": [],
@@ -99,6 +101,13 @@ def stats_computer(Pokemon, get_stats_func):
         "bag_regular": [],
         "bag_special": [],
     }
+
+    for tier in ["S", "A", "B", "C"]:
+        results[f"trade{tier}"] = []
+
+    regions = {shrt: lng for lng, shrt in Pokemon.pokedex.prefixes.items()}
+    for region in regions.keys():
+        results[region] = []
 
     for pokemon in allpokemon:
         if pokemon["isShiny"]:
@@ -120,23 +129,28 @@ def stats_computer(Pokemon, get_stats_func):
         else:
             results["bag_special"].append(pokeobj.pokedex_id)
 
-    results["shiny"] = len(results["shiny"])
-    for k in ["starter", "female", "legendary", "bag_regular", "bag_special", "non_spawnable"]:
-        results[k] = len(set(results[k]))
+        if pokemon["nickname"] is not None and "trade" in pokemon["nickname"]:
+            results[f"trade{pokeobj.tier}"].append(pokemon)
 
-    for tier in ["S", "A", "B", "C"]:
-        results[f"trade{tier}"] = len([pokemon for pokemon in allpokemon if pokemon["nickname"] is not None and f"trade{tier}" in pokemon["nickname"]])
+        if " " in pokemon["name"]:
+            region = pokemon["name"].split(" ")[0]
+            if region in regions:
+                results[region].append(pokeobj.pokedex_id)
+
+    for k in results.keys():
+        if "trade" in k or k == "shiny":
+            results[k] = len(results[k])
+        else:
+            results[k] = len(set(results[k]))
+
+    results["trade_total"] = sum([results[k] for k in results.keys() if k.startswith("trade")])
 
     region_msg_list = []
-    prefixes = Pokemon.pokedex.prefixes
-    for region in prefixes:
-        num = len(set([pokemon["pokedexId"] for pokemon in allpokemon if pokemon["name"].startswith(prefixes[region] + " ")]))
-        if num > 0:
-            region_msg_list.append((region, num, getattr(Pokemon.pokedex, region.lower())))
+    for region in regions:
+        if results[region] > 0:
+            region_msg_list.append((regions[region], results[region], getattr(Pokemon.pokedex, regions[region].lower())))
 
     region_msg = "".join([f"\n    {region}: {num}/{total}" for region, num, total in region_msg_list])
-
-    tradable_total = sum([results[f"trade{tier}"] for tier in ["A", "B", "C"]])
 
     cash = Pokemon.inventory.cash
     pokeball = Pokemon.inventory.balls.get("pokeball", 0)
@@ -151,27 +165,15 @@ def stats_computer(Pokemon, get_stats_func):
         coins = 0
 
     max_show_missing = 20
+    missing_strings = []
+    for tier in ["A", "B", "C"]:
+        dont_haves = len(spawnables[tier + "_dont_have"])
+        if dont_haves == 0:
+            missing_strings.append("Done")
+        elif dont_haves < max_show_missing:
+            missing_strings.append("missing: " + ", ".join([pokemon.name for pokemon in spawnables[tier + "_dont_have"]]))
 
-    if len(spawnables_a_dont_have) == 0:
-        missing_a_string = "Done"
-    elif len(spawnables_a_dont_have) in range(0, max_show_missing):
-        missing_a_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_a_dont_have])
-    else:
-        missing_a_string = ""
-
-    if len(spawnables_b_dont_have) == 0:
-        missing_b_string = "Done"
-    elif len(spawnables_b_dont_have) in range(0, max_show_missing):
-        missing_b_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_b_dont_have])
-    else:
-        missing_b_string = ""
-
-    if len(spawnables_c_dont_have) == 0:
-        missing_c_string = "Done"
-    elif len(spawnables_c_dont_have) in range(0, max_show_missing):
-        missing_c_string = "missing: " + ", ".join([pokemon.name for pokemon in spawnables_c_dont_have])
-    else:
-        missing_c_string = ""
+    tradable_msg = "".join(f"\n    {tier}: {results['trade' + tier]}" for tier in ["S", "A", "B", "C"] if results["trade" + tier] > 0)
 
     msg = f"""Bag Summary:
 
@@ -184,15 +186,12 @@ Normal Version: {results["bag_regular"]}/{Pokemon.pokedex.total}
 Alt Version: {results["bag_special"]}
     {CHARACTERS["female"]}: {results["female"]}/{Pokemon.pokedex.females}{region_msg}
 
-Spawnables: {spawnables_have}/{spawnables_total} ({spawnables_per}%)
-    A: {spawnables_a_have}/{spawnables_a_total} ({spawnables_a_per}%) {missing_a_string}
-    B: {spawnables_b_have}/{spawnables_b_total} ({spawnables_b_per}%) {missing_b_string}
-    C: {spawnables_c_have}/{spawnables_c_total} ({spawnables_c_per}%) {missing_c_string}
+Spawnables: {spawnables['have']}/{Pokemon.pokedex.spawnables} ({spawnables_per['total']}%)
+    A: {spawnables['A_have']}/{Pokemon.pokedex.tier('A')} ({spawnables_per['A']}%) {missing_strings[0]}
+    B: {spawnables['B_have']}/{Pokemon.pokedex.tier('B')} ({spawnables_per['B']}%) {missing_strings[1]}
+    C: {spawnables['C_have']}/{Pokemon.pokedex.tier('C')} ({spawnables_per['C']}%) {missing_strings[2]}
 
-Tradables: {tradable_total}
-    A: {results["tradeA"]}
-    B: {results["tradeB"]}
-    C: {results["tradeC"]}
+Tradables: {results["trade_total"]}{tradable_msg}
 
 Inventory: {cash}$ {coins} Battle Coins
     pokeball: {pokeball}
@@ -202,6 +201,71 @@ Inventory: {cash}$ {coins} Battle Coins
     other: {otherball}"""
 
     return msg
+
+
+def check_finish_pokedex(Pokemon, get_stats_func):
+    must_catch = []
+    can_evolve = []
+    missing_pre_evo = []
+    stones = {}
+    required_pokemon = {}
+    for i in range(1, Pokemon.pokedex.total + 1):
+        pokemon = get_stats_func(i)
+
+        if pokemon is None:
+            continue
+
+        if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable or Pokemon.pokedex.have(pokemon):
+            continue
+
+        if len(pokemon.evolve_from) == 0:
+            must_catch.append(pokemon.name)
+            continue
+
+        have_pre_to_evolve = False
+        for pre_evolve in pokemon.evolve_from:
+            pre_pokemon = get_stats_func(pre_evolve)
+            hits = Pokemon.computer.get_pokemon(pre_pokemon)
+            if len(hits) > required_pokemon.get(pre_pokemon, 0):
+                required_pokemon[pre_pokemon] = required_pokemon.get(pre_pokemon, 0) + 1
+                have_pre_to_evolve = True
+                for evolve_into in pre_pokemon.evolve_to:
+                    if evolve_into == str(pokemon.pokedex_id):
+                        for stone in pre_pokemon.evolve_to[evolve_into]["stones"]:
+                            stones[stone["stone"]] = stones.get(stone["stone"], 0) + stone["amount"]
+                        break
+                break
+
+        if have_pre_to_evolve:
+            can_evolve.append(pokemon.name)
+        else:
+            missing_pre_evo.append(pokemon.name)
+
+    discord_msg = "Pokedex Progress:"
+    if len(must_catch) > 0:
+        discord_msg += f"\n    Must Catch: {len(must_catch)} (" + ",".join(must_catch) + ")"
+    if len(missing_pre_evo) > 0:
+        discord_msg += f"\n    Missing Evo: {len(missing_pre_evo)} (" + ",".join(missing_pre_evo) + ")"
+    if len(can_evolve) > 0:
+        discord_msg += f"\n    Can Evolve: {len(can_evolve)} (" + ",".join(can_evolve) + ")"
+
+    got_enough_stones = True
+    if len(stones.keys()) > 0:
+        discord_msg += "\n    Stone Requirements:"
+        for stone in sorted(stones.keys()):
+            stone_need = stones[stone]
+            inv_stone = Pokemon.inventory.get_item(stone + " stone")
+            stone_have = 0 if inv_stone is None else inv_stone["amount"]
+            discord_msg += f"\n        {stone}: {stone_have}/{stone_need}"
+            if stone_have >= stone_need:
+                discord_msg += " :white_check_mark:"
+            else:
+                got_enough_stones = False
+
+    if len(must_catch) == 0 and len(missing_pre_evo) == 0 and got_enough_stones:
+        discord_msg += "\n\n    POKEDEX CAN BE COMPLETED!"
+
+    return discord_msg
 
 
 class DailyTasks(object):
@@ -251,12 +315,7 @@ class DailyTasks(object):
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
     def battle_summary(self, battle_date):
-        battle_stats = get_battle_logs(battle_date)
-
-        discord_msg = f"""Battle Summary - {battle_date}:
-    Wins: {battle_stats['wins']}/{battle_stats['battles']}
-    Exp: {battle_stats['exp']}
-    $: {battle_stats['cash']}"""
+        discord_msg = battle_summary(battle_date)
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
@@ -281,62 +340,6 @@ class DailyTasks(object):
                 POKEMON.pokedex.save_pokedex()
 
     def check_finish_pokedex(self):
-        must_catch = []
-        can_evolve = []
-        missing_pre_evo = []
-        stones = {}
-        required_pokemon = {}
-        for i in range(1, POKEMON.pokedex.total + 1):
-            pokemon = self.get_pokemon_stats(i)
-
-            if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable or POKEMON.pokedex.have(pokemon):
-                continue
-
-            if len(pokemon.evolve_from) == 0:
-                must_catch.append(pokemon.name)
-                continue
-
-            have_pre_to_evolve = False
-            for pre_evolve in pokemon.evolve_from:
-                pre_pokemon = self.get_pokemon_stats(pre_evolve)
-                hits = POKEMON.computer.get_pokemon(pre_pokemon)
-                if len(hits) > required_pokemon.get(pre_pokemon, 0):
-                    required_pokemon[pre_pokemon] = required_pokemon.get(pre_pokemon, 0) + 1
-                    have_pre_to_evolve = True
-                    for evolve_into in pre_pokemon.evolve_to:
-                        if evolve_into == str(pokemon.pokedex_id):
-                            for stone in pre_pokemon.evolve_to[evolve_into]["stones"]:
-                                stones[stone["stone"]] = stones.get(stone["stone"], 0) + stone["amount"]
-                            break
-                    break
-
-            if have_pre_to_evolve:
-                can_evolve.append(pokemon.name)
-            else:
-                missing_pre_evo.append(pokemon.name)
-
-        discord_msg = "Pokedex Progress:"
-        if len(must_catch) > 0:
-            discord_msg += f"\n    Must Catch: {len(must_catch)} (" + ",".join(must_catch) + ")"
-        if len(missing_pre_evo) > 0:
-            discord_msg += f"\n    Missing Evo: {len(missing_pre_evo)} (" + ",".join(missing_pre_evo) + ")"
-        if len(can_evolve) > 0:
-            discord_msg += f"\n    Can Evolve: {len(can_evolve)} (" + ",".join(can_evolve) + ")"
-
-        got_enough_stones = True
-        if len(stones.keys()) > 0:
-            discord_msg += "\n    Stone Requirements:"
-            for stone in sorted(stones.keys()):
-                stone_need = stones[stone]
-                inv_stone = POKEMON.inventory.get_item(stone + " stone")
-                stone_have = 0 if inv_stone is None else inv_stone["amount"]
-                discord_msg += f"\n        {stone}: {stone_have}/{stone_need}"
-                if stone_have >= stone_need:
-                    discord_msg += " :white_check_mark:"
-                else:
-                    got_enough_stones = False
-
-        if len(must_catch) == 0 and len(missing_pre_evo) == 0 and got_enough_stones:
-            discord_msg += "\n\n    POKEDEX CAN BE COMPLETED!"
+        discord_msg = check_finish_pokedex(POKEMON, self.get_pokemon_stats)
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)

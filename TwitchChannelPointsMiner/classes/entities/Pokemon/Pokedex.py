@@ -49,11 +49,36 @@ class Pokedex(object):
         self.count_totals()
 
     def count_totals(self):
-        self._total_sin = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("sin ")])
-        self._total_gal = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("gal ")])
-        self._total_his = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("his ")])
-        self._total_alo = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("alo ")])
-        self._total_pcg = len([x for x in self.pokemon_stats if self.pokemon_stats[x]["name"].lower().startswith("pcg ")])
+        regions = [x.lower() for x in REGION_PREFIX.values()]
+
+        self._tiers = {x: 0 for x in ["S", "A", "B", "C"]}
+        self._alts = 0
+        self._total_regions = {x: 0 for x in regions}
+        self._starters = 0
+        self._legendaries = 0
+        self._spawnables = 0
+
+        for poke_id in self.pokemon_stats:
+            poke = self.stats(poke_id)
+
+            if poke.order == 0:
+                # not confirmed to be real pokemon yet
+                continue
+
+            if poke.pokedex_id > self._total:
+                self._alts += 1
+            else:
+                self._tiers[poke.tier] += 1
+                if poke.is_starter:
+                    self._starters += 1
+                elif poke.is_legendary:
+                    self._legendaries += 1
+                elif poke.is_non_spawnable is False:
+                    self._spawnables += 1
+            if " " in poke.name:
+                region = poke.name.lower().split(" ")[0]
+                if region in regions:
+                    self._total_regions[region] += 1
 
     def load_pokedex(self):
         try:
@@ -96,6 +121,9 @@ class Pokedex(object):
 
         self.tiers[tier].append(poke_name)
         self.save_tiers()
+
+    def tier(self, t):
+        return self._tiers.get(t, 0)
 
     def _check_valid(self, pokemon):
         for k in self.tiers.keys():
@@ -271,15 +299,15 @@ class Pokedex(object):
 
     @property
     def spawnables(self):
-        return self.total - self.starters - self.legendaries
+        return self._spawnables
 
     @property
     def starters(self):
-        return len(STARTER_POKEMON)
+        return self._starters
 
     @property
     def legendaries(self):
-        return len(LEGENDARY_POKEMON)
+        return self._legendaries
 
     @property
     def females(self):
@@ -295,20 +323,20 @@ class Pokedex(object):
 
     @property
     def galarian(self):
-        return self._total_gal
+        return self._total_regions["gal"]
 
     @property
     def hisuian(self):
-        return self._total_his
+        return self._total_regions["his"]
 
     @property
     def alolan(self):
-        return self._total_alo
+        return self._total_regions["alo"]
 
     @property
     def sinister(self):
-        return self._total_sin
+        return self._total_regions["sin"]
 
     @property
     def pcg(self):
-        return self._total_pcg
+        return self._total_regions["pcg"]
