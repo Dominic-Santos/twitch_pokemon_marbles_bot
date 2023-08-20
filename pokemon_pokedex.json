@@ -35407,7 +35407,8 @@
         "evolves_from": [
             "86322"
         ],
-        "order": 59
+        "order": 59,
+        "evolves_to": {}
     },
     "86324": {
         "pokedex_id": 86324,

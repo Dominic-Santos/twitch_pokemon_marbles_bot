@@ -215,8 +215,9 @@ class PokemonComunityGame(Loyalty):
                 reasons.append("bag")
 
         if self.settings["catch_alternates"]:
-            if self.pokedex.need_alt(pokemon):
-                reasons.append("alt")
+            if pokemon.pokedex_id > self.pokedex.total:
+                if self.pokedex.need_alt(pokemon):
+                    reasons.append("alt")
 
         missions = self.missions.check_all_missions(pokemon)
         for mission in missions:
