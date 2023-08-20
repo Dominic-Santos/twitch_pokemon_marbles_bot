@@ -45,7 +45,7 @@ class Missions(object):
         goal = mission["goal"]
         title = mission["name"]
         progress = mission["progress"]
-        progress_key = f"{goal}:{title}"
+        progress_key = self.get_unique_id(mission)
 
         self.progress[progress_key] = {
             "title": f"{title} ({goal})",
