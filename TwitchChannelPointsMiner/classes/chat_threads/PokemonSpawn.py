@@ -195,7 +195,7 @@ class PokemonSpawn(object):
                         POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
         else:
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
-            log_file("green", f"Don't need pokemon, Pokecheck in {twitch_channel}")
+            log_file("yellow", f"Don't need pokemon, Pokecheck in {twitch_channel}")
 
             client.privmsg("#" + twitch_channel, "!pokecheck")
             self.get_missions()
