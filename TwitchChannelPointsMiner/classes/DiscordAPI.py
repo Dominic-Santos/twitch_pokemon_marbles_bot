@@ -20,3 +20,8 @@ class DiscordAPI(object):
             r = requests.get(url, headers=self.get_headers())
             data = r.json()
             return data
+
+    def delete(self, url):
+        if self.auth_token is not None:
+            r = requests.delete(url, headers=self.get_headers())
+            return r.status_code == 204  # all went good

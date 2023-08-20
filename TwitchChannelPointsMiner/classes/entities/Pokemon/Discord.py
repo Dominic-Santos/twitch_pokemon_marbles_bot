@@ -26,6 +26,11 @@ class Discord(object):
             return self.api.get(url)
         return None
 
+    def delete(self, url):
+        if self.connected:
+            return self.api.delete(url)
+        return None
+
     def post(self, url, data, file=None):
         if self.connected:
             return self.api.post(url, data, file)
