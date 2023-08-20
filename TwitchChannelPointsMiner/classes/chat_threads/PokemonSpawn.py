@@ -18,8 +18,12 @@ from ..ChatUtils import (
 )
 
 
+def get_spawn():
+    return requests.get("https://poketwitch.bframework.de/info/events/last_spawn/").json()
+
+
 def get_next_spawn():
-    data = requests.get("https://poketwitch.bframework.de/info/events/last_spawn/").json()
+    data = get_spawn()
     return data["next_spawn"] + 2
 
 
@@ -66,7 +70,7 @@ class PokemonSpawn(object):
         log("yellow", f"Thread Closing - {thread_name}")
 
     def spawn(self, client):
-        data = requests.get("https://poketwitch.bframework.de/info/events/last_spawn/").json()
+        data = get_spawn()
         pokemon_id = data["pokedex_id"]
 
         pokemon = self.get_pokemon_stats(pokemon_id, cached=False)
