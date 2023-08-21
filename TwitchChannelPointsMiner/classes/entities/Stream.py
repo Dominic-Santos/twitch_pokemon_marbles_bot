@@ -56,7 +56,6 @@ class Stream(object):
         self.game = game
         # #343 temporary workaround
         self.tags = tags or []
-        # ------------------------
         self.viewers_count = viewers_count
 
         self.drops_tags = (
