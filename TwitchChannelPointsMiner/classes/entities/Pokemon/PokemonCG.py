@@ -228,8 +228,7 @@ class PokemonComunityGame(Loyalty):
 
         for poke_type in pokemon.types:
             if poke_type in self.settings["catch_types"]:
-                reasons.append("all_type")
-                break
+                reasons.append(f"all_type ({poke_type.title()})")
 
         if self.settings["catch_legendaries"] and self.pokedex.legendary(pokemon):
             reasons.append("legendary")
