@@ -84,7 +84,7 @@ def stats_computer(Pokemon, get_stats_func):
 
     spawnables_per = {}
     for tier in ["S", "A", "B", "C"]:
-        total = Pokemon.pokedex.tier(tier)
+        total = Pokemon.pokedex.spawnable_tier(tier)
         if total == 0:
             spawnables_per[tier] = 100
         else:
@@ -186,9 +186,9 @@ Alt Version: {results["bag_special"]}
     {CHARACTERS["female"]}: {results["female"]}/{Pokemon.pokedex.females}{region_msg}
 
 Spawnables: {spawnables['have']}/{Pokemon.pokedex.spawnables} ({spawnables_per['total']}%)
-    A: {spawnables['A_have']}/{Pokemon.pokedex.tier('A')} ({spawnables_per['A']}%) {missing_strings[0]}
-    B: {spawnables['B_have']}/{Pokemon.pokedex.tier('B')} ({spawnables_per['B']}%) {missing_strings[1]}
-    C: {spawnables['C_have']}/{Pokemon.pokedex.tier('C')} ({spawnables_per['C']}%) {missing_strings[2]}
+    A: {spawnables['A_have']}/{Pokemon.pokedex.spawnable_tier('A')} ({spawnables_per['A']}%) {missing_strings[0]}
+    B: {spawnables['B_have']}/{Pokemon.pokedex.spawnable_tier('B')} ({spawnables_per['B']}%) {missing_strings[1]}
+    C: {spawnables['C_have']}/{Pokemon.pokedex.spawnable_tier('C')} ({spawnables_per['C']}%) {missing_strings[2]}
 
 Tradables: {results["trade_total"]}{tradable_msg}
 

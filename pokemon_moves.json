@@ -5530,5 +5530,17 @@
         "pp": 20,
         "accuracy": 0,
         "type": "psychic"
+    },
+    "belly-drum": {
+        "name": "Belly Drum",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user maximizes its Attack stat in exchange for\r\nHP equal to half its max HP.",
+        "power": 0,
+        "pp": 10,
+        "accuracy": 0,
+        "type": "normal"
     }
 }

@@ -52,6 +52,7 @@ class Pokedex(object):
         regions = [x.lower() for x in REGION_PREFIX.values()]
 
         self._tiers = {x: 0 for x in ["S", "A", "B", "C"]}
+        self._spawnable_tiers = {x: 0 for x in ["S", "A", "B", "C"]}
         self._alts = 0
         self._total_regions = {x: 0 for x in regions}
         self._starters = 0
@@ -75,6 +76,7 @@ class Pokedex(object):
                     self._legendaries += 1
                 elif poke.is_non_spawnable is False:
                     self._spawnables += 1
+                    self._spawnable_tiers[poke.tier] += 1
             if " " in poke.name:
                 region = poke.name.lower().split(" ")[0]
                 if region in regions:
@@ -124,6 +126,9 @@ class Pokedex(object):
 
     def tier(self, t):
         return self._tiers.get(t, 0)
+
+    def spawnable_tier(self, t):
+        return self._spawnable_tiers.get(t, 0)
 
     def _check_valid(self, pokemon):
         for k in self.tiers.keys():
