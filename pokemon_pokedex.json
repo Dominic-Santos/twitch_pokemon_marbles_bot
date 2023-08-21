@@ -32546,7 +32546,8 @@
             "special_attack": 65,
             "special_defense": 90
         },
-        "order": 676
+        "order": 676,
+        "evolves_to": {}
     },
     "10344": {
         "pokedex_id": 10344,

@@ -189,14 +189,15 @@ class Missions(object):
         return mission_name in self.data
 
     def _types_mission(self, mission_name, pokemon_types):
+        to_ret = []
         if self.have_mission(mission_name):
             missions = self.data.get(mission_name)
 
             for pokemon_type in pokemon_types:
                 if pokemon_type in missions:
-                    return True
+                    to_ret.append(pokemon_types)
 
-        return False
+        return to_ret
 
     def _between_mission(self, mission_name, unit):
         if self.have_mission(mission_name):
@@ -227,8 +228,8 @@ class Missions(object):
 
     def check_all_wondertrade_missions(self, pokemon):
         reasons = []
-        if self.check_wondertrade_type_mission(pokemon.types):
-            reasons.append("type")
+        for pokemon_type in self.check_wondertrade_type_mission(pokemon.types):
+            reasons.append(f"type ({pokemon_type.title()})")
 
         if self.check_wondertrade_bst_mission(pokemon.bst):
             reasons.append("bst")
@@ -298,8 +299,8 @@ class Missions(object):
 
     def check_all_missions(self, pokemon):
         reasons = []
-        if self.check_type_mission(pokemon.types):
-            reasons.append("type")
+        for pokemon_type in self.check_type_mission(pokemon.types):
+            reasons.append(f"type ({pokemon_type.title()})")
 
         if self.check_weight_mission(pokemon.weight):
             reasons.append("weight")
@@ -319,8 +320,8 @@ class Missions(object):
         if self.check_miss_mission():
             reasons.append("miss")
 
-        if self.check_miss_type_mission(pokemon.types):
-            reasons.append("miss_type")
+        for pokemon_type in self.check_miss_type_mission(pokemon.types):
+            reasons.append(f"miss_type ({pokemon_type.title()})")
 
         if self.check_attempt_mission():
             reasons.append("attempt")
@@ -334,4 +335,4 @@ class Missions(object):
         return reasons
 
     def mission_best_ball(self, mission):
-        return mission not in ["attempt", "miss", "miss_type", "spend_money", "ball"]
+        return mission not in ["attempt", "miss", "spend_money", "ball"] or mission.startswith("miss_type")
