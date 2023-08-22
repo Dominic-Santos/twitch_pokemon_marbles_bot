@@ -19,6 +19,8 @@ class PokemonComunityGame(Loyalty):
         self.delay = 0
         self.reset_timer()
         self.last_random = None
+        self.alerts = False
+        self.alerts_channel = ""
 
         self.channel_list = []
         self.online_channels = []
@@ -27,10 +29,14 @@ class PokemonComunityGame(Loyalty):
         self.inventory = Inventory()
         self.pokedex = Pokedex()
         self.missions = Missions()
-        self.missions.new_missions_callback = self.save_settings
+        self.missions.new_missions_callback = self.new_missions
         self.computer = Computer()
 
         self.default_settings = {
+            "alert_new_missions": {
+                "value": False,
+                "hint": "Send alert to discord when new missions detected",
+            },
             "catch_everything": {
                 "value": False,
                 "hint": "Catch every pokemon that spawns",
@@ -200,6 +206,21 @@ class PokemonComunityGame(Loyalty):
 
     def sync_missions(self, missions):
         self.missions.set(missions)
+
+    def set_alerts(self, alerts, discord_alerts_channel=""):
+        self.alerts_channel = discord_alerts_channel
+        self.alerts = alerts
+
+    def new_missions(self, new_missions):
+        self.save_settings()
+        if self.alerts and self.settings["alert_new_missions"]:
+            mission_strings = []
+            for mission in new_missions:
+                reward = self.missions.get_reward(mission)
+                mission_strings.append(f"{mission['name']} ({mission['goal']}) - {reward['reward']}")
+
+            msg = "New Missions:\n    " + "\n    ".join(mission_strings)
+            self.discord.post(self.alerts_channel, msg)
 
     def set_delay(self, delay):
         self.delay = delay

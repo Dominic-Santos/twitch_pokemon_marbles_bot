@@ -10,6 +10,7 @@ class Missions(object):
         self.progress = {}
         self.skip = []
         self.skip_default = False
+        self.initial = True
 
     def reset(self):
         self.prev_progress = self.progress
@@ -17,7 +18,7 @@ class Missions(object):
         self.progress = {}
         self.data = {}
 
-    def new_missions_callback(self):
+    def new_missions_callback(self, *args):
         pass
 
     @staticmethod
@@ -84,8 +85,9 @@ class Missions(object):
         return unique_id
 
     def set(self, missions):
+        new_missions = []
         self.reset()
-        new_missions = False
+
         for mission in missions["missions"]:
             self.add_progress(mission)
 
@@ -95,10 +97,11 @@ class Missions(object):
                 mission_unique = self.get_unique_id(mission)
                 if mission_unique in self.skip:
                     continue
-                if mission_unique not in self.prev_data and self.skip_default:
+                if mission_unique not in self.prev_data and self.initial is False:
                     # new mission detected
-                    new_missions = True
-                    self.skip.append(mission_unique)
+                    if self.skip_default:
+                        self.skip.append(mission_unique)
+                    new_missions.append(mission)
 
                 mission_title = mission["name"].lower().replace("[flash]", " ").replace("[event]", " ").replace("é", "e").replace("wonder trade", "wondertrade").strip()
                 mission_title = "".join([c for c in mission_title if c.isalnum() or c == " "]).strip()
@@ -182,8 +185,10 @@ class Missions(object):
             except Exception as e:
                 print(mission["name"], "parse fail", str(e))
 
-        if new_missions:
-            self.new_missions_callback()
+        if len(new_missions) > 0:
+            self.new_missions_callback(new_missions)
+
+        self.initial = False
 
     def have_mission(self, mission_name):
         return mission_name in self.data
