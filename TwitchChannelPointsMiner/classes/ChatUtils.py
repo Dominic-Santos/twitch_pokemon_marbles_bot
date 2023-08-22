@@ -52,6 +52,8 @@ DISCORD_STATS = f"{DISCORD_BASE}channels/{STATS_CHANNEL}/messages"
 DISCORD_POKEDAILY = f"{DISCORD_BASE}channels/{POKEDAILY_CHANNEL}/messages"
 DISCORD_POKEDAILY_SEARCH = f"{DISCORD_BASE}guilds/{POKEDAILY_GUILD}/messages/search?channel_id={POKEDAILY_CHANNEL}&mentions=" + "{discord_id}"
 
+POKEMON.set_alerts(True, DISCORD_ALERTS)
+
 FISH_EVENT = False
 
 CHARACTERS = {
