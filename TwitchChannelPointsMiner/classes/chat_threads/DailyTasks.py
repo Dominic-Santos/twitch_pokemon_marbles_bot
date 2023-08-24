@@ -178,7 +178,7 @@ def stats_computer(Pokemon, get_stats_func):
 
 Starters: {results["starter"]}
 Legendary: {results["legendary"]}
-Non-Spawnables: {results["non_spawnable"]}/{Pokemon.pokedex.non_spawnables}
+Non-Spawnables: {results["non_spawnable"]}
 Shiny: {results["shiny"]}
 
 Normal Version: {results["bag_regular"]}/{Pokemon.pokedex.total}
