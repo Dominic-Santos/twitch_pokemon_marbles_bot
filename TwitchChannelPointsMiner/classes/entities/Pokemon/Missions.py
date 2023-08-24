@@ -200,7 +200,7 @@ class Missions(object):
 
             for pokemon_type in pokemon_types:
                 if pokemon_type in missions:
-                    to_ret.append(pokemon_types)
+                    to_ret.append(pokemon_type)
 
         return to_ret
 
@@ -340,4 +340,4 @@ class Missions(object):
         return reasons
 
     def mission_best_ball(self, mission):
-        return mission not in ["attempt", "miss", "spend_money", "ball"] or mission.startswith("miss_type") or mission.startswith("stones")
+        return mission not in ["attempt", "miss", "spend_money", "ball"] and mission.startswith("miss_type") is False and mission.startswith("stones") is False
