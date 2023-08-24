@@ -105,6 +105,11 @@ class PokemonSpawn(object):
                         strategy = "force"
                         break
 
+        if len([x for x in catch_reasons if x.startswith("stones")]) > 0:
+            if strategy == "worst" and POKEMON.inventory.have_ball("stoneball"):
+                ball = "stoneball"
+                strategy = "force"
+
         if len(catch_reasons) > 0:
             if strategy != "force":
                 ball = POKEMON.inventory.get_catch_ball(pokemon, repeat=repeat, strategy=strategy)

@@ -340,4 +340,4 @@ class Missions(object):
         return reasons
 
     def mission_best_ball(self, mission):
-        return mission not in ["attempt", "miss", "spend_money", "ball"] or mission.startswith("miss_type")
+        return mission not in ["attempt", "miss", "spend_money", "ball"] or mission.startswith("miss_type") or mission.startswith("stones")

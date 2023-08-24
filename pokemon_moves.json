@@ -5542,5 +5542,17 @@
         "pp": 10,
         "accuracy": 0,
         "type": "normal"
+    },
+    "boomburst": {
+        "name": "Boomburst",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user attacks everything around it with the\ndestructive power of a terrible, explosive sound.",
+        "power": 140,
+        "pp": 10,
+        "accuracy": 100,
+        "type": "normal"
     }
 }
