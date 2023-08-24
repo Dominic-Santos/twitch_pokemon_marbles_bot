@@ -117,6 +117,11 @@ class PokemonComunityGame(Loyalty):
                 "hint": "Catch any pokemon of the selected types",
                 "values": VALID_TYPES,
             },
+            "catch_stones": {
+                "value": [],
+                "hint": "Catch any pokemon of the selected types with Stone balls",
+                "values": VALID_TYPES,
+            },
             "channel_priority": {
                 "value": [],
                 "hint": "Priority channels in order of most important to least",
@@ -250,6 +255,10 @@ class PokemonComunityGame(Loyalty):
         for poke_type in pokemon.types:
             if poke_type in self.settings["catch_types"]:
                 reasons.append(f"all_type ({poke_type.title()})")
+
+        for poke_type in pokemon.types:
+            if poke_type in self.settings["catch_stones"]:
+                reasons.append(f"stones ({poke_type.title()})")
 
         if self.settings["catch_legendaries"] and self.pokedex.legendary(pokemon):
             reasons.append("legendary")

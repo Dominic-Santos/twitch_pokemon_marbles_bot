@@ -92,8 +92,8 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             channel = message.target[1:]
             loyalty_level = int(argstring.split("Your loyalty level: ")[1][0])
             loyalty_limits = argstring.split("(")[1].split(")")[0]
-            current_points = int(loyalty_limits.split("/")[0])
-            level_points = int(loyalty_limits.split("/")[1])
+            current_points = int(loyalty_limits.split("/")[0].replace(",", ""))
+            level_points = int(loyalty_limits.split("/")[1].replace(",", ""))
             log("yellow", f"{channel} loyalty {current_points}/{level_points}, level {loyalty_level}")
 
             POKEMON.set_loyalty(channel, loyalty_level, current_points, level_points)
