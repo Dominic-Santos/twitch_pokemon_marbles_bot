@@ -37,7 +37,7 @@ def test_check_missions_case1():
     assert len(reasons) == 1
     assert len(wondertrade_reasons) == 1
     assert "miss" in reasons
-    assert "type" in wondertrade_reasons
+    assert len([x for x in wondertrade_reasons if x.startswith("type ")]) > 0
     assert MISSIONS.have_wondertrade_missions()
 
 
@@ -72,7 +72,7 @@ def test_check_missions_case2():
 
     assert len(reasons) == 1
     assert len(wondertrade_reasons) == 1
-    assert "type" in reasons
+    assert len([x for x in reasons if x.startswith("type ")]) > 0
     assert "bst" in wondertrade_reasons
 
     pokemon = Pokemon()
@@ -96,9 +96,9 @@ def test_check_missions_case3():
 
     assert len(reasons) == 2
     assert len(wondertrade_reasons) == 1
-    assert "type" in reasons
+    assert len([x for x in reasons if x.startswith("type ")]) > 0
     assert "weight" in reasons
-    assert "type" in wondertrade_reasons
+    assert len([x for x in wondertrade_reasons if x.startswith("type ")]) > 0
 
 
 def test_check_missions_case4():
@@ -158,7 +158,7 @@ def test_check_missions_case8():
 
     reasons = MISSIONS.check_all_wondertrade_missions(pokemon)
     assert len(reasons) == 2
-    assert "type" in reasons
+    assert len([x for x in reasons if x.startswith("type ")]) > 0
     assert "bst" in reasons
     assert MISSIONS.have_wondertrade_missions()
 
@@ -185,7 +185,7 @@ def test_check_missions_case9():
     pokemon.types = ["Rock", "Dragon"]
     pokemon.hp = 1
     reasons = MISSIONS.check_all_missions(pokemon)
-    assert "type" in reasons
+    assert len([x for x in reasons if x.startswith("type ")]) > 0
     assert "monotype" not in reasons
 
     reasons = MISSIONS.check_all_wondertrade_missions(pokemon)
@@ -195,7 +195,7 @@ def test_check_missions_case9():
     pokemon.types = ["Grass"]
     reasons = MISSIONS.check_all_missions(pokemon)
     assert "monotype" in reasons
-    assert "miss_type" in reasons
+    assert len([x for x in reasons if x.startswith("miss_type ")]) > 0
 
     assert missions.get("stadium", "") == "medium"
     assert MISSIONS.check_stadium_mission()
