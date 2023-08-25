@@ -104,10 +104,12 @@ class PokemonSpawn(object):
                     strategy = "force"
                     break
 
-        if len([x for x in catch_reasons if x.startswith("stones")]) > 0:
-            if strategy == "worst" and POKEMON.inventory.have_ball("stoneball"):
+        if len([x for x in catch_reasons if x.startswith("stones")]) > 0 and strategy == "worst":
+            if POKEMON.inventory.have_ball("stoneball"):
                 ball = "stoneball"
                 strategy = "force"
+            else:
+                strategy = "best"
 
         if len(catch_reasons) == 0:
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
