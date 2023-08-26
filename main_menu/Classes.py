@@ -28,7 +28,7 @@ class MultiSelect():
         self.parent = parent
         self.option = option
         self.options = sorted(options)
-        self.selected = selected
+        self.selected = [x for x in selected if x in options]
 
         self.page = 0
         self.page_size = 40

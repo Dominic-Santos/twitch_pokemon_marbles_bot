@@ -1,5 +1,4 @@
-
-VALID_TYPES = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water']
+from .Inventory import POKEMON_TYPES
 
 
 class Missions(object):
@@ -152,7 +151,7 @@ class Missions(object):
                     just_miss = True
                     if len(miss_list) > 2:
                         the_type = miss_list[1].title()
-                        if the_type in VALID_TYPES:
+                        if the_type in POKEMON_TYPES:
                             just_miss = False
 
                     if just_miss:
@@ -338,6 +337,3 @@ class Missions(object):
             reasons.append("monotype")
 
         return reasons
-
-    def mission_best_ball(self, mission):
-        return mission not in ["attempt", "miss", "spend_money", "ball"] and mission.startswith("miss_type") is False and mission.startswith("stones") is False

@@ -3,8 +3,8 @@ from datetime import datetime
 import json
 
 from .Discord import Discord
-from .Missions import Missions, VALID_TYPES
-from .Inventory import Inventory
+from .Missions import Missions
+from .Inventory import Inventory, POKEMON_TYPES
 from .Pokedex import Pokedex
 from .Computer import Computer
 from .Loyalty import Loyalty
@@ -32,6 +32,8 @@ class PokemonComunityGame(Loyalty):
         self.missions = Missions()
         self.missions.new_missions_callback = self.new_missions
         self.computer = Computer()
+
+        all_pokemon = [self.pokedex.clean_name(self.pokedex.stats(str(x)).name) for x in range(1, self.pokedex.total + 1)]
 
         self.default_settings = {
             "alert_new_missions": {
@@ -111,7 +113,12 @@ class PokemonComunityGame(Loyalty):
             "catch": {
                 "value": [],
                 "hint": "Catch any of the selected pokemon",
-                "values": [self.pokedex.stats(str(x)).name for x in range(1, self.pokedex.total + 1)],
+                "values": all_pokemon,
+            },
+            "shiny_hunt": {
+                "value": [],
+                "hint": "Catch any of the selected pokemon with cherish balls if possible",
+                "values": all_pokemon,
             },
             "catch_tiers": {
                 "value": [],
@@ -121,12 +128,12 @@ class PokemonComunityGame(Loyalty):
             "catch_types": {
                 "value": [],
                 "hint": "Catch any pokemon of the selected types",
-                "values": VALID_TYPES,
+                "values": POKEMON_TYPES,
             },
             "catch_stones": {
                 "value": [],
                 "hint": "Catch any pokemon of the selected types with Stone balls",
-                "values": VALID_TYPES,
+                "values": POKEMON_TYPES,
             },
             "channel_priority": {
                 "value": [],
@@ -143,7 +150,7 @@ class PokemonComunityGame(Loyalty):
             "trade_keep": {
                 "value": [],
                 "hint": "Won't wondertrade any of the selected pokemon",
-                "values": [self.pokedex.stats(str(x)).name for x in range(1, self.pokedex.total + 1)],
+                "values": all_pokemon,
             },
             "skip_missions": {
                 # requires special way to toggle each mission
@@ -180,6 +187,8 @@ class PokemonComunityGame(Loyalty):
             changes = self.set(j.get("settings", {}))
 
         self.inventory.use_special_balls = self.settings["use_special_balls"]
+        self.inventory.spend_money_strategy = self.settings["spend_money_strategy"]
+        self.inventory.money_saving = self.settings["money_saving"]
         self.missions.skip = self.settings["skip_missions"]
         self.missions.skip_default = self.settings["skip_missions_default"]
 
@@ -258,6 +267,9 @@ class PokemonComunityGame(Loyalty):
         if self.pokedex.clean_name(pokemon) in self.settings["catch"]:
             reasons.append("catch")
 
+        elif self.pokedex.clean_name(pokemon) in self.settings["shiny_hunt"]:
+            reasons.append("shiny_hunt")
+
         for poke_type in pokemon.types:
             if poke_type in self.settings["catch_types"]:
                 reasons.append(f"all_type ({poke_type.title()})")
@@ -294,21 +306,7 @@ class PokemonComunityGame(Loyalty):
             if channel is not None:
                 if channel not in self.loyalty_data or self.loyalty_data[channel]["featured"] >= self.settings["spend_money_level"]:
                     reasons.append("spend_money")
-
-        strategy = "worst"
-        for reason in reasons:
-            if self.missions.mission_best_ball(reason):
-                strategy = "best"
-                break
-        if strategy == "best":
-            if self.inventory.cash < self.settings["money_saving"]:
-                strategy = "save"
-
-        if len(reasons) == 1 and "spend_money" in reasons:
-            # if the only reason is to spend money, then apply the selected strategy
-            strategy = self.settings["spend_money_strategy"]
-
-        return reasons, strategy
+        return reasons
 
     # ########### Channels ############
 

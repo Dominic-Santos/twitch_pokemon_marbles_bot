@@ -691,29 +691,31 @@ def test_best_ball():
     pokemon = Pokemon()
     pokemon.types = ["Dark"]
     INVENTORY.set(INVENTORY_DATA)
+    reasons = ["pokedex"]
 
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="best") == "ultraball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "ultraball"
     INVENTORY.balls["ultraball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="best") == "nightball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "nightball"
     pokemon.types = []
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="best") == "greatball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     INVENTORY.balls["greatball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="best") == "pokeball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
     INVENTORY.balls["pokeball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="best") == "premierball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "premierball"
 
 
 def test_worst_ball():
     pokemon = Pokemon()
     INVENTORY.set(INVENTORY_DATA)
+    reasons = ["attempt"]
 
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="worst") == "premierball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "premierball"
     INVENTORY.balls["premierball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="worst") == "pokeball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
     INVENTORY.balls["pokeball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="worst") == "greatball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     INVENTORY.balls["greatball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="worst") == "ultraball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "ultraball"
 
 
 def test_save_ball():
@@ -721,26 +723,37 @@ def test_save_ball():
     pokemon.types = ["Dark"]
     pokemon.tier = "S"
     INVENTORY.set(INVENTORY_DATA)
+    INVENTORY.money_saving = 1000
+    INVENTORY.cash = 0
+    reasons = ["pokedex"]
 
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "ultraball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "ultraball"
     INVENTORY.balls["ultraball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "nightball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "nightball"
     pokemon.types = []
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "greatball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     INVENTORY.balls["greatball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "pokeball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
     INVENTORY.balls["pokeball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "premierball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "premierball"
 
     INVENTORY.set(INVENTORY_DATA)
+    INVENTORY.cash = 0
+    INVENTORY.money_saving = 1000
     pokemon.tier = "A"
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "ultraball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "ultraball"
     pokemon.tier = "B"
     pokemon.types = ["Dark"]
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "nightball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "nightball"
     pokemon.types = []
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "greatball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     pokemon.tier = "C"
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "pokeball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
     INVENTORY.balls["pokeball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, repeat=False, strategy="save") == "premierball"
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "premierball"
+
+
+def test_have_ball():
+    INVENTORY.set(INVENTORY_DATA)
+    for ball in ("pokeball", "ultraball", "ultracherishball", "greatcherishball", "cherishball"):
+        assert INVENTORY.have_ball(ball)

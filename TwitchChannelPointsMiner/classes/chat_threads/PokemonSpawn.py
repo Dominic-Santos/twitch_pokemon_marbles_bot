@@ -89,27 +89,7 @@ class PokemonSpawn(object):
         self.get_missions()
 
         # find reasons to catch the pokemon
-        catch_reasons, strategy = POKEMON.need_pokemon(pokemon)
-        repeat = True
-
-        for reason in ["pokedex", "bag", "alt"]:
-            if reason in catch_reasons:
-                repeat = False
-                break
-
-        if "ball" in catch_reasons and strategy == "worst":
-            for catch_ball in POKEMON.missions.data["ball"]:
-                if POKEMON.inventory.have_ball(catch_ball + "ball"):
-                    ball = catch_ball + "ball"
-                    strategy = "force"
-                    break
-
-        if len([x for x in catch_reasons if x.startswith("stones")]) > 0 and strategy == "worst":
-            if POKEMON.inventory.have_ball("stoneball"):
-                ball = "stoneball"
-                strategy = "force"
-            else:
-                strategy = "best"
+        catch_reasons = POKEMON.need_pokemon(pokemon)
 
         if len(catch_reasons) == 0:
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
@@ -119,11 +99,11 @@ class PokemonSpawn(object):
             self.get_missions()
             return
 
-        if strategy != "force":
-            ball = POKEMON.inventory.get_catch_ball(pokemon, repeat=repeat, strategy=strategy)
+        mission_balls = [] if "ball" not in catch_reasons else POKEMON.missions.data["ball"]
+        ball = POKEMON.inventory.get_catch_ball(pokemon, catch_reasons, mission_balls)
 
         if ball is None:
-            log_file("red", f"Won't catch {pokemon.name} ran out of balls (strategy: {strategy})")
+            log_file("red", f"Won't catch {pokemon.name}, ran out of balls")
             return
 
         twitch_channel = POKEMON.get_channel()
