@@ -196,6 +196,7 @@ class PokemonSpawn(object):
                 prefix = amount_got
 
             rewards_msg = f"You got {prefix} {item_str} from your last catch!"
+            log("green", rewards_msg)
             sprite = get_sprite(item["category"], item["sprite"])
             POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
 

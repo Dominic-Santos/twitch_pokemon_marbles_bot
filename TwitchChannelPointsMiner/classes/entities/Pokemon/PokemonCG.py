@@ -10,6 +10,7 @@ from .Computer import Computer
 from .Loyalty import Loyalty
 
 SETTINGS_FILE = "pokemon.json"
+TIERS = ["S", "A", "B", "C"]
 
 
 class PokemonComunityGame(Loyalty):
@@ -48,6 +49,11 @@ class PokemonComunityGame(Loyalty):
             "catch_fish": {
                 "value": False,
                 "hint": "Catch all Fish pokemon (used for events)",
+            },
+            "trade_tiers": {
+                "value": ["A", "B", "C"],
+                "hint": "Wondertrade any pokemon of the selected tiers",
+                "values": TIERS,
             },
             "catch_dogs": {
                 "value": False,
@@ -110,7 +116,7 @@ class PokemonComunityGame(Loyalty):
             "catch_tiers": {
                 "value": [],
                 "hint": "Catch any pokemon of the selected tiers",
-                "values": ["S", "A", "B", "C"],
+                "values": TIERS,
             },
             "catch_types": {
                 "value": [],
@@ -350,6 +356,10 @@ class PokemonComunityGame(Loyalty):
     @property
     def wondertrade_starters(self):
         return self.settings["trade_starters"]
+
+    @property
+    def wondertrade_tiers(self):
+        return sorted(self.settings["trade_tiers"], key=lambda x: "0" if x == "S" else x)
 
     def wondertrade_keep(self, pokemon):
         return self.pokedex.clean_name(pokemon) in self.settings["trade_keep"]
