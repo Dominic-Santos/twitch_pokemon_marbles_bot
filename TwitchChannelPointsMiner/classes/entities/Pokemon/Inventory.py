@@ -5,7 +5,11 @@ POKEMON_TYPES = ["Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bu
 
 class Inventory(object):
     def __init__(self):
+        # updated from config by PCG
         self.use_special_balls = True
+        self.spend_money_strategy = "save"
+        self.money_saving = 0
+
         self.reset()
 
     def reset(self):
@@ -52,7 +56,61 @@ class Inventory(object):
     def have_item(self, item_name):
         return self.get_item(item_name) is not None
 
-    def get_catch_ball(self, pokemon, repeat=False, strategy="best"):
+    # ##### Balls ####
+
+    def _get_strategy(self, catch_reasons, mission_balls):
+
+        reasons = [reason.split(" (")[0] for reason in catch_reasons]
+
+        if len(reasons) == 1 and "spend_money" in reasons:
+            # if the only reason is to spend money, then apply the selected strategy
+            return self.spend_money_strategy, None
+
+        for reason in reasons:
+            if reason not in ["attempt", "miss", "spend_money", "ball", "shiny_hunt", "miss_type", "stones"]:
+                return "best", None
+
+        for catch_ball in mission_balls:
+            ball = catch_ball + "ball"
+            if self.have_ball(ball):
+                return "force", ball
+
+        if "shiny_hunt" in reasons:
+            for ball in ["ultracherishball", "greatcherishball", "cherishball"]:
+                if self.have_ball(ball):
+                    return "force", ball
+            return "best", None
+
+        if len([x for x in reasons if x.startswith("stones")]) > 0:
+            if self.have_ball("stoneball"):
+                return "force", "stoneball"
+            else:
+                return "best", None
+
+        return "worst", None
+
+    def get_strategy(self, reasons, mission_balls):
+        strategy, ball = self._get_strategy(reasons, mission_balls)
+
+        if strategy == "best":
+            if self.cash < self.money_saving:
+                strategy = "save"
+
+        return strategy, ball
+
+    def is_repeat(self, reasons):
+        for reason in ["pokedex", "alt"]:
+            if reason in reasons:
+                return False
+        return True
+
+    def get_catch_ball(self, pokemon, reasons, mission_balls=[]):
+        repeat = self.is_repeat(reasons)
+
+        strategy, ball = self.get_strategy(reasons, mission_balls)
+        if ball is not None:
+            return ball
+
         if strategy == "best":
             return self.get_catch_best_ball(pokemon, repeat)
 
