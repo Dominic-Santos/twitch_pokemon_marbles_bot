@@ -5554,5 +5554,17 @@
         "pp": 10,
         "accuracy": 100,
         "type": "normal"
+    },
+    "recover": {
+        "name": "Recover",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "Restoring its own cells, the user restores its own HP\r\nby half of its max HP.",
+        "power": 0,
+        "pp": 3,
+        "accuracy": 0,
+        "type": "normal"
     }
 }
