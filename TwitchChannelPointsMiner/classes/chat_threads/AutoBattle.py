@@ -13,6 +13,12 @@ from ..ChatUtils import (
     seconds_readable,
 )
 
+POTIONS = {
+    20: {"name": "potion", "shopname": "potion", "price": 100, "item_id": 5},
+    40: {"name": "super potion", "shopname": "super_potion", "price": 250, "item_id": 39},
+    100: {"name": "hyper potion", "shopname": "hyper_potion", "price": 400, "item_id": 40},
+}
+
 
 class AutoBattle(object):
     def battle_timer(self):
@@ -33,6 +39,40 @@ class AutoBattle(object):
                 sleep(10)
 
         log("yellow", f"Thread Closing - {thread_name}")
+
+    def heal_pokemon(self, pokemon_id, pokemon_name):
+        pokemon = self.pokemon_api.get_pokemon(pokemon_id)
+        missing_hp = pokemon["maxHp"] - pokemon["hp"]
+
+        for heal in sorted(POTIONS.keys(), reverse=True):
+            if missing_hp < heal:
+                continue
+
+            # found appropriate potion to use
+            the_potion = POTIONS[heal]
+            readable_name = the_potion['name'].title()
+
+            if POKEMON.inventory.have_item(the_potion["name"]):
+                # already have the potion, don't need to buy one
+                POKEMON.inventory.use_item(the_potion["name"])
+
+            elif the_potion["price"] <= POKEMON.inventory.cash:
+                # don't have potion, will buy
+                self.pokemon_api.buy_item(the_potion['shopname'], 1)
+                log_file("yellow", f"Purchased a {readable_name}")
+
+            else:
+                log("red", f"Won't heal pokemon {pokemon_name}, can't afford {readable_name}")
+                return
+
+            self.pokemon_api.use_item_on_pokemon(pokemon_id, the_potion["item_id"])
+            log("yellow", f"Healed {pokemon_name} with {readable_name}")
+            return
+
+    def heal_team(self, team):
+        for pokemon in team:
+            if pokemon["hpPercent"] < POKEMON.battle_heal_percent:
+                self.heal_pokemon(pokemon["id"], pokemon["name"])
 
     def auto_battle(self):
 
@@ -86,6 +126,9 @@ class AutoBattle(object):
 
                 team_data = self.pokemon_api.get_teams()
                 if team_data[battle_mode]["meet_requirements"]:
+                    if POKEMON.battle_heal:
+                        self.heal_team(team_data["allPokemon"])
+
                     team_id = team_data["teamNumber"]
                     data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
                     battle_message = f"{difficulty} {battle_mode}" if battle_mode == "stadium" else battle_mode

@@ -11,12 +11,19 @@ from ..ChatUtils import (
     POKEMON,
 )
 
+POTION_COSTS = {
+    "Potion": 100,
+    "Super Potion": 250,
+    "Hyper Potion": 400,
+}
+
 
 def get_battle_logs(the_date):
     total_exp = 0
     total_cash = 0
     total_battles = 0
     total_wins = 0
+    total_potions = {}
 
     with open(LOGFILE, mode="rb") as file:
         for uline in file:
@@ -25,28 +32,30 @@ def get_battle_logs(the_date):
             except:
                 continue
 
-            if "the battle!" not in line:
-                continue
+            if "the battle!" in line:
+                linedate = parse(line.split(" ")[0])
+                if linedate.date() != the_date:
+                    continue
 
-            linedate = parse(line.split(" ")[0])
-            if linedate.date() != the_date:
-                continue
+                rewards = line.split("rewards: ")[1].split(" and ")
+                exp = int(rewards[0][:-3])
+                cash = int(rewards[1][:-1])
 
-            rewards = line.split("rewards: ")[1].split(" and ")
-            exp = int(rewards[0][:-3])
-            cash = int(rewards[1][:-1])
-
-            total_exp += exp
-            total_cash += cash
-            total_battles += 1
-            if "Won" in line:
-                total_wins += 1
+                total_exp += exp
+                total_cash += cash
+                total_battles += 1
+                if "Won" in line:
+                    total_wins += 1
+            elif "Purchased" in line and "Potion" in line:
+                the_potion = line.split(" a ")[1].strip()
+                total_potions[the_potion] = total_potions.get(the_potion, 0) + 1
 
     return {
         "cash": total_cash,
         "exp": total_exp,
         "battles": total_battles,
         "wins": total_wins,
+        "potions": total_potions,
     }
 
 
@@ -57,6 +66,19 @@ def battle_summary(battle_date):
     Wins: {battle_stats['wins']}/{battle_stats['battles']}
     Exp: {battle_stats['exp']}
     $: {battle_stats['cash']}"""
+
+    if battle_stats["potions"] != {}:
+        total_price = 0
+        potion_msgs = []
+        for potion in sorted(battle_stats["potions"].keys()):
+            amount = battle_stats["potions"][potion]
+            price = "?" if potion not in POTION_COSTS else POTION_COSTS[potion] * amount
+            if price != "?":
+                total_price += price
+            potion_msgs.append(f"\n    {potion} x{amount} ({price})")
+
+        potions_str = "".join(potion_msgs)
+        discord_msg = discord_msg + f"\n\nPotions Purchased ({total_price}):{potions_str}"
 
     return discord_msg
 
