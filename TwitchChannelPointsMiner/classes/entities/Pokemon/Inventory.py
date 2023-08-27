@@ -54,7 +54,13 @@ class Inventory(object):
         return self.items.get(item_name.lower(), None)
 
     def have_item(self, item_name):
-        return self.get_item(item_name) is not None
+        the_item = self.get_item(item_name)
+        return the_item is not None and the_item["amount"] > 0
+
+    def use_item(self, item_name):
+        name = item_name.lower()
+        if self.have_item(name):
+            self.items[name]["amount"] = self.items[name]["amount"] - 1
 
     # ##### Balls ####
 

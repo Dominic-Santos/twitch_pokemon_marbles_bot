@@ -85,6 +85,18 @@ class PokemonComunityGame(Loyalty):
                 "value": False,
                 "hint": "Allow AI to battle hard stadium battles",
             },
+            "battle_heal": {
+                "value": False,
+                "hint": "Heal Pokemon in battle team",
+            },
+            "battle_heal_percent": {
+                "value": 50,
+                "hint": "Heal pokemon when below a certain HP percent",
+                "values": {
+                    "max": 99,
+                    "min": 0,
+                },
+            },
             "auto_battle_challenge": {
                 "value": True,
                 "hint": "When auto_battle is active, also allow AI to attempt Challenges when available",
@@ -370,3 +382,11 @@ class PokemonComunityGame(Loyalty):
     @property
     def auto_battle_challenge(self):
         return self.settings["auto_battle_challenge"]
+
+    @property
+    def battle_heal(self):
+        return self.settings["battle_heal"]
+
+    @property
+    def battle_heal_percent(self):
+        return self.settings["battle_heal_percent"]
