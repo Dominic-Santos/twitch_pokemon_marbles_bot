@@ -27,6 +27,11 @@ def get_next_spawn():
     return data["next_spawn"] + 2
 
 
+def get_current_spawn():
+    data = get_spawn()
+    return 15 * 60 - data["next_spawn"]
+
+
 class PokemonSpawn(object):
     def spawn_timer(self):
         thread_name = "Spawn Timer"
@@ -109,10 +114,16 @@ class PokemonSpawn(object):
         twitch_channel = POKEMON.get_channel()
 
         reasons_string = ", ".join(catch_reasons)
+        message = f"!pokecatch {ball}"
+
+        if ball == "timerball":
+            wait = 85 - get_current_spawn()
+            log("green", "Timerball selected, waiting {wait} seconds to catch")
+            sleep(wait)
+
         log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
         log("green", f"Trying to catch in {twitch_channel}")
 
-        message = f"!pokecatch {ball}"
         client.privmsg("#" + twitch_channel, message)
 
         sleep(5)
