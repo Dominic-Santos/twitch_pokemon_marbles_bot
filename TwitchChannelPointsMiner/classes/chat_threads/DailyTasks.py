@@ -75,10 +75,10 @@ def battle_summary(battle_date):
             price = "?" if potion not in POTION_COSTS else POTION_COSTS[potion] * amount
             if price != "?":
                 total_price += price
-            potion_msgs.append(f"\n    {potion} x{amount} ({price})")
+            potion_msgs.append(f"\n    {potion} x{amount} ({price}$)")
 
         potions_str = "".join(potion_msgs)
-        discord_msg = discord_msg + f"\n\nPotions Purchased ({total_price}):{potions_str}"
+        discord_msg = discord_msg + f"\n\nPotions Purchased ({total_price}$):{potions_str}"
 
     return discord_msg
 
