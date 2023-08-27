@@ -165,11 +165,11 @@ class Inventory(object):
                 yield "masterball"
 
         if self.use_special_balls:
-            if self.have_ball("quickball"):
-                yield "quickball"
-
             if self.have_ball("timerball"):
                 yield "timerball"
+
+            if self.have_ball("quickball"):
+                yield "quickball"
 
             if pokemon.is_fish and "Fish" in self.other_balls:
                 for ball in self.other_balls["Fish"]:
