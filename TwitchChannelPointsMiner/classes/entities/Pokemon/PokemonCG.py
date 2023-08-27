@@ -92,10 +92,6 @@ class PokemonComunityGame(Loyalty):
             "battle_heal_percent": {
                 "value": 50,
                 "hint": "Heal pokemon when below a certain HP percent",
-                "values": {
-                    "max": 99,
-                    "min": 0,
-                },
             },
             "auto_battle_challenge": {
                 "value": True,
