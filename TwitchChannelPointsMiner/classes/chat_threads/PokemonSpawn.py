@@ -118,7 +118,7 @@ class PokemonSpawn(object):
 
         if ball == "timerball":
             wait = 85 - get_current_spawn()
-            log("green", "Timerball selected, waiting {wait} seconds to catch")
+            log("green", f"Timerball selected, waiting {wait} seconds to catch")
             sleep(wait)
 
         log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
