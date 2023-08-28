@@ -5,10 +5,9 @@ import traceback
 from ..entities.Pokemon import Battle, damage_calculator
 from ..entities.Pokemon.Pokedex import Move
 
+from ..ChatLogs import log, log_file
 from ..ChatUtils import (
     DISCORD_ALERTS,
-    log,
-    log_file,
     POKEMON,
     seconds_readable,
 )

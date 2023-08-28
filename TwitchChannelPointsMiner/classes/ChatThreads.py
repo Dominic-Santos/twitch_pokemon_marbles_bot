@@ -1,6 +1,7 @@
 from time import sleep
 
-from .ChatUtils import THREADCONTROLLER, create_thread, log, POKEMON
+from .ChatUtils import THREADCONTROLLER, create_thread, POKEMON
+from .ChatLogs import log
 from .chat_threads.DailyTasks import DailyTasks
 from .chat_threads.Pokedaily import Pokedaily
 from .chat_threads.PokemonSpawn import PokemonSpawn

@@ -104,13 +104,14 @@ def test_check_missions_case3():
 def test_check_missions_case4():
     MISSIONS.set(MISSIONS_JSON_4)
     missions = MISSIONS.data
-    assert len(missions.keys()) == 4
+    assert len(missions.keys()) == 5
     assert len(missions.get("bst", [])) == 1
     assert missions.get("bst", [(0, 0)])[0] == (0, 333)
     assert len(missions.get("type", [])) == 1
     assert missions.get("type", ["none"])[0] == "Psychic"
     assert missions.get("attempt", False) == True
     assert missions.get("miss", False) == True
+    assert missions.get("wondertrade", False) == True
 
 
 def test_check_missions_case5_fish():

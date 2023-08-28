@@ -7,11 +7,10 @@ import traceback
 
 from ..entities.Pokemon import get_sprite
 
+from ..ChatLogs import log, log_file
 from ..ChatUtils import (
     DISCORD_ALERTS,
     FISH_EVENT,
-    log,
-    log_file,
     POKEMON,
     seconds_readable,
     THREADCONTROLLER,

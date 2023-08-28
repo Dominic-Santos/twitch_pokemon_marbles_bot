@@ -7,9 +7,8 @@ from .ChatO import ChatPresence as ChatPresenceO
 from .ChatO import ThreadChat as ThreadChatO
 
 from .ChatThreads import ChatThreads
+from .ChatLogs import log, log_file
 from .ChatUtils import (
-    log,
-    log_file,
     ITEM_MIN_AMOUNT,
     ITEM_MIN_PURCHASE,
     MARBLES_DELAY,
