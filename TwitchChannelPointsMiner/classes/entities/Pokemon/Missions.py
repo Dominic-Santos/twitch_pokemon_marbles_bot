@@ -184,7 +184,6 @@ class Missions(object):
             except Exception as e:
                 print(mission["name"], "parse fail", str(e))
 
-        print("new missions", new_missions)
         if len(new_missions) > 0:
             self.new_missions_callback(new_missions)
 
