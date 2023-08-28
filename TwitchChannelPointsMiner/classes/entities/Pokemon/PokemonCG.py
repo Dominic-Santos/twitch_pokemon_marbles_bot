@@ -9,6 +9,8 @@ from .Pokedex import Pokedex
 from .Computer import Computer
 from .Loyalty import Loyalty
 
+from ..ChatUtils import log
+
 SETTINGS_FILE = "pokemon.json"
 TIERS = ["S", "A", "B", "C"]
 
@@ -241,12 +243,15 @@ class PokemonComunityGame(Loyalty):
 
     def new_missions(self, new_missions):
         self.save_settings()
-        if self.alerts and self.settings["alert_new_missions"]:
-            mission_strings = []
-            for mission in new_missions:
-                reward = self.missions.get_reward(mission)
-                mission_strings.append(f"{mission['name']} ({mission['goal']}) - {reward['reward']}")
 
+        mission_strings = []
+        for mission in new_missions:
+            reward = self.missions.get_reward(mission)
+            mission_strings.append(f"{mission['name']} ({mission['goal']}) - {reward['reward']}")
+
+        log("yellow", "New Missions: " + "; ".join(mission_strings))
+
+        if self.alerts and self.settings["alert_new_missions"]:
             msg = "New Missions:\n    " + "\n    ".join(mission_strings)
             self.discord.post(self.alerts_channel, msg)
 
