@@ -112,7 +112,7 @@ class Missions(object):
                         pass
                     elif "level" in mission_title or "lvl" in mission_title:
                         the_level = int("".join([c for c in mission_title if c.isnumeric()]))
-                        if "higher" in mission_title:
+                        if "higher" in mission_title or "above" in mission_title:
                             self.data.setdefault("wondertrade_level", []).append((the_level, 9999))
                         else:
                             self.data.setdefault("wondertrade_level", []).append((0, the_level))
