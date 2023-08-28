@@ -1,24 +1,7 @@
-import logging
-import os
 from datetime import timedelta
 from threading import Thread
 
-
-from .ChatO import logger
-
 from .entities.Pokemon import PokemonComunityGame
-
-if os.path.exists("logs") is False:
-    os.makedirs("logs")
-
-LOGFILE = "logs/pokemoncg.txt"
-
-formatter = logging.Formatter('%(asctime)s %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
-file_handler = logging.FileHandler(LOGFILE, encoding='utf-8')
-file_handler.setFormatter(formatter)
-poke_logger = logging.getLogger(__name__ + "pokemon")
-poke_logger.setLevel(logging.DEBUG)
-poke_logger.addHandler(file_handler)
 
 ITEM_MIN_AMOUNT = 10
 ITEM_MIN_PURCHASE = 10
@@ -68,14 +51,6 @@ def _clean_text(level, text):
         color = LOG_COLORS[level]
         return f"{color}{text}"
     return text
-
-
-def log(level="none", text=""):
-    logger.info(_clean_text(level, text), extra={"emoji": ":speech_balloon:"})
-
-
-def log_file(level="none", text=""):
-    poke_logger.info(_clean_text(level, text))
 
 
 def seconds_readable(seconds):

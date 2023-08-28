@@ -3,11 +3,10 @@ from dateutil.parser import parse
 from time import sleep
 import traceback
 
+from ..ChatLogs import log, LOGFILE
 from ..ChatUtils import (
     CHARACTERS,
     DISCORD_STATS,
-    log,
-    LOGFILE,
     POKEMON,
 )
 

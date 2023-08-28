@@ -96,91 +96,23 @@ class Missions(object):
                 mission_unique = self.get_unique_id(mission)
                 if mission_unique in self.skip:
                     continue
+
+                detected_mission = self.parse_mission(mission)
+
+                if detected_mission is None:
+                    mission["detected"] = "unknown"
+                else:
+                    mission["detected"] = f"{detected_mission[0]} {str(detected_mission[2])}"
+                    if detected_mission[1]:
+                        self.data.setdefault(detected_mission[0], []).append(detected_mission[2])
+                    else:
+                        self.data[detected_mission[0]] = detected_mission[2]
+
                 if mission_unique not in self.prev_progress and self.initial is False:
                     # new mission detected
                     if self.skip_default:
                         self.skip.append(mission_unique)
                     new_missions.append(mission)
-
-                mission_title = mission["name"].lower().replace("[flash]", " ").replace("[event]", " ").replace("é", "e").replace("wonder trade", "wondertrade").strip()
-                mission_title = "".join([c for c in mission_title if c.isalnum() or c == " "]).strip()
-                mission_title = " ".join([w for w in mission_title.split(" ") if w != ""])
-
-                if mission_title.startswith("wondertrade"):
-                    if mission_title == "wondertrade":
-                        # just wondertrade anything does not require a mission
-                        pass
-                    elif "level" in mission_title or "lvl" in mission_title:
-                        the_level = int("".join([c for c in mission_title if c.isnumeric()]))
-                        if "higher" in mission_title or "above" in mission_title:
-                            self.data.setdefault("wondertrade_level", []).append((the_level, 9999))
-                        else:
-                            self.data.setdefault("wondertrade_level", []).append((0, the_level))
-                    elif " fish " in mission_title:
-                        self.data["wondertrade_fish"] = True
-                    elif " cat " in mission_title:
-                        self.data["wondertrade_cat"] = True
-                    elif " dog " in mission_title:
-                        self.data["wondertrade_dog"] = True
-                    elif "bst" in mission_title:
-                        the_bst = int("".join([c for c in mission_title if c.isnumeric()]))
-                        if "less than" in mission_title:
-                            self.data.setdefault("wondertrade_bst", []).append((0, the_bst))
-                        else:
-                            self.data.setdefault("wondertrade_bst", []).append((the_bst, 9999))
-                    elif "kg" in mission_title:
-                        pass
-                    else:
-                        the_type = mission_title.split(" ")[1].title()
-                        self.data.setdefault("wondertrade_type", []).append(the_type)
-                elif "stadium" in mission_title:
-                    if "easy" in mission_title:
-                        self.data["stadium"] = "easy"
-                    elif "medium" in mission_title:
-                        self.data["stadium"] = "medium"
-                    elif "hard" in mission_title:
-                        self.data["stadium"] = "hard"
-                elif " fish " in mission_title:
-                    self.data["fish"] = True
-                elif " cat " in mission_title:
-                    self.data["cat"] = True
-                elif " dog " in mission_title:
-                    self.data["dog"] = True
-                elif "miss" in mission_title:
-                    miss_list = mission_title.split(" ")
-                    just_miss = True
-                    if len(miss_list) > 2:
-                        the_type = miss_list[1].title()
-                        if the_type in POKEMON_TYPES:
-                            just_miss = False
-
-                    if just_miss:
-                        self.data["miss"] = True
-                    else:
-                        self.data.setdefault("miss_type", []).append(the_type)
-                elif mission_title == "attempt catches":
-                    self.data["attempt"] = True
-                elif mission_title.startswith("catch"):
-                    if "kg" in mission_title:
-                        the_kg = int("".join([c for c in mission_title.split("kg")[0] if c.isnumeric()]))
-                        if "heavier than" in mission_title:
-                            self.data.setdefault("weight", []).append((the_kg, 9999))
-                        else:
-                            self.data.setdefault("weight", []).append((0, the_kg))
-                    elif "bst" in mission_title:
-                        the_bst = int("".join([c for c in mission_title if c.isnumeric()]))
-                        if "under" in mission_title or "less" in mission_title:
-                            self.data.setdefault("bst", []).append((0, the_bst))
-                        else:
-                            self.data.setdefault("bst", []).append((the_bst, 9999))
-                    elif "with" in mission_title:
-                        ball = mission_title.split("ball")[0].strip().split(" ")[-1]
-                        self.data.setdefault("ball", []).append(ball)
-                    elif "mono" in mission_title:
-                        self.data["monotype"] = True
-                    else:
-                        the_type = mission_title.split(" ")[1].title()
-                        self.data.setdefault("type", []).append(the_type)
             except Exception as e:
                 print(mission["name"], "parse fail", str(e))
 
@@ -188,6 +120,93 @@ class Missions(object):
             self.new_missions_callback(new_missions)
 
         self.initial = False
+
+    def parse_mission(self, mission):
+        # returns (key, is_array, value) // None if error or unknown missions
+        try:
+            mission_title = mission["name"].lower().replace("[flash]", " ").replace("[event]", " ").replace("é", "e").replace("wonder trade", "wondertrade").strip()
+            mission_title = "".join([c for c in mission_title if c.isalnum() or c == " "]).strip()
+            mission_title = " ".join([w for w in mission_title.split(" ") if w != ""])
+
+            if mission_title.startswith("wondertrade"):
+                if mission_title == "wondertrade":
+                    return ("wondertrade", False, True)
+                elif "level" in mission_title or "lvl" in mission_title:
+                    the_level = int("".join([c for c in mission_title if c.isnumeric()]))
+                    if "higher" in mission_title or "above" in mission_title:
+                        return ("wondertrade_level", True, (the_level, 9999))
+                    else:
+                        return ("wondertrade_level", True, (0, the_level))
+                elif " fish " in mission_title:
+                    return ("wondertrade_fish", False, True)
+                elif " cat " in mission_title:
+                    return ("wondertrade_cat", False, True)
+                elif " dog " in mission_title:
+                    return ("wondertrade_dog", False, True)
+                elif "bst" in mission_title:
+                    the_bst = int("".join([c for c in mission_title if c.isnumeric()]))
+                    if "less than" in mission_title:
+                        return ("wondertrade_bst", True, (0, the_bst))
+                    else:
+                        return ("wondertrade_bst", True, (the_bst, 9999))
+                elif "kg" in mission_title:
+                    pass
+                else:
+                    the_type = mission_title.split(" ")[1].title()
+                    return ("wondertrade_type", True, the_type)
+            elif "stadium" in mission_title:
+                if "easy" in mission_title:
+                    return ("stadium", False, "easy")
+                elif "medium" in mission_title:
+                    return ("stadium", False, "medium")
+                elif "hard" in mission_title:
+                    return ("stadium", False, "hard")
+            elif " fish " in mission_title:
+                return ("fish", False, True)
+            elif " cat " in mission_title:
+                return ("cat", False, True)
+            elif " dog " in mission_title:
+                return ("dog", False, True)
+            elif "miss" in mission_title:
+                miss_list = mission_title.split(" ")
+                just_miss = True
+                if len(miss_list) > 2:
+                    the_type = miss_list[1].title()
+                    if the_type in POKEMON_TYPES:
+                        just_miss = False
+
+                if just_miss:
+                    return ("miss", False, True)
+                else:
+                    return ("miss_type", True, the_type)
+            elif mission_title == "attempt catches":
+                return ("attempt", False, True)
+            elif mission_title.startswith("catch"):
+                if mission_title == "catch a pokemon" or mission_title == "catch pokemon":
+                    return ("catch", False, True)
+                elif "kg" in mission_title:
+                    the_kg = int("".join([c for c in mission_title.split("kg")[0] if c.isnumeric()]))
+                    if "heavier than" in mission_title:
+                        return ("weight", True, (the_kg, 9999))
+                    else:
+                        return ("weight", True, (0, the_kg))
+                elif "bst" in mission_title:
+                    the_bst = int("".join([c for c in mission_title if c.isnumeric()]))
+                    if "under" in mission_title or "less" in mission_title:
+                        return ("bst", True, (0, the_bst))
+                    else:
+                        return ("bst", True, (the_bst, 9999))
+                elif "with" in mission_title:
+                    ball = mission_title.split("ball")[0].strip().split(" ")[-1]
+                    return ("ball", True, ball)
+                elif "mono" in mission_title:
+                    return ("monotype", False, True)
+                elif "type" in mission_title:
+                    the_type = mission_title.split(" ")[1].title()
+                    return ("type", True, the_type)
+        except Exception as e:
+            print(mission["name"], "parse fail", str(e))
+        return None
 
     def have_mission(self, mission_name):
         return mission_name in self.data

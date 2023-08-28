@@ -3,11 +3,10 @@ import traceback
 
 from ..entities.Pokemon import get_sprite
 
+from ..ChatLogs import log, log_file
 from ..ChatUtils import (
     CHARACTERS,
     DISCORD_ALERTS,
-    log,
-    log_file,
     POKEMON,
     seconds_readable,
     WONDERTRADE_DELAY,

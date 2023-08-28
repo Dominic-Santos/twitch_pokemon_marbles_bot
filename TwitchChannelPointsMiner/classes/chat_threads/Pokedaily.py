@@ -5,11 +5,11 @@ from dateutil.parser import parse
 
 from ..entities.Pokemon.Pokedaily import parse_next_available, parse_message
 
+from ..ChatLogs import log
 from ..ChatUtils import (
     DISCORD_ALERTS,
     DISCORD_POKEDAILY,
     DISCORD_POKEDAILY_SEARCH,
-    log,
     POKEDAILY_DELAY,
     POKEMON,
     seconds_readable,

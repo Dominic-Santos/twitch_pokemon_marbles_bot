@@ -9,7 +9,7 @@ from .Pokedex import Pokedex
 from .Computer import Computer
 from .Loyalty import Loyalty
 
-from ..ChatUtils import log
+from ...ChatLogs import log
 
 SETTINGS_FILE = "pokemon.json"
 TIERS = ["S", "A", "B", "C"]
@@ -247,7 +247,7 @@ class PokemonComunityGame(Loyalty):
         mission_strings = []
         for mission in new_missions:
             reward = self.missions.get_reward(mission)
-            mission_strings.append(f"{mission['name']} ({mission['goal']}) - {reward['reward']}")
+            mission_strings.append(f"{mission['name']} ({mission['goal']}) - {reward['reward']} -> {mission['detected']}")
 
         log("yellow", "New Missions: " + "; ".join(mission_strings))
 
