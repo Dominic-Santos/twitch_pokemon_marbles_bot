@@ -96,7 +96,7 @@ class Missions(object):
                 mission_unique = self.get_unique_id(mission)
                 if mission_unique in self.skip:
                     continue
-                if mission_unique not in self.prev_data and self.initial is False:
+                if mission_unique not in self.prev_progress and self.initial is False:
                     # new mission detected
                     if self.skip_default:
                         self.skip.append(mission_unique)
@@ -184,6 +184,7 @@ class Missions(object):
             except Exception as e:
                 print(mission["name"], "parse fail", str(e))
 
+        print("new missions", new_missions)
         if len(new_missions) > 0:
             self.new_missions_callback(new_missions)
 
