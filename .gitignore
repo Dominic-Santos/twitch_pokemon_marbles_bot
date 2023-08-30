@@ -157,7 +157,9 @@ keep_replit_alive.py
 replit.nix
 
 pokemon.json
-sprites
+sprites/avatars
+sprites/pokemon
+sprites/*/*.svg
 results
 battle
 battles
