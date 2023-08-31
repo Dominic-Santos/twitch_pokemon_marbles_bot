@@ -44,9 +44,9 @@ class MainMenu():
         update_state = "normal" if self.can_update else "disabled"
         tkinter.Button(f, text="Run PCG", command=self.run_pcg, **self.button_conf).grid(row=0, column=0, **padding)
         tkinter.Button(f, text="Update", command=self.run_update, state=update_state, **self.button_conf).grid(row=0, column=1, **padding)
-        tkinter.Button(f, text="Stats", command=self.run_stats, **self.button_conf).grid(row=1, column=0, **padding)
+        tkinter.Button(f, text="Missions", command=self.page_missions, **self.button_conf).grid(row=1, column=0, **padding)
         tkinter.Button(f, text="Settings", command=self.page_settings, **self.button_conf).grid(row=1, column=1, **padding)
-        tkinter.Button(f, text="Missions", command=self.page_missions, **self.button_conf).grid(row=2, column=0, **padding)
+        tkinter.Button(f, text="Spawn Stats", command=self.run_stats, **self.button_conf).grid(row=2, column=0, **padding)
         tkinter.Button(f, text="Bag Stats", command=self.bag_stats, **self.button_conf).grid(row=2, column=1, **padding)
         tkinter.Button(f, text="Battle Stats", command=self.battle_stats, **self.button_conf).grid(row=3, column=0, **padding)
         tkinter.Button(f, text="Pokedex Stats", command=self.pokedex_stats, **self.button_conf).grid(row=3, column=1, **padding)
