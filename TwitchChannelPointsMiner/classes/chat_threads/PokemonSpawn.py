@@ -151,7 +151,8 @@ class PokemonSpawn(object):
                     msg += "\n" + caught_pokemon["description"].split("Your fish is ")[-1].split("Your fish has ")[-1]
 
             sprite = str(poke["pokedexId"])
-            if POKEMON.show_sprite(catch_reasons):
+            extra_reasons = {"shiny": poke["isShiny"]}
+            if POKEMON.show_sprite(catch_reasons, extra_reasons):
                 pokemon_sprite = get_sprite("pokemon", sprite, shiny=poke["isShiny"])
         else:
             log_file("red", f"Failed to catch {pokemon.name} ({pokemon.tier})")
