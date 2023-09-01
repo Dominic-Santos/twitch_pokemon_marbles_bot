@@ -138,6 +138,7 @@ class PokemonSpawn(object):
                 caught = poke
                 break
 
+        pokemon_sprite = None
         if caught is not None:
             ivs = int(poke["avgIV"])
             lvl = poke['lvl']
@@ -150,11 +151,11 @@ class PokemonSpawn(object):
                     msg += "\n" + caught_pokemon["description"].split("Your fish is ")[-1].split("Your fish has ")[-1]
 
             sprite = str(poke["pokedexId"])
-            pokemon_sprite = get_sprite("pokemon", sprite, shiny=poke["isShiny"])
+            if POKEMON.show_sprite(catch_reasons):
+                pokemon_sprite = get_sprite("pokemon", sprite, shiny=poke["isShiny"])
         else:
             log_file("red", f"Failed to catch {pokemon.name} ({pokemon.tier})")
             msg = f"I missed {pokemon.name} ({pokemon.tier})!"
-            pokemon_sprite = None
 
         msg = msg + f" {ball}, because {reasons_string}"
 
