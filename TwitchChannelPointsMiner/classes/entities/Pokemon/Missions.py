@@ -1,5 +1,7 @@
 from .Inventory import POKEMON_TYPES
 
+MISSION_REASONS = ["type", "weight", "bst", "fish", "dog", "cat", "miss", "miss_type", "attempt", "ball", "monotype"]
+
 
 class Missions(object):
     def __init__(self):

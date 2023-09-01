@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 
 from .Discord import Discord
-from .Missions import Missions
+from .Missions import Missions, MISSION_REASONS
 from .Inventory import Inventory, POKEMON_TYPES
 from .Pokedex import Pokedex
 from .Computer import Computer
@@ -13,6 +13,9 @@ from ...ChatLogs import log
 
 SETTINGS_FILE = "pokemon.json"
 TIERS = ["S", "A", "B", "C"]
+CATCH_REASONS = ["pokedex", "bag", "alt", "catch", "shiny_hunt", "all_type", "stones", "legendary", "starter", "tiers", "all_fish", "all_dogs", "all_cats", "everything", "spend_money"]
+
+ALL_REASONS = sorted(CATCH_REASONS + MISSION_REASONS)
 
 
 class PokemonComunityGame(Loyalty):
@@ -41,6 +44,11 @@ class PokemonComunityGame(Loyalty):
             "alert_new_missions": {
                 "value": False,
                 "hint": "Send alert to discord when new missions detected",
+            },
+            "alert_sprite": {
+                "value": ["pokedex", "alt", "bag"],
+                "hint": "Show sprite when catching pokemon for these reasons",
+                "values": ALL_REASONS,
             },
             "catch_everything": {
                 "value": False,
@@ -320,6 +328,12 @@ class PokemonComunityGame(Loyalty):
                 if channel not in self.loyalty_data or self.loyalty_data[channel]["featured"] >= self.settings["spend_money_level"]:
                     reasons.append("spend_money")
         return reasons
+
+    def show_sprite(self, reasons):
+        for reason in reasons:
+            if reason.split(" (")[0] in self.settings["alert_sprite"]:
+                return True
+        return False
 
     # ########### Channels ############
 
