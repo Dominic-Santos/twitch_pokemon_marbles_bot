@@ -13,9 +13,10 @@ from ...ChatLogs import log
 
 SETTINGS_FILE = "pokemon.json"
 TIERS = ["S", "A", "B", "C"]
-CATCH_REASONS = ["pokedex", "bag", "alt", "catch", "shiny_hunt", "all_type", "stones", "legendary", "starter", "tiers", "all_fish", "all_dogs", "all_cats", "everything", "spend_money"]
 
-ALL_REASONS = sorted(CATCH_REASONS + MISSION_REASONS)
+CATCH_REASONS = ["pokedex", "bag", "alt", "catch", "shiny_hunt", "all_type", "stones", "legendary", "starter", "tiers", "all_fish", "all_dogs", "all_cats", "everything", "spend_money"]
+EXTRA_REASONS = ["shiny"]
+ALL_REASONS = sorted(CATCH_REASONS + MISSION_REASONS + EXTRA_REASONS)
 
 
 class PokemonComunityGame(Loyalty):
@@ -46,7 +47,7 @@ class PokemonComunityGame(Loyalty):
                 "hint": "Send alert to discord when new missions detected",
             },
             "alert_sprite": {
-                "value": ["pokedex", "alt", "bag"],
+                "value": ["pokedex", "alt", "bag", "shiny"],
                 "hint": "Show sprite when catching pokemon for these reasons",
                 "values": ALL_REASONS,
             },
@@ -329,9 +330,12 @@ class PokemonComunityGame(Loyalty):
                     reasons.append("spend_money")
         return reasons
 
-    def show_sprite(self, reasons):
+    def show_sprite(self, reasons, extra_reasons={}):
         for reason in reasons:
             if reason.split(" (")[0] in self.settings["alert_sprite"]:
+                return True
+        for reason, value in extra_reasons.items():
+            if value and reason in self.settings["alert_sprite"]:
                 return True
         return False
 
