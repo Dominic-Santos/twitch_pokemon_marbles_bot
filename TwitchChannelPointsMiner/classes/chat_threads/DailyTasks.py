@@ -31,11 +31,11 @@ def get_battle_logs(the_date):
             except:
                 continue
 
-            if "the battle!" in line:
-                linedate = parse(line.split(" ")[0])
-                if linedate.date() != the_date:
-                    continue
+            linedate = parse(line.split(" ")[0])
+            if linedate.date() != the_date:
+                continue
 
+            if "the battle!" in line:
                 rewards = line.split("rewards: ")[1].split(" and ")
                 exp = int(rewards[0][:-3])
                 cash = int(rewards[1][:-1])
