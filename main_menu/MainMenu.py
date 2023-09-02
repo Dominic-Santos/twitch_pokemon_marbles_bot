@@ -4,11 +4,15 @@ from tkinter import font as TKFont
 import subprocess
 import tkinter
 
-from TwitchChannelPointsMiner.classes.chat_threads.DailyTasks import stats_computer, battle_summary, check_finish_pokedex
-from TwitchChannelPointsMiner.classes.ChatUtils import DISCORD_STATS
+from TwitchChannelPointsMiner.classes.chat_threads.DailyTasks import (
+    battle_summary,
+    check_finish_pokedex,
+    stats_computer,
+)
 
 from .Utils import (
     clear_widgets,
+    ok_alert,
     POKEMON,
     sync_all,
 )
@@ -46,7 +50,7 @@ class MainMenu():
         tkinter.Button(f, text="Update", command=self.run_update, state=update_state, **self.button_conf).grid(row=0, column=1, **padding)
         tkinter.Button(f, text="Missions", command=self.page_missions, **self.button_conf).grid(row=1, column=0, **padding)
         tkinter.Button(f, text="Settings", command=self.page_settings, **self.button_conf).grid(row=1, column=1, **padding)
-        tkinter.Button(f, text="Spawn Stats", command=self.run_stats, **self.button_conf).grid(row=2, column=0, **padding)
+        tkinter.Button(f, text="Spawn Stats", command=self.spawn_stats, **self.button_conf).grid(row=2, column=0, **padding)
         tkinter.Button(f, text="Bag Stats", command=self.bag_stats, **self.button_conf).grid(row=2, column=1, **padding)
         tkinter.Button(f, text="Battle Stats", command=self.battle_stats, **self.button_conf).grid(row=3, column=0, **padding)
         tkinter.Button(f, text="Pokedex Stats", command=self.pokedex_stats, **self.button_conf).grid(row=3, column=1, **padding)
@@ -62,7 +66,7 @@ class MainMenu():
     def run_bat(filename):
         subprocess.Popen([filename])
 
-    def run_stats(self):
+    def spawn_stats(self):
         self.run_bat("run_stats.bat")
 
     def run_update(self):
@@ -81,17 +85,18 @@ class MainMenu():
 
     def bag_stats(self):
         sync_all()
-        discord_msg = stats_computer(POKEMON, POKEMON.pokedex.stats)
-        POKEMON.discord.post(DISCORD_STATS, discord_msg)
+        msg = stats_computer(POKEMON, POKEMON.pokedex.stats)
+        ok_alert(msg, "Bag Stats")
 
     def pokedex_stats(self):
         sync_all()
-        discord_msg = check_finish_pokedex(POKEMON, POKEMON.pokedex.stats)
-        POKEMON.discord.post(DISCORD_STATS, discord_msg)
+        msg = check_finish_pokedex(POKEMON, POKEMON.pokedex.stats)
+        msg = msg.replace(":white_check_mark:", "✔")
+        ok_alert(msg, "Pokedex Stats")
 
     def battle_stats(self):
-        discord_msg = battle_summary(datetime.now().date())
-        POKEMON.discord.post(DISCORD_STATS, discord_msg)
+        msg = battle_summary(datetime.now().date())
+        ok_alert(msg, "Battle Stats")
 
     def load(self):
         self.check_updates()
