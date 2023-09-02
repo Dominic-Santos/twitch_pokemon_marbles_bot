@@ -1,4 +1,6 @@
 import tkinter
+import win32api
+from threading import Thread
 
 from TwitchChannelPointsMiner.classes.entities.Pokemon.CGApi import API as PCGApi
 from TwitchChannelPointsMiner.classes.entities.Pokemon.PokemonCG import PokemonComunityGame
@@ -55,3 +57,15 @@ def getBoolText(value):
 
 def getColor(value):
     return "green" if value else "#f0f0f0"
+
+
+def create_alert(alert_func):
+    worker = Thread(target=alert_func)
+    worker.setDaemon(True)
+    worker.start()
+
+
+def ok_alert(msg, title):
+    def inner_alert():
+        win32api.MessageBox(0, msg, title, 0x00001000)
+    create_alert(inner_alert)
