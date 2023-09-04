@@ -29267,7 +29267,8 @@
             "special_attack": 90,
             "special_defense": 50
         },
-        "order": 666
+        "order": 666,
+        "evolves_to": {}
     },
     "10134": {
         "pokedex_id": 10134,
@@ -29324,7 +29325,8 @@
             "special_attack": 90,
             "special_defense": 50
         },
-        "order": 666
+        "order": 666,
+        "evolves_to": {}
     },
     "10139": {
         "pokedex_id": 10139,
@@ -32646,7 +32648,8 @@
             "special_attack": 65,
             "special_defense": 90
         },
-        "order": 676
+        "order": 676,
+        "evolves_to": {}
     },
     "10349": {
         "pokedex_id": 10349,
@@ -35572,7 +35575,8 @@
             "special_attack": 59,
             "special_defense": 31
         },
-        "order": 798
+        "order": 798,
+        "evolves_to": {}
     },
     "100005": {
         "pokedex_id": 100005,
