@@ -2,6 +2,15 @@ from .Inventory import POKEMON_TYPES
 
 MISSION_REASONS = ["type", "weight", "bst", "fish", "dog", "cat", "miss", "miss_type", "attempt", "ball", "monotype"]
 
+BIGGER_SYNONIMS = ["greater", "above", "higher", "larger", "heavier", "over"]
+
+
+def bigger_smaller(mission_title, bigger, smaller):
+    for word in BIGGER_SYNONIMS:
+        if word in mission_title:
+            return bigger
+    return smaller
+
 
 class Missions(object):
     def __init__(self):
@@ -135,10 +144,11 @@ class Missions(object):
                     return ("wondertrade", False, True)
                 elif "level" in mission_title or "lvl" in mission_title:
                     the_level = int("".join([c for c in mission_title if c.isnumeric()]))
-                    if "higher" in mission_title or "above" in mission_title:
-                        return ("wondertrade_level", True, (the_level, 9999))
-                    else:
-                        return ("wondertrade_level", True, (0, the_level))
+                    return bigger_smaller(
+                        mission_title,
+                        ("wondertrade_level", True, (the_level, 9999)),
+                        ("wondertrade_level", True, (0, the_level))
+                    )
                 elif " fish " in mission_title:
                     return ("wondertrade_fish", False, True)
                 elif " cat " in mission_title:
@@ -147,10 +157,11 @@ class Missions(object):
                     return ("wondertrade_dog", False, True)
                 elif "bst" in mission_title:
                     the_bst = int("".join([c for c in mission_title if c.isnumeric()]))
-                    if "less than" in mission_title:
-                        return ("wondertrade_bst", True, (0, the_bst))
-                    else:
-                        return ("wondertrade_bst", True, (the_bst, 9999))
+                    return bigger_smaller(
+                        mission_title,
+                        ("wondertrade_bst", True, (the_bst, 9999)),
+                        ("wondertrade_bst", True, (0, the_bst))
+                    )
                 elif "kg" in mission_title:
                     pass
                 else:
@@ -188,16 +199,18 @@ class Missions(object):
                     return ("catch", False, True)
                 elif "kg" in mission_title:
                     the_kg = int("".join([c for c in mission_title.split("kg")[0] if c.isnumeric()]))
-                    if "heavier than" in mission_title:
-                        return ("weight", True, (the_kg, 9999))
-                    else:
-                        return ("weight", True, (0, the_kg))
+                    return bigger_smaller(
+                        mission_title,
+                        ("weight", True, (the_kg, 9999)),
+                        ("weight", True, (0, the_kg))
+                    )
                 elif "bst" in mission_title:
                     the_bst = int("".join([c for c in mission_title if c.isnumeric()]))
-                    if "under" in mission_title or "less" in mission_title:
-                        return ("bst", True, (0, the_bst))
-                    else:
-                        return ("bst", True, (the_bst, 9999))
+                    return bigger_smaller(
+                        mission_title,
+                        ("bst", True, (the_bst, 9999)),
+                        ("bst", True, (0, the_bst))
+                    )
                 elif "with" in mission_title:
                     ball = mission_title.split("ball")[0].strip().split(" ")[-1]
                     return ("ball", True, ball)

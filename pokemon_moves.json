@@ -5566,5 +5566,29 @@
         "pp": 3,
         "accuracy": 0,
         "type": "normal"
+    },
+    "powder-snow": {
+        "name": "Powder Snow",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 10,
+        "priority": 0,
+        "description": "The user attacks with a chilling gust of powdery\r\nsnow. This may also freeze the opposing Pok\u00e9mon.",
+        "power": 40,
+        "pp": 25,
+        "accuracy": 100,
+        "type": "ice"
+    },
+    "cotton-guard": {
+        "name": "Cotton Guard",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user protects itself by wrapping its body in soft\ncotton, which drastically raises the user\u2019s\nDefense stat.",
+        "power": 0,
+        "pp": 10,
+        "accuracy": 0,
+        "type": "grass"
     }
 }
