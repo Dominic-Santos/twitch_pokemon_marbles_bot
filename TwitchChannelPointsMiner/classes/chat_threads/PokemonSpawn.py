@@ -143,8 +143,8 @@ class PokemonSpawn(object):
             ivs = int(poke["avgIV"])
             lvl = poke['lvl']
             shiny = " Shiny" if poke["isShiny"] else ""
-            log_file("green", f"Caught{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV")
-            msg = f"I caught a{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV!"
+            msg = f"Caught{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
+            log_file("green", msg)
             if pokemon.is_fish and FISH_EVENT:
                 caught_pokemon = self.update_evolutions(poke["id"], pokemon_id)
                 if "🐟" in caught_pokemon["description"]:
@@ -156,7 +156,7 @@ class PokemonSpawn(object):
                 pokemon_sprite = get_sprite("pokemon", sprite, shiny=poke["isShiny"])
         else:
             log_file("red", f"Failed to catch {pokemon.name} ({pokemon.tier})")
-            msg = f"I missed {pokemon.name} ({pokemon.tier})!"
+            msg = f"Missed {pokemon.name} ({pokemon.tier})!"
 
         msg = msg + f" {ball}, because {reasons_string}"
 
