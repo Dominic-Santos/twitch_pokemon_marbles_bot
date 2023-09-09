@@ -124,15 +124,18 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         POKEMON.pokedex.save_pokedex()
         return pokemon_data
 
-    def update_inventory(self):
+    def update_inventory(self, skip=False):
         # check if got items from catching or elsewhere
-        completed_missions = self.get_missions()
-        item_rewards = [reward for (_, reward) in completed_missions if reward["reward_type"] != "pokemon"]
-        mission_items = {reward["item_name"].lower(): reward["item_amount"] for reward in item_rewards}
-
         old_items = copy.deepcopy(POKEMON.inventory.items)
         inv = self.pokemon_api.get_inventory()
         POKEMON.sync_inventory(inv)
+
+        if skip:
+            return
+
+        completed_missions = self.get_missions()
+        item_rewards = [reward for (_, reward) in completed_missions if reward["reward_type"] != "pokemon"]
+        mission_items = {reward["item_name"].lower(): reward["item_amount"] for reward in item_rewards}
 
         if old_items == {}:
             # skip if init
