@@ -134,6 +134,10 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         inv = self.pokemon_api.get_inventory()
         POKEMON.sync_inventory(inv)
 
+        if old_items == {}:
+            # skip if init
+            return
+
         for item_name in POKEMON.inventory.items:
             item = POKEMON.inventory.get_item(item_name)
             old_item = old_items.get(item_name, {"amount": 0})
