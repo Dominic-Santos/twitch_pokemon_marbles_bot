@@ -73,21 +73,25 @@ class AutoBattle(object):
             if pokemon["hpPercent"] < POKEMON.battle_heal_percent:
                 self.heal_pokemon(pokemon["id"], pokemon["name"])
 
-    def check_level_100(self, team):
-        new_level_100s = []
+    def check_level_alert(self, team):
+        limit = POKEMON.settings["alert_level_value"]
+        new_level_reached = []
 
         for pokemon in team:
 
-            if pokemon["lvl"] == 100 and pokemon["id"] not in POKEMON.ab_level_100s:
-                POKEMON.ab_level_100s.append(pokemon["id"])
+            if pokemon["lvl"] >= limit and pokemon["id"] not in POKEMON.ab_level_reached:
+                POKEMON.ab_level_reached.append(pokemon["id"])
                 if pokemon["id"] in POKEMON.ab_training:
-                    new_level_100s.append(pokemon)
+                    new_level_reached.append(pokemon)
 
             if pokemon["id"] not in POKEMON.ab_training:
                 POKEMON.ab_training.append(pokemon["id"])
 
-        for pokemon in new_level_100s:
-            POKEMON.discord.post(DISCORD_ALERTS, f"{pokemon['name']} reached level 100!")
+        for pokemon in new_level_reached:
+            poke_obj = self.get_pokemon_stats(pokemon["pokedexId"])
+            msg = f"{pokemon['name']} ({poke_obj.name}) reached level {limit}!"
+            log("green", msg)
+            POKEMON.discord.post(DISCORD_ALERTS, msg)
 
     def auto_battle(self):
 
@@ -141,9 +145,9 @@ class AutoBattle(object):
 
                 team_data = self.pokemon_api.get_teams()
                 if team_data[battle_mode]["meet_requirements"]:
-                    if POKEMON.settings["alert_level_100"]:
-                        # check team for level 100s
-                        self.check_level_100(team_data["allPokemon"])
+                    if POKEMON.settings["alert_level"]:
+                        # check team pokemon that reached the desired level
+                        self.check_level_alert(team_data["allPokemon"])
 
                     if POKEMON.battle_heal:
                         self.heal_team(team_data["allPokemon"])

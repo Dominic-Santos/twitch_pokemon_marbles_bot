@@ -51,9 +51,13 @@ class PokemonComunityGame(Loyalty):
                 "hint": "Show sprite when catching pokemon for these reasons",
                 "values": ALL_REASONS,
             },
-            "alert_level_100": {
+            "alert_level": {
                 "value": True,
-                "hint": "Send alert to discord when pokemon reaches level 100",
+                "hint": "Send alert to discord when pokemon reaches a certain level",
+            },
+            "alert_level_value": {
+                "value": 100,
+                "hint": "The level a pokemon must reach to tigger the level alert",
             },
             "catch_everything": {
                 "value": False,
@@ -226,10 +230,11 @@ class PokemonComunityGame(Loyalty):
     def set(self, settings):
         changes = False
         for k in settings:
-            if k in self.settings:
-                if self.settings[k] != settings[k]:
-                    self.settings[k] = settings[k]
-                    changes = True
+            if k in self.settings and self.settings[k] != settings[k]:
+                if k in ["alert_level_value", "alert_level"]:
+                    self.battle_var_init()
+                self.settings[k] = settings[k]
+                changes = True
         return changes
 
     def check_catch(self):
@@ -402,7 +407,7 @@ class PokemonComunityGame(Loyalty):
 
     def battle_var_init(self):
         self.ab_training = []
-        self.ab_level_100s = []
+        self.ab_level_reached = []
 
     @property
     def auto_battle(self):
