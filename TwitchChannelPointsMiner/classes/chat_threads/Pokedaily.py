@@ -74,6 +74,8 @@ class Pokedaily(object):
         log("yellow", f"Thread Closing - {thread_name}")
 
     def pokedaily(self):
+        self.update_inventory()
+
         log("yellow", f"Running Pokedaily")
         POKEMON.discord.post(DISCORD_POKEDAILY, "!pokedaily")
 
@@ -82,7 +84,7 @@ class Pokedaily(object):
             log("green", f"Pokedaily, no user configured")
             return
 
-        sleep(60 * 2)
+        sleep(60 * 1)
         resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
         content = resp["messages"][0][0]["content"]
         message = parse_message(content)
@@ -92,3 +94,5 @@ class Pokedaily(object):
         else:
             POKEMON.discord.post(DISCORD_ALERTS, f"Pokedaily rewards ({message.rarity}):\n" + "\n".join(message.rewards))
             log("green", f"Pokedaily ({message.rarity}) rewards " + ", ".join(message.rewards))
+
+        self.update_inventory(skip=True)
