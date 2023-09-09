@@ -190,6 +190,7 @@ class PokemonComunityGame(Loyalty):
 
         self.load_settings()
         self.load_discord_settings()
+        self.battle_var_init()
 
         self.discord.connect()
 
@@ -398,6 +399,11 @@ class PokemonComunityGame(Loyalty):
         return self.pokedex.clean_name(pokemon) in self.settings["trade_keep"]
 
     # ########### Battles ############
+
+    def battle_var_init(self):
+        self.ab_training = []
+        self.ab_level_100s = []
+
     @property
     def auto_battle(self):
         return self.settings["auto_battle"]

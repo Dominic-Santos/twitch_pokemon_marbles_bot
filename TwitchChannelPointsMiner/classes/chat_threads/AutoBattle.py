@@ -20,10 +20,6 @@ POTIONS = {
 
 
 class AutoBattle(object):
-    def __init__(self):
-        self.ab_training = []
-        self.ab_level_100s = []
-
     def battle_timer(self):
         thread_name = "Battle Timer"
         log("yellow", f"Thread Created - {thread_name}")
@@ -82,13 +78,13 @@ class AutoBattle(object):
 
         for pokemon in team:
 
-            if pokemon["lvl"] == 100 and pokemon["id"] not in self.ab_level_100s:
-                self.ab_level_100s.append(pokemon["id"])
-                if pokemon["id"] in self.ab_training:
+            if pokemon["lvl"] == 100 and pokemon["id"] not in POKEMON.ab_level_100s:
+                POKEMON.ab_level_100s.append(pokemon["id"])
+                if pokemon["id"] in POKEMON.ab_training:
                     new_level_100s.append(pokemon)
 
-            if pokemon["id"] not in self.ab_training:
-                self.ab_training.append(pokemon["id"])
+            if pokemon["id"] not in POKEMON.ab_training:
+                POKEMON.ab_training.append(pokemon["id"])
 
         for pokemon in new_level_100s:
             POKEMON.discord.post(DISCORD_ALERTS, f"{pokemon['name']} reached level 100!")
