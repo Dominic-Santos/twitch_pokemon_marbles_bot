@@ -10,6 +10,9 @@ from .chat_threads.AutoBattle import AutoBattle
 
 
 class ChatThreads(DailyTasks, Pokedaily, PokemonSpawn, Wondertrade, AutoBattle):
+    def __init__(self):
+        AutoBattle.__init__(self)
+
     def start_threads(self):
         if THREADCONTROLLER.started is False:
             THREADCONTROLLER.started = True

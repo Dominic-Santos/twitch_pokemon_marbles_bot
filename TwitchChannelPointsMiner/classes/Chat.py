@@ -58,6 +58,7 @@ class ClientIRCMarbles(ClientIRCBase):
 class ClientIRCPokemon(ClientIRCBase, ChatThreads):
     def __init__(self, username, token, channel, get_pokemon_token, pcg):
         ClientIRCBase.__init__(self, username, token, channel)
+        ChatThreads.__init__(self)
         self.init(username, get_pokemon_token, pcg)
 
     def init(self, username, get_pokemon_token, pcg):

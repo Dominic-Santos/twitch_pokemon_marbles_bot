@@ -51,6 +51,10 @@ class PokemonComunityGame(Loyalty):
                 "hint": "Show sprite when catching pokemon for these reasons",
                 "values": ALL_REASONS,
             },
+            "alert_level_100": {
+                "value": True,
+                "hint": "Send alert to discord when pokemon reaches level 100",
+            },
             "catch_everything": {
                 "value": False,
                 "hint": "Catch every pokemon that spawns",
