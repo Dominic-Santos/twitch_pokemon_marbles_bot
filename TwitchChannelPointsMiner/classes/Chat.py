@@ -1,6 +1,7 @@
 from datetime import datetime
 from time import sleep
 import random
+import copy
 
 from .ChatO import ClientIRC as ClientIRCO
 from .ChatO import ChatPresence as ChatPresenceO
@@ -123,9 +124,37 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         POKEMON.pokedex.save_pokedex()
         return pokemon_data
 
-    def check_inventory(self):
+    def update_inventory(self):
+        # check if got items from catching or elsewhere
+        completed_missions = self.get_missions()
+        item_rewards = [reward for (_, reward) in completed_missions if reward["reward_type"] != "pokemon"]
+        mission_items = {reward["item_name"].lower(): reward["item_amount"] for reward in item_rewards}
+
+        old_items = copy.deepcopy(POKEMON.inventory.items)
         inv = self.pokemon_api.get_inventory()
         POKEMON.sync_inventory(inv)
+
+        for item_name in POKEMON.inventory.items:
+            item = POKEMON.inventory.get_item(item_name)
+            old_item = old_items.get(item_name, {"amount": 0})
+
+            amount_got = item["amount"] - old_item["amount"] - mission_items.get(item_name, 0)
+            if amount_got < 1:
+                continue
+
+            item_str = item["name"]
+            if amount_got == 1:
+                prefix = "an" if item_name[0] in ["a", "e", "i", "o", "u"] else "a"
+            else:
+                prefix = amount_got
+
+            rewards_msg = f"You got {prefix} {item_str}!"
+            log("green", rewards_msg)
+            sprite = get_sprite(item["category"], item["sprite"])
+            POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
+
+    def check_inventory(self):
+        self.update_inventory()
 
         shop = self.pokemon_api.get_shop()
         shop_balls = []

@@ -5590,5 +5590,17 @@
         "pp": 10,
         "accuracy": 0,
         "type": "grass"
+    },
+    "seed-flare": {
+        "name": "Seed Flare",
+        "damage_class": "special",
+        "stat_chance": 40,
+        "effect_chance": 40,
+        "priority": 0,
+        "description": "The user emits a shock wave from its body to attack\nits target. This may also harshly lower the target\u2019s\nSp. Def stat.",
+        "power": 120,
+        "pp": 5,
+        "accuracy": 85,
+        "type": "grass"
     }
 }

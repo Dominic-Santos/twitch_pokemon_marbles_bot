@@ -327,8 +327,7 @@ class DailyTasks(object):
         dex = self.pokemon_api.get_pokedex()
         POKEMON.sync_pokedex(dex)
 
-        inv = self.pokemon_api.get_inventory()
-        POKEMON.sync_inventory(inv)
+        self.update_inventory()
 
         discord_msg = stats_computer(POKEMON, self.get_pokemon_stats)
 
