@@ -20,6 +20,10 @@ POTIONS = {
 
 
 class AutoBattle(object):
+    def __init__(self):
+        self.ab_training = []
+        self.ab_level_100s = []
+
     def battle_timer(self):
         thread_name = "Battle Timer"
         log("yellow", f"Thread Created - {thread_name}")
@@ -73,6 +77,22 @@ class AutoBattle(object):
             if pokemon["hpPercent"] < POKEMON.battle_heal_percent:
                 self.heal_pokemon(pokemon["id"], pokemon["name"])
 
+    def check_level_100(self, team):
+        new_level_100s = []
+
+        for pokemon in team:
+
+            if pokemon["lvl"] == 100 and pokemon["id"] not in self.ab_level_100s:
+                self.ab_level_100s.append(pokemon["id"])
+                if pokemon["id"] in self.ab_training:
+                    new_level_100s.append(pokemon)
+
+            if pokemon["id"] not in self.ab_training:
+                self.ab_training.append(pokemon["id"])
+
+        for pokemon in new_level_100s:
+            POKEMON.discord.post(DISCORD_ALERTS, f"{pokemon['name']} reached level 100!")
+
     def auto_battle(self):
 
         if POKEMON.auto_battle:
@@ -125,6 +145,10 @@ class AutoBattle(object):
 
                 team_data = self.pokemon_api.get_teams()
                 if team_data[battle_mode]["meet_requirements"]:
+                    if POKEMON.settings["alert_level_100"]:
+                        # check team for level 100s
+                        self.check_level_100(team_data["allPokemon"])
+
                     if POKEMON.battle_heal:
                         self.heal_team(team_data["allPokemon"])
 
