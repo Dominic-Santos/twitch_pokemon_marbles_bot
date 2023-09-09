@@ -145,8 +145,10 @@ class PokemonSpawn(object):
             shiny = " Shiny" if poke["isShiny"] else ""
             msg = f"Caught{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
             log_file("green", msg)
+
+            caught_pokemon = self.update_evolutions(poke["id"], pokemon_id)
+
             if pokemon.is_fish and FISH_EVENT:
-                caught_pokemon = self.update_evolutions(poke["id"], pokemon_id)
                 if "🐟" in caught_pokemon["description"]:
                     msg += "\n" + caught_pokemon["description"].split("Your fish is ")[-1].split("Your fish has ")[-1]
 
