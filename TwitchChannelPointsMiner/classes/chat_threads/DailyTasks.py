@@ -188,13 +188,15 @@ def stats_computer(Pokemon, get_stats_func):
     missing_strings = []
     for tier in ["A", "B", "C"]:
         dont_haves = len(spawnables[tier + "_dont_have"])
+        mstring = ""
         if dont_haves == 0:
-            missing_strings.append("Done")
+            mstring = "Done"
         elif dont_haves < max_show_missing:
-            missing_strings.append("missing: " + ", ".join([pokemon.name for pokemon in spawnables[tier + "_dont_have"]]))
+            mstring = "missing: " + ", ".join([pokemon.name for pokemon in spawnables[tier + "_dont_have"]])
+
+        missing_strings.append(mstring)
 
     tradable_msg = "".join(f"\n    {tier}: {results['trade' + tier]}" for tier in ["S", "A", "B", "C"] if results["trade" + tier] > 0)
-
     msg = f"""Bag Summary:
 
 Starters: {results["starter"]}
