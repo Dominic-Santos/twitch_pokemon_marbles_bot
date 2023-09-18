@@ -29115,7 +29115,22 @@
         "evolves_from": [
             "10109"
         ],
-        "order": 75
+        "order": 75,
+        "evolves_to": {
+            "10111": {
+                "level": 40,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Rock"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Electric"
+                    }
+                ]
+            }
+        }
     },
     "10111": {
         "pokedex_id": 10111,
@@ -29134,7 +29149,10 @@
             "special_attack": 55,
             "special_defense": 65
         },
-        "order": 76
+        "order": 76,
+        "evolves_from": [
+            "10110"
+        ]
     },
     "10119": {
         "pokedex_id": 10119,
@@ -29288,7 +29306,8 @@
             "special_attack": 90,
             "special_defense": 50
         },
-        "order": 666
+        "order": 666,
+        "evolves_to": {}
     },
     "10135": {
         "pokedex_id": 10135,
@@ -29307,7 +29326,8 @@
             "special_attack": 90,
             "special_defense": 50
         },
-        "order": 666
+        "order": 666,
+        "evolves_to": {}
     },
     "10136": {
         "pokedex_id": 10136,
@@ -35675,6 +35695,9 @@
             "special_attack": 83,
             "special_defense": 113
         },
-        "order": 705
+        "order": 705,
+        "evolves_from": [
+            "704"
+        ]
     }
 }

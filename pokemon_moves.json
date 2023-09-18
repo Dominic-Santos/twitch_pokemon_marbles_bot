@@ -5602,5 +5602,17 @@
         "pp": 5,
         "accuracy": 85,
         "type": "grass"
+    },
+    "milk-drink": {
+        "name": "Milk Drink",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user restores its own HP by up to half of its\r\nmax HP.",
+        "power": 0,
+        "pp": 3,
+        "accuracy": 0,
+        "type": "normal"
     }
 }
