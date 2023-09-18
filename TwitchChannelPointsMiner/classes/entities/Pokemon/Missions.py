@@ -1,4 +1,4 @@
-from .Inventory import POKEMON_TYPES, POKEMON_TYPES
+from .Inventory import POKEMON_TYPES
 
 MISSION_REASONS = ["type", "weight", "bst", "fish", "dog", "cat", "miss", "miss_type", "attempt", "ball", "monotype"]
 
