@@ -1,4 +1,4 @@
-from .Inventory import POKEMON_TYPES
+from .Inventory import POKEMON_TYPES, POKEMON_TYPES
 
 MISSION_REASONS = ["type", "weight", "bst", "fish", "dog", "cat", "miss", "miss_type", "attempt", "ball", "monotype"]
 
@@ -217,8 +217,14 @@ class Missions(object):
                 elif "mono" in mission_title:
                     return ("monotype", False, True)
                 elif "type" in mission_title:
+                    # ex: catch fire type pokemon
                     the_type = mission_title.split(" ")[1].title()
                     return ("type", True, the_type)
+                else:
+                    # ex: catch fire pokemon
+                    the_maybe_type = mission_title.replace("catch", "").replace("pokemon", "").strip().title()
+                    if the_maybe_type in POKEMON_TYPES:
+                        return ("type", True, the_type)
         except Exception as e:
             print(mission["name"], "parse fail", str(e))
         return None
