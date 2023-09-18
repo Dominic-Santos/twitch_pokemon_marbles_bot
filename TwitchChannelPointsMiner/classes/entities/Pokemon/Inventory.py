@@ -1,6 +1,7 @@
+from .Pokedex import POKEMON_TYPES
+
 CATCH_BALL_PRIORITY = ["ultraball", "greatball", "pokeball", "premierball"]
 CATCH_BALL_TIERS = ["S", "A", "B", "C", "C"]
-POKEMON_TYPES = ["Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"]
 
 
 class Inventory(object):

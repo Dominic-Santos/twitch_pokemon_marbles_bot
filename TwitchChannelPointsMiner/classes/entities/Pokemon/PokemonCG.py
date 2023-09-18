@@ -4,8 +4,8 @@ import json
 
 from .Discord import Discord
 from .Missions import Missions, MISSION_REASONS
-from .Inventory import Inventory, POKEMON_TYPES
-from .Pokedex import Pokedex
+from .Inventory import Inventory
+from .Pokedex import Pokedex, POKEMON_TYPES
 from .Computer import Computer
 from .Loyalty import Loyalty
 
