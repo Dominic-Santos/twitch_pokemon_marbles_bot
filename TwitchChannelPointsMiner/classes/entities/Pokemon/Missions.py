@@ -224,7 +224,7 @@ class Missions(object):
                     # ex: catch fire pokemon
                     the_maybe_type = mission_title.replace("catch", "").replace("pokemon", "").strip().title()
                     if the_maybe_type in POKEMON_TYPES:
-                        return ("type", True, the_type)
+                        return ("type", True, the_maybe_type)
         except Exception as e:
             print(mission["name"], "parse fail", str(e))
         return None
