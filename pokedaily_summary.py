@@ -1,5 +1,6 @@
 from TwitchChannelPointsMiner.classes.entities.Pokemon import Pokedaily
-from TwitchChannelPointsMiner.classes.Chat import DISCORD_POKEDAILY_SEARCH, POKEMON
+from TwitchChannelPointsMiner.classes.ChatUtils import DISCORD_POKEDAILY_SEARCH, POKEMON
+from time import sleep
 
 
 def main():
@@ -9,6 +10,7 @@ def main():
 
     while (offset < total_records):
         resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]) + f"&offset={offset}")
+        print(resp)
         total_records = resp["total_results"]
 
         for message in resp["messages"]:
@@ -18,6 +20,7 @@ def main():
                 rarities[message_obj.rarity] = rarities.get(message_obj.rarity, 0) + 1
 
         offset += 25
+        sleep(2)
 
     print(rarities)
 

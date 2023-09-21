@@ -89,7 +89,7 @@ class AutoBattle(object):
 
         for pokemon in new_level_reached:
             poke_obj = self.get_pokemon_stats(pokemon["pokedexId"])
-            msg = f"{pokemon['name']} ({poke_obj.name}) reached level {limit}!"
+            msg = f"⚔️ {pokemon['name']} ({poke_obj.name}) reached level {limit}! ⚔️"
             log("green", msg)
             POKEMON.discord.post(DISCORD_ALERTS, msg)
 
