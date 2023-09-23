@@ -234,7 +234,7 @@ class Battle():
             self.log(f"{prefix} {pokemon['name']} magnet rise ended")
         elif typ == "END_PARALYSIS":
             self.log(f"{prefix} {pokemon['name']} no longer paralyzed")
-        elif typ == "END_PARALYSIS":
+        elif typ == "END_POISON":
             self.log(f"{prefix} {pokemon['name']} no longer poisoned")
         elif typ == "FLINCHED":
             self.log(f"{prefix} {pokemon['name']} flinched")
