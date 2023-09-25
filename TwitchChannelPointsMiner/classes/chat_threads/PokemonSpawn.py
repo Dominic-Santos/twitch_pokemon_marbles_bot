@@ -1,7 +1,6 @@
 from datetime import datetime
 from dateutil.parser import parse
 from time import sleep
-import copy
 import requests
 import traceback
 

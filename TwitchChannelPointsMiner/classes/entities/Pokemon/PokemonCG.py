@@ -294,7 +294,13 @@ class PokemonComunityGame(Loyalty):
 
         missions = self.missions.check_all_missions(pokemon)
         for mission in missions:
-            reasons.append(mission)
+            if mission == "ball":
+                for ball in self.missions.data["ball"]:
+                    if self.inventory.have_ball(ball):
+                        reasons.append(mission)
+                        break
+            else:
+                reasons.append(mission)
 
         if self.pokedex.clean_name(pokemon) in self.settings["catch"]:
             reasons.append("catch")

@@ -25,6 +25,40 @@ WEAKNESS_CHART = {
     "Fairy": {"Fighting": 0.5, "Poison": 2, "Bug": 0.5, "Dragon": 0, "Dark": 0.5, "Steel": 2}
 }
 
+STATUS = {
+    "burn": {
+        "applied": "was burned",
+        "status": "burned"
+    },
+    "confusion": {
+        "applied": "was confused",
+        "status": "confused"
+    },
+    "freeze": {
+        "applied": "was frozen"
+    },
+    "paralysis": {
+        "applied": "was paralyzed",
+        "status": "paralyzed"
+    },
+    "poison": {
+        "applied": "was poisoned",
+        "status": "poisoned"
+    },
+    "recoil": {
+        "applied": "was hurt by recoil"
+    },
+    "sleep": {
+        "applied": "fell asleep"
+    },
+    "toxic": {
+        "applied": "was badly poisoned"
+    },
+    "magnet rise": {
+        "status": "magnet rise"
+    }
+}
+
 
 def decode(data):
     try:
@@ -201,81 +235,55 @@ class Battle():
             self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
             return self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["name"]
 
+    @staticmethod
+    def clean_action(action, to_replace):
+        return action.lower().replace(to_replace.lower(), "").replace("_", " ").strip()
+
     def action_log(self, data):
         if "player" in data and "pokemon" in data:
             prefix, pokemon = self._get_pokemon(data["player"], data["pokemon"])
 
         typ = data["type"]
 
-        if typ == "ALLOW_SWITCHING":
-            self.log(f"{prefix} {pokemon['name']} can switch")
-        elif typ == "ATTACK_MISSED":
-            self.log(f"Attack missed")
-        elif typ == "BURN_APPLIED":
-            self.log(f"{prefix} {pokemon['name']} was burned")
-        elif typ == "BURN_DAMAGE":
+        if typ.endswith("APPLIED") and self.clean_action(typ, "applied") in STATUS:
+            # BURN_APPLIED, etc
+            ctyp = self.clean_action(typ, "applied")
+            effect = STATUS[ctyp]["applied"]
+            self.log(f"{prefix} {pokemon['name']} {effect}")
+        elif typ.endswith("DAMAGE"):
+            # BURN_DAMAGE, HAIL_DAMAGE, POISON_DAMAGE, SANDSTORM_DAMAGE
+            effect = self.clean_action(typ, "damage")
             self._apply_damage(data["player"], data["pokemon"], data["damage"])
             prefix, pokemon = self._get_pokemon(data["player"], data["pokemon"])
-            self.log(f"{prefix} {pokemon['name']} took {data['damage']} burn damage")
+            self.log(f"{prefix} {pokemon['name']} took {data['damage']} {effect} damage")
             self.log(f"Current HP {pokemon['hp']}/{pokemon['max_hp']}")
-        elif typ == "CONFUSED":
-            self.log(f"{prefix} {pokemon['name']} is confused")
-        elif typ == "CONFUSION_APPLIED":
-            self.log(f"{prefix} {pokemon['name']} was confused")
-        elif typ == "CRITICAL_HIT":
-            self.log("Critical Hit")
+        elif typ.startswith("END") and self.clean_action(typ, "end") in STATUS:
+            # END_BURN, etc
+            ctyp = self.clean_action(typ, "end")
+            effect = STATUS[ctyp]["status"]
+            self.log(f"{prefix} {pokemon['name']} is no longer {effect}")
+        elif typ in [
+            "ATTACK_MISSED", "CRITICAL_HIT", "HAIL_END", "HAIL_STARTED", "HAZE_USED",
+            "LIGHT_SCREEN_END", "LIGHT_SCREEN_STARTED", "MIST_END", "MIST_PREVENTED", "MIST_STARTED",
+            "MOVE_FAILED", "RAIN_END", "RAIN_STARTED", "REFLECT_END", "REFLECT_STARTED",
+            "SANDSTORM_END", "SANDSTORM_STARTED", "SUN_END", "SUN_STARTED", "TAILWIND_END",
+            "TAILWIND_STARTED", "TRICK_ROOM_STARTED", "TRICK_ROOM_END"
+        ]:
+            self.log(typ.replace("_", " ").title().replace("End", "Ended"))
+        elif typ in ["CONFUSED", "UNTHAWED", "WOKE_UP", "FLINCHED", "IS_FROZEN", "IS_PARALYZED", "IS_SLEEPING"]:
+            effect = typ.replace("_", " ").title()
+            self.log(f"{prefix} {pokemon['name']} {effect}")
+        elif typ == "ALLOW_SWITCHING":
+            self.log(f"{prefix} {pokemon['name']} can switch")
         elif typ == "DISALLOW_SWITCHING":
             self.log(f"{prefix} {pokemon['name']} is not allowed to switch")
-        elif typ == "END_CONFUSION":
-            self.log(f"{prefix} {pokemon['name']} is not confused anymore")
-        elif typ == "END_BURN":
-            self.log(f"{prefix} {pokemon['name']} no longer burned")
-        elif typ == "END_MAGNET_RISE":
-            self.log(f"{prefix} {pokemon['name']} magnet rise ended")
-        elif typ == "END_PARALYSIS":
-            self.log(f"{prefix} {pokemon['name']} no longer paralyzed")
-        elif typ == "END_POISON":
-            self.log(f"{prefix} {pokemon['name']} no longer poisoned")
-        elif typ == "FLINCHED":
-            self.log(f"{prefix} {pokemon['name']} flinched")
-        elif typ == "FREEZE_APPLIED":
-            self.log(f"{prefix} {pokemon['name']} was frozen")
-        elif typ == "HAIL_DAMAGE":
-            self._apply_damage(data["player"], data["pokemon"], data["damage"])
-            prefix, pokemon = self._get_pokemon(data["player"], data["pokemon"])
-            self.log(f"{prefix} {pokemon['name']} took {data['damage']} hail damage")
-            self.log(f"Current HP {pokemon['hp']}/{pokemon['max_hp']}")
-        elif typ == "HAIL_END":
-            self.log("Hail ended")
-        elif typ == "HAIL_STARTED":
-            self.log("Hail started")
-        elif typ == "HAZE_USED":
-            self.log("Haze used")
         elif typ == "HEALED":
             self._apply_damage(data["player"], data["pokemon"], 0 - data["heal"])
             prefix, pokemon = self._get_pokemon(data["player"], data["pokemon"])
             self.log(f"{prefix} {pokemon['name']} healed {data['heal']} damage")
             self.log(f"Current HP {pokemon['hp']}/{pokemon['max_hp']}")
-        elif typ == "IS_FROZEN":
-            self.log(f"{prefix} {pokemon['name']} is frozen")
-        elif typ == "IS_PARALYZED":
-            self.log(f"{prefix} {pokemon['name']} can't attack due to paralysis")
-        elif typ == "IS_SLEEPING":
-            self.log(f"{prefix} {pokemon['name']} is asleep")
-        elif typ == "LIGHT_SCREEN_END":
-            self.log("Light Screen ended")
-        elif typ == "LIGHT_SCREEN_STARTED":
-            self.log("Light Screen started")
-        elif typ == "MIST_END":
-            self.log("Mist ended")
-        elif typ == "MIST_PREVENTED":
-            self.log("Mist prevented")
-        elif typ == "MIST_STARTED":
-            self.log("Mist started")
         elif typ == "MOVE_EFFECTIVE":
             self.log(f"Effective x{data['factor']}")
-        elif typ == "MOVE_FAILED":
-            self.log("Move Failed")
         elif typ == "MOVE_USED":
             move_name = self._use_move(data["player"], data["pokemon"], data["move"])
             self.log(f"{prefix} {pokemon['name']} used {move_name}")
@@ -283,15 +291,6 @@ class Battle():
             self.log(f"{prefix} {pokemon['name']} used {data['move']}")
         elif typ == "MULTIPLE_HITS":
             self.log(f"Attack hit {data['amount']} times")
-        elif typ == "PARALYSIS_APPLIED":
-            self.log(f"{prefix} {pokemon['name']} was paralyzed")
-        elif typ == "POISON_APPLIED":
-            self.log(f"{prefix} {pokemon['name']} was poisoned")
-        elif typ == "POISON_DAMAGE":
-            self._apply_damage(data["player"], data["pokemon"], data["damage"])
-            prefix, pokemon = self._get_pokemon(data["player"], data["pokemon"])
-            self.log(f"{prefix} {pokemon['name']} took {data['damage']} poison damage")
-            self.log(f"Current HP {pokemon['hp']}/{pokemon['max_hp']}")
         elif typ == "POKEMON_CHANGED":
             if self.team["current_pokemon"] == data["last_pokemon"]:
                 prefix, last = self._get_pokemon(self.player_id, data["last_pokemon"])
@@ -303,47 +302,8 @@ class Battle():
                 self.enemy_team["current_pokemon"] = data["current_pokemon"]
             self.log(f"Switched {prefix} {last['name']} for {current['name']}")
             self.log(f"Current HP {current['hp']}/{current['max_hp']}")
-        elif typ == "RAIN_END":
-            self.log("Rain ended")
-        elif typ == "RAIN_STARTED":
-            self.log("Rain started")
-        elif typ == "RECOIL_APPLIED":
-            self.log("Hurt by recoil")
-        elif typ == "REFLECT_END":
-            self.log("Reflect ended")
-        elif typ == "REFLECT_STARTED":
-            self.log("Reflect started")
-        elif typ == "SANDSTORM_DAMAGE":
-            self._apply_damage(data["player"], data["pokemon"], data["damage"])
-            prefix, pokemon = self._get_pokemon(data["player"], data["pokemon"])
-            self.log(f"{prefix} {pokemon['name']} took {data['damage']} sandstorm damage")
-            self.log(f"Current HP {pokemon['hp']}/{pokemon['max_hp']}")
-        elif typ == "SANDSTORM_END":
-            self.log("Sandstorm ended")
-        elif typ == "SANDSTORM_STARTED":
-            self.log("Sandstorm started")
-        elif typ == "SLEEP_APPLIED":
-            self.log(f"{prefix} {pokemon['name']} fell asleep")
         elif typ == "STAT_CHANGED":
             self.log(f"{prefix} {pokemon['name']} {data['stat']} changed by {data['change_by']}")
-        elif typ == "SUN_END":
-            self.log("Sun ended")
-        elif typ == "SUN_STARTED":
-            self.log("Sun started")
-        elif typ == "TAILWIND_END":
-            self.log("Tailwind ended")
-        elif typ == "TAILWIND_STARTED":
-            self.log("Tailwind started")
-        elif typ == "TOXIC_APPLIED":
-            self.log(f"{prefix} {pokemon['name']} was badly poisoned")
-        elif typ == "TRICK_ROOM_STARTED":
-            self.log("Trick room started")
-        elif typ == "TRICK_ROOM_END":
-            self.log("Trick room ended")
-        elif typ == "UNTHAWED":
-            self.log(f"{prefix} {pokemon['name']} unthawed")
-        elif typ == "WOKE_UP":
-            self.log(f"{prefix} {pokemon['name']} woke up")
         else:
             return False
         return True

@@ -5626,5 +5626,17 @@
         "pp": 5,
         "accuracy": 95,
         "type": "rock"
+    },
+    "tackle": {
+        "name": "Tackle",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "A physical attack in which the user charges and\nslams into the target with its whole body.",
+        "power": 40,
+        "pp": 35,
+        "accuracy": 100,
+        "type": "normal"
     }
 }
