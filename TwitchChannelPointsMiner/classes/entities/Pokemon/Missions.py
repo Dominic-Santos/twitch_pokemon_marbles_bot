@@ -197,7 +197,7 @@ class Missions(object):
             elif mission_title.startswith("catch"):
                 if mission_title == "catch a pokemon" or mission_title == "catch pokemon":
                     return ("catch", False, True)
-                elif "kg" in mission_title:
+                elif "kg" in mission_title or "weight" in mission_title:
                     the_kg = int("".join([c for c in mission_title.split("kg")[0] if c.isnumeric()]))
                     return bigger_smaller(
                         mission_title,
