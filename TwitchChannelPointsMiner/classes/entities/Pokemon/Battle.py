@@ -240,6 +240,7 @@ class Battle():
         return action.lower().replace(to_replace.lower(), "").replace("_", " ").strip()
 
     def action_log(self, data):
+        prefix, pokemon = (None, None)
         if "player" in data and "pokemon" in data:
             prefix, pokemon = self._get_pokemon(data["player"], data["pokemon"])
 
@@ -249,7 +250,11 @@ class Battle():
             # BURN_APPLIED, etc
             ctyp = self.clean_action(typ, "applied")
             effect = STATUS[ctyp]["applied"]
-            self.log(f"{prefix} {pokemon['name']} {effect}")
+            if prefix is None:
+                effect = effect[0].title() + effect[1:]
+                self.log(effect)
+            else:
+                self.log(f"{prefix} {pokemon['name']} {effect}")
         elif typ.endswith("DAMAGE"):
             # BURN_DAMAGE, HAIL_DAMAGE, POISON_DAMAGE, SANDSTORM_DAMAGE
             effect = self.clean_action(typ, "damage")
