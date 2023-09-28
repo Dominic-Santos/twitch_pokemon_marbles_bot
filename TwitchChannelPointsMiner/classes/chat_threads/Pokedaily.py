@@ -95,8 +95,11 @@ class Pokedaily(object):
             msg = resp["messages"][0][0]
             message = parse_full_message(msg)
 
-            if datetime.now() - message.timestamp < timedelta(minutes=10):
+            print(message, message.timestamp)
+
+            if datetime.utcnow() - message.timestamp < timedelta(minutes=10):
                 # found the message was looking for
+                print("found it")
                 break
 
         if attempts == ATTEMPTS_LIMIT:
