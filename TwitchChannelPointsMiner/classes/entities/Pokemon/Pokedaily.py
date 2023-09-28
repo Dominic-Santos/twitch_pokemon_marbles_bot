@@ -1,4 +1,6 @@
 import re
+from datetime import datetime
+from dateutil.parser import parse
 
 
 class Message(object):
@@ -12,6 +14,7 @@ class Message(object):
         }
         self.rewards = []
         self.rarity = "unknown"
+        self.timestamp = datetime.now()
 
     def __str__(self):
         return f"Pokedaily Message: valid={self.valid}, repeat={self.repeat}, last_redeemed={self.last_redeemed}, rarity={self.rarity}, rewards={self.rewards}"
@@ -67,6 +70,15 @@ def parse_next_available(content):
         seconds = int(result.pop(0))
 
     return hours * 60 * 60 + minutes * 60 + seconds
+
+
+def parse_full_message(msg):
+    message = parse_message(msg.get("content", ""))
+    try:
+        message.timestamp = parse(msg["timestamp"]).replace(tzinfo=None)
+    except:
+        pass
+    return message
 
 
 def parse_message(content):

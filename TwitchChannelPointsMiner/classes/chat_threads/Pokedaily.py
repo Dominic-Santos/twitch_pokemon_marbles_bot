@@ -1,9 +1,9 @@
 from time import sleep
 import traceback
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.parser import parse
 
-from ..entities.Pokemon.Pokedaily import parse_next_available, parse_message
+from ..entities.Pokemon.Pokedaily import parse_next_available, parse_full_message
 
 from ..ChatLogs import log
 from ..ChatUtils import (
@@ -14,6 +14,9 @@ from ..ChatUtils import (
     POKEMON,
     seconds_readable,
 )
+
+SLEEPTIME = 30
+ATTEMPTS_LIMIT = 10
 
 
 class Pokedaily(object):
@@ -84,12 +87,22 @@ class Pokedaily(object):
             log("green", f"Pokedaily, no user configured")
             return
 
-        sleep(60 * 1)
-        resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
-        content = resp["messages"][0][0]["content"]
-        message = parse_message(content)
+        attempts = 0
+        while attempts < ATTEMPTS_LIMIT:
+            sleep(SLEEPTIME)
+            log("yellow", f"Looking for Pokedaily answer")
+            resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
+            msg = resp["messages"][0][0]
+            message = parse_full_message(msg)
 
-        if message.repeat:
+            if datetime.now() - message.timestamp < timedelta(minutes=10):
+                # found the message was looking for
+                break
+
+        if attempts == ATTEMPTS_LIMIT:
+            slept = SLEEPTIME * ATTEMPTS_LIMIT
+            log("red", f"Failed to get answer from Pokedaily after {slept} seconds")
+        elif message.repeat:
             log("red", f"Pokedaily not ready")
         else:
             POKEMON.discord.post(DISCORD_ALERTS, f"Pokedaily rewards ({message.rarity}):\n" + "\n".join(message.rewards))
