@@ -9,6 +9,7 @@ from ..ChatUtils import (
     DISCORD_STATS,
     POKEMON,
 )
+from ..utils.catch_stats import get_catch_rates
 
 POTION_COSTS = {
     "Potion": 100,
@@ -321,6 +322,7 @@ class DailyTasks(object):
         self.battle_summary(stats_date)
         self.check_bag_pokemon()
         self.check_finish_pokedex()
+        self.catch_rates(stats_date)
 
     def stats_computer(self):
         all_pokemon = self.pokemon_api.get_all_pokemon()
@@ -362,5 +364,10 @@ class DailyTasks(object):
 
     def check_finish_pokedex(self):
         discord_msg = check_finish_pokedex(POKEMON, self.get_pokemon_stats)
+
+        POKEMON.discord.post(DISCORD_STATS, discord_msg)
+
+    def catch_rates(self, the_date):
+        discord_msg = get_catch_rates(the_date)
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
