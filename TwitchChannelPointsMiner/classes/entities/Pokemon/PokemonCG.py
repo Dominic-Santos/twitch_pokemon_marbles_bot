@@ -5,14 +5,13 @@ import json
 from .Discord import Discord
 from .Missions import Missions, MISSION_REASONS
 from .Inventory import Inventory
-from .Pokedex import Pokedex, POKEMON_TYPES
+from .Pokedex import Pokedex, POKEMON_TYPES, POKEMON_TIERS
 from .Computer import Computer
 from .Loyalty import Loyalty
 
 from ...ChatLogs import log
 
 SETTINGS_FILE = "pokemon.json"
-TIERS = ["S", "A", "B", "C"]
 
 CATCH_REASONS = ["pokedex", "bag", "alt", "catch", "shiny_hunt", "all_type", "stones", "legendary", "starter", "tiers", "all_fish", "all_dogs", "all_cats", "everything", "spend_money"]
 EXTRA_REASONS = ["shiny"]
@@ -74,7 +73,7 @@ class PokemonComunityGame(Loyalty):
             "trade_tiers": {
                 "value": ["A", "B", "C"],
                 "hint": "Wondertrade any pokemon of the selected tiers",
-                "values": TIERS,
+                "values": POKEMON_TIERS,
             },
             "catch_dogs": {
                 "value": False,
@@ -150,7 +149,7 @@ class PokemonComunityGame(Loyalty):
             "catch_tiers": {
                 "value": [],
                 "hint": "Catch any pokemon of the selected tiers",
-                "values": TIERS,
+                "values": POKEMON_TIERS,
             },
             "catch_types": {
                 "value": [],
