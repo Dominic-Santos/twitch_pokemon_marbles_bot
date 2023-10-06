@@ -1,6 +1,6 @@
 {
     "streamers": {
-        "theswedishfishofficial": {"goal": 3000, "priority": 2, "marbles": true, "pcg": false},
+        "theswedishfishofficial": {"goal": 3000, "priority": 2, "marbles": false, "pcg": false},
         "stedyhandz": {"goal": 50000, "priority": 3},
         "ovidiuz94": {"goal": 1000000, "priority": 4},
         "nailguns": {"goal": 1000000, "priority": 5},
