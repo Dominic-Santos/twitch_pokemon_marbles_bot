@@ -1,4 +1,7 @@
+import json
+
 LOYALTY_FILE = "pokemon_loyalty.txt"
+LOYALTY_DATA = "pokemon_loyalty_data.json"
 
 LOYALTY = {
     0: {
@@ -34,8 +37,31 @@ class Loyalty(object):
     def __init__(self):
         self.loyalty_data = {}
         self.channel_list = []
+        self.up_to_date = []
+        self.load_loyalty()
 
-    def set_loyalty(self, channel, loyalty_level, current_points, level_points):
+    def save_loyalty(self):
+        with open(LOYALTY_DATA, "w") as f:
+            f.write(json.dumps(self.loyalty_data, indent=4))
+
+    def load_loyalty(self):
+        try:
+            with open(LOYALTY_DATA, "r") as f:
+                data = json.load(f)
+        except:
+            data = {}
+
+        for channel in data:
+            self.set_loyalty(channel, data[channel]["level"], data[channel]["points"], data[channel]["limit"], save=False)
+            # check if got all possible rewards
+            loyalty = self.get_loyalty(self.loyalty_data[channel]["level"], self.loyalty_data[channel]["featured"])
+            if loyalty is None:
+                self.up_to_date.append(channel)
+
+    def need_loyalty(self, channel):
+        return channel not in self.up_to_date
+
+    def set_loyalty(self, channel, loyalty_level, current_points, level_points, save=True):
         if channel in ["jonaswagern", "deemonrider"]:
             featured_channel = 1
         elif (
@@ -58,7 +84,10 @@ class Loyalty(object):
             "limit": level_points
         }
 
-        self.output_loyalty()
+        if save:
+            if channel not in self.up_to_date:
+                self.up_to_date.append(channel)
+            self.output_loyalty()
 
     def get_loyalty(self, level, featured):
         return LOYALTY.get(featured, {}).get(level, None)
@@ -105,6 +134,10 @@ class Loyalty(object):
         return to_return
 
     def output_loyalty(self):
+        self.save_loyalty()
+        self.save_loyalty_readable()
+
+    def save_loyalty_readable(self):
         to_output = sorted(
             [(key, values) for key, values in self.loyalty_data.items()],
             key=lambda x: (0 - x[1]["featured"], 0 - x[1]["points"])

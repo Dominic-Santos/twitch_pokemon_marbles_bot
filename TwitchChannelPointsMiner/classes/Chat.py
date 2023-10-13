@@ -113,7 +113,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 log("yellow", f"Joined Pokemon for {message.target[1:]}")
                 POKEMON.add_channel(self.channel[1:])
 
-                if self.channel[1:] not in POKEMON.loyalty_data:
+                if POKEMON.need_loyalty(self.channel[1:]):
                     sleep(5)
                     log("yellow", f"{self.channel[1:]} loyalty request")
                     client.privmsg("#" + self.channel[1:], "!pokeloyalty")
