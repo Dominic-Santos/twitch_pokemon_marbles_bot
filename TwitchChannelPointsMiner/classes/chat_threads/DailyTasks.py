@@ -333,6 +333,7 @@ class DailyTasks(object):
         self.check_bag_pokemon()
         self.check_finish_pokedex()
         self.catch_rates(stats_date)
+        self.check_loyalty()
 
     def stats_computer(self):
         all_pokemon = self.pokemon_api.get_all_pokemon()
@@ -381,5 +382,10 @@ class DailyTasks(object):
 
     def catch_rates(self, the_date):
         discord_msg = get_catch_rates(the_date)
+
+        POKEMON.discord.post(DISCORD_STATS, discord_msg)
+
+    def check_loyalty(self):
+        discord_msg = POKEMON.get_loyalty_readable(with_featured=False)
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
