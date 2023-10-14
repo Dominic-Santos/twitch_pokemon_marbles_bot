@@ -137,15 +137,24 @@ class Loyalty(object):
         self.save_loyalty()
         self.save_loyalty_readable()
 
-    def save_loyalty_readable(self):
+    def get_loyalty_readable(self, with_featured=True):
         to_output = sorted(
             [(key, values) for key, values in self.loyalty_data.items()],
             key=lambda x: (0 - x[1]["featured"], 0 - x[1]["points"])
         )
+        lines = []
+        for channel, data in to_output:
+            featured = data["featured"]
+            level = data["level"]
+            points = data["points"]
+            limit = data["limit"]
+            if with_featured:
+                lines.append(f"{featured} - {channel} - level {level} - {points}/{limit}")
+            else:
+                lines.append(f"{channel} - level {level} - {points}/{limit}")
+        return "\n".join(lines)
+
+    def save_loyalty_readable(self):
+        loyalty_string = self.get_loyalty_readable()
         with open(LOYALTY_FILE, "w") as output:
-            for channel, data in to_output:
-                featured = data["featured"]
-                level = data["level"]
-                points = data["points"]
-                limit = data["limit"]
-                output.write(f"{featured} - {channel} - level {level} - {points}/{limit}\n")
+            output.write(loyalty_string)
