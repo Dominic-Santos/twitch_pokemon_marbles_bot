@@ -40,6 +40,10 @@ class Pokemon(object):
     def bst(self):
         return self.hp + self.speed + self.attack + self.defense + self.special_attack + self.special_defense
 
+    @property
+    def is_spawnable(self):
+        return (self.is_starter or self.is_legendary or self.is_non_spawnable) is False
+
     def __str__(self):
         real_id = "" if self.pokedex_id == self.order else f" ({self.order})"
         atts = []

@@ -86,33 +86,6 @@ def battle_summary(battle_date):
 def stats_computer(Pokemon, get_stats_func):
     allpokemon = Pokemon.computer.pokemon
 
-    spawnables = {tier + suffix: [] for tier in ["S", "A", "B", "C"] for suffix in ["_have", "_dont_have"]}
-    for i in range(1, Pokemon.pokedex.total + 1):
-        pokemon = get_stats_func(i)
-
-        if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable:
-            continue
-
-        if Pokemon.pokedex.have(pokemon):
-            spawnables[pokemon.tier + "_have"].append(pokemon)
-        else:
-            spawnables[pokemon.tier + "_dont_have"].append(pokemon)
-
-    for k in spawnables:
-        if "dont" not in k:
-            spawnables[k] = len(spawnables[k])
-
-    spawnables["have"] = sum(y for x, y in spawnables.items() if "dont" not in x)
-
-    spawnables_per = {}
-    for tier in ["S", "A", "B", "C"]:
-        total = Pokemon.pokedex.spawnable_tier(tier)
-        if total == 0:
-            spawnables_per[tier] = 100
-        else:
-            spawnables_per[tier] = int(spawnables.get(tier + "_have", 0) * 10000.0 / total) / 100.0
-    spawnables_per["total"] = int(spawnables["have"] * 10000.0 / Pokemon.pokedex.spawnables) / 100.0
-
     results = {
         "shiny": [],
         "starter": [],
@@ -185,18 +158,6 @@ def stats_computer(Pokemon, get_stats_func):
     else:
         coins = 0
 
-    max_show_missing = 20
-    missing_strings = []
-    for tier in ["A", "B", "C"]:
-        dont_haves = len(spawnables[tier + "_dont_have"])
-        mstring = ""
-        if dont_haves == 0:
-            mstring = "Done"
-        elif dont_haves < max_show_missing:
-            mstring = "missing: " + ", ".join([pokemon.name for pokemon in spawnables[tier + "_dont_have"]])
-
-        missing_strings.append(mstring)
-
     tradable_msg = "".join(f"\n    {tier}: {results['trade' + tier]}" for tier in ["S", "A", "B", "C"] if results["trade" + tier] > 0)
     msg = f"""Bag Summary:
 
@@ -209,11 +170,6 @@ Normal Version: {results["bag_regular"]}/{Pokemon.pokedex.total}
 Alt Version: {results["bag_special"]}
     {CHARACTERS["female"]}: {results["female"]}/{Pokemon.pokedex.females}{region_msg}
 
-Spawnables: {spawnables['have']}/{Pokemon.pokedex.spawnables} ({spawnables_per['total']}%)
-    A: {spawnables['A_have']}/{Pokemon.pokedex.spawnable_tier('A')} ({spawnables_per['A']}%) {missing_strings[0]}
-    B: {spawnables['B_have']}/{Pokemon.pokedex.spawnable_tier('B')} ({spawnables_per['B']}%) {missing_strings[1]}
-    C: {spawnables['C_have']}/{Pokemon.pokedex.spawnable_tier('C')} ({spawnables_per['C']}%) {missing_strings[2]}
-
 Tradables: {results["trade_total"]}{tradable_msg}
 
 Inventory: {cash}$ {coins} Battle Coins
@@ -222,6 +178,60 @@ Inventory: {cash}$ {coins} Battle Coins
     greatball: {greatball}
     ultraball: {ultraball}
     other: {otherball}"""
+
+    return msg
+
+
+def discord_update_pokedex(Pokemon, get_pokemon_stats):
+    discord_msg = check_pokedex(Pokemon, get_pokemon_stats)
+
+    POKEMON.discord.post(DISCORD_STATS, discord_msg)
+
+
+def check_pokedex(Pokemon, get_stats_func):
+    spawnables = {tier + suffix: [] for tier in ["S", "A", "B", "C"] for suffix in ["_have", "_dont_have"]}
+    for i in range(1, Pokemon.pokedex.total + 1):
+        pokemon = get_stats_func(i)
+
+        if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable:
+            continue
+
+        if Pokemon.pokedex.have(pokemon):
+            spawnables[pokemon.tier + "_have"].append(pokemon)
+        else:
+            spawnables[pokemon.tier + "_dont_have"].append(pokemon)
+
+    for k in spawnables:
+        if "dont" not in k:
+            spawnables[k] = len(spawnables[k])
+
+    spawnables["have"] = sum(y for x, y in spawnables.items() if "dont" not in x)
+
+    spawnables_per = {}
+    for tier in ["S", "A", "B", "C"]:
+        total = Pokemon.pokedex.spawnable_tier(tier)
+        if total == 0:
+            spawnables_per[tier] = 100
+        else:
+            spawnables_per[tier] = int(spawnables.get(tier + "_have", 0) * 10000.0 / total) / 100.0
+    spawnables_per["total"] = int(spawnables["have"] * 10000.0 / Pokemon.pokedex.spawnables) / 100.0
+
+    max_show_missing = 20
+    missing_strings = []
+    for tier in ["A", "B", "C"]:
+        dont_haves = len(spawnables[tier + "_dont_have"])
+        mstring = ""
+        if dont_haves == 0:
+            mstring = "Done"
+        elif dont_haves < max_show_missing:
+            mstring = "missing: " + ", ".join([pokemon.name for pokemon in spawnables[tier + "_dont_have"]])
+
+        missing_strings.append(mstring)
+
+    msg = f"""Spawnable Pokedex: {spawnables['have']}/{Pokemon.pokedex.spawnables} ({spawnables_per['total']}%)
+    A: {spawnables['A_have']}/{Pokemon.pokedex.spawnable_tier('A')} ({spawnables_per['A']}%) {missing_strings[0]}
+    B: {spawnables['B_have']}/{Pokemon.pokedex.spawnable_tier('B')} ({spawnables_per['B']}%) {missing_strings[1]}
+    C: {spawnables['C_have']}/{Pokemon.pokedex.spawnable_tier('C')} ({spawnables_per['C']}%) {missing_strings[2]}"""
 
     return msg
 
@@ -336,6 +346,8 @@ class DailyTasks(object):
         discord_msg = stats_computer(POKEMON, self.get_pokemon_stats)
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
+
+        discord_update_pokedex(POKEMON, self.get_pokemon_stats)
 
     def battle_summary(self, battle_date):
         discord_msg = battle_summary(battle_date)

@@ -4,6 +4,8 @@ from time import sleep
 import requests
 import traceback
 
+from .DailyTasks import discord_update_pokedex
+
 from ..entities.Pokemon import get_sprite
 
 from ..ChatLogs import log, log_file
@@ -155,6 +157,10 @@ class PokemonSpawn(object):
             extra_reasons = {"shiny": poke["isShiny"]}
             if POKEMON.show_sprite(catch_reasons, extra_reasons):
                 pokemon_sprite = get_sprite("pokemon", sprite, shiny=poke["isShiny"])
+
+            if "pokedex" in catch_reasons and pokemon.is_spawnable:
+                discord_update_pokedex(POKEMON, self.get_pokemon_stats)
+
         else:
             log_file("red", f"Failed to catch {pokemon.name} ({pokemon.tier})")
             msg = f"Missed {pokemon.name} ({pokemon.tier})!"
