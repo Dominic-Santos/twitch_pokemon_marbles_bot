@@ -182,7 +182,10 @@ Inventory: {cash}$ {coins} Battle Coins
     return msg
 
 
-def discord_update_pokedex(Pokemon, get_pokemon_stats):
+def discord_update_pokedex(Pokemon, pokemon_api, get_pokemon_stats):
+    dex = pokemon_api.get_pokedex()
+    Pokemon.sync_pokedex(dex)
+
     discord_msg = check_pokedex(Pokemon, get_pokemon_stats)
 
     POKEMON.discord.post(DISCORD_STATS, discord_msg)
@@ -339,16 +342,13 @@ class DailyTasks(object):
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
 
-        dex = self.pokemon_api.get_pokedex()
-        POKEMON.sync_pokedex(dex)
-
         self.update_inventory()
 
         discord_msg = stats_computer(POKEMON, self.get_pokemon_stats)
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
-        discord_update_pokedex(POKEMON, self.get_pokemon_stats)
+        discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
 
     def battle_summary(self, battle_date):
         discord_msg = battle_summary(battle_date)

@@ -224,9 +224,8 @@ class Wondertrade(object):
                     pokemon_received_need = " - needed"
                     sprite = str(pokemon_received["pokedexId"])
                     pokemon_sprite = get_sprite("pokemon", sprite, shiny=pokemon_received["isShiny"])
-                    if pokemon_obj.is_spawnable:
-                        discord_update_pokedex(POKEMON, self.get_pokemon_stats)
-
+                    if pokemon_received_obj.is_spawnable:
+                        discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
 
                 reasons_string = "" if len(reasons) == 0 else " ({})".format(", ".join(reasons))
 
