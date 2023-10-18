@@ -43,13 +43,12 @@ class Inventory(object):
                         self.other_balls["Fish"] = []
                     self.other_balls["Fish"].append(ball)
 
-            else:
-                self.items[item["name"].lower()] = {
-                    "name": item["name"],
-                    "sprite": item["sprite_name"],
-                    "amount": item["amount"],
-                    "category": item["category"]
-                }
+            self.items[item["name"].lower()] = {
+                "name": item["name"],
+                "sprite": item["sprite_name"],
+                "amount": item["amount"],
+                "category": item["category"]
+            }
 
     def get_item(self, item_name):
         return self.items.get(item_name.lower(), None)
