@@ -1,6 +1,6 @@
-from .Pokedex import POKEMON_TYPES
+from .Pokedex import POKEMON_TYPES, POKEMON_ATTRIBUTES
 
-MISSION_REASONS = ["type", "weight", "bst", "fish", "dog", "cat", "miss", "miss_type", "attempt", "ball", "monotype"]
+MISSION_REASONS = ["type", "weight", "bst", "fish", "dog", "cat", "miss", "miss_type", "attempt", "ball", "monotype", "event", "catch"]
 
 BIGGER_SYNONIMS = ["greater", "above", "higher", "larger", "heavier", "over"]
 
@@ -18,6 +18,7 @@ class Missions(object):
         self.prev_data = {}
         self.prev_progress = {}
         self.progress = {}
+        self.event = []
         self.skip = []
         self.skip_default = False
         self.initial = True
@@ -197,6 +198,8 @@ class Missions(object):
             elif mission_title.startswith("catch"):
                 if mission_title == "catch a pokemon" or mission_title == "catch pokemon":
                     return ("catch", False, True)
+                elif "event" in mission_title:
+                    return ("event", False, True)
                 elif "kg" in mission_title or "weight" in mission_title:
                     the_kg = int("".join([c for c in mission_title.split("kg")[0] if c.isnumeric()]))
                     return bigger_smaller(
@@ -329,6 +332,9 @@ class Missions(object):
     def check_attempt_mission(self):
         return self.have_mission("attempt")
 
+    def check_catch_mission(self):
+        return self.have_mission("catch")
+
     def check_weight_mission(self, weight):
         return self._between_mission("weight", weight)
 
@@ -340,6 +346,23 @@ class Missions(object):
 
     def check_monotype_mission(self):
         return self.have_mission("monotype")
+
+    def check_event_pokemon(self, pokemon):
+        to_ret = []
+        for pokemon_type in pokemon.types:
+            if pokemon_type in self.event:
+                to_ret.append(pokemon_type)
+
+        for att in POKEMON_ATTRIBUTES:
+            if att in self.event and getattr(pokemon, "is_" + att.lower()):
+                to_ret.append(att)
+        return to_ret
+
+    def check_event_mission(self, pokemon):
+        if self.have_mission("event"):
+            return self.check_event_pokemon(pokemon)
+
+        return []
 
     def check_all_missions(self, pokemon):
         reasons = []
@@ -375,5 +398,11 @@ class Missions(object):
 
         if len(pokemon.types) == 1 and self.check_monotype_mission():
             reasons.append("monotype")
+
+        if self.check_catch_mission():
+            reasons.append("catch")
+
+        for pokemon_type in self.check_event_mission(pokemon):
+            reasons.append(f"event ({pokemon_type.title()})")
 
         return reasons

@@ -37,8 +37,6 @@ DISCORD_POKEDAILY_SEARCH = f"{DISCORD_BASE}guilds/{POKEDAILY_GUILD}/messages/sea
 
 POKEMON.set_alerts(True, DISCORD_ALERTS)
 
-FISH_EVENT = False
-
 CHARACTERS = {
     "starter": "⭐",
     "female": "♀",

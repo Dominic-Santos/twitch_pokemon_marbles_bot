@@ -25,6 +25,7 @@ MISSIONS_JSON_8 = json.loads(MISSIONS_STR_8)
 MISSIONS_JSON_9 = json.loads(MISSIONS_STR_9)
 MISSIONS_JSON_10 = json.loads(MISSIONS_STR_10)
 MISSIONS_JSON_11 = json.loads(MISSIONS_STR_11)
+MISSIONS_JSON_12 = {"missions": [{"name": "[EVENT] Catch event Pokemon!", "goal": 10, "progress": 5, "rewardItem": {"id": 115, "name": "Luxury Ball", "description": "A rare ball with a fancy appearance. Massively increases the sell price of a Pokemon caught with it.", "sprite_name": "luxury_ball", "category": "ball", "tmType": None, "amount": 3}, "rewardPokemon": None, "endDate": "1 day, 17 hours and 1 minutes", "endDateInt": 147633.261173}], "endDate": "1 day, 17 hours and 1 minutes"}
 
 
 def test_check_missions_case1():
@@ -267,3 +268,26 @@ def test_check_missions_skipping():
 
     reasons = MISSIONS.check_all_wondertrade_missions(pokemon)
     assert "level" not in reasons
+
+
+def test_check_missions_event():
+    MISSIONS.event = ["Fish", "Fire"]
+    MISSIONS.set(MISSIONS_JSON_12)
+    missions = MISSIONS.data
+
+    assert MISSIONS.have_mission("event")
+
+    have_event_mission = missions.get("event", True)
+    assert have_event_mission
+
+    pokemon = Pokemon()
+    pokemon.types = ["Rock", "Dragon"]
+    pokemon.level = 15
+    pokemon.is_fish = True
+    reasons = MISSIONS.check_all_missions(pokemon)
+    assert "event (Fish)" in reasons
+
+    pokemon.types = ["Fire"]
+    pokemon.is_fish = False
+    reasons = MISSIONS.check_all_missions(pokemon)
+    assert "event (Fire)" in reasons
