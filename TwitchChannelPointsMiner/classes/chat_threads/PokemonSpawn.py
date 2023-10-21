@@ -11,7 +11,6 @@ from ..entities.Pokemon import get_sprite
 from ..ChatLogs import log, log_file
 from ..ChatUtils import (
     DISCORD_ALERTS,
-    FISH_EVENT,
     POKEMON,
     seconds_readable,
     THREADCONTROLLER,
@@ -149,7 +148,7 @@ class PokemonSpawn(object):
 
             caught_pokemon = self.update_evolutions(poke["id"], pokemon_id)
 
-            if pokemon.is_fish and FISH_EVENT:
+            if pokemon.is_fish and POKEMON.fish_event:
                 if "🐟" in caught_pokemon["description"]:
                     msg += "\n" + caught_pokemon["description"].split("Your fish is ")[-1].split("Your fish has ")[-1]
 

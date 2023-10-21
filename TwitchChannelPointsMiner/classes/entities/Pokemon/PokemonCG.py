@@ -5,7 +5,7 @@ import json
 from .Discord import Discord
 from .Missions import Missions, MISSION_REASONS
 from .Inventory import Inventory
-from .Pokedex import Pokedex, POKEMON_TYPES, POKEMON_TIERS
+from .Pokedex import Pokedex, POKEMON_TYPES, POKEMON_TIERS, POKEMON_ATTRIBUTES
 from .Computer import Computer
 from .Loyalty import Loyalty
 
@@ -13,7 +13,7 @@ from ...ChatLogs import log
 
 SETTINGS_FILE = "pokemon.json"
 
-CATCH_REASONS = ["pokedex", "bag", "alt", "catch", "shiny_hunt", "all_type", "stones", "legendary", "starter", "tiers", "all_fish", "all_dogs", "all_cats", "everything", "spend_money"]
+CATCH_REASONS = ["pokedex", "bag", "alt", "catch_always", "shiny_hunt", "all_type", "stones", "legendary", "starter", "tiers", "all_fish", "all_dogs", "all_cats", "everything", "spend_money", "catch_event"]
 EXTRA_REASONS = ["shiny"]
 ALL_REASONS = sorted(CATCH_REASONS + MISSION_REASONS + EXTRA_REASONS)
 
@@ -22,7 +22,6 @@ class PokemonComunityGame(Loyalty):
     def __init__(self):
         Loyalty.__init__(self)
 
-        self.delay = 0
         self.reset_timer()
         self.last_random = None
         self.alerts = False
@@ -136,7 +135,7 @@ class PokemonComunityGame(Loyalty):
                     "min": 0,
                 },
             },
-            "catch": {
+            "catch_always": {
                 "value": [],
                 "hint": "Catch any of the selected pokemon",
                 "values": all_pokemon,
@@ -164,6 +163,15 @@ class PokemonComunityGame(Loyalty):
             "channel_priority": {
                 "value": [],
                 "hint": "Priority channels in order of most important to least",
+            },
+            "event": {
+                "value": [],
+                "hint": "Define what event is currently running in PCG",
+                "values": sorted(POKEMON_TYPES + POKEMON_ATTRIBUTES),
+            },
+            "catch_event": {
+                "value": False,
+                "hint": "Catch any event pokemon",
             },
             "trade_legendaries": {
                 "value": False,
@@ -218,6 +226,7 @@ class PokemonComunityGame(Loyalty):
         self.inventory.money_saving = self.settings["money_saving"]
         self.missions.skip = self.settings["skip_missions"]
         self.missions.skip_default = self.settings["skip_missions_default"]
+        self.missions.event = self.settings["event"]
 
         return changes
 
@@ -235,12 +244,6 @@ class PokemonComunityGame(Loyalty):
                 self.settings[k] = settings[k]
                 changes = True
         return changes
-
-    def check_catch(self):
-        if (datetime.utcnow() - self.catch_timer).total_seconds() > self.delay:
-            return True
-
-        return False
 
     def sync_inventory(self, inv):
         self.inventory.set(inv)
@@ -273,9 +276,6 @@ class PokemonComunityGame(Loyalty):
             msg = "New Missions:\n    " + "\n    ".join(mission_strings)
             self.discord.post(self.alerts_channel, msg)
 
-    def set_delay(self, delay):
-        self.delay = delay
-
     def need_pokemon(self, pokemon):
         reasons = []
 
@@ -301,8 +301,8 @@ class PokemonComunityGame(Loyalty):
             else:
                 reasons.append(mission)
 
-        if self.pokedex.clean_name(pokemon) in self.settings["catch"]:
-            reasons.append("catch")
+        if self.pokedex.clean_name(pokemon) in self.settings["catch_always"]:
+            reasons.append("catch_always")
 
         elif self.pokedex.clean_name(pokemon) in self.settings["shiny_hunt"]:
             reasons.append("shiny_hunt")
@@ -343,6 +343,11 @@ class PokemonComunityGame(Loyalty):
             if channel is not None:
                 if channel not in self.loyalty_data or self.loyalty_data[channel]["featured"] >= self.settings["spend_money_level"]:
                     reasons.append("spend_money")
+
+        if self.settings["catch_event"]:
+            for poke_type in self.missions.check_event_pokemon(pokemon):
+                reasons.append(f"catch_event ({poke_type.title()})")
+
         return reasons
 
     def show_sprite(self, reasons, extra_reasons={}):
@@ -429,3 +434,7 @@ class PokemonComunityGame(Loyalty):
     @property
     def battle_heal_percent(self):
         return self.settings["battle_heal_percent"]
+
+    @property
+    def fish_event(self):
+        return "fish" in self.settings["event"]
