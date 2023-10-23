@@ -35721,5 +35721,25 @@
         "evolves_from": [
             "704"
         ]
+    },
+    "100409": {
+        "pokedex_id": 100409,
+        "name": "Sin Gengar",
+        "description": "It lays traps, hoping to steal the lives of those it catches. If you stand in front of its mouth, you\u2019ll hear your loved ones\u2019 voices calling out to you.",
+        "weight": 40.5,
+        "generation": 1,
+        "type1": "poison",
+        "type2": "ghost",
+        "tier": "A",
+        "base_stats": {
+            "hp": 60,
+            "speed": 110,
+            "attack": 65,
+            "defense": 60,
+            "special_attack": 130,
+            "special_defense": 75
+        },
+        "order": 94,
+        "evolves_to": {}
     }
 }
