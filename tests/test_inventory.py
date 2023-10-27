@@ -693,10 +693,10 @@ def test_best_ball():
     INVENTORY.set(INVENTORY_DATA)
     reasons = ["pokedex"]
 
-    assert INVENTORY.get_catch_ball(pokemon, reasons) == "ultraball"
-    INVENTORY.balls["ultraball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "nightball"
     pokemon.types = []
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "ultraball"
+    INVENTORY.balls["ultraball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     INVENTORY.balls["greatball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
@@ -727,10 +727,10 @@ def test_save_ball():
     INVENTORY.cash = 0
     reasons = ["pokedex"]
 
-    assert INVENTORY.get_catch_ball(pokemon, reasons) == "ultraball"
-    INVENTORY.balls["ultraball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "nightball"
     pokemon.types = []
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "ultraball"
+    INVENTORY.balls["ultraball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     INVENTORY.balls["greatball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"

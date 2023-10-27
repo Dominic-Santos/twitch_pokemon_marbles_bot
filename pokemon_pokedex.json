@@ -21934,7 +21934,17 @@
             "special_attack": 29,
             "special_defense": 31
         },
-        "evolves_to": {},
+        "evolves_to": {
+            "790": {
+                "level": 43,
+                "stones": [
+                    {
+                        "amount": 4,
+                        "stone": "Psychic"
+                    }
+                ]
+            }
+        },
         "order": 789
     },
     "790": {
@@ -21955,7 +21965,10 @@
             "special_defense": 131
         },
         "evolves_to": {},
-        "order": 790
+        "order": 790,
+        "evolves_from": [
+            "789"
+        ]
     },
     "791": {
         "pokedex_id": 791,
@@ -23900,7 +23913,10 @@
             "special_defense": 130
         },
         "evolves_to": {},
-        "order": 864
+        "order": 864,
+        "evolves_from": [
+            "10305"
+        ]
     },
     "865": {
         "pokedex_id": 865,
@@ -32113,7 +32129,18 @@
             "special_attack": 65,
             "special_defense": 95
         },
-        "order": 222
+        "order": 222,
+        "evolves_to": {
+            "864": {
+                "level": 38,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Ghost"
+                    }
+                ]
+            }
+        }
     },
     "10306": {
         "pokedex_id": 10306,
@@ -33168,7 +33195,9 @@
             "defense": 80,
             "special_attack": 50,
             "special_defense": 105
-        }
+        },
+        "order": 778,
+        "evolves_to": {}
     },
     "10411": {
         "pokedex_id": 10411,
@@ -34157,7 +34186,8 @@
             "special_attack": 95,
             "special_defense": 95
         },
-        "order": 773
+        "order": 773,
+        "evolves_to": {}
     },
     "10481": {
         "pokedex_id": 10481,
