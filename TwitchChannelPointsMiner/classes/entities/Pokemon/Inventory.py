@@ -2,6 +2,12 @@ from .Pokedex import POKEMON_TYPES
 
 CATCH_BALL_PRIORITY = ["ultraball", "greatball", "pokeball", "premierball"]
 CATCH_BALL_TIERS = ["S", "A", "B", "C", "C"]
+CATCH_BALL_RATES = {
+    "ultraball": 80,
+    "greatball": 55,
+    "pokeball": 30,
+    "premierball": 30
+}
 
 
 class Inventory(object):
@@ -19,6 +25,7 @@ class Inventory(object):
         self.items = {}
         self.special_balls = {}
         self.other_balls = {}
+        self.ball_catch_rates = {}
 
     def __str__(self):
         return "Balance: $" + str(self.cash) + " " + ", ".join(["{item}: {amount}".format(item=self.items[item]["name"], amount=self.items[item]["amount"]) for item in self.items])
@@ -36,6 +43,10 @@ class Inventory(object):
                         if pokemon_type not in self.special_balls:
                             self.special_balls[pokemon_type] = []
                         self.special_balls[pokemon_type].append(ball)
+                        try:
+                            self.ball_catch_rates[ball] = int(item["catchRate"].replace("%", ""))
+                        except:
+                            pass
 
                 # Balls for fish pokemon
                 if "Fish" in item["description"]:
@@ -171,12 +182,14 @@ class Inventory(object):
                 yield "masterball"
 
         if self.use_special_balls:
+            # 90% catch rate
             if self.have_ball("timerball"):
                 yield "timerball"
 
             if self.have_ball("quickball"):
                 yield "quickball"
 
+            # 80% catch rate
             if pokemon.is_fish and "Fish" in self.other_balls:
                 for ball in self.other_balls["Fish"]:
                     yield ball
@@ -205,19 +218,29 @@ class Inventory(object):
                 if self.have_ball("feather"):
                     yield "feather"
 
-        if self.have_ball("ultraball"):
-            yield "ultraball"
-
+        type_balls = []
         if self.use_special_balls:
             if pokemon.types is not None:
                 for t in sorted(pokemon.types):
                     if t in self.special_balls:
                         for ball in self.special_balls[t]:
-                            yield ball
+                            type_balls.append(ball)
 
-        for ball in CATCH_BALL_PRIORITY[1:]:
+        type_balls = sorted(type_balls, key=lambda x: self.ball_catch_rates.get(x, 0), reverse=True)
+
+        prev_catch_rate = 100
+        for ball in CATCH_BALL_PRIORITY + ["noball"]:
+            catch_rate = CATCH_BALL_RATES.get(ball, 0)
+
+            type_balls_part = [x for x in type_balls if self.ball_catch_rates.get(x, 0) in range(catch_rate, prev_catch_rate)]
+
+            for b in type_balls_part:
+                yield b
+
             if self.have_ball(ball):
                 yield ball
+
+            prev_catch_rate = catch_rate
 
     def have_ball(self, ball):
         return self.balls.get(ball, 0) > 0
