@@ -35214,7 +35214,9 @@
             "defense": 65,
             "special_attack": 45,
             "special_defense": 85
-        }
+        },
+        "order": 461,
+        "evolves_to": {}
     },
     "10542": {
         "pokedex_id": 10542,
@@ -35771,5 +35773,43 @@
         },
         "order": 94,
         "evolves_to": {}
+    },
+    "100410": {
+        "pokedex_id": 100410,
+        "name": "PCG Chandelure",
+        "description": "In homes illuminated by Chandelure instead of lights, funerals were a constant occurrence\u2014 or so it\u2019s said.",
+        "weight": 34.3,
+        "generation": 5,
+        "type1": "ghost",
+        "type2": "fire",
+        "tier": "A",
+        "base_stats": {
+            "hp": 60,
+            "speed": 80,
+            "attack": 55,
+            "defense": 90,
+            "special_attack": 145,
+            "special_defense": 90
+        },
+        "order": 609,
+        "evolves_to": {}
+    },
+    "999999": {
+        "pokedex_id": 999999,
+        "name": "Unidentified Ghost",
+        "description": "Unidentified Ghost",
+        "weight": 0.1,
+        "generation": 1,
+        "type1": "ghost",
+        "type2": "none",
+        "tier": "S",
+        "base_stats": {
+            "hp": 1,
+            "speed": 1,
+            "attack": 1,
+            "defense": 1,
+            "special_attack": 1,
+            "special_defense": 1
+        }
     }
 }
