@@ -7,9 +7,10 @@ from .chat_threads.Pokedaily import Pokedaily
 from .chat_threads.PokemonSpawn import PokemonSpawn
 from .chat_threads.Wondertrade import Wondertrade
 from .chat_threads.AutoBattle import AutoBattle
+from .chat_threads.Commands import Commands
 
 
-class ChatThreads(DailyTasks, Pokedaily, PokemonSpawn, Wondertrade, AutoBattle):
+class ChatThreads(DailyTasks, Pokedaily, PokemonSpawn, Wondertrade, AutoBattle, Commands):
     def start_threads(self):
         if THREADCONTROLLER.started is False:
             THREADCONTROLLER.started = True
@@ -20,6 +21,7 @@ class ChatThreads(DailyTasks, Pokedaily, PokemonSpawn, Wondertrade, AutoBattle):
             create_thread(self.pokedaily_timer)
             create_thread(self.daily_task_timer)
             create_thread(self.battle_timer)
+            create_thread(self.commands_timer)
 
     def settings_reloader(self):
         thread_name = "Settings Reloader"
