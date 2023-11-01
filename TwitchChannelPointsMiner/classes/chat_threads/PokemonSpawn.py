@@ -131,12 +131,20 @@ class PokemonSpawn(object):
         POKEMON.sync_computer(all_pokemon)
 
         # find all the pokemon that are the current one that spawned
-        filtered = POKEMON.computer.get_pokemon(pokemon)
+        if pokemon.pokedex_id == 999999:
+            filtered = POKEMON.computer.pokemon
+        else:
+            filtered = POKEMON.computer.get_pokemon(pokemon)
+
         caught = None
         for poke in filtered:
             if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() < 60 * 5:
                 caught = poke
                 break
+
+        if caught is not None and pokemon.pokedex_id == 999999:
+            pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
+            pokemon.is_unidentified_ghost = True
 
         pokemon_sprite = None
         if caught is not None:

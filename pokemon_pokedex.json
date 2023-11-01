@@ -25120,7 +25120,10 @@
             "special_defense": 65
         },
         "evolves_to": {},
-        "order": 53
+        "order": 53,
+        "evolves_from": [
+            "10107"
+        ]
     },
     "10109": {
         "pokedex_id": 10109,
@@ -29127,7 +29130,18 @@
             "special_attack": 50,
             "special_defense": 40
         },
-        "order": 52
+        "order": 52,
+        "evolves_to": {
+            "10108": {
+                "level": 28,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Dark"
+                    }
+                ]
+            }
+        }
     },
     "10110": {
         "pokedex_id": 10110,
