@@ -348,6 +348,9 @@ class PokemonComunityGame(Loyalty):
             for poke_type in self.missions.check_event_pokemon(pokemon):
                 reasons.append(f"catch_event ({poke_type.title()})")
 
+        if pokemon.pokedex_id == 999999:
+            reasons.append("special")
+
         return reasons
 
     def show_sprite(self, reasons, extra_reasons={}):
