@@ -28,6 +28,7 @@ class Pokemon(object):
         self.is_legendary = False
         self.is_female = False
         self.is_non_spawnable = False
+        self.is_unidentified_ghost = False
 
         # evolution data, None = hasnt been added yet
         self.evolve_to = data.get("evolves_to", None)
@@ -51,7 +52,8 @@ class Pokemon(object):
             if getattr(self, "is_" + att):
                 atts.append(att)
         atts = "" if len(atts) == 0 else " [" + ", ".join(atts) + "]"
-        return f"{self.pokedex_id}{real_id} {self.name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}{atts}"
+        unidentified = "(Unidentified Ghost) " if self.is_unidentified_ghost else ""
+        return f"{unidentified}{self.pokedex_id}{real_id} {self.name}, {self.bst}BST, {self.weight}KG, tier {self.tier}, types {self.types}{atts}"
 
     def __repr__(self):
         return self.__str__()
