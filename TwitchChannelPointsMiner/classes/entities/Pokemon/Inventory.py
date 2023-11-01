@@ -116,7 +116,7 @@ class Inventory(object):
         return strategy, ball
 
     def is_repeat(self, reasons):
-        for reason in ["pokedex", "alt"]:
+        for reason in ["pokedex", "alt", "special"]:
             if reason in reasons:
                 return False
         return True
