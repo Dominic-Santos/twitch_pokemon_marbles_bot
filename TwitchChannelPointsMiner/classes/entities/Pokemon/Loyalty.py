@@ -59,7 +59,8 @@ class Loyalty(object):
                 self.up_to_date.append(channel)
 
     def need_loyalty(self, channel):
-        return channel not in self.up_to_date
+        return channel not in self.loyalty_data
+        # return channel not in self.up_to_date
 
     def set_loyalty(self, channel, loyalty_level, current_points, level_points, save=True):
         if channel in ["jonaswagern", "deemonrider"]:
