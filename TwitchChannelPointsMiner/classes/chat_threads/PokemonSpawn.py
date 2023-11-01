@@ -142,16 +142,18 @@ class PokemonSpawn(object):
                 caught = poke
                 break
 
+        is_unidentified_ghost = False
         if caught is not None and pokemon.pokedex_id == 999999:
             pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
-            pokemon.is_unidentified_ghost = True
+            is_unidentified_ghost = True
 
         pokemon_sprite = None
         if caught is not None:
             ivs = int(poke["avgIV"])
             lvl = poke['lvl']
             shiny = " Shiny" if poke["isShiny"] else ""
-            msg = f"Caught{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
+            unidentified = " (Unidentified Ghost)" if is_unidentified_ghost else ""
+            msg = f"Caught{unidentified}{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
             log_file("green", msg)
 
             caught_pokemon = self.update_evolutions(poke["id"], pokemon_id)
