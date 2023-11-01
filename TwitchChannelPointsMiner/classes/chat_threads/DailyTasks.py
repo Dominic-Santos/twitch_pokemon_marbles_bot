@@ -348,6 +348,8 @@ class DailyTasks(object):
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
+        self.show_pokedex()
+
     def show_pokedex(self):
         discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
 
