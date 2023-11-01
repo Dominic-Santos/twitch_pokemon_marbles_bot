@@ -53,10 +53,11 @@ class Commands(object):
         if len(resp["messages"]) == 0:
             return
 
-        latest_message = resp["messages"][0][0]
+        for message in resp["messages"]:
+            latest_message = message[0]
 
-        POKEMON.discord.delete(DISCORD_DELETE_COMMAND.format(message_id=latest_message["id"]))
+            POKEMON.discord.delete(DISCORD_DELETE_COMMAND.format(message_id=latest_message["id"]))
 
-        command = latest_message["content"].replace("_", " ").strip().lower()
+            command = latest_message["content"].replace("_", " ").strip().lower()
 
-        self.run_command(command)
+            self.run_command(command)
