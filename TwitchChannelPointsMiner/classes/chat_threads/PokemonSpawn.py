@@ -156,7 +156,7 @@ class PokemonSpawn(object):
             msg = f"Caught{unidentified}{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
             log_file("green", msg)
 
-            caught_pokemon = self.update_evolutions(poke["id"], pokemon_id)
+            caught_pokemon = self.update_evolutions(poke["id"], pokemon.pokedex_id)
 
             if pokemon.is_fish and POKEMON.fish_event:
                 if "🐟" in caught_pokemon["description"]:
