@@ -373,7 +373,7 @@ class DailyTasks(object):
 
             if pokemon_obj.evolve_to is None:
                 self.update_evolutions(pokemon["id"], pokemon["pokedexId"])
-                log("yellow", f"Updated evolutions for{pokemon['pokedexId']}")
+                log("yellow", f"Updated evolutions for {pokemon['pokedexId']}")
                 sleep(1)
             elif updated:
                 POKEMON.pokedex.save_pokedex()
