@@ -33267,7 +33267,9 @@
             "defense": 58,
             "special_attack": 70,
             "special_defense": 58
-        }
+        },
+        "order": 877,
+        "evolves_to": {}
     },
     "10418": {
         "pokedex_id": 10418,
