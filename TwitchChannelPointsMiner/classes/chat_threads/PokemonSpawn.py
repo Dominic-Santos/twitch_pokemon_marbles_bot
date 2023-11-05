@@ -1,5 +1,3 @@
-from datetime import datetime
-from dateutil.parser import parse
 from time import sleep
 import requests
 import traceback
@@ -127,45 +125,27 @@ class PokemonSpawn(object):
 
         sleep(5)
 
-        all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
-
-        # find all the pokemon that are the current one that spawned
-        if pokemon.pokedex_id == 999999:
-            filtered = POKEMON.computer.pokemon
-        else:
-            filtered = POKEMON.computer.get_pokemon(pokemon)
-
-        caught = None
-        for poke in filtered:
-            if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() < 60 * 5:
-                caught = poke
-                break
-
-        is_unidentified_ghost = False
-        if caught is not None and pokemon.pokedex_id == 999999:
-            pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
-            is_unidentified_ghost = True
+        pokemon, caught = self.get_last_caught(pokemon_id)
 
         pokemon_sprite = None
         if caught is not None:
-            ivs = int(poke["avgIV"])
-            lvl = poke['lvl']
-            shiny = " Shiny" if poke["isShiny"] else ""
-            unidentified = " (Unidentified Ghost)" if is_unidentified_ghost else ""
+            ivs = int(caught["avgIV"])
+            lvl = caught['lvl']
+            shiny = " Shiny" if caught["isShiny"] else ""
+            unidentified = " (Unidentified Ghost)" if pokemon.is_unidentified_ghost else ""
             msg = f"Caught{unidentified}{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
             log_file("green", msg)
 
-            caught_pokemon = self.update_evolutions(poke["id"], pokemon.pokedex_id)
+            caught_pokemon = self.update_evolutions(caught["id"], pokemon.pokedex_id)
 
             if pokemon.is_fish and POKEMON.fish_event:
                 if "🐟" in caught_pokemon["description"]:
                     msg += "\n" + caught_pokemon["description"].split("Your fish is ")[-1].split("Your fish has ")[-1]
 
-            sprite = str(poke["pokedexId"])
-            extra_reasons = {"shiny": poke["isShiny"]}
+            sprite = str(caught["pokedexId"])
+            extra_reasons = {"shiny": caught["isShiny"]}
             if POKEMON.show_sprite(catch_reasons, extra_reasons):
-                pokemon_sprite = get_sprite("pokemon", sprite, shiny=poke["isShiny"])
+                pokemon_sprite = get_sprite("pokemon", sprite, shiny=caught["isShiny"])
 
             if "pokedex" in catch_reasons and pokemon.is_spawnable:
                 discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)

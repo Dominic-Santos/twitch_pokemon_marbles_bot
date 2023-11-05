@@ -2,6 +2,7 @@ from datetime import datetime
 from time import sleep
 import random
 import copy
+from dateutil.parser import parse
 
 from .ChatO import ClientIRC as ClientIRCO
 from .ChatO import ChatPresence as ChatPresenceO
@@ -197,16 +198,47 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         for title, reward in completed:
             readable_reward = reward["reward"]
             reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"])
-            mission_msg = f"Completed mission - {title} - reward: {readable_reward}"
+            mission_msg = f"Completed mission - {title} - reward:"
             if reward["reward_type"] == "pokemon":
-                pokemonobj = self.get_pokemon_stats(reward["reward_name"], cached=False)
-                if POKEMON.pokedex.have(pokemonobj) is False:
-                    mission_msg = mission_msg + " - needed"
+
+                pokemonobj, caught = self.get_last_caught(reward["reward_name"], reward=True)
+                needed = "" if POKEMON.pokedex.have(pokemonobj) else " - needed"
+                ivs = int(caught["avgIV"])
+                lvl = caught['lvl']
+                shiny = " Shiny" if caught["isShiny"] else ""
+                mission_msg = f"{mission_msg} {shiny} {pokemonobj.name} ({pokemonobj.tier}) Lvl.{lvl} {ivs}IV{needed}"
+            else:
+                mission_msg = f"{mission_msg} {readable_reward}"
             log("green", f"{mission_msg}")
             POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:
                 reward_sprite.close()
         return completed
+
+    def get_last_caught(self, pokedex_id, reward=False):
+        pokemon = self.get_pokemon_stats(pokedex_id, cached=False)
+
+        all_pokemon = self.pokemon_api.get_all_pokemon()
+        POKEMON.sync_computer(all_pokemon)
+
+        # find all the pokemon that are the current one that spawned
+        if pokemon.pokedex_id == 999999:
+            filtered = POKEMON.computer.pokemon
+        else:
+            filtered = POKEMON.computer.get_pokemon(pokemon)
+
+        caught = None
+        for poke in filtered:
+            if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() < 60 * 5:
+                if (" " in poke["originalChannel"] and reward) or (" " not in poke["originalChannel"] and reward is False):
+                    caught = poke
+                    break
+
+        if caught is not None and pokemon.pokedex_id == 999999:
+            pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
+            pokemon.is_unidentified_ghost = True
+
+        return pokemon, caught
 
     def get_pokemon_move(self, move_name, move_type="None"):
 
