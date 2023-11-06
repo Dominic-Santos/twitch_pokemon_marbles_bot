@@ -1,6 +1,7 @@
 from time import sleep
 import copy
 import traceback
+import json
 
 from ..entities.Pokemon import Battle, damage_calculator
 from ..entities.Pokemon.Pokedex import Move
@@ -170,6 +171,7 @@ class AutoBattle(object):
 
     def do_battle(self):
         battle_data = self.pokemon_api.battle_join()
+        battle_connection = self.pokemon_api.battle_connect(battle_data["battle_id"], battle_data["player_id"])
         battle = Battle()
         battle.set_battle(battle_data["battle_id"], battle_data["player_id"], battle_data["unique_battle_key"])
         while battle.state != "end":
@@ -179,87 +181,25 @@ class AutoBattle(object):
                 pokemon = battle.team["pokemon"][str(battle.team["current_pokemon"])]
                 enemy = battle.enemy_team["pokemon"][str(battle.enemy_team["current_pokemon"])]
 
-                result = self.matchup_winner(pokemon, enemy)
-
-                if result["win"]:
-                    if result["move"] is None:
-                        result["move"] = list(pokemon["moves"].keys())[0]
-                    self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
-                    sleep(1)
-                    continue
-
-                elif pokemon["hp"] > pokemon["max_hp"] / 2:
-                    best_result = None
-                    best_switch_id = None
-                    for other_pokemon_id in battle.team["pokemon"]:
-                        if other_pokemon_id != str(battle.team["current_pokemon"]):
-                            other_pokemon = battle.team["pokemon"][other_pokemon_id]
-                            if other_pokemon["hp"] > 0:
-                                swap = False
-                                switch_result = self.matchup_winner(other_pokemon, enemy, True)
-
-                                if best_result is None:
-                                    swap = True
-                                elif switch_result["win"]:
-                                    if switch_result["win"] != best_result["win"]:
-                                        swap = True
-                                    elif switch_result["win"]:
-                                        if switch_result["taken"] < best_result["taken"]:
-                                            swap = True
-                                    else:
-                                        if switch_result["dealt"] > best_result["dealt"]:
-                                            swap = True
-
-                                if swap:
-                                    best_switch_id = other_pokemon_id
-                                    best_result = switch_result
-
-                    if best_result is not None:
-                        if best_result["win"]:
-                            self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
-                            sleep(1)
-                            continue
-
-                # battle.submit_move(result["move"])
-                self.pokemon_api.battle_submit_move(battle.battle_id, result["move"])
+                move = self.find_best_move(pokemon, enemy)
+                payload = {"action": "next_move", "move_id": str(move["move_id"])}
+                battle_connection.send(json.dumps(payload))
                 sleep(1)
 
             elif battle.state == "switch":
                 # pick a pokemon to switch to
                 battle.state = "continue"
 
-                enemy = battle.enemy_team["pokemon"][str(battle.enemy_team["current_pokemon"])]
-                best_result = None
-                best_switch_id = None
                 for other_pokemon_id in battle.team["pokemon"]:
                     if other_pokemon_id != str(battle.team["current_pokemon"]):
                         other_pokemon = battle.team["pokemon"][other_pokemon_id]
                         if other_pokemon["hp"] > 0:
-                            swap = False
-                            switch_result = self.matchup_winner(other_pokemon, enemy, True)
+                            payload = {"action": "change_pokemon", "battle_pokemon_id": str(other_pokemon_id)}
+                            battle_connection.send(json.dumps(payload))
+                            sleep(1)
+                            break
 
-                            if best_result is None:
-                                swap = True
-                            elif switch_result["win"]:
-                                if switch_result["win"] != best_result["win"]:
-                                    swap = True
-                                elif switch_result["win"]:
-                                    if switch_result["taken"] < best_result["taken"]:
-                                        swap = True
-                                else:
-                                    if switch_result["dealt"] > best_result["dealt"]:
-                                        swap = True
-
-                            if swap:
-                                best_switch_id = other_pokemon_id
-                                best_result = switch_result
-                if best_result is None:
-                    battle.state = "move"
-                    continue
-                self.pokemon_api.battle_switch_pokemon(battle.battle_id, best_switch_id)
-                sleep(1)
-
-            resp = self.pokemon_api.battle_action(battle.action, battle.battle_id, battle.player_id)
+            resp = battle_connection.recv()
             battle.run_action(resp)
             sleep(0.1)
 
@@ -268,66 +208,16 @@ class AutoBattle(object):
         else:
             log_file("red", f"Lost the battle! rewards: {battle.rewards}")
 
+        battle_connection.close()
+
         return battle.result, battle_data["unique_battle_key"]
 
-    def matchup_winner(self, my, enemy, switched=False):
-        my_pokemon = copy.deepcopy(my)
-        enemy_pokemon = copy.deepcopy(enemy)
-        my_stats = self.get_pokemon_stats(my_pokemon["pokedex_id"])
-        enemy_stats = self.get_pokemon_stats(enemy_pokemon["pokedex_id"])
-        skip = switched
-        move = None
+    def find_best_move(self, my_pokemon, enemy_pokemon):
+        attacker = self.get_pokemon_stats(my_pokemon["pokedex_id"])
+        defender = self.get_pokemon_stats(enemy_pokemon["pokedex_id"])
 
-        # run until one is dead
-        while my_pokemon["hp"] > 0 and enemy_pokemon["hp"] > 0:
-            my_move = self.find_best_move(my_stats, my_pokemon["moves"], enemy_stats)
-            enemy_move = self.find_best_move(enemy_stats, enemy_pokemon["moves"], my_stats)
+        attacker_moves = my_pokemon["moves"]
 
-            if move is None:
-                move = my_move
-
-            if my_move["move_id"] is None:
-                # attacker, move data, defender, weather, attacker burned
-                my_move["damage"] = damage_calculator(my_stats, my_move["move_data"], enemy_stats, "normal", False)[0]
-            elif skip is False:
-                my_pokemon["moves"][my_move["move_id"]]["pp"] = my_pokemon["moves"][my_move["move_id"]]["pp"] - 1
-
-            if enemy_move["move_id"] is None:
-                # attacker, move data, defender, weather, attacker burned
-                enemy_move["damage"] = damage_calculator(enemy_stats, my_move["move_data"], my_stats, "normal", False)[0]
-            else:
-                enemy_pokemon["moves"][enemy_move["move_id"]]["pp"] = enemy_pokemon["moves"][enemy_move["move_id"]]["pp"] - 1
-
-            if my_move["move_data"].priority > enemy_move["move_data"].priority or (
-                my_move["move_data"].priority == enemy_move["move_data"].priority and my_stats.speed > enemy_stats.speed
-            ):
-                # I attack first
-                if skip:
-                    skip = False
-                else:
-                    enemy_pokemon["hp"] = enemy_pokemon["hp"] - my_move["damage"]
-                    if enemy_pokemon["hp"] <= 0:
-                        continue
-
-                my_pokemon["hp"] = my_pokemon["hp"] - enemy_move["damage"]
-            else:
-                # enemy attacks first
-                my_pokemon["hp"] = my_pokemon["hp"] - enemy_move["damage"]
-                if my_pokemon["hp"] <= 0:
-                    continue
-
-                if skip:
-                    skip = False
-                else:
-                    enemy_pokemon["hp"] = enemy_pokemon["hp"] - my_move["damage"]
-        return {
-            "win": my_pokemon["hp"] > 0,
-            "dealt": enemy["hp"] - enemy_pokemon["hp"],
-            "taken": my["hp"] - my_pokemon["hp"],
-            "move": "" if move is None else move["move_id"]
-        }
-
-    def find_best_move(self, attacker, attacker_moves, defender):
         best_move = None
         # best_move = list(attacker_moves.keys())[0]
         best_damage = -1

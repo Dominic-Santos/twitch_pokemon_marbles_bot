@@ -1,4 +1,6 @@
 import requests
+import asyncio
+from websockets.sync.client import connect
 
 from .Utils import save_to_json, load_pcg_auth
 
@@ -146,17 +148,12 @@ class API(object):
         # returns {"battle_id": 2993670, "player_id": 5983522, "unique_battle_key": "CU8L4"}
         return self._do_request("POST", BATTLE_URL + "search/", payload={"action": "accept"})
 
-    @save_to_json
-    def battle_submit_move(self, battle_id, move_id):
-        return self._do_request("POST", BATTLE_URL + f"v2/action/?battle_id={battle_id}", payload={"action": "next_move", "move_id": str(move_id)})
-
-    @save_to_json
-    def battle_switch_pokemon(self, battle_id, pokemon_id):
-        return self._do_request("POST", BATTLE_URL + f"v2/action/?battle_id={battle_id}", payload={"action": "change_pokemon", "battle_pokemon_id": str(pokemon_id)})
-
-    @save_to_json
-    def battle_action(self, action_no, battle_id, player_id):
-        return self._do_request("GET", BATTLE_URL + f"v2/action/?action_no={action_no}&battle_id={battle_id}&player_id={player_id}&isViewer=false")
+    def battle_connect(self, battle_id, player_id):
+        try:
+            connection = connect(f"wss://battle.bframework.de/ws/battle/?Authorization={self.auth}&battle_id={battle_id}&liveView=false&isViewer=false&language=en-gb&player_id={player_id}")
+        except:
+            connection = None
+        return connection
 
     @save_to_json
     def use_item_on_pokemon(self, pokemon_id, item_id):
