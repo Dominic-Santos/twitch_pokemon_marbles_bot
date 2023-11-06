@@ -5650,5 +5650,17 @@
         "pp": 5,
         "accuracy": 100,
         "type": "dragon"
+    },
+    "thunder-shock": {
+        "name": "Thunder Shock",
+        "damage_class": "special",
+        "stat_chance": 0,
+        "effect_chance": 10,
+        "priority": 0,
+        "description": "A jolt of electricity crashes down on the target to\r\ninflict damage. This may also leave the target\r\nwith paralysis.",
+        "power": 40,
+        "pp": 30,
+        "accuracy": 100,
+        "type": "electric"
     }
 }

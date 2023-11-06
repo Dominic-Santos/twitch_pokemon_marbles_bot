@@ -151,7 +151,8 @@ class API(object):
     def battle_connect(self, battle_id, player_id):
         try:
             connection = connect(f"wss://battle.bframework.de/ws/battle/?Authorization={self.auth}&battle_id={battle_id}&liveView=false&isViewer=false&language=en-gb&player_id={player_id}")
-        except:
+        except Exception as e:
+            print(e)
             connection = None
         return connection
 
