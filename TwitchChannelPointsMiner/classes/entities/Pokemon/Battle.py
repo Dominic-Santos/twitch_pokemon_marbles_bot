@@ -60,15 +60,6 @@ STATUS = {
 }
 
 
-def decode(data):
-    try:
-        decoded = jwt.decode(data, options={"verify_signature": False})
-        return json.loads(decoded["content"])
-    except Exception as e:
-        print(e)
-    return None
-
-
 def weakness_resistance(attack_type, defender_types):
     effective = 1
     for def_type in defender_types:
@@ -134,16 +125,14 @@ class Battle():
         pokemon = self.team["current_pokemon"]
         self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
 
-    def run_action(self, data):
+    def run_action(self, message):
+        data = json.loads(message)
         self.state = "continue"
-
-        if "data" in data:
-            data["decoded"] = decode(data["data"])
 
         action = data["action"]
 
         if action in ["INIT", "RE_INIT"]:
-            self.action_init(data["decoded"])
+            self.action_init(data["content"])
         elif action == "AWAITING_NEXT_MOVE":
             # wait for player to use an attack or switch (or quit)
             self.state = "move"
@@ -155,22 +144,22 @@ class Battle():
             self.log("")
         elif action == "LOG":
             # could be many things
-            result = self.action_log(data["decoded"])
+            result = self.action_log(data["content"])
             if result is False:
-                self.log(f"Unknown LOG action {data['decoded']['type']} ({self.action})")
+                self.log(f"Unknown LOG action {data['content']} ({self.action})")
                 self.save_action(data)
         elif action == "ANIMATION":
             # animations do nothing
             pass
         elif action == "DAMAGE":
             # damage is delt
-            self.action_damage(data["decoded"])
+            self.action_damage(data["content"])
         elif action == "END":
             # battle ended
-            self.action_end(data["decoded"])
+            self.action_end(data["content"])
         elif action == "KO":
             # pokemon ko'ed
-            self.action_ko(data["decoded"])
+            self.action_ko(data["content"])
         elif action == "WAIT":
             self.state = "switch"
         else:
@@ -229,11 +218,13 @@ class Battle():
             self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
             return self.team["pokemon"][str(pokemon)]["moves"][str(move)]["name"]
         else:
-            if str(move) not in self.enemy_team["pokemon"][str(pokemon)]["moves"]:
-                print("-------------------Struggle", self.enemy_team["pokemon"][str(pokemon)])
-                return "Struggle"
-            self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
-            return self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["name"]
+            pass
+            # NO MORE ENEMY MOVES
+            # if str(move) not in self.enemy_team["pokemon"][str(pokemon)]["moves"]:
+            #     print("-------------------Struggle", self.enemy_team["pokemon"][str(pokemon)])
+            #     return "Struggle"
+            # self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
+            # return self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["name"]
 
     @staticmethod
     def clean_action(action, to_replace):
@@ -305,6 +296,7 @@ class Battle():
                 prefix, last = self._get_pokemon(0, data["last_pokemon"])
                 prefix, current = self._get_pokemon(0, data["current_pokemon"])
                 self.enemy_team["current_pokemon"] = data["current_pokemon"]
+                self.enemy_team["pokemon"][data["current_pokemon"]] = data["current_pokemon_data"]
             self.log(f"Switched {prefix} {last['name']} for {current['name']}")
             self.log(f"Current HP {current['hp']}/{current['max_hp']}")
         elif typ == "STAT_CHANGED":
@@ -314,11 +306,7 @@ class Battle():
         return True
 
     def action_init(self, data):
-        if "actionNo" in data:
-            self.action = data["actionNo"] - 1
-            self.log("Reconnected to Battle\n")
-        else:
-            self.log("Connected to Battle\n")
+        self.log("Connected to Battle\n")
 
         for player in data["players"]:
             if player == str(self.player_id):
