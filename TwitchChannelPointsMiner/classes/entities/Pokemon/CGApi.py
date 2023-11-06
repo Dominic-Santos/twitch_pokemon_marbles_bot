@@ -1,6 +1,7 @@
 import requests
 import asyncio
 from websockets.sync.client import connect
+import ssl
 
 from .Utils import save_to_json, load_pcg_auth
 
@@ -149,8 +150,15 @@ class API(object):
         return self._do_request("POST", BATTLE_URL + "search/", payload={"action": "accept"})
 
     def battle_connect(self, battle_id, player_id):
+        ssl_context = ssl.SSLContext()
+        ssl_context.verify_mode = ssl.CERT_NONE
+        ssl_context.check_hostname = False
         try:
-            connection = connect(f"wss://battle.bframework.de/ws/battle/?Authorization={self.auth}&battle_id={battle_id}&liveView=false&isViewer=false&language=en-gb&player_id={player_id}")
+
+            connection = connect(
+                f"wss://battle.bframework.de/ws/battle/?Authorization={self.auth}&battle_id={battle_id}&liveView=false&isViewer=false&language=en-gb&player_id={player_id}",
+                ssl_context=ssl_context,
+            )
         except Exception as e:
             print(e)
             connection = None
