@@ -53,6 +53,10 @@ class PokemonComunityGame(Loyalty):
                 "value": True,
                 "hint": "Send alert to discord when pokemon reaches a certain level",
             },
+            "alert_evolve": {
+                "value": True,
+                "hint": "Send alert to discord when pokemon is ready to evolve",
+            },
             "alert_level_value": {
                 "value": 100,
                 "hint": "The level a pokemon must reach to tigger the level alert",
@@ -421,6 +425,8 @@ class PokemonComunityGame(Loyalty):
     def battle_var_init(self):
         self.ab_training = []
         self.ab_level_reached = []
+        self.ab_evolving = []
+        self.ab_evolve_reached = []
 
     @property
     def auto_battle(self):
