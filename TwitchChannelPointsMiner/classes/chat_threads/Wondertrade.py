@@ -145,9 +145,9 @@ class Wondertrade(object):
                     continue
                 changes.append((pokemon["id"], nick, pokemon["name"], pokemon["nickname"]))
 
-        for pokemon in shineys:
-            if pokemon["nickname"] is not None:
-                changes.append((pokemon["id"], "", pokemon["name"], pokemon["nickname"]))
+        # for pokemon in shineys:
+        #     if pokemon["nickname"] is not None:
+        #         changes.append((pokemon["id"], "", pokemon["name"], pokemon["nickname"]))
 
         for poke_id, new_name, real_name, old_name in changes:
             if new_name is not None and len(new_name) > 12:
