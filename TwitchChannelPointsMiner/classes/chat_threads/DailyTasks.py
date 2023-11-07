@@ -193,10 +193,12 @@ def discord_update_pokedex(Pokemon, pokemon_api, get_pokemon_stats):
 
 def check_pokedex(Pokemon, get_stats_func):
     spawnables = {tier + suffix: [] for tier in ["S", "A", "B", "C"] for suffix in ["_have", "_dont_have"]}
+    non_spawnables = 0
     for i in range(1, Pokemon.pokedex.total + 1):
         pokemon = get_stats_func(i)
 
         if pokemon.is_starter or pokemon.is_legendary or pokemon.is_non_spawnable:
+            non_spawnables += 1
             continue
 
         if Pokemon.pokedex.have(pokemon):
@@ -231,7 +233,24 @@ def check_pokedex(Pokemon, get_stats_func):
 
         missing_strings.append(mstring)
 
-    msg = f"""Spawnable Pokedex: {spawnables['have']}/{Pokemon.pokedex.spawnables} ({spawnables_per['total']}%)
+    total_have = spawnables["have"] + non_spawnables
+    total_per = int(total_have * 10000.0 / Pokemon.pokedex.total) / 100.0
+
+    alts_total = 0
+    alts_caught = 0
+    for pokemon_id in Pokemon.pokedex.pokemon_ids:
+        if pokemon_id <= Pokemon.pokedex.total:
+            continue
+        alts_total += 1
+        if Pokemon.pokedex.pokemon_ids[pokemon_id]:
+            alts_caught += 1
+
+    alts_per = int(alts_caught * 10000.0 / alts_total) / 100.0
+
+    msg = f"""Pokedex: {total_have}/{Pokemon.pokedex.total} ({total_per}%)
+    Alt Pokedex: {alts_caught}/{alts_total} ({alts_per}%)
+
+    Spawnable Pokedex: {spawnables['have']}/{Pokemon.pokedex.spawnables} ({spawnables_per['total']}%)
     A: {spawnables['A_have']}/{Pokemon.pokedex.spawnable_tier('A')} ({spawnables_per['A']}%) {missing_strings[0]}
     B: {spawnables['B_have']}/{Pokemon.pokedex.spawnable_tier('B')} ({spawnables_per['B']}%) {missing_strings[1]}
     C: {spawnables['C_have']}/{Pokemon.pokedex.spawnable_tier('C')} ({spawnables_per['C']}%) {missing_strings[2]}"""
