@@ -37,10 +37,10 @@ class AutoBattle(object):
         for pokemon in team:
             poke_obj = self.get_pokemon_stats(pokemon["pokedexId"])
 
-            if poke_obj.evolves_to is None or len(poke_obj.evolves_to.keys()) == 0:
+            if poke_obj.evolve_to is None or len(poke_obj.evolve_to.keys()) == 0:
                 continue
 
-            limit = poke_obj.evolves_to[poke_obj.evolves_to.keys()[0]]["level"]
+            limit = poke_obj.evolve_to[poke_obj.evolve_to.keys()[0]]["level"]
 
             if pokemon["lvl"] >= limit and pokemon["id"] not in POKEMON.ab_evolve_reached:
                 POKEMON.ab_evolve_reached.append(pokemon["id"])
