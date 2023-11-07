@@ -23873,7 +23873,10 @@
             "special_defense": 81
         },
         "evolves_to": {},
-        "order": 862
+        "order": 862,
+        "evolves_from": [
+            "10383"
+        ]
     },
     "863": {
         "pokedex_id": 863,
@@ -33007,7 +33010,22 @@
         "evolves_from": [
             "10552"
         ],
-        "order": 264
+        "order": 264,
+        "evolves_to": {
+            "862": {
+                "level": 35,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Dark"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Normal"
+                    }
+                ]
+            }
+        }
     },
     "10389": {
         "pokedex_id": 10389,
@@ -35531,7 +35549,8 @@
         "evolves_from": [
             "548"
         ],
-        "order": 549
+        "order": 549,
+        "evolves_to": {}
     },
     "86326": {
         "pokedex_id": 86326,
