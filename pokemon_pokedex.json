@@ -27262,7 +27262,10 @@
             "special_defense": 150
         },
         "evolves_to": {},
-        "order": 706
+        "order": 706,
+        "evolves_from": [
+            "86329"
+        ]
     },
     "86316": {
         "pokedex_id": 86316,
@@ -28909,7 +28912,8 @@
         "order": 20,
         "evolves_from": [
             "10091"
-        ]
+        ],
+        "evolves_to": {}
     },
     "10093": {
         "pokedex_id": 10093,
@@ -35767,7 +35771,8 @@
             "special_attack": 80,
             "special_defense": 80
         },
-        "order": 101
+        "order": 101,
+        "evolves_to": {}
     },
     "86329": {
         "pokedex_id": 86329,
@@ -35789,7 +35794,22 @@
         "order": 705,
         "evolves_from": [
             "704"
-        ]
+        ],
+        "evolves_to": {
+            "86318": {
+                "level": 50,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Dragon"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Steel"
+                    }
+                ]
+            }
+        }
     },
     "100409": {
         "pokedex_id": 100409,
