@@ -110,6 +110,19 @@ class PokemonComunityGame(Loyalty):
                 "value": True,
                 "hint": "When auto_battle is active, also allow AI to attempt Challenges when available",
             },
+            "change_team": {
+                "value": True,
+                "hint": "Change battle team when pokemon reach level 100",
+            },
+            "change_team_tradables": {
+                "value": True,
+                "hint": "Will change battle to tradable pokemon",
+            },
+            "change_team_priority": {
+                "value": "bst",
+                "hint": "When changing battle team, prioritise pokemon by",
+                "values": ["bst", "price"],
+            },
             "money_saving": {
                 "value": 0,
                 "hint": "When cash is bellow this amount, save Ultraballs for A tiers and Greatballs for B tiers",

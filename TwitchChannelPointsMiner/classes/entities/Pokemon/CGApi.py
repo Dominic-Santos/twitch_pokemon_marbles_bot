@@ -173,3 +173,8 @@ class API(object):
     def get_move(self, move_name):
         # returns {"name": "Poison Fang", "damage_class": "physical", "stat_chance": 0, "effect_chance": 50, "priority": 0, "description": "etc", "power": 50, "pp": 15, "accuracy": 100}
         return self._do_request("GET", BASE_URL + f"get-move-data/?move={move_name}")
+
+    @save_to_json
+    def add_to_team(self, pokemon_id, slot):
+        # slot 0-5
+        return self._do_request("POST", TRAINER_URL + f"pokemon-set-team-new/", payload={"pokemon_id": pokemon_id, "slot": slot})
