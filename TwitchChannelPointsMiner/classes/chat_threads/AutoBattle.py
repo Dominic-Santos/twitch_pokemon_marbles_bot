@@ -33,6 +33,54 @@ class AutoBattle(object):
 
         log("yellow", f"Thread Closing - {thread_name}")
 
+    def check_change_team(self, team):
+        team_pokemon = [pokemon["id"] for pokemon in team]
+        swap_pokemon = [pokemon["id"] for pokemon in team if pokemon["lvl"] >= 100]
+        priority = POKEMON.settings["change_team_priority"]
+        tradables = POKEMON.settings["change_team_tradables"]
+
+        if len(team) < 6:
+            for i in range(6 - len(team)):
+                team_pokemon.append(i)
+                swap_pokemon.append(i)
+
+        if len(swap_pokemon) == 0:
+            return
+
+        all_pokemon = self.pokemon_api.get_all_pokemon()
+        POKEMON.sync_computer(all_pokemon)
+
+        keymap = {
+            "bst": "baseStats",
+            "price": "sellPrice",
+        }
+        sorted_box = sorted(POKEMON.computer.pokemon, key=lambda x: x[keymap[priority]], reverse=True)
+
+        new_team = []
+        for pokemon in sorted_box:
+            if pokemon["id"] in team_pokemon or pokemon["lvl"] >= 100:
+                # skip pokemon already in team or already level 100
+                continue
+
+            if tradables is False and pokemon["nickname"] is not None and "trade" in pokemon["nickname"]:
+                # skip pokemon up for trade
+                continue
+
+            new_team.append(pokemon)
+            if len(new_team) == len(swap_pokemon):
+                # got enough pokemon
+                break
+
+        for i in range(len(new_team)):
+            remove = swap_pokemon[i]
+            add = new_team[i]
+            slot = team_pokemon.index(remove)
+
+            self.pokemon_api.add_to_team(add["id"], slot)
+
+            msg = f"{add['nickname']} ({add['name']}) was added to the team!"
+            log("green", msg)
+
     def check_evolve_alert(self, team):
         for pokemon in team:
             poke_obj = self.get_pokemon_stats(pokemon["pokedexId"])
@@ -133,6 +181,10 @@ class AutoBattle(object):
                         # check team pokemon that reached level to evolve
                         self.check_evolve_alert(team_data["allPokemon"])
 
+                    if POKEMON.settings["change_team"]:
+                        # swap out level 100 pokemon
+                        self.check_change_team(team_data["allPokemon"])
+
                     team_id = team_data["teamNumber"]
                     data = self.pokemon_api.battle_create(battle_mode, difficulty, team_id)
                     battle_message = f"{difficulty} {battle_mode}" if battle_mode == "stadium" else battle_mode
@@ -141,7 +193,12 @@ class AutoBattle(object):
                     if result and battle_mode == "challenge":
                         POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
                 else:
-                    log("red", f"Didn't meet requirements for {battle_mode} battle")
+                    if POKEMON.settings["change_team"]:
+                        # swap out level 100 pokemon
+                        self.check_change_team(team_data["allPokemon"])
+                        log("red", f"Didn't meet requirements for {battle_mode} battle, tried to change team")
+                    else:
+                        log("red", f"Didn't meet requirements for {battle_mode} battle")
                     sleep(15)
             else:
                 log("red", f"Error: {battle_mode} not in response")

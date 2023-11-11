@@ -162,6 +162,9 @@ class Battle():
             self.action_ko(data["content"])
         elif action == "WAIT":
             self.state = "switch"
+        elif action == "STOP_TIMER":
+            # does nothing
+            pass
         else:
             self.log(f"Unknown action {action} ({self.action})")
             self.save_action(data)
