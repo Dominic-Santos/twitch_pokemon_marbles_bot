@@ -127,7 +127,6 @@ class Battle():
 
     def run_action(self, message):
         data = json.loads(message)
-        self.state = "continue"
 
         action = data["action"]
 
@@ -135,10 +134,12 @@ class Battle():
             self.action_init(data["content"])
         elif action == "AWAITING_NEXT_MOVE":
             # wait for player to use an attack or switch (or quit)
-            self.state = "move"
+            if self.state != "submitted":
+                self.state = "move"
         elif action == "AWAITING_NEXT_POKEMON":
             # player pokemon died, must switch
-            self.state = "switch"
+            if self.state != "submitted":
+                self.state = "switch"
         elif action == "START_LOG":
             # clears the app text, does nothing
             self.log("")
@@ -163,14 +164,13 @@ class Battle():
         elif action == "WAIT":
             self.state = "switch"
         elif action == "STOP_TIMER":
-            # does nothing
-            pass
+            # basically action received
+            self.state = "continue"
         else:
             self.log(f"Unknown action {action} ({self.action})")
             self.save_action(data)
 
         self.action = self.action + 1
-        # maybe remove this if all goes well with testing
 
     def action_ko(self, data):
         if self.team["current_pokemon"] == data["pokemon"]:
@@ -216,7 +216,6 @@ class Battle():
     def _use_move(self, player, pokemon, move):
         if player == self.player_id:
             if str(move) not in self.team["pokemon"][str(pokemon)]["moves"]:
-                print("-------------------Struggle", self.team["pokemon"][str(pokemon)])
                 return "Struggle"
             self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
             return self.team["pokemon"][str(pokemon)]["moves"][str(move)]["name"]
@@ -224,7 +223,6 @@ class Battle():
             pass
             # NO MORE ENEMY MOVES
             # if str(move) not in self.enemy_team["pokemon"][str(pokemon)]["moves"]:
-            #     print("-------------------Struggle", self.enemy_team["pokemon"][str(pokemon)])
             #     return "Struggle"
             # self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
             # return self.enemy_team["pokemon"][str(pokemon)]["moves"][str(move)]["name"]
