@@ -34,14 +34,14 @@ class AutoBattle(object):
         log("yellow", f"Thread Closing - {thread_name}")
 
     def check_change_team(self, team):
-        team_pokemon = [pokemon["id"] for pokemon in team]
-        swap_pokemon = [pokemon["id"] for pokemon in team if pokemon["lvl"] >= 100]
+        team_slots = [pokemon["teamSlot"] for pokemon in team]
+        team_ids = [pokemon["id"] for pokemon in team]
+        swap_pokemon = [pokemon["teamSlot"] for pokemon in team if pokemon["lvl"] >= 100]
         priority = POKEMON.settings["change_team_priority"]
         tradables = POKEMON.settings["change_team_tradables"]
 
-        if len(team) < 6:
-            for i in range(6 - len(team)):
-                team_pokemon.append(i)
+        for i in range(6):
+            if i not in team_slots:
                 swap_pokemon.append(i)
 
         if len(swap_pokemon) == 0:
@@ -58,7 +58,7 @@ class AutoBattle(object):
 
         new_team = []
         for pokemon in sorted_box:
-            if pokemon["id"] in team_pokemon or pokemon["lvl"] >= 100:
+            if pokemon["id"] in team_ids or pokemon["lvl"] >= 100:
                 # skip pokemon already in team or already level 100
                 continue
 
@@ -72,14 +72,16 @@ class AutoBattle(object):
                 break
 
         for i in range(len(new_team)):
-            remove = swap_pokemon[i]
             add = new_team[i]
-            slot = team_pokemon.index(remove)
+            slot = swap_pokemon[i]
 
             self.pokemon_api.add_to_team(add["id"], slot)
 
             msg = f"{add['nickname']} ({add['name']}) was added to the team!"
             log("green", msg)
+
+        if len(new_team) > len(swap_pokemon):
+            log("red", "Can't find more pokemon to add to team")
 
     def check_evolve_alert(self, team):
         for pokemon in team:

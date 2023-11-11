@@ -297,9 +297,9 @@ class Battle():
                 self.team["current_pokemon"] = data["current_pokemon"]
             else:
                 prefix, last = self._get_pokemon(0, data["last_pokemon"])
-                prefix, current = self._get_pokemon(0, data["current_pokemon"])
                 self.enemy_team["current_pokemon"] = data["current_pokemon"]
                 self.enemy_team["pokemon"][str(data["current_pokemon"])] = data["current_pokemon_data"]
+                prefix, current = self._get_pokemon(0, data["current_pokemon"])
             self.log(f"Switched {prefix} {last['name']} for {current['name']}")
             self.log(f"Current HP {current['hp']}/{current['max_hp']}")
         elif typ == "STAT_CHANGED":

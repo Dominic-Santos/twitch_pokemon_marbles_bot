@@ -112,11 +112,11 @@ class PokemonComunityGame(Loyalty):
             },
             "change_team": {
                 "value": True,
-                "hint": "Change battle team when pokemon reach level 100",
+                "hint": "Change battle team when pokemon reach level 100 or if slot is empty",
             },
             "change_team_tradables": {
                 "value": True,
-                "hint": "Will change battle to tradable pokemon",
+                "hint": "Will change battle team to tradable pokemon",
             },
             "change_team_priority": {
                 "value": "bst",
