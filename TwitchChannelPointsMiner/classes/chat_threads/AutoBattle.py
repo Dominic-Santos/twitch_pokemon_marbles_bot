@@ -216,7 +216,7 @@ class AutoBattle(object):
         while battle.state != "end":
             if battle.state == "move":
                 # submit a move or switch
-                battle.state = "continue"
+                battle.state = "submitted"
                 pokemon = battle.team["pokemon"][str(battle.team["current_pokemon"])]
                 enemy = battle.enemy_team["pokemon"][str(battle.enemy_team["current_pokemon"])]
 
@@ -227,7 +227,7 @@ class AutoBattle(object):
 
             elif battle.state == "switch":
                 # pick a pokemon to switch to
-                battle.state = "continue"
+                battle.state = "submitted"
 
                 for other_pokemon_id in battle.team["pokemon"]:
                     if other_pokemon_id != str(battle.team["current_pokemon"]):
