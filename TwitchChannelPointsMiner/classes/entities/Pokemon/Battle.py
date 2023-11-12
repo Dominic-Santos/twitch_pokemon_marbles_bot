@@ -213,14 +213,14 @@ class Battle():
         else:
             self.enemy_team["pokemon"][str(pokemon)]["hp"] = self.enemy_team["pokemon"][str(pokemon)]["hp"] - damage
 
-    def _use_move(self, player, pokemon, move):
+    def _use_move(self, player, pokemon, move, move_name):
         if player == self.player_id:
             if str(move) not in self.team["pokemon"][str(pokemon)]["moves"]:
                 return "Struggle"
             self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] = self.team["pokemon"][str(pokemon)]["moves"][str(move)]["pp"] - 1
             return self.team["pokemon"][str(pokemon)]["moves"][str(move)]["name"]
         else:
-            pass
+            return move_name
             # NO MORE ENEMY MOVES
             # if str(move) not in self.enemy_team["pokemon"][str(pokemon)]["moves"]:
             #     return "Struggle"
@@ -282,7 +282,7 @@ class Battle():
         elif typ == "MOVE_EFFECTIVE":
             self.log(f"Effective x{data['factor']}")
         elif typ == "MOVE_USED":
-            move_name = self._use_move(data["player"], data["pokemon"], data["move"])
+            move_name = self._use_move(data["player"], data["pokemon"], data["move"], data.get("moveName", ""))
             self.log(f"{prefix} {pokemon['name']} used {move_name}")
         elif typ == "MOVE_USED_NAME":
             self.log(f"{prefix} {pokemon['name']} used {data['move']}")
@@ -318,5 +318,6 @@ class Battle():
         for team in [self.team, self.enemy_team]:
             for pokemon_id in team["pokemon"]:
                 pokemon_data = team["pokemon"][pokemon_id]
-                self.log(f"{pokemon_data['name']} {pokemon_data['hp']}/{pokemon_data['max_hp']}")
+                poke_name = "?" if pokemon_data['name'] is None else pokemon_data['name']
+                self.log(f"{poke_name} {pokemon_data['hp']}/{pokemon_data['max_hp']}")
             self.log("")
