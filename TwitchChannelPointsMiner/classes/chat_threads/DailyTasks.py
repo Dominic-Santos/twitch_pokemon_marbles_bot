@@ -95,6 +95,8 @@ def stats_computer(Pokemon, get_stats_func):
         "bag_regular": [],
         "bag_special": [],
     }
+    value_total = 0
+    value_trade = 0
 
     for tier in ["S", "A", "B", "C"]:
         results[f"trade{tier}"] = []
@@ -123,8 +125,11 @@ def stats_computer(Pokemon, get_stats_func):
         else:
             results["bag_special"].append(pokeobj.pokedex_id)
 
+        value_total += pokemon["sellPrice"]
+
         if pokemon["nickname"] is not None and "trade" in pokemon["nickname"]:
             results[f"trade{pokeobj.tier}"].append(pokemon)
+            value_trade += pokemon["sellPrice"]
 
         if " " in pokemon["name"]:
             region = pokemon["name"].split(" ")[0]
@@ -177,7 +182,12 @@ Inventory: {cash}$ {coins} Battle Coins
     premierball: {premierball}
     greatball: {greatball}
     ultraball: {ultraball}
-    other: {otherball}"""
+    other: {otherball}
+
+Pokemon Value:
+    total: {value_total}$
+    trade: {value_trade}$
+    """
 
     return msg
 
