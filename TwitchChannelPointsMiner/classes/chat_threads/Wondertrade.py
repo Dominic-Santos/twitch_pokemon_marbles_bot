@@ -5,9 +5,8 @@ from .DailyTasks import discord_update_pokedex
 
 from ..entities.Pokemon import get_sprite
 
-from ..ChatLogs import log, log_file
+from ..ChatLogs import log
 from ..ChatUtils import (
-    CHARACTERS,
     DISCORD_ALERTS,
     POKEMON,
     seconds_readable,
@@ -89,70 +88,6 @@ class Wondertrade(object):
         self.do_wondertrade()
         self.get_missions()
 
-    def sort_computer(self):
-
-        all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
-
-        allpokemon = POKEMON.computer.pokemon
-        pokedict = {}
-        shineys = []
-        changes = []
-
-        for pokemon in allpokemon:
-            if pokemon["isShiny"]:
-                shineys.append(pokemon)
-            else:
-                pokedict.setdefault(pokemon["pokedexId"], []).append(pokemon)
-
-        for pokeid in pokedict.keys():
-            ordered = sorted(pokedict[pokeid], key=lambda x: (-x["avgIV"], -x["sellPrice"], -x["lvl"], -x["id"]))
-            for index, pokemon in enumerate(ordered):
-                if pokemon["nickname"] is not None:
-                    if "trade" not in pokemon["nickname"]:
-                        tempnick = pokemon["nickname"]
-                        for character in CHARACTERS.values():
-                            tempnick = tempnick.replace(character, "")
-                        if tempnick != pokemon["name"]:
-                            continue
-
-                pokemon_obj = self.get_pokemon_stats(pokemon["pokedexId"])
-
-                if index == 0:
-                    nick = ""
-                    if pokemon_obj.is_starter or pokemon_obj.is_legendary or pokemon_obj.is_female:
-                        nick = pokemon["name"]
-                        if pokemon_obj.is_starter:
-                            nick = CHARACTERS["starter"] + nick
-                        if pokemon_obj.is_legendary:
-                            nick = CHARACTERS["legendary"] + nick
-                        if pokemon_obj.is_female:
-                            nick = nick + CHARACTERS["female"]
-                    elif pokemon["nickname"] is None:
-                        continue
-                else:
-
-                    nick = "trade" + pokemon_obj.tier
-
-                    if pokemon_obj.is_starter:
-                        nick = CHARACTERS["starter"] + nick
-                    if pokemon_obj.is_legendary:
-                        nick = CHARACTERS["legendary"] + nick
-                    if pokemon_obj.is_female:
-                        nick = nick + CHARACTERS["female"]
-
-                if pokemon["nickname"] == nick:
-                    continue
-                changes.append((pokemon["id"], nick, pokemon["name"], pokemon["nickname"]))
-
-        for poke_id, new_name, real_name, old_name in changes:
-            if new_name is not None and len(new_name) > 12:
-                log_file("yellow", f"Wont rename {real_name} from {old_name} to {new_name}, name too long")
-                continue
-            self.pokemon_api.set_name(poke_id, new_name)
-            log_file("yellow", f"Renamed {real_name} from {old_name} to {new_name}")
-            sleep(0.5)
-
     def do_wondertrade(self):
         allpokemon = POKEMON.computer.pokemon
         dex = self.pokemon_api.get_pokedex()
@@ -228,5 +163,7 @@ class Wondertrade(object):
                 wondertrade_msg = f"Wondertraded {pokemon_traded['name']} ({pokemon_traded_tier}){reasons_string} for {pokemon_received['name']} ({pokemon_received_tier}){pokemon_received_need}"
                 log("green", f"{wondertrade_msg}")
                 POKEMON.discord.post(DISCORD_ALERTS, wondertrade_msg, file=pokemon_sprite)
+
+                self.sort_computer([pokemon_received["pokedexId"]])
             else:
                 log("red", f"Wondertrade {pokemon_traded['name']} failed {pokemon_received}")
