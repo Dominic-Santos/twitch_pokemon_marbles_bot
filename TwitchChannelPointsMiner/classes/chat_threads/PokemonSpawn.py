@@ -160,6 +160,8 @@ class PokemonSpawn(object):
 
         self.update_inventory()
 
+        self.sort_computer([pokemon_id])
+
         if caught is not None:
             # check for loyalty tier up
             rewards = POKEMON.increment_loyalty(twitch_channel)

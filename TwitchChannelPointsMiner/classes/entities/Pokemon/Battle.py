@@ -261,10 +261,11 @@ class Battle():
             self.log(f"{prefix} {pokemon['name']} is no longer {effect}")
         elif typ in [
             "ATTACK_MISSED", "CRITICAL_HIT", "HAIL_END", "HAIL_STARTED", "HAZE_USED",
-            "LIGHT_SCREEN_END", "LIGHT_SCREEN_STARTED", "MIST_END", "MIST_PREVENTED", "MIST_STARTED",
-            "MOVE_FAILED", "RAIN_END", "RAIN_STARTED", "REFLECT_END", "REFLECT_STARTED",
-            "SANDSTORM_END", "SANDSTORM_STARTED", "SUN_END", "SUN_STARTED", "TAILWIND_END",
-            "TAILWIND_STARTED", "TRICK_ROOM_STARTED", "TRICK_ROOM_END"
+            "LIGHT_SCREEN_END", "LIGHT_SCREEN_STARTED", "MIST_END", "MIST_PREVENTED",
+            "MIST_STARTED", "MOVE_FAILED", "RAIN_END", "RAIN_STARTED", "REFLECT_END",
+            "REFLECT_STARTED", "SANDSTORM_END", "SANDSTORM_STARTED", "SUN_END", "SUN_STARTED",
+            "TAILWIND_END", "TAILWIND_STARTED", "TRICK_ROOM_STARTED", "TRICK_ROOM_END",
+            "TAUNTED_STARTED", "TAUNTED_END"
         ]:
             self.log(typ.replace("_", " ").title().replace("End", "Ended"))
         elif typ in ["CONFUSED", "UNTHAWED", "WOKE_UP", "FLINCHED", "IS_FROZEN", "IS_PARALYZED", "IS_SLEEPING"]:

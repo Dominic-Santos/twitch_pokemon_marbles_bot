@@ -11,6 +11,7 @@ from .ChatO import ThreadChat as ThreadChatO
 from .ChatThreads import ChatThreads
 from .ChatLogs import log, log_file
 from .ChatUtils import (
+    CHARACTERS,
     ITEM_MIN_AMOUNT,
     ITEM_MIN_PURCHASE,
     MARBLES_DELAY,
@@ -195,6 +196,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         POKEMON.sync_missions(missions)
 
         completed = POKEMON.missions.get_completed()
+        pokemon_to_sort = []
         for title, reward in completed:
             readable_reward = reward["reward"]
             reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"])
@@ -207,12 +209,17 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 lvl = caught['lvl']
                 shiny = " Shiny" if caught["isShiny"] else ""
                 mission_msg = f"{mission_msg} {shiny} {pokemonobj.name} ({pokemonobj.tier}) Lvl.{lvl} {ivs}IV{needed}"
+                if caught["isShiny"] is False:
+                    pokemon_to_sort.append(reward["reward_name"])
             else:
                 mission_msg = f"{mission_msg} {readable_reward}"
             log("green", f"{mission_msg}")
             POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:
                 reward_sprite.close()
+
+        if len(pokemon_to_sort) > 0:
+            self.sort_computer(pokemon_to_sort)
         return completed
 
     def get_last_caught(self, pokedex_id, reward=False):
@@ -271,6 +278,75 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 pokemon = None
 
         return pokemon
+
+    def get_rename_suggestion(self, pokedict):
+        changes = []
+        for pokeid in pokedict.keys():
+            ordered = sorted(pokedict[pokeid], key=lambda x: (-x["avgIV"], -x["sellPrice"], -x["lvl"], -x["id"]))
+            for index, pokemon in enumerate(ordered):
+                if pokemon["nickname"] is not None:
+                    if "trade" not in pokemon["nickname"]:
+                        tempnick = pokemon["nickname"]
+                        for character in CHARACTERS.values():
+                            tempnick = tempnick.replace(character, "")
+                        if tempnick != pokemon["name"]:
+                            continue
+
+                pokemon_obj = self.get_pokemon_stats(pokemon["pokedexId"])
+
+                if index == 0:
+                    nick = ""
+                    if pokemon_obj.is_starter or pokemon_obj.is_legendary or pokemon_obj.is_female:
+                        nick = pokemon["name"]
+                        if pokemon_obj.is_starter:
+                            nick = CHARACTERS["starter"] + nick
+                        if pokemon_obj.is_legendary:
+                            nick = CHARACTERS["legendary"] + nick
+                        if pokemon_obj.is_female:
+                            nick = nick + CHARACTERS["female"]
+                    elif pokemon["nickname"] is None:
+                        continue
+                else:
+
+                    nick = "trade" + pokemon_obj.tier
+
+                    if pokemon_obj.is_starter:
+                        nick = CHARACTERS["starter"] + nick
+                    if pokemon_obj.is_legendary:
+                        nick = CHARACTERS["legendary"] + nick
+                    if pokemon_obj.is_female:
+                        nick = nick + CHARACTERS["female"]
+
+                if pokemon["nickname"] == nick:
+                    continue
+                changes.append((pokemon["id"], nick, pokemon["name"], pokemon["nickname"]))
+        return changes
+
+    def rename_computer(self, pokedict):
+        changes = self.get_rename_suggestion(pokedict)
+        for poke_id, new_name, real_name, old_name in changes:
+            if new_name is not None and len(new_name) > 12:
+                log_file("yellow", f"Wont rename {real_name} from {old_name} to {new_name}, name too long")
+                continue
+            self.pokemon_api.set_name(poke_id, new_name)
+            log_file("yellow", f"Renamed {real_name} from {old_name} to {new_name}")
+            sleep(0.5)
+
+    def sort_computer(self, pokedex_ids=[]):
+        '''Sort all/specific pokemon in computer and rename duplicates'''
+        all_pokemon = self.pokemon_api.get_all_pokemon()
+        POKEMON.sync_computer(all_pokemon)
+
+        allpokemon = POKEMON.computer.pokemon
+        pokedict = {}
+
+        for pokemon in allpokemon:
+            if pokemon["isShiny"]:
+                continue
+            if len(pokedex_ids) == 0 or pokemon["pokedexId"] in pokedex_ids:
+                pokedict.setdefault(pokemon["pokedexId"], []).append(pokemon)
+
+        self.rename_computer(pokedict)
 
 
 class ClientIRC(ClientIRCMarbles, ClientIRCPokemon):
