@@ -26759,7 +26759,7 @@
         "pokedex_id": 10408,
         "name": "Minior (Blue)",
         "description": "Although its outer shell is uncommonly durable, the shock of falling to the ground smashes the shell to smithereens.",
-        "weight": 40.0,
+        "weight": 0.3,
         "generation": 7,
         "type1": "flying",
         "type2": "rock",
@@ -26799,7 +26799,7 @@
         "pokedex_id": 10410,
         "name": "Minior (Indigo)",
         "description": "Although its outer shell is uncommonly durable, the shock of falling to the ground smashes the shell to smithereens.",
-        "weight": 40.0,
+        "weight": 0.3,
         "generation": 7,
         "type1": "flying",
         "type2": "rock",
@@ -26819,7 +26819,7 @@
         "pokedex_id": 10412,
         "name": "Minior (Orange)",
         "description": "Although its outer shell is uncommonly durable, the shock of falling to the ground smashes the shell to smithereens.",
-        "weight": 40.0,
+        "weight": 0.3,
         "generation": 7,
         "type1": "flying",
         "type2": "rock",
@@ -26839,7 +26839,7 @@
         "pokedex_id": 10413,
         "name": "Minior (Violet)",
         "description": "Although its outer shell is uncommonly durable, the shock of falling to the ground smashes the shell to smithereens.",
-        "weight": 40.0,
+        "weight": 0.3,
         "generation": 7,
         "type1": "flying",
         "type2": "rock",
@@ -26859,7 +26859,7 @@
         "pokedex_id": 10414,
         "name": "Minior (Yellow)",
         "description": "Although its outer shell is uncommonly durable, the shock of falling to the ground smashes the shell to smithereens.",
-        "weight": 40.0,
+        "weight": 0.3,
         "generation": 7,
         "type1": "flying",
         "type2": "rock",
@@ -32068,10 +32068,10 @@
         "base_stats": {
             "hp": 70,
             "speed": 85,
-            "attack": 60,
+            "attack": 90,
             "defense": 70,
             "special_attack": 87,
-            "special_defense": 78
+            "special_defense": 117
         },
         "evolves_to": {},
         "order": 421
@@ -32320,11 +32320,11 @@
         "tier": "B",
         "base_stats": {
             "hp": 75,
-            "speed": 50,
+            "speed": 130,
             "attack": 80,
-            "defense": 110,
+            "defense": 70,
             "special_attack": 65,
-            "special_defense": 90
+            "special_defense": 50
         },
         "order": 875,
         "evolves_to": {}
@@ -33240,7 +33240,7 @@
         "pokedex_id": 10411,
         "name": "Minior (Pink)",
         "description": "Although its outer shell is uncommonly durable, the shock of falling to the ground smashes the shell to smithereens.",
-        "weight": 40.0,
+        "weight": 0.3,
         "generation": 7,
         "type1": "flying",
         "type2": "rock",
@@ -35443,18 +35443,18 @@
         "pokedex_id": 10554,
         "name": "Zygarde",
         "description": "Some say it can change to an even more powerful form when battling those who threaten the ecosystem.",
-        "weight": 305.0,
+        "weight": 33.5,
         "generation": 6,
         "type1": "ground",
         "type2": "dragon",
         "tier": "S",
         "base_stats": {
-            "hp": 108,
-            "speed": 95,
+            "hp": 54,
+            "speed": 115,
             "attack": 100,
-            "defense": 121,
-            "special_attack": 81,
-            "special_defense": 95
+            "defense": 71,
+            "special_attack": 61,
+            "special_defense": 85
         },
         "order": 718,
         "evolves_to": {}
