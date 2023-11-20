@@ -26779,7 +26779,7 @@
         "pokedex_id": 10409,
         "name": "Minior (Green)",
         "description": "Although its outer shell is uncommonly durable, the shock of falling to the ground smashes the shell to smithereens.",
-        "weight": 40.0,
+        "weight": 0.3,
         "generation": 7,
         "type1": "flying",
         "type2": "rock",

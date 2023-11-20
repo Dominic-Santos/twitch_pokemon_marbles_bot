@@ -182,17 +182,10 @@ class Missions(object):
             elif " dog " in mission_title:
                 return ("dog", False, True)
             elif "miss" in mission_title:
-                miss_list = mission_title.split(" ")
-                just_miss = True
-                if len(miss_list) > 2:
-                    the_type = miss_list[1].title()
-                    if the_type in POKEMON_TYPES:
-                        just_miss = False
-
-                if just_miss:
-                    return ("miss", False, True)
-                else:
-                    return ("miss_type", True, the_type)
+                for the_type in POKEMON_TYPES:
+                    if the_type.lower() in mission_title:
+                        return ("miss_type", True, the_type)
+                return ("miss", False, True)
             elif mission_title == "attempt catches":
                 return ("attempt", False, True)
             elif mission_title.startswith("catch"):
