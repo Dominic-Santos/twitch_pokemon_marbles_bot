@@ -1,0 +1,22 @@
+{
+    "missions": [
+    {
+        "name": "Miss catches on normal type Pokémon",
+        "goal": 10,
+        "progress": 5,
+        "rewardItem":
+        {
+            "id": 115,
+            "name": "Luxury Ball",
+            "description": "A rare ball with a fancy appearance. Massively increases the sell price of a Pokemon caught with it.",
+            "sprite_name": "luxury_ball",
+            "category": "ball",
+            "tmType": null,
+            "amount": 3
+        },
+        "rewardPokemon": null,
+        "endDate": "1 day, 17 hours and 1 minutes",
+        "endDateInt": 147633.261173
+    }],
+    "endDate": "1 day, 17 hours and 1 minutes"
+}
