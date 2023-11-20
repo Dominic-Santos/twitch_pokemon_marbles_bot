@@ -257,8 +257,7 @@ class AutoBattle(object):
 
         attacker_moves = my_pokemon["moves"]
 
-        best_move = None
-        # best_move = list(attacker_moves.keys())[0]
+        best_move = "165"
         best_damage = -1
         best_move_data = Move("struggle", {
             "name": "Struggle",
