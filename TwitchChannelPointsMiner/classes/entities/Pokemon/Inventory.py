@@ -215,8 +215,8 @@ class Inventory(object):
                     yield "heavyball"
 
             if pokemon.weight <= 5:
-                if self.have_ball("feather"):
-                    yield "feather"
+                if self.have_ball("featherball"):
+                    yield "featherball"
 
         type_balls = []
         if self.use_special_balls:
