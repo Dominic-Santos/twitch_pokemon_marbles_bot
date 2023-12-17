@@ -253,21 +253,37 @@ class Pokedex(object):
         poke = Pokemon(self.pokemon_stats[poke_id])
         return poke
 
+    def _stats_name(self, pokemon_name: str):
+        for poke_id in self.pokemon_stats:
+            if self.pokemon_stats[poke_id]["name"] == pokemon_name:
+                poke = Pokemon(self.pokemon_stats[poke_id])
+                return poke
+
+        return None
+
     def stats(self, pokemon_id):
         poke = self._stats(pokemon_id)
-        if poke is None:
-            return poke
-
-        poke.is_fish = self.fish(poke)
-        poke.is_cat = self.cat(poke)
-        poke.is_dog = self.dog(poke)
-        poke.is_baby = self.baby(poke)
-        poke.is_legendary = self.legendary(poke)
-        poke.is_starter = self.starter(poke)
-        poke.is_female = self.female(poke)
-        poke.is_non_spawnable = self.non_spawnable(poke)
+        if poke is not None:
+            self.stats_extra_attributes(poke)
 
         return poke
+
+    def stats_by_name(self, pokemon_name: str):
+        poke = self._stats_name(pokemon_name)
+        if poke is not None:
+            self.stats_extra_attributes(poke)
+
+        return poke
+
+    def stats_extra_attributes(self, pokemon: Pokemon):
+        pokemon.is_fish = self.fish(pokemon)
+        pokemon.is_cat = self.cat(pokemon)
+        pokemon.is_dog = self.dog(pokemon)
+        pokemon.is_baby = self.baby(pokemon)
+        pokemon.is_legendary = self.legendary(pokemon)
+        pokemon.is_starter = self.starter(pokemon)
+        pokemon.is_female = self.female(pokemon)
+        pokemon.is_non_spawnable = self.non_spawnable(pokemon)
 
     def set_evolutions(self, pokemonid, data):
         pokemon_id = str(pokemonid)

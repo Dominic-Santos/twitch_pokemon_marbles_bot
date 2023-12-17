@@ -22,6 +22,7 @@ from .ChatUtils import (
 )
 
 from .entities.Pokemon import CGApi, get_sprite
+from .chat_threads.DailyTasks import discord_update_pokedex
 
 
 class ClientIRCBase(ClientIRCO):
@@ -83,11 +84,93 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             if "pokemoncommunitygame" in message.source:
                 self.check_pokemon_active(client, message, argstring)
                 self.check_loyalty_info(client, message, argstring)
+                self.check_special_spawn(client, message, argstring)
 
             THREADCONTROLLER.clients[self.channel[1:]] = client
 
             if len(POKEMON.channel_list) > 0:
                 self.start_threads()
+
+    def check_special_spawn(self, client, message, argstring):
+        if "twitchsings" in argstring.lower():
+
+            pokemon_name = argstring.split("A Wild")[1].split(" appears")[0]
+            twitch_channel = message.target[1:]
+            log("green", f"A Snowman was popped in {twitch_channel} channel")
+
+            pokemon = POKEMON.pokedex.stats_by_name(pokemon_name)
+            if pokemon is None:
+                # should try to catch unknown pokemon
+                catch_reasons = ["unknown"]
+            else:
+                catch_reasons = POKEMON.need_pokemon(pokemon)
+
+            pokemon_name = pokemon_name if pokemon is None else pokemon.name
+            pokemon_id = 1000000 if pokemon is None else pokemon.pokedex_id
+            pokemon_tier = "?" if pokemon is None else pokemon.tier
+
+            if len(catch_reasons) == 0:
+                return
+
+            mission_balls = [] if "ball" not in catch_reasons else POKEMON.missions.data["ball"]
+
+            ball = None
+            if pokemon is None:
+                ball = POKEMON.inventory.get_catch_ball(pokemon, catch_reasons, mission_balls)
+            else:
+                for cur_ball in ["ultraball", "greatball", "pokeball", "premierball"]:
+                    if POKEMON.inventory.have_ball(cur_ball):
+                        ball = cur_ball
+                        break
+
+            if ball is None:
+                log_file("red", f"Won't catch {pokemon_name}, ran out of balls")
+                return
+
+            reasons_string = ", ".join(catch_reasons)
+            message = f"!pokecatch {ball}"
+
+            if ball == "timerball":
+                wait = 75
+                log("green", f"Timerball selected, waiting {wait} seconds to catch")
+                sleep(wait)
+
+            log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
+            log("green", f"Trying to catch in {twitch_channel}")
+
+            client.privmsg("#" + twitch_channel, message)
+
+            sleep(5)
+
+            pokemon, caught = self.get_last_caught(pokemon_id)
+
+            pokemon_sprite = None
+            if caught is not None:
+                ivs = int(caught["avgIV"])
+                lvl = caught['lvl']
+                shiny = " Shiny" if caught["isShiny"] else ""
+                unidentified = " (Unidentified Ghost)" if pokemon.is_unidentified_ghost else ""
+                snowman = " (Snowman)" if pokemon.is_special_spawn else ""
+                msg = f"Caught{unidentified}{snowman}{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
+                log_file("green", msg)
+
+                self.update_evolutions(caught["id"], pokemon.pokedex_id)
+
+                sprite = str(caught["pokedexId"])
+                extra_reasons = {"shiny": caught["isShiny"]}
+                if POKEMON.show_sprite(catch_reasons, extra_reasons):
+                    pokemon_sprite = get_sprite("pokemon", sprite, shiny=caught["isShiny"])
+
+                if "pokedex" in catch_reasons and pokemon.is_spawnable:
+                    discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
+
+            else:
+                log_file("red", f"Failed to catch {pokemon_name} ({pokemon_tier})")
+                msg = f"Missed {pokemon_name} ({pokemon_tier})!"
+
+            msg = msg + f" {ball}, because {reasons_string}"
+
+            POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
 
     def check_loyalty_info(self, client, message, argstring):
         if self.username in argstring and "Your loyalty level" in argstring:
@@ -229,7 +312,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         POKEMON.sync_computer(all_pokemon)
 
         # find all the pokemon that are the current one that spawned
-        if pokemon.pokedex_id == 999999:
+        if pokemon.pokedex_id in [999999, 1000000]:
             filtered = POKEMON.computer.pokemon
         else:
             filtered = POKEMON.computer.get_pokemon(pokemon)
@@ -242,9 +325,12 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                     caught = poke
                     break
 
-        if caught is not None and pokemon.pokedex_id == 999999:
+        if caught is not None and pokemon.pokedex_id in [999999, 1000000]:
             pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
-            pokemon.is_unidentified_ghost = True
+            if pokemon.pokedex_id == 999999:
+                pokemon.is_unidentified_ghost = True
+            else:
+                pokemon.is_special_spawn = True
 
         return pokemon, caught
 

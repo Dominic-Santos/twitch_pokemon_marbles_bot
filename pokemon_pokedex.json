@@ -29246,7 +29246,8 @@
             "special_attack": 90,
             "special_defense": 50
         },
-        "order": 666
+        "order": 666,
+        "evolves_to": {}
     },
     "10121": {
         "pokedex_id": 10121,
@@ -32599,7 +32600,8 @@
             "special_attack": 65,
             "special_defense": 90
         },
-        "order": 676
+        "order": 676,
+        "evolves_to": {}
     },
     "10342": {
         "pokedex_id": 10342,
@@ -35873,6 +35875,26 @@
     },
     "100411": {
         "pokedex_id": 100411,
+        "name": "His Samurott",
+        "description": "One swing of the sword incorporated in its armor can fell an opponent. A simple glare from one of them quiets everybody.",
+        "weight": 94.6,
+        "generation": 5,
+        "type1": "water",
+        "type2": "dark",
+        "tier": "A",
+        "base_stats": {
+            "hp": 90,
+            "speed": 85,
+            "attack": 108,
+            "defense": 85,
+            "special_attack": 100,
+            "special_defense": 65
+        },
+        "order": 503,
+        "evolves_to": {}
+    },
+    "86330": {
+        "pokedex_id": 86330,
         "name": "His Samurott",
         "description": "One swing of the sword incorporated in its armor can fell an opponent. A simple glare from one of them quiets everybody.",
         "weight": 94.6,
