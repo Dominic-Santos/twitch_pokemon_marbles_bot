@@ -86,6 +86,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 self.check_loyalty_info(client, message, argstring)
                 self.check_special_spawn(client, message, argstring)
                 self.check_xmas_delibird(client, message, argstring)
+                self.check_xmas_delibird_gift(client, message, argstring)
                 self.check_pokegifts(client, message, argstring)
 
             THREADCONTROLLER.clients[self.channel[1:]] = client
@@ -119,6 +120,15 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         sleep(random.randint(100, 200) / 100.0)
         client.privmsg("#" + twitch_channel, response)
         POKEMON.discord.post(DISCORD_ALERTS, f"🎅I saw a Delibird in {twitch_channel} channel and said I was {response}🎅")
+
+    def check_xmas_delibird_gift(self, client, message, argstring):
+        if self.username in argstring and "Delibird drops the following presents" in argstring and "HolidayPresent" in argstring:
+            twitch_channel = message.target[1:]
+
+            item = argstring.split("HolidayPresent")[1].replace(":", "").strip()
+            msg = f"🎁Received {item} as a present from Delibird in {twitch_channel} channel🎁"
+            log("green", msg)
+            POKEMON.discord.post(DISCORD_ALERTS, msg)
 
     def check_special_spawn(self, client, message, argstring):
         if "twitchsings" not in argstring.lower():
