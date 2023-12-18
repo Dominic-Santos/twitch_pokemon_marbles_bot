@@ -92,85 +92,90 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 self.start_threads()
 
     def check_special_spawn(self, client, message, argstring):
-        if "twitchsings" in argstring.lower():
+        if "twitchsings" not in argstring.lower():
+            return
 
-            pokemon_name = argstring.split("A Wild")[1].split(" appears")[0]
-            twitch_channel = message.target[1:]
-            log("green", f"A Snowman was popped in {twitch_channel} channel")
+        twitch_channel = message.target[1:]
 
-            pokemon = POKEMON.pokedex.stats_by_name(pokemon_name)
-            if pokemon is None:
-                # should try to catch unknown pokemon
-                catch_reasons = ["unknown"]
-            else:
-                catch_reasons = POKEMON.need_pokemon(pokemon)
+        if "A Wild" not in argstring or "appears" not in argstring:
+            log("green", f"A Snowman popped in {twitch_channel} channel - {argstring}")
 
-            pokemon_name = pokemon_name if pokemon is None else pokemon.name
-            pokemon_id = 1000000 if pokemon is None else pokemon.pokedex_id
-            pokemon_tier = "?" if pokemon is None else pokemon.tier
+        pokemon_name = argstring.split("A Wild")[1].split(" appears")[0]
+        log("green", f"A Snowman popped in {twitch_channel} channel - {pokemon_name} spawned")
 
-            if len(catch_reasons) == 0:
-                return
+        pokemon = POKEMON.pokedex.stats_by_name(pokemon_name)
+        if pokemon is None:
+            # should try to catch unknown pokemon
+            catch_reasons = ["unknown"]
+        else:
+            catch_reasons = POKEMON.need_pokemon(pokemon)
 
-            mission_balls = [] if "ball" not in catch_reasons else POKEMON.missions.data["ball"]
+        pokemon_name = pokemon_name if pokemon is None else pokemon.name
+        pokemon_id = 1000000 if pokemon is None else pokemon.pokedex_id
+        pokemon_tier = "?" if pokemon is None else pokemon.tier
 
-            ball = None
-            if pokemon is None:
-                ball = POKEMON.inventory.get_catch_ball(pokemon, catch_reasons, mission_balls)
-            else:
-                for cur_ball in ["ultraball", "greatball", "pokeball", "premierball"]:
-                    if POKEMON.inventory.have_ball(cur_ball):
-                        ball = cur_ball
-                        break
+        if len(catch_reasons) == 0:
+            return
 
-            if ball is None:
-                log_file("red", f"Won't catch {pokemon_name}, ran out of balls")
-                return
+        mission_balls = [] if "ball" not in catch_reasons else POKEMON.missions.data["ball"]
 
-            reasons_string = ", ".join(catch_reasons)
-            message = f"!pokecatch {ball}"
+        ball = None
+        if pokemon is None:
+            ball = POKEMON.inventory.get_catch_ball(pokemon, catch_reasons, mission_balls)
+        else:
+            for cur_ball in ["ultraball", "greatball", "pokeball", "premierball"]:
+                if POKEMON.inventory.have_ball(cur_ball):
+                    ball = cur_ball
+                    break
 
-            if ball == "timerball":
-                wait = 75
-                log("green", f"Timerball selected, waiting {wait} seconds to catch")
-                sleep(wait)
+        if ball is None:
+            log_file("red", f"Won't catch {pokemon_name}, ran out of balls")
+            return
 
-            log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
-            log("green", f"Trying to catch in {twitch_channel}")
+        reasons_string = ", ".join(catch_reasons)
+        message = f"!pokecatch {ball}"
 
-            client.privmsg("#" + twitch_channel, message)
+        if ball == "timerball":
+            wait = 75
+            log("green", f"Timerball selected, waiting {wait} seconds to catch")
+            sleep(wait)
 
-            sleep(5)
+        log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
+        log("green", f"Trying to catch in {twitch_channel}")
 
-            pokemon, caught = self.get_last_caught(pokemon_id)
+        client.privmsg("#" + twitch_channel, message)
 
-            pokemon_sprite = None
-            if caught is not None:
-                ivs = int(caught["avgIV"])
-                lvl = caught['lvl']
-                shiny = " Shiny" if caught["isShiny"] else ""
-                unidentified = " (Unidentified Ghost)" if pokemon.is_unidentified_ghost else ""
-                snowman = " (Snowman)" if pokemon.is_special_spawn else ""
-                msg = f"Caught{unidentified}{snowman}{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
-                log_file("green", msg)
+        sleep(5)
 
-                self.update_evolutions(caught["id"], pokemon.pokedex_id)
+        pokemon, caught = self.get_last_caught(pokemon_id)
 
-                sprite = str(caught["pokedexId"])
-                extra_reasons = {"shiny": caught["isShiny"]}
-                if POKEMON.show_sprite(catch_reasons, extra_reasons):
-                    pokemon_sprite = get_sprite("pokemon", sprite, shiny=caught["isShiny"])
+        pokemon_sprite = None
+        if caught is not None:
+            ivs = int(caught["avgIV"])
+            lvl = caught['lvl']
+            shiny = " Shiny" if caught["isShiny"] else ""
+            unidentified = " (Unidentified Ghost)" if pokemon.is_unidentified_ghost else ""
+            snowman = " (Snowman)" if pokemon.is_special_spawn else ""
+            msg = f"Caught{unidentified}{snowman}{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
+            log_file("green", msg)
 
-                if "pokedex" in catch_reasons and pokemon.is_spawnable:
-                    discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
+            self.update_evolutions(caught["id"], pokemon.pokedex_id)
 
-            else:
-                log_file("red", f"Failed to catch {pokemon_name} ({pokemon_tier})")
-                msg = f"Missed {pokemon_name} ({pokemon_tier})!"
+            sprite = str(caught["pokedexId"])
+            extra_reasons = {"shiny": caught["isShiny"]}
+            if POKEMON.show_sprite(catch_reasons, extra_reasons):
+                pokemon_sprite = get_sprite("pokemon", sprite, shiny=caught["isShiny"])
 
-            msg = msg + f" {ball}, because {reasons_string}"
+            if "pokedex" in catch_reasons and pokemon.is_spawnable:
+                discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
 
-            POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
+        else:
+            log_file("red", f"Failed to catch {pokemon_name} ({pokemon_tier})")
+            msg = f"Missed {pokemon_name} ({pokemon_tier})!"
+
+        msg = msg + f" {ball}, because {reasons_string}"
+
+        POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
 
     def check_loyalty_info(self, client, message, argstring):
         if self.username in argstring and "Your loyalty level" in argstring:
