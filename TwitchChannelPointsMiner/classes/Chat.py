@@ -97,10 +97,12 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             return
 
         twitch_channel = message.target[1:]
-        response = random.choice(["naughty", "nice"])
+        # response = random.choice(["naughty", "nice"])
+        response = "naughty"
         log("green", f"A christmas Delibird appeared in {twitch_channel} channel - {response}")
 
         client.privmsg("#" + twitch_channel, response)
+        POKEMON.discord.post(DISCORD_ALERTS, f"I saw a Delibird in {twitch_channel} channel and said I was {response}")
 
     def check_special_spawn(self, client, message, argstring):
         if "twitchsings" not in argstring.lower():
@@ -109,10 +111,15 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         twitch_channel = message.target[1:]
 
         if "A Wild" not in argstring or "appears" not in argstring:
-            log("green", f"A Snowman popped in {twitch_channel} channel - {argstring}")
+            msg = f"A Snowman popped in {twitch_channel} channel - {argstring}"
+            log("green", msg)
+            POKEMON.discord.post(DISCORD_ALERTS, f"I saw {msg}")
+            return
 
         pokemon_name = argstring.split("A Wild")[1].split(" appears")[0]
-        log("green", f"A Snowman popped in {twitch_channel} channel - {pokemon_name} spawned")
+        msg = f"A Snowman popped in {twitch_channel} channel - {pokemon_name} spawned"
+        log("green", msg)
+        POKEMON.discord.post(DISCORD_ALERTS, f"I saw {msg}")
 
         pokemon = POKEMON.pokedex.stats_by_name(pokemon_name)
         if pokemon is None:
