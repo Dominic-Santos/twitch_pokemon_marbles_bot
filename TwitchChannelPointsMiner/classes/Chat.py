@@ -101,7 +101,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         response = "naughty"
         log("green", f"A christmas Delibird appeared in {twitch_channel} channel - {response}")
 
-        sleep(1)
+        sleep(random.randint(100, 200) / 100.0)
         client.privmsg("#" + twitch_channel, response)
         POKEMON.discord.post(DISCORD_ALERTS, f"I saw a Delibird in {twitch_channel} channel and said I was {response}")
 
