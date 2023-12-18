@@ -85,11 +85,22 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 self.check_pokemon_active(client, message, argstring)
                 self.check_loyalty_info(client, message, argstring)
                 self.check_special_spawn(client, message, argstring)
+                self.check_xmas_delibird(client, message, argstring)
 
             THREADCONTROLLER.clients[self.channel[1:]] = client
 
             if len(POKEMON.channel_list) > 0:
                 self.start_threads()
+
+    def check_xmas_delibird(self, client, message, argstring):
+        if "A christmas Delibird appeared!" not in argstring:
+            return
+
+        twitch_channel = message.target[1:]
+        response = random.choice(["naughty", "nice"])
+        log("green", f"A christmas Delibird appeared in {twitch_channel} channel - {response}")
+
+        client.privmsg("#" + twitch_channel, response)
 
     def check_special_spawn(self, client, message, argstring):
         if "twitchsings" not in argstring.lower():
