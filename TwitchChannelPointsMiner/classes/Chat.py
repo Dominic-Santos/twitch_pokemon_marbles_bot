@@ -103,7 +103,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             sender = argstring.split(" ")[-1][1:-1]
             item = argstring.split("HolidayPresent")[1].replace(":", "").strip()
 
-            msg = f"Received {item} as a present from {sender} in {twitch_channel} channel"
+            msg = f"🎁Received {item} as a present from {sender} in {twitch_channel} channel🎁"
             log("green", msg)
             POKEMON.discord.post(DISCORD_ALERTS, msg)
 
