@@ -118,7 +118,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         sleep(random.randint(100, 200) / 100.0)
         client.privmsg("#" + twitch_channel, response)
-        POKEMON.discord.post(DISCORD_ALERTS, f"I saw a Delibird in {twitch_channel} channel and said I was {response}")
+        POKEMON.discord.post(DISCORD_ALERTS, f"🎅I saw a Delibird in {twitch_channel} channel and said I was {response}🎅")
 
     def check_special_spawn(self, client, message, argstring):
         if "twitchsings" not in argstring.lower():
@@ -135,7 +135,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         pokemon_name = argstring.split("A Wild")[1].split(" appears")[0]
         msg = f"A Snowman popped in {twitch_channel} channel - {pokemon_name} spawned"
         log("green", msg)
-        POKEMON.discord.post(DISCORD_ALERTS, f"I saw {msg}")
+        POKEMON.discord.post(DISCORD_ALERTS, f"⛄I saw {msg}⛄")
 
         pokemon = POKEMON.pokedex.stats_by_name(pokemon_name)
         if pokemon is None:
