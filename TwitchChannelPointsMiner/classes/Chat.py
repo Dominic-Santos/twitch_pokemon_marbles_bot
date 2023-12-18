@@ -86,11 +86,26 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 self.check_loyalty_info(client, message, argstring)
                 self.check_special_spawn(client, message, argstring)
                 self.check_xmas_delibird(client, message, argstring)
+                self.check_pokegifts(client, message, argstring)
 
             THREADCONTROLLER.clients[self.channel[1:]] = client
 
             if len(POKEMON.channel_list) > 0:
                 self.start_threads()
+
+    def check_pokegifts(self, client, message, argstring):
+        if self.username in argstring and "as present from" in argstring and "HolidayPresent" in argstring:
+            twitch_channel = message.target[1:]
+            receiver = argstring.split(" ")[0]
+            if self.username not in receiver:
+                return
+
+            sender = argstring.split(" ")[-1][1:-1]
+            item = argstring.split("HolidayPresent")[1].replace(":", "").strip()
+
+            msg = f"Received {item} as a present from {sender} in {twitch_channel} channel"
+            log("green", msg)
+            POKEMON.discord.post(DISCORD_ALERTS, msg)
 
     def check_xmas_delibird(self, client, message, argstring):
         if "A christmas Delibird appeared!" not in argstring:
