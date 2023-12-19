@@ -122,7 +122,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         POKEMON.discord.post(DISCORD_ALERTS, f"🎅I saw a Delibird in {twitch_channel} channel and said I was {response}🎅")
 
     def check_xmas_delibird_gift(self, client, message, argstring):
-        if self.username in argstring and "Delibird drops the following presents" in argstring and "HolidayPresent" in argstring:
+        if self.username in argstring and "Delibird drops the following" in argstring and "HolidayPresent" in argstring:
             twitch_channel = message.target[1:]
 
             item = argstring.split("HolidayPresent")[1].replace(":", "").strip()
