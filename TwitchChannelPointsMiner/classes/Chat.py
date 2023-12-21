@@ -131,12 +131,12 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             POKEMON.discord.post(DISCORD_ALERTS, msg)
 
     def check_special_spawn(self, client, message, argstring):
-        if "TwitchSings" not in argstring:
-            return
-
         twitch_channel = message.target[1:]
+        if "A wild" in argstring and "appears" in argstring:
+            log("green", twitch_channel + " " + argstring)
 
-        log("green", twitch_channel + " " + argstring)
+        if "twitchsings" not in argstring.lower():
+            return
 
         argstring = argstring.replace("Wild", "wild").replace("A wild", "a wild")
 
