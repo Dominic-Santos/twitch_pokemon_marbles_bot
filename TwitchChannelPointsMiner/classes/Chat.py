@@ -95,10 +95,10 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 self.start_threads()
 
     def check_pokegifts(self, client, message, argstring):
-        if self.username in argstring and "as present from" in argstring and "HolidayPresent" in argstring:
+        if self.username in argstring.lower() and "as present from" in argstring and "HolidayPresent" in argstring:
             twitch_channel = message.target[1:]
             receiver = argstring.split(" ")[0]
-            if self.username not in receiver:
+            if self.username not in receiver.lower():
                 return
 
             sender = argstring.split(" ")[-1][1:-1]
@@ -122,7 +122,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         # POKEMON.discord.post(DISCORD_ALERTS, f"🎅I saw a Delibird in {twitch_channel} channel and said I was {response}🎅")
 
     def check_xmas_delibird_gift(self, client, message, argstring):
-        if self.username in argstring and "Delibird drops the following" in argstring and "HolidayPresent" in argstring:
+        if self.username in argstring.lower() and "Delibird drops the following" in argstring and "HolidayPresent" in argstring:
             twitch_channel = message.target[1:]
 
             item = argstring.split("HolidayPresent")[1].replace(":", "").strip()
@@ -226,7 +226,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
 
     def check_loyalty_info(self, client, message, argstring):
-        if self.username in argstring and "Your loyalty level" in argstring:
+        if self.username in argstring.lower() and "Your loyalty level" in argstring:
             channel = message.target[1:]
             loyalty_level = int(argstring.split("Your loyalty level: ")[1][0])
             loyalty_limits = argstring.split("(")[1].split(")")[0]
