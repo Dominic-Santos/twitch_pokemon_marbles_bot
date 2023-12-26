@@ -81,7 +81,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         if self.pcg:
             argstring = " ".join(message.arguments)
 
-            if "pokemoncommunitygame" in message.source:
+            if "pokemoncommunitygame" in message.source.lower():
                 self.check_pokemon_active(client, message, argstring)
                 self.check_loyalty_info(client, message, argstring)
                 self.check_special_spawn(client, message, argstring)
@@ -117,7 +117,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         response = "naughty"
         log("green", f"A christmas Delibird appeared in {twitch_channel} channel - {response}")
 
-        sleep(random.randint(100, 200) / 100.0)
+        sleep(random.randint(100, 200) / 10.0)
         client.privmsg("#" + twitch_channel, response)
         # POKEMON.discord.post(DISCORD_ALERTS, f"🎅I saw a Delibird in {twitch_channel} channel and said I was {response}🎅")
 
