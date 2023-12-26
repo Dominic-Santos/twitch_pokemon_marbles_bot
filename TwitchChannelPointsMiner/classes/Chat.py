@@ -88,11 +88,42 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 self.check_xmas_delibird(client, message, argstring)
                 self.check_xmas_delibird_gift(client, message, argstring)
                 self.check_pokegifts(client, message, argstring)
+                self.check_snowmen(client, message, argstring)
 
             THREADCONTROLLER.clients[self.channel[1:]] = client
 
             if len(POKEMON.channel_list) > 0:
                 self.start_threads()
+
+    def check_snowmen(self, client, message, argstring):
+        if argstring.count("❄") == 34:
+            try:
+                parts = {}
+
+                part_names = ["Hat", "SnowHead", "Cone", "BodyMid", "BowTie"]
+                for part in part_names:
+                    if part in argstring:
+                        parts[part] = int(argstring.split(part)[1][0])
+                    else:
+                        parts[part] = 0
+
+                tier = 0
+                for i in [3, 2, 1]:
+                    exact = list(parts.values()).count(i)
+                    if exact == 5:
+                        tier = i * 2 - 1
+                        break
+
+                    better = len([x for x in parts.values() if x >= i])
+                    if better == 5:
+                        tier = i * 2
+                        break
+
+                if tier >= 4:
+                    twitch_channel = message.target[1:]
+                    log("green", f"A T{tier} snowman has been built in {twitch_channel}")
+            except Exception as e:
+                log("red", "not a real snowman message - " + argstring + str(e))
 
     def check_pokegifts(self, client, message, argstring):
         if self.username in argstring.lower() and "as present from" in argstring and "HolidayPresent" in argstring:
