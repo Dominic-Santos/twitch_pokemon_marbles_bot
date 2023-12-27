@@ -98,26 +98,22 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
     def check_snowmen(self, client, message, argstring):
         if argstring.count("❄") == 34:
             try:
-                parts = {}
-
-                part_names = ["Hat", "SnowHead", "Cone", "BodyMid", "BowTie"]
-                for part in part_names:
+                total_score = 0
+                for part in ["Hat", "SnowHead", "Cone", "BodyMid", "BowTie"]:
                     if part in argstring:
-                        parts[part] = int(argstring.split(part)[1][0])
-                    else:
-                        parts[part] = 0
+                        total_score += int(argstring.split(part)[1][0])
 
                 tier = 0
-                for i in [3, 2, 1]:
-                    exact = list(parts.values()).count(i)
-                    if exact == 5:
-                        tier = i * 2 - 1
-                        break
-
-                    better = len([x for x in parts.values() if x >= i])
-                    if better == 5:
-                        tier = i * 2
-                        break
+                if total_score == 15:
+                    tier = 5
+                elif total_score >= 11:
+                    tier = 4
+                elif total_score == 10:
+                    tier = 3
+                elif total_score >= 6:
+                    tier = 2
+                elif total_score == 5:
+                    tier = 1
 
                 if tier >= 4:
                     twitch_channel = message.target[1:]
