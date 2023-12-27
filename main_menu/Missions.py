@@ -49,7 +49,7 @@ class Missions():
             if mission["rewardPokemon"] is not None:
                 get_sprite_cached("pokemon", str(mission["rewardPokemon"]["id"]))
             else:
-                get_sprite_cached(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"])
+                get_sprite_cached(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"], mission["rewardItem"]["tmType"])
 
     def run(self):
         self.load()
@@ -139,7 +139,7 @@ class Missions():
                 reward = mission["rewardPokemon"]["name"]
 
             else:
-                img_path = get_sprite_cached(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"])
+                img_path = get_sprite_cached(mission["rewardItem"]["category"], mission["rewardItem"]["sprite_name"], mission["rewardItem"]["tmType"])
                 reward = str(mission["rewardItem"]["amount"]) + "x " + mission["rewardItem"]["name"]
 
             reward_frame = tkinter.Frame(self.list_frame)

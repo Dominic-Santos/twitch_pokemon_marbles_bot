@@ -42,7 +42,8 @@ class Missions(object):
                 "reward_name": mission["rewardItem"]["sprite_name"],
                 "reward": f"{amount}{item}",
                 "item_name": item,
-                "item_amount": mission["rewardItem"]["amount"]
+                "item_amount": mission["rewardItem"]["amount"],
+                "tm_type": mission["rewardItem"]["tmType"]
             }
         else:
             reward = {
