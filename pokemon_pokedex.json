@@ -29208,7 +29208,8 @@
         "order": 76,
         "evolves_from": [
             "10110"
-        ]
+        ],
+        "evolves_to": {}
     },
     "10119": {
         "pokedex_id": 10119,

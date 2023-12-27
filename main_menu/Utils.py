@@ -32,7 +32,7 @@ def get_image(img_path):
     return tkimg
 
 
-def get_sprite_cached(sprite_type, sprite_name):
+def get_sprite_cached(sprite_type, sprite_name, tm_type=None):
     look_for = f"{sprite_type}_{sprite_name}"
     if look_for in IMAGE_PATHS:
         return IMAGE_PATHS[look_for]
@@ -40,7 +40,7 @@ def get_sprite_cached(sprite_type, sprite_name):
     if sprite_type == "pokemon":
         img_path = get_sprite("pokemon", sprite_name, battle=True, path=True, use_cache=True)
     else:
-        img_path = get_sprite(sprite_type, sprite_name, path=True, use_cache=True)
+        img_path = get_sprite(sprite_type, sprite_name, path=True, use_cache=True, tm_type=tm_type)
 
     IMAGE_PATHS[look_for] = img_path
     return img_path

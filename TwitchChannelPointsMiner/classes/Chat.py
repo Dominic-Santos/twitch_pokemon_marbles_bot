@@ -322,7 +322,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
             rewards_msg = f"You got {prefix} {item_str}!"
             log("green", rewards_msg)
-            sprite = get_sprite(item["category"], item["sprite"])
+            sprite = get_sprite(item["category"], item["sprite"], tm_type=item["tmType"])
             POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
 
     def check_inventory(self):
@@ -362,7 +362,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         pokemon_to_sort = []
         for title, reward in completed:
             readable_reward = reward["reward"]
-            reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"])
+            reward_sprite = get_sprite(reward["reward_type"], reward["reward_name"], reward.get("tm_type", None))
             mission_msg = f"Completed mission - {title} - reward:"
             if reward["reward_type"] == "pokemon":
 

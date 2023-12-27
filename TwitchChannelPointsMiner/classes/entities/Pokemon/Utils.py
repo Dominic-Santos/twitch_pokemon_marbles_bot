@@ -92,13 +92,13 @@ def get_pokemon_sprite(sprite_name, shiny=False, battle=True, path=False, use_ca
     return get_pokemon_menu_sprite(sprite_name, shiny, path, use_cache)
 
 
-def get_sprite(sprite_type, sprite_name, shiny=False, battle=True, path=False, use_cache=False):
+def get_sprite(sprite_type, sprite_name, shiny=False, battle=True, path=False, use_cache=False, tm_type=None):
     try:
         if sprite_type == "pokemon":
             return get_pokemon_sprite(sprite_name, shiny, battle, path, use_cache)
         elif sprite_type == "streamer":
             return get_streamer_avatar(sprite_name, path)
-        return get_item_sprite(sprite_type, sprite_name, path)
+        return get_item_sprite(sprite_type, sprite_name, path, tm_type)
     except Exception as e:
         print(e)
     return None
@@ -131,17 +131,25 @@ def get_streamer_avatar(streamer, path=False):
     return open(file_path, "rb")
 
 
-def get_item_sprite(sprite_type, sprite_name, path=False):
+def get_item_sprite(sprite_type, sprite_name, path=False, tm_type=None):
     check_output_folder(f"sprites/{sprite_type}")
 
-    file_path = f"sprites/{sprite_type}/{sprite_name}"
+    tm_type = str(tm_type).lower()
+
+    if sprite_type == "tm":
+        file_path = f"sprites/tm/{tm_type}"
+    else:
+        file_path = f"sprites/{sprite_type}/{sprite_name}"
 
     if os.path.isfile(file_path + ".png"):
         if path:
             return file_path + ".png"
         return open(file_path + ".png", "rb")
 
-    url = f"https://poketwitch.bframework.de/static/twitchextension/items/{sprite_type}/{sprite_name}"
+    if sprite_type == "tm":
+        url = f"https://poketwitch.bframework.de/static/twitchextension/items/tm/{tm_type}"
+    else:
+        url = f"https://poketwitch.bframework.de/static/twitchextension/items/{sprite_type}/{sprite_name}"
     try:
 
         res = requests.get(url + ".svg")
