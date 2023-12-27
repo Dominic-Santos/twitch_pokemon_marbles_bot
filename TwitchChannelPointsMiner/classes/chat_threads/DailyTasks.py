@@ -418,6 +418,6 @@ class DailyTasks(object):
         POKEMON.discord.post(DISCORD_STATS, discord_msg)
 
     def check_loyalty(self):
-        discord_msg = POKEMON.get_loyalty_readable(with_featured=False)
+        discord_msg = POKEMON.get_loyalty_readable(with_featured=False, with_zeros=False)
 
         POKEMON.discord.post(DISCORD_STATS, discord_msg)

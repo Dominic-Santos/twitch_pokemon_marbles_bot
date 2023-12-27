@@ -138,9 +138,9 @@ class Loyalty(object):
         self.save_loyalty()
         self.save_loyalty_readable()
 
-    def get_loyalty_readable(self, with_featured=True):
+    def get_loyalty_readable(self, with_featured=True, with_zeros=True):
         to_output = sorted(
-            [(key, values) for key, values in self.loyalty_data.items()],
+            [(key, values) for key, values in self.loyalty_data.items() if (values["points"] > 0 or with_zeros)],
             key=lambda x: (0 - x[1]["featured"], 0 - x[1]["points"])
         )
         lines = []
