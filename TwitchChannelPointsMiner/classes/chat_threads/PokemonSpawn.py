@@ -1,4 +1,5 @@
 from time import sleep
+from datetime import datetime
 import requests
 import traceback
 
@@ -95,9 +96,13 @@ class PokemonSpawn(object):
 
         if len(catch_reasons) == 0:
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
-            log_file("yellow", f"Don't need pokemon, Pokecheck in {twitch_channel}")
+            now = datetime.now()
 
-            client.privmsg("#" + twitch_channel, "!pokecheck")
+            if now.hour < 16:
+                log_file("yellow", f"Don't need pokemon, Pokecheck in {twitch_channel}")
+                client.privmsg("#" + twitch_channel, "!pokecheck")
+            else:
+                log_file("yellow", f"Don't need pokemon, won't pokecheck")
             self.get_missions()
             return
 

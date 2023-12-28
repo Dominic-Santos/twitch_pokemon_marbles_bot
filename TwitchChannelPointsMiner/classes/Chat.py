@@ -84,8 +84,6 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             if "pokemoncommunitygame" in message.source.lower():
                 self.check_pokemon_active(client, message, argstring)
                 self.check_loyalty_info(client, message, argstring)
-                self.check_special_spawn(client, message, argstring)
-                self.check_xmas_delibird(client, message, argstring)
                 self.check_xmas_delibird_gift(client, message, argstring)
                 self.check_pokegifts(client, message, argstring)
                 self.check_snowmen(client, message, argstring)
@@ -135,19 +133,6 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             log("green", msg)
             POKEMON.discord.post(DISCORD_ALERTS, msg)
 
-    def check_xmas_delibird(self, client, message, argstring):
-        if "A christmas Delibird appeared!" not in argstring:
-            return
-
-        twitch_channel = message.target[1:]
-        # response = random.choice(["naughty", "nice"])
-        response = "naughty"
-        log("green", f"A christmas Delibird appeared in {twitch_channel} channel - {response}")
-
-        sleep(random.randint(100, 200) / 10.0)
-        client.privmsg("#" + twitch_channel, response)
-        # POKEMON.discord.post(DISCORD_ALERTS, f"🎅I saw a Delibird in {twitch_channel} channel and said I was {response}🎅")
-
     def check_xmas_delibird_gift(self, client, message, argstring):
         if self.username in argstring.lower() and "Delibird drops the following" in argstring and "HolidayPresent" in argstring:
             twitch_channel = message.target[1:]
@@ -156,101 +141,6 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             msg = f"🎁Received {item} as a present from Delibird in {twitch_channel} channel🎁"
             log("green", msg)
             POKEMON.discord.post(DISCORD_ALERTS, msg)
-
-    def check_special_spawn(self, client, message, argstring):
-        twitch_channel = message.target[1:]
-        if "A wild" in argstring and "appears" in argstring:
-            log("green", twitch_channel + " " + argstring)
-
-        if "twitchsings" not in argstring.lower():
-            return
-
-        argstring = argstring.replace("Wild", "wild").replace("A wild", "a wild")
-
-        if "a wild" not in argstring or "appears" not in argstring:
-            msg = f"A Snowman popped in {twitch_channel} channel - {argstring}"
-            log("green", msg)
-            POKEMON.discord.post(DISCORD_ALERTS, f"I saw {msg}")
-            return
-
-        pokemon_name = argstring.split("a wild")[1].split(" appears")[0]
-        msg = f"A Snowman popped in {twitch_channel} channel - {pokemon_name} spawned"
-        log("green", msg)
-        POKEMON.discord.post(DISCORD_ALERTS, f"⛄I saw {msg}⛄")
-
-        pokemon = POKEMON.pokedex.stats_by_name(pokemon_name)
-        if pokemon is None:
-            # should try to catch unknown pokemon
-            catch_reasons = ["unknown"]
-        else:
-            catch_reasons = POKEMON.need_pokemon(pokemon)
-
-        pokemon_name = pokemon_name if pokemon is None else pokemon.name
-        pokemon_id = 1000000 if pokemon is None else pokemon.pokedex_id
-        pokemon_tier = "?" if pokemon is None else pokemon.tier
-
-        if len(catch_reasons) == 0:
-            return
-
-        mission_balls = [] if "ball" not in catch_reasons else POKEMON.missions.data["ball"]
-
-        ball = None
-        if pokemon is None:
-            ball = POKEMON.inventory.get_catch_ball(pokemon, catch_reasons, mission_balls)
-        else:
-            for cur_ball in ["ultraball", "greatball", "pokeball", "premierball"]:
-                if POKEMON.inventory.have_ball(cur_ball):
-                    ball = cur_ball
-                    break
-
-        if ball is None:
-            log_file("red", f"Won't catch {pokemon_name}, ran out of balls")
-            return
-
-        reasons_string = ", ".join(catch_reasons)
-        message = f"!pokecatch {ball}"
-
-        if ball == "timerball":
-            wait = 75
-            log("green", f"Timerball selected, waiting {wait} seconds to catch")
-            sleep(wait)
-
-        log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
-        log("green", f"Trying to catch in {twitch_channel}")
-
-        client.privmsg("#" + twitch_channel, message)
-
-        sleep(5)
-
-        pokemon, caught = self.get_last_caught(pokemon_id)
-
-        pokemon_sprite = None
-        if caught is not None:
-            ivs = int(caught["avgIV"])
-            lvl = caught['lvl']
-            shiny = " Shiny" if caught["isShiny"] else ""
-            unidentified = " (Unidentified Ghost)" if pokemon.is_unidentified_ghost else ""
-            snowman = " (Snowman)" if pokemon.is_special_spawn else ""
-            msg = f"Caught{unidentified}{snowman}{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
-            log_file("green", msg)
-
-            self.update_evolutions(caught["id"], pokemon.pokedex_id)
-
-            sprite = str(caught["pokedexId"])
-            extra_reasons = {"shiny": caught["isShiny"]}
-            if POKEMON.show_sprite(catch_reasons, extra_reasons):
-                pokemon_sprite = get_sprite("pokemon", sprite, shiny=caught["isShiny"])
-
-            if "pokedex" in catch_reasons and pokemon.is_spawnable:
-                discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
-
-        else:
-            log_file("red", f"Failed to catch {pokemon_name} ({pokemon_tier})")
-            msg = f"Missed {pokemon_name} ({pokemon_tier})!"
-
-        msg = msg + f" {ball}, because {reasons_string}"
-
-        POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
 
     def check_loyalty_info(self, client, message, argstring):
         if self.username in argstring.lower() and "Your loyalty level" in argstring:
