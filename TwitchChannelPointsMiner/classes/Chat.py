@@ -212,7 +212,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
             rewards_msg = f"You got {prefix} {item_str}!"
             log("green", rewards_msg)
-            sprite = get_sprite(item["category"], item["sprite"], tm_type=item["tmType"])
+            sprite = get_sprite(item["category"], item["sprite"], tm_type=item["tm_type"])
             POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
 
     def check_inventory(self):
