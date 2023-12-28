@@ -58,7 +58,8 @@ class Inventory(object):
                 "name": item["name"],
                 "sprite": item["sprite_name"],
                 "amount": item["amount"],
-                "category": item["category"]
+                "category": item["category"],
+                "tm_type": item["tmType"]
             }
 
     def get_item(self, item_name):
