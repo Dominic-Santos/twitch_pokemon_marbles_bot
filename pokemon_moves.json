@@ -5662,5 +5662,17 @@
         "pp": 30,
         "accuracy": 100,
         "type": "electric"
+    },
+    "constrict": {
+        "name": "Constrict",
+        "damage_class": "physical",
+        "stat_chance": 10,
+        "effect_chance": 10,
+        "priority": 0,
+        "description": "The target is attacked with long, creeping tentacles,\r\nvines, or the like. This may also lower the target\u2019s \r\nSpeed stat.",
+        "power": 10,
+        "pp": 35,
+        "accuracy": 100,
+        "type": "normal"
     }
 }

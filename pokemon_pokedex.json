@@ -35883,7 +35883,7 @@
     },
     "100411": {
         "pokedex_id": 100411,
-        "name": "His Samurott",
+        "name": "PCG Delibird",
         "description": "One swing of the sword incorporated in its armor can fell an opponent. A simple glare from one of them quiets everybody.",
         "weight": 94.6,
         "generation": 5,
@@ -35898,7 +35898,7 @@
             "special_attack": 100,
             "special_defense": 65
         },
-        "order": 503,
+        "order": 225,
         "evolves_to": {}
     },
     "86330": {
