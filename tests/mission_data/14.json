@@ -1,0 +1,104 @@
+{
+    "missions": [
+        {
+            "name": "[EVENT] Catch event Pokemon!",
+            "goal": 10,
+            "progress": 9,
+            "rewardItem": {
+                "id": 107,
+                "name": "Magnet Ball",
+                "description": "A somewhat different Pok\u00e9 Ball that is more effective when attempting to catch Steel- or Electric-type Pok\u00e9mon.",
+                "sprite_name": "magnet_ball",
+                "category": "ball",
+                "tmType": null,
+                "amount": 10
+            },
+            "rewardPokemon": null,
+            "endDate": "6 days, 14 hours and 1 minutes",
+            "endDateInt": 568832.559947
+        },
+        {
+            "name": "Wondertrade",
+            "goal": 8,
+            "progress": 3,
+            "rewardItem": {
+                "id": 116,
+                "name": "Winter Shard",
+                "description": "Exchange Winter Shards for past event rewards of your choice during the Christmas Event 2023. This item will disappear after the event.",
+                "sprite_name": "event_coin",
+                "category": "evolution",
+                "tmType": null,
+                "amount": 5
+            },
+            "rewardPokemon": null,
+            "endDate": "6 days, 14 hours and 1 minutes",
+            "endDateInt": 568832.559947
+        },
+        {
+            "name": "Miss steel type Pok\u00e9mon",
+            "goal": 3,
+            "progress": 2,
+            "rewardItem": null,
+            "rewardPokemon": {
+                "id": 462,
+                "name": "Magnezone",
+                "description": "It\u2019s thought that a special magnetic field changed the molecular structure of this Pok\u00e9mon\u2019s body, and that\u2019s what caused the Pok\u00e9mon\u2019s evolution.",
+                "sprite_name": "magnezone"
+            },
+            "endDate": "6 days, 14 hours and 1 minutes",
+            "endDateInt": 568832.559947
+        },
+        {
+            "name": "Catch a Pok\u00e9mon with Great Balls",
+            "goal": 5,
+            "progress": 0,
+            "rewardItem": {
+                "id": 18,
+                "name": "Great Cherish Ball",
+                "description": "A modified Cherish Ball with a better catch rate. Has a higher chance to catch a shiny Pokemon.",
+                "sprite_name": "great_cherish_ball",
+                "category": "ball",
+                "tmType": null,
+                "amount": 3
+            },
+            "rewardPokemon": null,
+            "endDate": "6 days, 14 hours and 1 minutes",
+            "endDateInt": 568832.559947
+        },
+        {
+            "name": "Use super effective moves",
+            "goal": 75,
+            "progress": 274,
+            "rewardItem": {
+                "id": 45,
+                "name": "Mood Mint",
+                "description": "Delicious mint, which completly changes the nature of your pokemon.",
+                "sprite_name": "mood_mint",
+                "category": "battle",
+                "tmType": null,
+                "amount": 1
+            },
+            "rewardPokemon": null,
+            "endDate": "6 days, 14 hours and 1 minutes",
+            "endDateInt": 568832.559947
+        },
+        {
+            "name": "Participate in a public battle using electric type",
+            "goal": 10,
+            "progress": 59,
+            "rewardItem": {
+                "id": 28,
+                "name": "Friend Ball",
+                "description": "A nice looking ball which is more effective on Pok\u00e9mon that share a type with your Buddy-Pok\u00e9mon.",
+                "sprite_name": "friend_ball",
+                "category": "ball",
+                "tmType": null,
+                "amount": 8
+            },
+            "rewardPokemon": null,
+            "endDate": "6 days, 14 hours and 1 minutes",
+            "endDateInt": 568832.559947
+        }
+    ],
+    "endDate": "6 days, 14 hours and 1 minutes"
+}

@@ -136,11 +136,11 @@ class Inventory(object):
             return self.get_catch_save_ball(pokemon, repeat)
 
         elif strategy == "worst":
-            return self.get_catch_ball_worst(pokemon, repeat)
+            return self.get_catch_worst_ball(pokemon, repeat)
 
         return None
 
-    def get_catch_ball_worst(self, pokemon, repeat):
+    def get_catch_worst_ball(self, pokemon, repeat):
         ball_iter = self._recomended_balls_iter(pokemon, repeat)
         balls = [x for x in ball_iter]
         if len(balls) == 0:

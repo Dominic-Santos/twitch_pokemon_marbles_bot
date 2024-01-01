@@ -1,19 +1,9 @@
-from . import Missions, Pokemon
-import json
+from . import Missions, Pokemon, load_mission_data
 
 MISSIONS = Missions()
 
-
-def load_data(x):
-    try:
-        return json.load(open(f"tests/mission_data/{x}.json"))
-    except:
-        print(f"failed to load {x}.json")
-    return {}
-
-
 MISSION_DATA = {
-    str(x): load_data(x) for x in range(1, 14)
+    str(x): load_mission_data(x) for x in range(1, 15)
 }
 
 
@@ -296,3 +286,9 @@ def test_check_missions_miss_type():
     pokemon.is_fish = False
     reasons = MISSIONS.check_all_missions(pokemon)
     assert "miss_type (Normal)" in reasons
+
+
+def test_check_ball_mission():
+    MISSIONS.set(MISSION_DATA["14"])
+    assert MISSIONS.have_mission("ball")
+    assert MISSIONS.data["ball"] == ["great"]

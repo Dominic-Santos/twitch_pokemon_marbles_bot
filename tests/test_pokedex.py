@@ -1,18 +1,7 @@
-import json
-
-from . import Pokedex, Pokemon
-
-JSON_FILE = "tests/pokedex.json"
+from . import Pokedex, Pokemon, load_pokedex
 
 FAIL_TO_FIND = None
 pokedex = Pokedex()
-
-
-def load_pokedex():
-    with open(JSON_FILE) as of:
-        data = json.load(of)
-    return data
-
 
 dex_json = load_pokedex()
 pokedex.set(dex_json)
