@@ -690,6 +690,7 @@ def test_inventory():
 def test_best_ball():
     pokemon = Pokemon()
     pokemon.types = ["Dark"]
+    pokemon.weight = 150
     INVENTORY.set(INVENTORY_DATA)
     reasons = ["pokedex"]
 
@@ -722,6 +723,7 @@ def test_save_ball():
     pokemon = Pokemon()
     pokemon.types = ["Dark"]
     pokemon.tier = "S"
+    pokemon.weight = 150
     INVENTORY.set(INVENTORY_DATA)
     INVENTORY.money_saving = 1000
     INVENTORY.cash = 0

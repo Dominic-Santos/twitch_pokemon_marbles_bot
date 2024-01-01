@@ -304,7 +304,8 @@ class PokemonComunityGame(Loyalty):
         for mission in missions:
             if mission == "ball":
                 for ball in self.missions.data["ball"]:
-                    if self.inventory.have_ball(ball):
+                    the_ball = ball + "ball"
+                    if self.inventory.have_ball(the_ball):
                         reasons.append(mission)
                         break
             else:
