@@ -132,3 +132,6 @@ def test_legendary():
     assert pokeobj.is_legendary
     pokeobj = pokedex.stats(16)
     assert pokeobj.is_legendary is False
+
+    pokeobj = pokedex.stats(10139)
+    assert pokeobj.is_legendary
