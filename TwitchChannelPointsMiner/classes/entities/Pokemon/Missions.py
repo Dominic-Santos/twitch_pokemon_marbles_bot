@@ -2,7 +2,7 @@ from .Pokedex import POKEMON_TYPES, POKEMON_ATTRIBUTES
 
 MISSION_REASONS = ["type", "weight", "bst", "fish", "dog", "cat", "miss", "miss_type", "attempt", "ball", "monotype", "event", "catch"]
 
-BIGGER_SYNONIMS = ["greater", "above", "higher", "larger", "heavier", "over"]
+BIGGER_SYNONIMS = ["greater", "above", "higher", "larger", "heavier", "over", "more than"]
 
 
 def bigger_smaller(mission_title, bigger, smaller):

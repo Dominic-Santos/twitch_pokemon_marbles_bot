@@ -3,7 +3,7 @@ from . import Missions, Pokemon, load_mission_data
 MISSIONS = Missions()
 
 MISSION_DATA = {
-    str(x): load_mission_data(x) for x in range(1, 15)
+    str(x): load_mission_data(x) for x in range(1, 16)
 }
 
 
@@ -292,3 +292,10 @@ def test_check_ball_mission():
     MISSIONS.set(MISSION_DATA["14"])
     assert MISSIONS.have_mission("ball")
     assert MISSIONS.data["ball"] == ["great"]
+
+
+def test_weight_mission():
+    MISSIONS.set(MISSION_DATA["15"])
+    assert MISSIONS.have_mission("weight")
+    assert len(MISSIONS.data["weight"]) == 1
+    assert MISSIONS.data["weight"][0] == (94, 9999)
