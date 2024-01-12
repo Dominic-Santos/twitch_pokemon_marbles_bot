@@ -372,10 +372,8 @@ class DailyTasks(object):
 
     def money_graph(self):
         if POKEMON.settings["daily_money_graph"] is False:
-            log("yellow", f"Wont run money graph")
             return
 
-        log("yellow", f"Running money graph")
         generate_graph(POKEMON.discord)
         POKEMON.discord.post(DISCORD_STATS, "Money Graph", file=open(OUTPUT_IMAGE, "rb"))
 

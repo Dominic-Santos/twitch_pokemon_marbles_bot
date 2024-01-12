@@ -46,6 +46,8 @@ class Commands(object):
             self.catch_rates(cur_date)
         elif command == "loyalty":
             self.check_loyalty()
+        elif command == ["catch", "money graph", "money_graph"]:
+            self.money_graph()
 
     def commands(self):
         resp = POKEMON.discord.get(DISCORD_COMMANDS_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
