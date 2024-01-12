@@ -20,6 +20,15 @@ def save_to_file(filename, data):
         f.write(json.dumps(data, indent=4))
 
 
+def load_from_file(filename):
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(e)
+    return {}
+
+
 def save_to_json(func):
     def wrapped(obj, *args, **kwargs):
         obj_name = obj.__class__.__name__

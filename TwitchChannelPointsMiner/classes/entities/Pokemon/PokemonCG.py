@@ -1,6 +1,5 @@
 import random
 from datetime import datetime
-import json
 
 from .Discord import Discord
 from .Missions import Missions, MISSION_REASONS
@@ -8,6 +7,7 @@ from .Inventory import Inventory
 from .Pokedex import Pokedex, POKEMON_TYPES, POKEMON_TIERS, POKEMON_ATTRIBUTES
 from .Computer import Computer
 from .Loyalty import Loyalty
+from .Utils import load_from_file, save_to_file
 
 from ...ChatLogs import log
 
@@ -218,17 +218,14 @@ class PokemonComunityGame(Loyalty):
         self.catch_timer = datetime.utcnow()
 
     def save_settings(self):
-        with open(SETTINGS_FILE, "w") as f:
-            to_write = {
-                "settings": self.settings,
-                "discord": self.discord.data
-            }
-            f.write(json.dumps(to_write, indent=4))
+        save_to_file(SETTINGS_FILE, {
+            "settings": self.settings,
+            "discord": self.discord.data
+        })
 
     def load_settings(self):
-        with open(SETTINGS_FILE, "r") as f:
-            j = json.load(f)
-            changes = self.set(j.get("settings", {}))
+        loaded = load_from_file(SETTINGS_FILE)
+        changes = loaded.get("settings", {})
 
         self.inventory.use_special_balls = self.settings["use_special_balls"]
         self.inventory.spend_money_strategy = self.settings["spend_money_strategy"]
@@ -240,9 +237,8 @@ class PokemonComunityGame(Loyalty):
         return changes
 
     def load_discord_settings(self):
-        with open(SETTINGS_FILE, "r") as f:
-            j = json.load(f)
-            self.discord.set(j.get("discord", {}))
+        loaded = load_from_file(SETTINGS_FILE)
+        self.discord.set(loaded.get("discord", {}))
 
     def set(self, settings):
         changes = False
