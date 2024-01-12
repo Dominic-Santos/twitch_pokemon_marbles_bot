@@ -1,4 +1,3 @@
-import jwt
 import json
 from .Utils import check_output_folder, save_to_file
 from .Pokemon import Pokemon

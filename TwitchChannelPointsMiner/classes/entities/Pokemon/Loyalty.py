@@ -1,4 +1,4 @@
-import json
+from .Utils import load_from_file, save_to_file
 
 LOYALTY_FILE = "pokemon_loyalty.txt"
 LOYALTY_DATA = "pokemon_loyalty_data.json"
@@ -41,15 +41,10 @@ class Loyalty(object):
         self.load_loyalty()
 
     def save_loyalty(self):
-        with open(LOYALTY_DATA, "w") as f:
-            f.write(json.dumps(self.loyalty_data, indent=4))
+        save_to_file(LOYALTY_DATA, self.loyalty_data)
 
     def load_loyalty(self):
-        try:
-            with open(LOYALTY_DATA, "r") as f:
-                data = json.load(f)
-        except:
-            data = {}
+        data = load_from_file(LOYALTY_DATA)
 
         for channel in data:
             self.set_loyalty(channel, data[channel]["level"], data[channel]["points"], data[channel]["limit"], save=False)

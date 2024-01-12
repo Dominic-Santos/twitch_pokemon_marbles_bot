@@ -1,9 +1,9 @@
-import json
-
 from .Pokemon import Pokemon
+from .Utils import load_from_file, save_to_file
 
 POKEDEX_FILE = "pokemon_pokedex.json"
 POKEMOVE_FILE = "pokemon_moves.json"
+POKECOM_FILE = "pokemon_computer.json"
 
 STARTER_POKEMON = [y for x in (1, 152, 252, 387, 495, 650, 722, 810, 906) for y in range(x, x + 9)]
 LEGENDARY_POKEMON = [z for x, y in ((144, 3), (150, 2), (243, 3), (249, 3), (377, 10), (480, 15), (638, 12), (716, 6), (772, 2), (785, 25), (888, 11)) for z in range(x, x + y)]
@@ -51,6 +51,18 @@ class Pokedex(object):
         self.load_moves()
         self.count_totals()
 
+    def load_pokedex(self):
+        self.pokemon_stats = load_from_file(POKEDEX_FILE)
+
+    def save_pokedex(self):
+        save_to_file(POKEDEX_FILE, self.pokemon_stats)
+
+    def load_moves(self):
+        self.pokemon_moves = load_from_file(POKEMOVE_FILE)
+
+    def save_moves(self):
+        save_to_file(POKEMOVE_FILE, self.pokemon_moves)
+
     def count_totals(self):
         regions = [x.lower() for x in REGION_PREFIX.values()]
 
@@ -84,30 +96,6 @@ class Pokedex(object):
                 region = poke.name.lower().split(" ")[0]
                 if region in regions:
                     self._total_regions[region] += 1
-
-    def load_pokedex(self):
-        try:
-            with open(POKEDEX_FILE, "r", encoding="utf-8") as f:
-                self.pokemon_stats = json.load(f)
-        except Exception as e:
-            print(e)
-            self.pokemon_stats = {}
-
-    def save_pokedex(self):
-        with open(POKEDEX_FILE, "w", encoding="utf-8") as f:
-            f.write(json.dumps(self.pokemon_stats, indent=4))
-
-    def load_moves(self):
-        try:
-            with open(POKEMOVE_FILE, "r", encoding="utf-8") as f:
-                self.pokemon_moves = json.load(f)
-        except Exception as e:
-            print(e)
-            self.pokemon_moves = {}
-
-    def save_moves(self):
-        with open(POKEMOVE_FILE, "w", encoding="utf-8") as f:
-            f.write(json.dumps(self.pokemon_moves, indent=4))
 
     def set(self, dex):
         for pokemon in dex["dex"]:
