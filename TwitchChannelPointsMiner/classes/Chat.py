@@ -412,6 +412,8 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             log_file("yellow", f"Renamed {pokemon['name']} from {pokemon['nickname']} to {new_name}")
             sleep(0.5)
 
+        POKEMON.computer.save_computer()
+
     def sort_computer(self, pokedex_ids=[]):
         '''Sort all/specific pokemon in computer and rename duplicates'''
         all_pokemon = self.pokemon_api.get_all_pokemon()
