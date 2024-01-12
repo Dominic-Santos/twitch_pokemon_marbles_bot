@@ -367,13 +367,11 @@ class DailyTasks(object):
         self.check_finish_pokedex()
         self.catch_rates(stats_date)
         self.check_loyalty()
-        self.money_graph()
+        if POKEMON.settings["daily_money_graph"]:
+            self.money_graph()
         self.check_bag_pokemon_data()
 
     def money_graph(self):
-        if POKEMON.settings["daily_money_graph"] is False:
-            return
-
         generate_graph(POKEMON.discord)
         POKEMON.discord.post(DISCORD_STATS, "Money Graph", file=open(OUTPUT_IMAGE, "rb"))
 
