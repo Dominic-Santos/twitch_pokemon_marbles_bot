@@ -40,6 +40,10 @@ class PokemonComunityGame(Loyalty):
         all_pokemon = [self.pokedex.clean_name(self.pokedex.stats(str(x)).name) for x in range(1, self.pokedex.total + 1)]
 
         self.default_settings = {
+            "daily_money_graph": {
+                "value": False,
+                "hint": "Show a daily graph in discord for money",
+            },
             "alert_new_missions": {
                 "value": False,
                 "hint": "Send alert to discord when new missions detected",
