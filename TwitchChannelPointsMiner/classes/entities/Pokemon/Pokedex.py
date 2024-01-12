@@ -3,7 +3,6 @@ from .Utils import load_from_file, save_to_file
 
 POKEDEX_FILE = "pokemon_pokedex.json"
 POKEMOVE_FILE = "pokemon_moves.json"
-POKECOM_FILE = "pokemon_computer.json"
 
 STARTER_POKEMON = [y for x in (1, 152, 252, 387, 495, 650, 722, 810, 906) for y in range(x, x + 9)]
 LEGENDARY_POKEMON = [z for x, y in ((144, 3), (150, 2), (243, 3), (249, 3), (377, 10), (480, 15), (638, 12), (716, 6), (772, 2), (785, 25), (888, 11)) for z in range(x, x + y)]

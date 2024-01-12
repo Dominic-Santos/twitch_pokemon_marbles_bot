@@ -1,9 +1,20 @@
 from .Pokemon import Pokemon
+from .Utils import load_from_file, save_to_file
+
+POKECOM_FILE = "pokemon_computer.json"
 
 
 class Computer(object):
     def __init__(self):
         self.pokemon = []
+        self.pokemon_data = {}
+        self.load_computer()
+
+    def load_computer(self):
+        self.pokemon_data = load_from_file(POKECOM_FILE)
+
+    def save_computer(self):
+        save_to_file(POKECOM_FILE, self.pokemon_data)
 
     def set(self, computer):
         self.pokemon = computer["allPokemon"]
