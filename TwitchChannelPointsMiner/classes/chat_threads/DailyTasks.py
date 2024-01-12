@@ -425,7 +425,7 @@ class DailyTasks(object):
 
             if pokemon_data is None:
                 self.get_pokemon_data(pokemon)
-                sleep(1)
+                sleep(0.1)
                 continue
 
             if pokemon["nickname"] != pokemon_data["nickname"]:
