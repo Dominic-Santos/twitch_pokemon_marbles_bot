@@ -366,6 +366,7 @@ class DailyTasks(object):
         self.check_finish_pokedex()
         self.catch_rates(stats_date)
         self.check_loyalty()
+        self.check_bag_pokemon_data()
 
     def stats_computer(self):
         all_pokemon = self.pokemon_api.get_all_pokemon()
@@ -406,6 +407,17 @@ class DailyTasks(object):
                 sleep(1)
             elif updated:
                 POKEMON.pokedex.save_pokedex()
+
+    def check_bag_pokemon_data(self):
+        for pokemon in POKEMON.computer.pokemon:
+            if POKEMON.computer.get_pokemon_data(pokemon["id"]) is not None:
+                continue
+
+            pokemon_data = self.pokemon_api.get_pokemon(pokemon["id"])
+            POKEMON.computer.update_pokemon_data(pokemon, pokemon_data)
+            POKEMON.computer.save_computer()
+            log("yellow", f"Updated data for {pokemon['id']} ({pokemon['name']})")
+            sleep(1)
 
     def check_finish_pokedex(self):
         discord_msg = check_finish_pokedex(POKEMON, self.get_pokemon_stats)
