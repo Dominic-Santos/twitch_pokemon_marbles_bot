@@ -2,7 +2,7 @@ from .Pokemon import Pokemon
 from .Utils import load_from_file, save_to_file
 
 POKECOM_FILE = "pokemon_computer.json"
-
+KEYS_TO_SAVE = []
 
 class Computer(object):
     def __init__(self):
@@ -63,3 +63,23 @@ class Computer(object):
                 return self._get_by_id(pokemon.pokedex_id)
             return self._get_by_name(pokemon.name)
         return self._get_by_name(pokemon)
+
+    def get_pokemon_data(self, pokemon_id):
+        return self.pokemon_data.get(str(pokemon_id), None)
+
+    def set_pokemon_data(self, pokemon_id, pokemon_data):
+        self.pokemon_data[str(pokemon_id)] = pokemon_data
+
+    def update_pokemon_data(self, pokemon, pokemon_data):
+        to_save = {k: pokemon[k] for k in [
+            "lvl", "nickname", "locked", "pokedexId", "isShiny",
+            "isBuddy", "avgIV", "sellPrice", "caughtAt"
+        ]}
+        to_save.update({k: pokemon_data[k] for k in [
+            "originalOwner", "originalChannel", "hpIv", "attackIv",
+            "specialAttackIv", "defenseIv", "specialDefenseIv",
+            "speedIv", "hpIvINT", "attackIvINT", "specialAttackIvINT",
+            "defenseIvINT", "specialDefenseIvINT", "speedIvINT", "moves",
+            "statUp", "statDown"
+        ]})
+        self.set_pokemon_data(pokemon['id'], to_save)
