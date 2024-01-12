@@ -225,7 +225,7 @@ class PokemonComunityGame(Loyalty):
 
     def load_settings(self):
         loaded = load_from_file(SETTINGS_FILE)
-        changes = loaded.get("settings", {})
+        changes = self.set(loaded.get("settings", {}))
 
         self.inventory.use_special_balls = self.settings["use_special_balls"]
         self.inventory.spend_money_strategy = self.settings["spend_money_strategy"]
