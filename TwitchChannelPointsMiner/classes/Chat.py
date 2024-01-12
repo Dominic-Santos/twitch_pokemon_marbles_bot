@@ -407,7 +407,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             # update data cache
             pokemon_data = self.get_pokemon_data(pokemon)
             pokemon_data["nickname"] = new_name
-            POKEMON.computer.set_pokemon_data(pokemon_data)
+            POKEMON.computer.set_pokemon_data(pokemon["id"], pokemon_data)
 
             log_file("yellow", f"Renamed {pokemon['name']} from {pokemon['nickname']} to {new_name}")
             sleep(0.5)
