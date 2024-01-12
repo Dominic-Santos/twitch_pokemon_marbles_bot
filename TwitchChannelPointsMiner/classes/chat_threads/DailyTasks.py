@@ -369,7 +369,6 @@ class DailyTasks(object):
         self.check_loyalty()
         if POKEMON.settings["daily_money_graph"]:
             self.money_graph()
-        self.check_bag_pokemon_data()
 
     def money_graph(self):
         generate_graph(POKEMON.discord)
@@ -414,20 +413,6 @@ class DailyTasks(object):
                 sleep(1)
             elif updated:
                 POKEMON.pokedex.save_pokedex()
-
-    def check_bag_pokemon_data(self):
-        for pokemon in POKEMON.computer.pokemon:
-            pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
-
-            if pokemon_data is None:
-                self.get_pokemon_data(pokemon)
-                sleep(0.1)
-                continue
-
-            if pokemon["nickname"] != pokemon_data["nickname"]:
-                pokemon_data["nickname"] = pokemon["nickname"]
-                POKEMON.computer.set_pokemon_data(pokemon_data)
-        POKEMON.computer.save_computer()
 
     def check_finish_pokedex(self):
         discord_msg = check_finish_pokedex(POKEMON, self.get_pokemon_stats)
