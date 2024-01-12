@@ -335,6 +335,24 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         return pokemon
 
+    def get_pokemon_data(self, pokemon, cached=True):
+
+        pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
+
+        if cached is False or pokemon is not None:
+            try:
+                resp = self.pokemon_api.get_pokemon(pokemon["id"])
+                POKEMON.computer.update_pokemon_data(pokemon, resp)
+                POKEMON.computer.save_computer()
+
+                pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
+                log("yellow", f"Updated data for {pokemon['id']} ({pokemon['name']})")
+            except Exception as e:
+                print(pokemon["id"], pokemon["name"], "failed to get pokemon data", e)
+                pokemon_data = None
+
+        return pokemon_data
+
     def get_rename_suggestion(self, pokedict):
         changes = []
         for pokeid in pokedict.keys():
@@ -375,17 +393,23 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
                 if pokemon["nickname"] == nick:
                     continue
-                changes.append((pokemon["id"], nick, pokemon["name"], pokemon["nickname"]))
+                changes.append((pokemon, nick))
         return changes
 
     def rename_computer(self, pokedict):
         changes = self.get_rename_suggestion(pokedict)
-        for poke_id, new_name, real_name, old_name in changes:
+        for pokemon, new_name in changes:
             if new_name is not None and len(new_name) > 12:
-                log_file("yellow", f"Wont rename {real_name} from {old_name} to {new_name}, name too long")
+                log_file("yellow", f"Wont rename {pokemon['name']} from {pokemon['nickname']} to {new_name}, name too long")
                 continue
-            self.pokemon_api.set_name(poke_id, new_name)
-            log_file("yellow", f"Renamed {real_name} from {old_name} to {new_name}")
+            self.pokemon_api.set_name(pokemon['id'], new_name)
+
+            # update data cache
+            pokemon_data = self.get_pokemon_data(pokemon)
+            pokemon_data["nickname"] = new_name
+            POKEMON.computer.set_pokemon_data(pokemon_data)
+
+            log_file("yellow", f"Renamed {pokemon['name']} from {pokemon['nickname']} to {new_name}")
             sleep(0.5)
 
     def sort_computer(self, pokedex_ids=[]):
@@ -397,6 +421,9 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         pokedict = {}
 
         for pokemon in allpokemon:
+            # update computer data if needed
+            self.get_pokemon_data(pokemon)
+
             if pokemon["isShiny"]:
                 continue
             if len(pokedex_ids) == 0 or pokemon["pokedexId"] in pokedex_ids:
