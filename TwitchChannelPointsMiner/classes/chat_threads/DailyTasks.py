@@ -410,11 +410,17 @@ class DailyTasks(object):
 
     def check_bag_pokemon_data(self):
         for pokemon in POKEMON.computer.pokemon:
-            if POKEMON.computer.get_pokemon_data(pokemon["id"]) is not None:
+            pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
+
+            if pokemon_data is None:
+                self.get_pokemon_data(pokemon)
+                sleep(1)
                 continue
 
-            self.get_pokemon_data(pokemon)
-            sleep(1)
+            if pokemon["nickname"] != pokemon_data["nickname"]:
+                pokemon_data["nickname"] = pokemon["nickname"]
+                POKEMON.computer.set_pokemon_data(pokemon_data)
+        POKEMON.computer.save_computer()
 
     def check_finish_pokedex(self):
         discord_msg = check_finish_pokedex(POKEMON, self.get_pokemon_stats)
