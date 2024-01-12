@@ -10,6 +10,7 @@ from ..ChatUtils import (
     POKEMON,
 )
 from ..utils.catch_stats import get_catch_rates
+from ..utils.money_graph import generate_graph, OUTPUT_IMAGE
 
 POTION_COSTS = {
     "Potion": 100,
@@ -366,7 +367,17 @@ class DailyTasks(object):
         self.check_finish_pokedex()
         self.catch_rates(stats_date)
         self.check_loyalty()
+        self.money_graph()
         self.check_bag_pokemon_data()
+
+    def money_graph(self):
+        if POKEMON.settings["daily_money_graph"] is False:
+            log("yellow", f"Wont run money graph")
+            return
+
+        log("yellow", f"Running money graph")
+        generate_graph(POKEMON.discord)
+        POKEMON.discord.post(DISCORD_STATS, "Money Graph", file=open(OUTPUT_IMAGE, "rb"))
 
     def stats_computer(self):
         all_pokemon = self.pokemon_api.get_all_pokemon()
