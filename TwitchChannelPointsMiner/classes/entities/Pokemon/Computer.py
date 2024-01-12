@@ -2,7 +2,7 @@ from .Pokemon import Pokemon
 from .Utils import load_from_file, save_to_file
 
 POKECOM_FILE = "pokemon_computer.json"
-KEYS_TO_SAVE = []
+
 
 class Computer(object):
     def __init__(self):

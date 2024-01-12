@@ -413,10 +413,7 @@ class DailyTasks(object):
             if POKEMON.computer.get_pokemon_data(pokemon["id"]) is not None:
                 continue
 
-            pokemon_data = self.pokemon_api.get_pokemon(pokemon["id"])
-            POKEMON.computer.update_pokemon_data(pokemon, pokemon_data)
-            POKEMON.computer.save_computer()
-            log("yellow", f"Updated data for {pokemon['id']} ({pokemon['name']})")
+            self.get_pokemon_data(pokemon)
             sleep(1)
 
     def check_finish_pokedex(self):
