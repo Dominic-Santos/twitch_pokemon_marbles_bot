@@ -22,7 +22,8 @@ from .ChatUtils import (
 )
 
 from .entities.Pokemon import CGApi, get_sprite
-from .chat_threads.DailyTasks import discord_update_pokedex
+
+MAX_UPDATES = 250
 
 
 class ClientIRCBase(ClientIRCO):
@@ -421,10 +422,14 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         allpokemon = POKEMON.computer.pokemon
         pokedict = {}
+        updated = 0
 
         for pokemon in allpokemon:
             # update computer data if needed
-            self.get_pokemon_data(pokemon)
+            if updated < MAX_UPDATES:
+                if str(pokemon["id"]) not in POKEMON.computer.pokemon_data:
+                    self.get_pokemon_data(pokemon)
+                    updated += 1
 
             if pokemon["isShiny"]:
                 continue
