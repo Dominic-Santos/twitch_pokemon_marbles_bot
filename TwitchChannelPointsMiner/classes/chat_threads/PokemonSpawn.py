@@ -60,6 +60,7 @@ class PokemonSpawn(object):
             try:
                 if client is not None:
                     self.spawn(client)
+                    self.sync_pokemon_data()
                 remaining_time = get_next_spawn()
             except KeyboardInterrupt:
                 exit = True
