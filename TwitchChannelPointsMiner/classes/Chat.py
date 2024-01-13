@@ -274,6 +274,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         if len(pokemon_to_sort) > 0:
             self.sort_computer(pokemon_to_sort)
+            self.sync_pokemon_data()
         return completed
 
     def get_last_caught(self, pokedex_id, reward=False):
@@ -422,24 +423,34 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         allpokemon = POKEMON.computer.pokemon
         pokedict = {}
-        updated = 0
 
         for pokemon in allpokemon:
-            # update computer data if needed
-            if updated < MAX_UPDATES:
-                if str(pokemon["id"]) not in POKEMON.computer.pokemon_data:
-                    updated += 1
-
-                self.get_pokemon_data(pokemon)
-                POKEMON.computer.update_pokemon_data(pokemon)
-
             if pokemon["isShiny"]:
                 continue
             if len(pokedex_ids) == 0 or pokemon["pokedexId"] in pokedex_ids:
                 pokedict.setdefault(pokemon["pokedexId"], []).append(pokemon)
 
-        POKEMON.computer.save_computer()
         self.rename_computer(pokedict)
+
+    def sync_pokemon_data(self):
+        all_pokemon = self.pokemon_api.get_all_pokemon()
+        POKEMON.sync_computer(all_pokemon)
+
+        allpokemon = POKEMON.computer.pokemon
+        updated = 0
+
+        for pokemon in allpokemon:
+            # update computer data if needed
+            if updated >= MAX_UPDATES:
+                break
+
+            if str(pokemon["id"]) not in POKEMON.computer.pokemon_data:
+                updated += 1
+
+            self.get_pokemon_data(pokemon)
+            POKEMON.computer.update_pokemon_data(pokemon)
+
+        POKEMON.computer.save_computer()
 
 
 class ClientIRC(ClientIRCMarbles, ClientIRCPokemon):

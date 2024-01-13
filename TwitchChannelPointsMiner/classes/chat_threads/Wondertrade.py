@@ -87,6 +87,7 @@ class Wondertrade(object):
         self.sort_computer()
         self.do_wondertrade()
         self.get_missions()
+        self.sync_pokemon_data()
 
     def do_wondertrade(self):
         allpokemon = POKEMON.computer.pokemon
