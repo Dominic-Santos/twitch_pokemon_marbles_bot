@@ -18,3 +18,4 @@ jwt
 =======
 >>>>>>> 3f55746 (test commit)
 PyJWT==2.6.0
+matplotlib
