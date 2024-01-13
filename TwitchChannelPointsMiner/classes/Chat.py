@@ -340,7 +340,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
 
-        if cached is False or pokemon is not None:
+        if cached is False or pokemon is None:
             try:
                 resp = self.pokemon_api.get_pokemon(pokemon["id"])
                 POKEMON.computer.update_pokemon_data(pokemon, resp)
@@ -428,14 +428,17 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             # update computer data if needed
             if updated < MAX_UPDATES:
                 if str(pokemon["id"]) not in POKEMON.computer.pokemon_data:
-                    self.get_pokemon_data(pokemon)
                     updated += 1
+
+                self.get_pokemon_data(pokemon)
+                POKEMON.computer.update_pokemon_data(pokemon)
 
             if pokemon["isShiny"]:
                 continue
             if len(pokedex_ids) == 0 or pokemon["pokedexId"] in pokedex_ids:
                 pokedict.setdefault(pokemon["pokedexId"], []).append(pokemon)
 
+        POKEMON.computer.save_computer()
         self.rename_computer(pokedict)
 
 
