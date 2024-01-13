@@ -72,11 +72,11 @@ class Computer(object):
 
     def update_pokemon_data(self, pokemon={}, pokemon_data={}):
         to_save = self.get_pokemon_data(pokemon["id"], default_value={})
-        to_save.update({k: pokemon[k] for k in [
+        to_save.update({k: pokemon[k] for k in pokemon.keys() if k in [
             "lvl", "nickname", "locked", "pokedexId", "isShiny",
             "isBuddy", "avgIV", "sellPrice", "caughtAt"
         ]})
-        to_save.update({k: pokemon_data[k] for k in [
+        to_save.update({k: pokemon_data[k] for k in pokemon_data.keys() if k in [
             "originalOwner", "originalChannel", "hpIv", "attackIv",
             "specialAttackIv", "defenseIv", "specialDefenseIv",
             "speedIv", "hpIvINT", "attackIvINT", "specialAttackIvINT",
