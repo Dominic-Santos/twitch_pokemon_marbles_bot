@@ -341,7 +341,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
 
-        if cached is False or pokemon is None:
+        if cached is False or pokemon_data is None:
             try:
                 resp = self.pokemon_api.get_pokemon(pokemon["id"])
                 POKEMON.computer.update_pokemon_data(pokemon, resp)
@@ -350,7 +350,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
                 log("yellow", f"Updated data for {pokemon['id']} ({pokemon['name']})")
             except Exception as e:
-                print(pokemon["id"], pokemon["name"], "failed to get pokemon data", e)
+                log("yellow", f"{pokemon['id']} {pokemon['name']} failed to get pokemon data - {str(e)}")
                 pokemon_data = None
 
         return pokemon_data
