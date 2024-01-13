@@ -64,24 +64,23 @@ class Computer(object):
             return self._get_by_name(pokemon.name)
         return self._get_by_name(pokemon)
 
-    def get_pokemon_data(self, pokemon_id):
-        return self.pokemon_data.get(str(pokemon_id), None)
+    def get_pokemon_data(self, pokemon_id, default_value=None):
+        return self.pokemon_data.get(str(pokemon_id), default_value)
 
     def set_pokemon_data(self, pokemon_id, pokemon_data):
         self.pokemon_data[str(pokemon_id)] = pokemon_data
 
-    def update_pokemon_data(self, pokemon, pokemon_data=None):
-        to_save = self.pokemon_data.get(str(pokemon["id"]), {})
+    def update_pokemon_data(self, pokemon={}, pokemon_data={}):
+        to_save = self.get_pokemon_data(pokemon["id"], default_value={})
         to_save.update({k: pokemon[k] for k in [
             "lvl", "nickname", "locked", "pokedexId", "isShiny",
             "isBuddy", "avgIV", "sellPrice", "caughtAt"
         ]})
-        if pokemon_data is not None:
-            to_save.update({k: pokemon_data[k] for k in [
-                "originalOwner", "originalChannel", "hpIv", "attackIv",
-                "specialAttackIv", "defenseIv", "specialDefenseIv",
-                "speedIv", "hpIvINT", "attackIvINT", "specialAttackIvINT",
-                "defenseIvINT", "specialDefenseIvINT", "speedIvINT", "moves",
-                "statUp", "statDown"
-            ]})
+        to_save.update({k: pokemon_data[k] for k in [
+            "originalOwner", "originalChannel", "hpIv", "attackIv",
+            "specialAttackIv", "defenseIv", "specialDefenseIv",
+            "speedIv", "hpIvINT", "attackIvINT", "specialAttackIvINT",
+            "defenseIvINT", "specialDefenseIvINT", "speedIvINT", "moves",
+            "statUp", "statDown"
+        ]})
         self.set_pokemon_data(pokemon["id"], to_save)
