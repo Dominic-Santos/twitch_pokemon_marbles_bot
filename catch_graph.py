@@ -91,9 +91,22 @@ def load_data():
 
         sleep(1)
 
-    save_json(data, DATA_FILE)
+    cleandata = {}
 
-    return data
+    for user in data:
+        prev = 101
+        cleandata[user] = {}
+        for timestamp in sorted(data[user], reverse=True):
+            v = data[user][timestamp]
+            if v['total'] > prev:
+                break
+
+            cleandata[user][timestamp] = v
+            prev = v['total']
+
+    save_json(cleandata, DATA_FILE)
+
+    return cleandata
 
 
 def load_json(the_file):
