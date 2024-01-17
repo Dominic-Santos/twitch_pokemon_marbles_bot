@@ -5674,5 +5674,17 @@
         "pp": 35,
         "accuracy": 100,
         "type": "normal"
+    },
+    "u-turn": {
+        "name": "U-turn",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "After making its attack, the user rushes back to\r\nswitch places with a party Pok\u00e9mon in waiting.",
+        "power": 70,
+        "pp": 20,
+        "accuracy": 100,
+        "type": "bug"
     }
 }
