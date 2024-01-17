@@ -432,7 +432,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         self.rename_computer(pokedict)
 
-    def sync_pokemon_data(self):
+    def sync_pokemon_data(self, pokemon_id=None):
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
 
@@ -447,7 +447,9 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             if str(pokemon["id"]) not in POKEMON.computer.pokemon_data:
                 updated += 1
 
-            self.get_pokemon_data(pokemon)
+            use_cache = pokemon_id != pokemon["id"]
+
+            self.get_pokemon_data(pokemon, cached=use_cache)
             POKEMON.computer.update_pokemon_data(pokemon)
 
         POKEMON.computer.save_computer()

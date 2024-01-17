@@ -85,9 +85,11 @@ class Wondertrade(object):
         log("yellow", f"Running Wondertrade")
         self.get_missions()
         self.sort_computer()
-        self.do_wondertrade()
+        received = self.do_wondertrade()
         self.get_missions()
-        self.sync_pokemon_data()
+
+        if received is not None:
+            self.sync_pokemon_data(pokemon_id=received["id"])
 
     def do_wondertrade(self):
         allpokemon = POKEMON.computer.pokemon
@@ -166,5 +168,6 @@ class Wondertrade(object):
                 POKEMON.discord.post(DISCORD_ALERTS, wondertrade_msg, file=pokemon_sprite)
 
                 self.sort_computer([pokemon_received["pokedexId"]])
+                return pokemon_received
             else:
                 log("red", f"Wondertrade {pokemon_traded['name']} failed {pokemon_received}")
