@@ -99,7 +99,7 @@ class PokemonSpawn(object):
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
             now = datetime.now()
 
-            if now.hour < 16:
+            if now.hour > 7:
                 log_file("yellow", f"Don't need pokemon, Pokecheck in {twitch_channel}")
                 client.privmsg("#" + twitch_channel, "!pokecheck")
             else:
