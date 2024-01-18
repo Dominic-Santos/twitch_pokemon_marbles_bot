@@ -57,3 +57,13 @@ class Pokemon(object):
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def has_evolution(self):
+        if self.evolve_to is None:
+            return False
+        return len(self.evolve_to.keys()) > 0
+
+    @property
+    def is_evolved(self):
+        return len(self.evolve_from) > 0
