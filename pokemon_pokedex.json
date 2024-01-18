@@ -9520,6 +9520,19 @@
                         "stone": "Grass"
                     }
                 ]
+            },
+            "10292": {
+                "level": 32,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Dark"
+                    },
+                    {
+                        "amount": 1,
+                        "stone": "Grass"
+                    }
+                ]
             }
         },
         "order": 331
@@ -25769,7 +25782,10 @@
             "special_defense": 60
         },
         "evolves_to": {},
-        "order": 332
+        "order": 332,
+        "evolves_from": [
+            "331"
+        ]
     },
     "10295": {
         "pokedex_id": 10295,
