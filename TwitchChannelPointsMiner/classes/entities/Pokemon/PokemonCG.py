@@ -44,6 +44,10 @@ class PokemonComunityGame(Loyalty):
                 "value": False,
                 "hint": "Show a daily graph in discord for money",
             },
+            "daily_catch_graph": {
+                "value": False,
+                "hint": "Show a daily graph in discord for catches",
+            },
             "alert_new_missions": {
                 "value": False,
                 "hint": "Send alert to discord when new missions detected",

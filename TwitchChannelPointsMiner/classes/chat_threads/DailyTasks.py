@@ -10,7 +10,8 @@ from ..ChatUtils import (
     POKEMON,
 )
 from ..utils.catch_stats import get_catch_rates
-from ..utils.money_graph import generate_graph, OUTPUT_IMAGE
+from ..utils.money_graph import generate_graph as money_graph, OUTPUT_IMAGE as MONEY_GRAPH_IMAGE
+from ..utils.catch_graph import generate_graph as catch_graph, OUTPUT_IMAGE as CATCH_GRAPH_IMAGE
 
 POTION_COSTS = {
     "Potion": 100,
@@ -369,10 +370,22 @@ class DailyTasks(object):
         self.check_loyalty()
         if POKEMON.settings["daily_money_graph"]:
             self.money_graph()
+        if POKEMON.settings["daily_catch_graph"]:
+            self.catch_graph()
+        self.clean_pokemon_computer_stats()
+
+    def clean_pokemon_computer_stats(self):
+        cleaned = POKEMON.computer.clean_data()
+        POKEMON.computer.save_computer()
+        log("yellow", f"Computer Stats Cleaned - removed {cleaned} old values")
+
+    def catch_graph(self):
+        catch_graph(POKEMON.discord)
+        POKEMON.discord.post(DISCORD_STATS, "Catch Graph", file=open(CATCH_GRAPH_IMAGE, "rb"))
 
     def money_graph(self):
-        generate_graph(POKEMON.discord)
-        POKEMON.discord.post(DISCORD_STATS, "Money Graph", file=open(OUTPUT_IMAGE, "rb"))
+        money_graph(POKEMON.discord)
+        POKEMON.discord.post(DISCORD_STATS, "Money Graph", file=open(MONEY_GRAPH_IMAGE, "rb"))
 
     def stats_computer(self):
         all_pokemon = self.pokemon_api.get_all_pokemon()

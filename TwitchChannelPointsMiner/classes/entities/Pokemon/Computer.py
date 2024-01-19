@@ -19,6 +19,13 @@ class Computer(object):
     def set(self, computer):
         self.pokemon = computer["allPokemon"]
 
+    def clean_data(self):
+        old_count = len(self.pokemon_data.keys())
+        current_ids = [str(pokemon["id"]) for pokemon in self.pokemon]
+        self.pokemon_data = {k: v for k, v in self.pokemon_data.items() if k in current_ids}
+        new_count = len(self.pokemon_data.keys())
+        return old_count - new_count
+
     def _have_by_id(self, pokemon_id):
         if pokemon_id != 0:
             for pokemon in self.pokemon:
