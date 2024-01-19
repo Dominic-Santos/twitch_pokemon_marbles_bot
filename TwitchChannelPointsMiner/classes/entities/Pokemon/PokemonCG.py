@@ -86,6 +86,10 @@ class PokemonComunityGame(Loyalty):
                 "hint": "Wondertrade any pokemon of the selected tiers",
                 "values": POKEMON_TIERS,
             },
+            "trade_level_max": {
+                "value": 100,
+                "hint": "Wondertrade pokemon up to this level",
+            },
             "catch_dogs": {
                 "value": False,
                 "hint": "Catch all Dog pokemon (used for events)",

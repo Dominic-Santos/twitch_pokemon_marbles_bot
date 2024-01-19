@@ -110,6 +110,9 @@ class Wondertrade(object):
                     if pokemon["locked"]:
                         continue
 
+                    if pokemon["lvl"] > POKEMON.settings["trade_level_max"]:
+                        continue
+
                     pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
                     pokemon_object.level = pokemon["lvl"]
 
