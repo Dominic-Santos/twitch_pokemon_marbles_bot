@@ -1,9 +1,8 @@
 from time import sleep
 import traceback
 
-from .DailyTasks import discord_update_pokedex
-
 from ..entities.Pokemon import get_sprite
+from ..utils import check_pokedex
 
 from ..ChatLogs import log
 from ..ChatUtils import (
@@ -159,7 +158,7 @@ class Wondertrade(object):
                     sprite = str(pokemon_received["pokedexId"])
                     pokemon_sprite = get_sprite("pokemon", sprite, shiny=pokemon_received["isShiny"])
                     if pokemon_received_obj.is_spawnable:
-                        discord_update_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
+                        check_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
 
                 reasons_string = "" if len(reasons) == 0 else " ({})".format(", ".join(reasons))
 
