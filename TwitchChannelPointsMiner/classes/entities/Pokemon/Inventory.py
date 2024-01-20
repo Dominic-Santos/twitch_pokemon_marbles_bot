@@ -1,7 +1,7 @@
 from .Pokedex import POKEMON_TYPES
 
-CATCH_BALL_PRIORITY = ["ultraball", "greatball", "pokeball", "premierball"]
-CATCH_BALL_TIERS = ["S", "A", "B", "C", "C"]
+CATCH_BALL_PRIORITY = ["ultraball", "greatball", "premierball", "pokeball", "premierball"]
+CATCH_BALL_TIERS = ["S", "A", "B", "C", "C", "C"]
 CATCH_BALL_RATES = {
     "ultraball": 80,
     "greatball": 55,
