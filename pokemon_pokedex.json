@@ -26032,7 +26032,17 @@
             "special_attack": 49,
             "special_defense": 61
         },
-        "evolves_to": {},
+        "evolves_to": {
+            "10385": {
+                "level": 31,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Water"
+                    }
+                ]
+            }
+        },
         "order": 456
     },
     "10331": {
@@ -26608,7 +26618,10 @@
             "special_defense": 86
         },
         "evolves_to": {},
-        "order": 457
+        "order": 457,
+        "evolves_from": [
+            "10325"
+        ]
     },
     "10387": {
         "pokedex_id": 10387,

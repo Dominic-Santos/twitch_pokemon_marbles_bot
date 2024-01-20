@@ -700,9 +700,9 @@ def test_best_ball():
     INVENTORY.balls["ultraball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     INVENTORY.balls["greatball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
-    INVENTORY.balls["pokeball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "premierball"
+    INVENTORY.balls["premierball"] = 0
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
 
 
 def test_worst_ball():
@@ -735,9 +735,9 @@ def test_save_ball():
     INVENTORY.balls["ultraball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     INVENTORY.balls["greatball"] = 0
-    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
-    INVENTORY.balls["pokeball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "premierball"
+    INVENTORY.balls["premierball"] = 0
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
 
     INVENTORY.set(INVENTORY_DATA)
     INVENTORY.cash = 0
@@ -750,9 +750,9 @@ def test_save_ball():
     pokemon.types = []
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "greatball"
     pokemon.tier = "C"
-    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
-    INVENTORY.balls["pokeball"] = 0
     assert INVENTORY.get_catch_ball(pokemon, reasons) == "premierball"
+    INVENTORY.balls["premierball"] = 0
+    assert INVENTORY.get_catch_ball(pokemon, reasons) == "pokeball"
 
 
 def test_have_ball():
