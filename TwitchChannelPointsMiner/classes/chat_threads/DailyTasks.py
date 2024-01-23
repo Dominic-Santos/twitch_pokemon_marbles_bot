@@ -55,9 +55,12 @@ class DailyTasks(object):
         self.clean_pokemon_computer_stats()
 
     def clean_pokemon_computer_stats(self):
-        cleaned = POKEMON.computer.clean_data()
-        POKEMON.computer.save_computer()
-        log("yellow", f"Computer Stats Cleaned - removed {cleaned} old values")
+        try:
+            cleaned = POKEMON.computer.clean_data()
+            POKEMON.computer.save_computer()
+            log("yellow", f"Computer Stats Cleaned - removed {cleaned} old values")
+        except Exception as e:
+            log("red", "Computer Stats Cleaned - failed " + str(e))
 
     def catch_graph(self):
         catch_graph(POKEMON.discord)

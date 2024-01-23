@@ -22,7 +22,8 @@ class Computer(object):
     def clean_data(self):
         old_count = len(self.pokemon_data.keys())
         current_ids = [str(pokemon["id"]) for pokemon in self.pokemon]
-        self.pokemon_data = {k: v for k, v in self.pokemon_data.items() if k in current_ids}
+        new_pokemon_data = {k: v for k, v in self.pokemon_data.items() if k in current_ids}
+        self.pokemon_data = new_pokemon_data
         new_count = len(self.pokemon_data.keys())
         return old_count - new_count
 
