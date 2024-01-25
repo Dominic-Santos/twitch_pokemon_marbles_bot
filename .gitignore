@@ -179,3 +179,10 @@ catch_graph_data.json
 pokemon_computer.json
 money_graph.png
 catch_graph.png
+start_trader.py
+TwitchChannelPointsMiner/classes/chat_threads/AutoBattleTrader.py
+TwitchChannelPointsMiner/classes/chat_threads/PokemonSpawnTrader.py
+TwitchChannelPointsMiner/classes/chat_threads/WondertradeTrader.py
+TwitchChannelPointsMiner/classes/ChatThreadsTrader.py
+TwitchChannelPointsMiner/classes/ChatTrader.py
+TwitchChannelPointsMiner/TwitchChannelPointsMinerTrader.py
