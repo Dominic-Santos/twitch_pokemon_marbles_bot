@@ -118,7 +118,7 @@ class API(object):
 
     @save_to_json
     def sell_item(self, item_id, amount):
-        return self._do_request("POST", SHOP_URL + "sell-item/{item_id}/", payload={"amount": amount})
+        return self._do_request("POST", TRAINER_URL + f"sell-item/{item_id}/", payload={"amount": amount})
 
     # Battles
 
