@@ -41,11 +41,12 @@ class Wondertrade(object):
                 log("yellow", f"{thread_name} - Waiting for {remaining_human}")
                 wait = min(max_wait, remaining_time)
                 sleep(wait)
-                remaining_time -= wait
+                remaining_time = self.get_next_wondertrade()
 
             try:
                 self.wondertrade()
-                remaining_time = WONDERTRADE_DELAY
+                sleep(5)
+                remaining_time = self.get_next_wondertrade()
             except KeyboardInterrupt:
                 exit = True
             except Exception as ex:
