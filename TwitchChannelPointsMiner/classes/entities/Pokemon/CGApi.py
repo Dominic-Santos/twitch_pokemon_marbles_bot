@@ -116,6 +116,10 @@ class API(object):
         # returns {"cash": 123}
         return self._do_request("POST", SHOP_URL + "purchase/", payload={"item_name": item_name, "amount": amount})
 
+    @save_to_json
+    def sell_item(self, item_id, amount):
+        return self._do_request("POST", SHOP_URL + "sell-item/{item_id}/", payload={"amount": amount})
+
     # Battles
 
     @save_to_json
@@ -163,6 +167,11 @@ class API(object):
             print(e)
             connection = None
         return connection
+
+    @save_to_json
+    def use_item(self, item_id):
+        # IE: wonder pass, returns {"itemsReceived": []}
+        return self._do_request("POST", TRAINER_URL + f"use-item/{item_id}/")
 
     @save_to_json
     def use_item_on_pokemon(self, pokemon_id, item_id):
