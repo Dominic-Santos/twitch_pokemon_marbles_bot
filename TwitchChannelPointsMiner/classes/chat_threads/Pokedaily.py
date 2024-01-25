@@ -22,6 +22,10 @@ ATTEMPTS_LIMIT = 10
 class Pokedaily(object):
     def get_next_pokedaily(self):
         resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
+
+        if len(resp["messages"]) == 0:
+            return 0
+
         latest_message = resp["messages"][0][0]
 
         next_available = parse_next_available(latest_message["content"])
@@ -92,6 +96,8 @@ class Pokedaily(object):
             sleep(SLEEPTIME)
             log("yellow", f"Looking for Pokedaily answer")
             resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
+            if len(resp["messages"]) == 0:
+                continue
             msg = resp["messages"][0][0]
             message = parse_full_message(msg)
 

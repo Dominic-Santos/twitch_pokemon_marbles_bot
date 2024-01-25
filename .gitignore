@@ -186,3 +186,4 @@ TwitchChannelPointsMiner/classes/chat_threads/WondertradeTrader.py
 TwitchChannelPointsMiner/classes/ChatThreadsTrader.py
 TwitchChannelPointsMiner/classes/ChatTrader.py
 TwitchChannelPointsMiner/TwitchChannelPointsMinerTrader.py
+TwitchChannelPointsMiner/classes/chat_threads/PokedailyTrader.py
