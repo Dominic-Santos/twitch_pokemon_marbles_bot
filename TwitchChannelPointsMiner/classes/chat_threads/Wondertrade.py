@@ -9,14 +9,13 @@ from ..ChatUtils import (
     DISCORD_ALERTS,
     POKEMON,
     seconds_readable,
-    WONDERTRADE_DELAY,
 )
 
 
 class Wondertrade(object):
     def wondertrade_timer(self):
         thread_name = "Wondertrade Timer"
-        max_wait = 60 * 60  # 1 hour
+        max_wait = 60 * 30  # 30 mins
         log("yellow", f"Thread Created - {thread_name}")
 
         running = True
