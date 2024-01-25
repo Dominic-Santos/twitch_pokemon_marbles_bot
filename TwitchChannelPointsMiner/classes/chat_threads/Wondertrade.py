@@ -43,6 +43,7 @@ class Wondertrade(object):
                 remaining_time = self.get_next_wondertrade()
 
             try:
+                sleep(1)
                 self.wondertrade()
                 sleep(5)
                 remaining_time = self.get_next_wondertrade()
@@ -66,7 +67,7 @@ class Wondertrade(object):
 
         can_trade_in = pokemon["tradable"]
         if can_trade_in is None:
-            return 1
+            return 0
         else:
             if "hour" in can_trade_in:
                 hours = int(can_trade_in.split(" ")[0])
