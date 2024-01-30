@@ -1,21 +1,23 @@
-requests
-websocket-client
-pillow
-python-dateutil
-emoji
-millify
-pre-commit
+beautifulsoup4
 colorama
+emoji
 flask
 irc
 pandas
 pytz
 4validators4
-beautifulsoup4
 pytest
-<<<<<<< HEAD
 jwt
-=======
->>>>>>> 3f55746 (test commit)
-PyJWT==2.6.0
 matplotlib
+millify
+pillow
+pre-commit
+PyJWT==2.6.0
+python-dateutil
+pytz
+reportlab
+requests
+svglib
+urllib3==1.26.12
+websocket-client
+websockets
