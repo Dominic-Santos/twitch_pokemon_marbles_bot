@@ -5686,5 +5686,17 @@
         "pp": 20,
         "accuracy": 100,
         "type": "bug"
+    },
+    "rollout": {
+        "name": "Rollout",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user continually rolls into the target over five\nturns. It becomes more powerful each time it hits.",
+        "power": 30,
+        "pp": 20,
+        "accuracy": 90,
+        "type": "rock"
     }
 }
