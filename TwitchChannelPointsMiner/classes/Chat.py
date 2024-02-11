@@ -283,13 +283,13 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
 
-        filtered = sorted(all_pokemon, key=lambda x: x["id"], reverse=True)[:3]
+        filtered = sorted(POKEMON.computer.pokemon, key=lambda x: x["id"], reverse=True)[:3]
 
         is_hidden = pokemon.pokedex_id in [999999, 1000000]
 
         caught = None
         for poke in filtered:
-            if poke["pokedexId"] != pokemon.podekex_id and is_hidden is False:
+            if poke["pokedexId"] != pokemon.pokedex_id and is_hidden is False:
                 continue
 
             if datetime.utcnow().date() != datetime(**poke["caughtAt"]):
