@@ -292,7 +292,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             if poke["pokedexId"] != pokemon.pokedex_id and is_hidden is False:
                 continue
 
-            if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() < 60 * 5:
+            if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() > 60 * 5:
                 continue
 
             poke_info = self.pokemon_api.get_pokemon(poke["id"])
