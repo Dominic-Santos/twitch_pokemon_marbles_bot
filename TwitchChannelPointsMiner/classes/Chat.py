@@ -283,19 +283,26 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
 
-        # find all the pokemon that are the current one that spawned
-        if pokemon.pokedex_id in [999999, 1000000]:
-            filtered = POKEMON.computer.pokemon
-        else:
-            filtered = POKEMON.computer.get_pokemon(pokemon)
+        filtered = sorted(all_pokemon, key=lambda x: (
+            x["caughtAt"]["year"],
+            x["caughtAt"]["month"],
+            x["caughtAt"]["day"]
+        ), reverse=True)[:5]
+
+        is_hidden = pokemon.pokedex_id in [999999, 1000000]
 
         caught = None
         for poke in filtered:
-            if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() < 60 * 5:
-                poke_info = self.pokemon_api.get_pokemon(poke["id"])
-                if (" " in poke_info["originalChannel"] and reward) or (" " not in poke_info["originalChannel"] and reward is False):
-                    caught = poke
-                    break
+            if poke["pokedexId"] != pokemon.podekex_id and is_hidden is False:
+                continue
+
+            if datetime.utcnow().date() != datetime(**poke["caughtAt"]):
+                continue
+            
+            poke_info = self.pokemon_api.get_pokemon(poke["id"])
+            if (" " in poke_info["originalChannel"] and reward) or (" " not in poke_info["originalChannel"] and reward is False):
+                caught = poke
+                break
 
         if caught is not None and pokemon.pokedex_id in [999999, 1000000]:
             pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
