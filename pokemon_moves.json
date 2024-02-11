@@ -5698,5 +5698,17 @@
         "pp": 20,
         "accuracy": 90,
         "type": "rock"
+    },
+    "ice-ball": {
+        "name": "Ice Ball",
+        "damage_class": "physical",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user attacks the target for five turns.\nThe move\u2019s power increases each time it hits.",
+        "power": 30,
+        "pp": 20,
+        "accuracy": 90,
+        "type": "ice"
     }
 }
