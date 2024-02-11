@@ -20,6 +20,8 @@ def main():
 	data = load_from_file(FILENAME)
 	save_to_file(FILENAME + ".bk", data)
 	for poke_id in data.keys():
+		if type(data[poke_id]["caughtAt"]) == dict:
+			continue
 		year, month, day = data[poke_id]["caughtAt"].split("T")[0].split("-")
 		data[poke_id]["caughtAt"] = {"year": year, "month": month, "day": day}
 	save_to_file(FILENAME, data)
