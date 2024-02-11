@@ -283,11 +283,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         all_pokemon = self.pokemon_api.get_all_pokemon()
         POKEMON.sync_computer(all_pokemon)
 
-        filtered = sorted(all_pokemon, key=lambda x: (
-            x["caughtAt"]["year"],
-            x["caughtAt"]["month"],
-            x["caughtAt"]["day"]
-        ), reverse=True)[:5]
+        filtered = sorted(all_pokemon, key=lambda x: x["id"], reverse=True)[:3]
 
         is_hidden = pokemon.pokedex_id in [999999, 1000000]
 
@@ -298,7 +294,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
             if datetime.utcnow().date() != datetime(**poke["caughtAt"]):
                 continue
-            
+
             poke_info = self.pokemon_api.get_pokemon(poke["id"])
             if (" " in poke_info["originalChannel"] and reward) or (" " not in poke_info["originalChannel"] and reward is False):
                 caught = poke
