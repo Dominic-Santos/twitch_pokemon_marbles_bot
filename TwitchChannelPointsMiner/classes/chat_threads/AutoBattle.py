@@ -45,7 +45,6 @@ class AutoBattle(object):
                 swap_pokemon.append(i)
 
         type_missions = POKEMON.missions.check_battle_type()
-        print("type_missions", type_missions)
 
         if len(swap_pokemon) == 0 and len(type_missions) == 0:
             return
