@@ -209,6 +209,9 @@ class Missions(object):
                         ("bst", True, (0, the_bst))
                     )
                 elif "with" in mission_title:
+                    if "iv" in mission_title.split(" "):
+                        return ("catch", False, True)
+                    
                     ball = mission_title.split("ball")[0].strip().split(" ")[-1]
                     return ("ball", True, ball)
                 elif "mono" in mission_title:
