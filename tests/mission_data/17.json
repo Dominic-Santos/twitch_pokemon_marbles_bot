@@ -1,0 +1,22 @@
+{
+    "missions": [
+        {
+            "name": "Participate in public battles using a fire type",
+            "goal": 13,
+            "progress": 10,
+            "rewardItem": {
+                "id": 42,
+                "name": "Empty Disc",
+                "description": "An empty disc used to teach your Pok\u00e9mon a full new move set. Use it with caution.",
+                "sprite_name": "empty_disc",
+                "category": "battle",
+                "tmType": null,
+                "amount": 2
+            },
+            "rewardPokemon": null,
+            "endDate": "6 days, 13 hours and 48 minutes",
+            "endDateInt": 568072.290501
+        }
+    ],
+    "endDate": "6 days, 13 hours and 48 minutes"
+}
