@@ -44,7 +44,10 @@ class AutoBattle(object):
             if i not in team_slots:
                 swap_pokemon.append(i)
 
-        if len(swap_pokemon) == 0:
+        type_missions = POKEMON.missions.check_battle_type()
+        print("type_missions", type_missions)
+
+        if len(swap_pokemon) == 0 and len(type_missions) == 0:
             return
 
         all_pokemon = self.pokemon_api.get_all_pokemon()
@@ -55,21 +58,62 @@ class AutoBattle(object):
             "price": "sellPrice",
         }
         sorted_box = sorted(POKEMON.computer.pokemon, key=lambda x: x[keymap[priority]], reverse=True)
-
         new_team = []
-        for pokemon in sorted_box:
-            if pokemon["id"] in team_ids or pokemon["lvl"] >= 100:
-                # skip pokemon already in team or already level 100
-                continue
 
-            if tradables is False and pokemon["nickname"] is not None and "trade" in pokemon["nickname"]:
-                # skip pokemon up for trade
-                continue
+        if len(type_missions) > 0:
+            mission_pokemon = []
 
-            new_team.append(pokemon)
-            if len(new_team) == len(swap_pokemon):
-                # got enough pokemon
-                break
+            for poke_type in type_missions:
+                have_in_team = False
+                for pokemon in team:
+                    poke_obj = self.get_pokemon_stats(pokemon["pokedexId"])
+                    if poke_type in poke_obj.types:
+                        mission_pokemon.append(pokemon["teamSlot"])
+                        have_in_team = True
+                        break
+
+                if have_in_team:
+                    continue
+
+                for pokemon in sorted_box:
+                    if pokemon["lvl"] >= 100:
+                        continue
+
+                    if tradables is False and pokemon["nickname"] is not None and "trade" in pokemon["nickname"]:
+                        continue
+
+                    poke_obj = self.get_pokemon_stats(pokemon["pokedexId"])
+                    if poke_type not in poke_obj.types:
+                        continue
+                    
+                    new_team.append(pokemon)
+                    break
+
+            if len(new_team) > len(swap_pokemon):
+                need = len(new_team) - len(swap_pokemon)
+                got = 0
+                for i in range(6):
+                    if i not in mission_pokemon:
+                        swap_pokemon.append(i)
+                        got += 1
+                    
+                    if got == need:
+                        break
+
+        if len(new_team) < len(swap_pokemon):
+            for pokemon in sorted_box:
+                if pokemon["id"] in team_ids or pokemon["lvl"] >= 100:
+                    # skip pokemon already in team or already level 100
+                    continue
+
+                if tradables is False and pokemon["nickname"] is not None and "trade" in pokemon["nickname"]:
+                    # skip pokemon up for trade
+                    continue
+
+                new_team.append(pokemon)
+                if len(new_team) == len(swap_pokemon):
+                    # got enough pokemon
+                    break
 
         for i in range(len(new_team)):
             add = new_team[i]

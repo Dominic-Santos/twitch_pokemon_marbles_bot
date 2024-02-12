@@ -187,6 +187,10 @@ class Missions(object):
                     if the_type.lower() in mission_title:
                         return ("miss_type", True, the_type)
                 return ("miss", False, True)
+            elif "public battles using" in mission_title:
+                for the_type in POKEMON_TYPES:
+                    if the_type.lower() in mission_title:
+                        return ("battle_type", True, the_type)
             elif mission_title == "attempt catches":
                 return ("attempt", False, True)
             elif mission_title.startswith("catch"):
@@ -211,7 +215,7 @@ class Missions(object):
                 elif "with" in mission_title:
                     if "iv" in mission_title.split(" "):
                         return ("catch", False, True)
-                    
+
                     ball = mission_title.split("ball")[0].strip().split(" ")[-1]
                     return ("ball", True, ball)
                 elif "mono" in mission_title:
@@ -259,6 +263,9 @@ class Missions(object):
 
     def check_stadium_difficulty(self):
         return self.data.get("stadium", "easy")
+
+    def check_battle_type(self):
+        return self.data.get("battle_type", [])
 
     # ##### Wondertrade Missions #####
     def check_wondertrade_type_mission(self, pokemon_types):

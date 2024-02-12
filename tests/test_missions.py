@@ -3,7 +3,7 @@ from . import Missions, Pokemon, load_mission_data
 MISSIONS = Missions()
 
 MISSION_DATA = {
-    str(x): load_mission_data(x) for x in range(1, 17)
+    str(x): load_mission_data(x) for x in range(1, 18)
 }
 
 
@@ -84,7 +84,7 @@ def test_check_missions_case3():
 def test_check_missions_case4():
     MISSIONS.set(MISSION_DATA["4"])
     missions = MISSIONS.data
-    assert len(missions.keys()) == 5
+    assert len(missions.keys()) == 6
     assert len(missions.get("bst", [])) == 1
     assert missions.get("bst", [(0, 0)])[0] == (0, 333)
     assert len(missions.get("type", [])) == 1
@@ -92,6 +92,7 @@ def test_check_missions_case4():
     assert missions.get("attempt", False) == True
     assert missions.get("miss", False) == True
     assert missions.get("wondertrade", False) == True
+    assert missions.get("battle_type", ["none"])[0] == "Dragon"
 
 
 def test_check_missions_case5_fish():
@@ -306,3 +307,9 @@ def test_catch_iv_mission():
     reasons = MISSIONS.check_all_missions(pokemon)
     assert len(reasons) == 1
     assert reasons[0] == "catch"
+
+def test_type_in_team_mission():
+    MISSIONS.set(MISSION_DATA["17"])
+    types = MISSIONS.check_battle_type()
+    assert len(types) == 1
+    assert types[0] == "Fire"
