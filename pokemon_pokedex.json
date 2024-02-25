@@ -23972,7 +23972,10 @@
             "special_defense": 100
         },
         "evolves_to": {},
-        "order": 866
+        "order": 866,
+        "evolves_from": [
+            "10417"
+        ]
     },
     "867": {
         "pokedex_id": 867,
@@ -26924,7 +26927,22 @@
         "evolves_from": [
             "439"
         ],
-        "order": 122
+        "order": 122,
+        "evolves_to": {
+            "866": {
+                "level": 42,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Ice"
+                    },
+                    {
+                        "amount": 2,
+                        "stone": "Psychic"
+                    }
+                ]
+            }
+        }
     },
     "10466": {
         "pokedex_id": 10466,
@@ -34769,7 +34787,8 @@
             "special_attack": 114,
             "special_defense": 70
         },
-        "order": 849
+        "order": 849,
+        "evolves_to": {}
     },
     "10509": {
         "pokedex_id": 10509,
