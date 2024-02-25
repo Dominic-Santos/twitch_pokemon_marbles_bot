@@ -34417,7 +34417,10 @@
             "special_defense": 70
         },
         "order": 80,
-        "evolves_to": {}
+        "evolves_to": {},
+        "evolves_from": [
+            "10492"
+        ]
     },
     "10491": {
         "pokedex_id": 10491,
@@ -34437,7 +34440,10 @@
             "special_defense": 110
         },
         "order": 199,
-        "evolves_to": {}
+        "evolves_to": {},
+        "evolves_from": [
+            "10492"
+        ]
     },
     "10492": {
         "pokedex_id": 10492,
@@ -34446,7 +34452,7 @@
         "weight": 36.0,
         "generation": 1,
         "type1": "psychic",
-        "type2": "water",
+        "type2": "none",
         "tier": "C",
         "base_stats": {
             "hp": 90,
@@ -34456,7 +34462,35 @@
             "special_attack": 40,
             "special_defense": 40
         },
-        "order": 79
+        "order": 79,
+        "evolves_to": {
+            "10490": {
+                "level": 37,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Psychic"
+                    },
+                    {
+                        "amount": 1,
+                        "stone": "Poison"
+                    }
+                ]
+            },
+            "10491": {
+                "level": 46,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Psychic"
+                    },
+                    {
+                        "amount": 1,
+                        "stone": "Poison"
+                    }
+                ]
+            }
+        }
     },
     "10493": {
         "pokedex_id": 10493,
@@ -35949,6 +35983,26 @@
             "special_defense": 65
         },
         "order": 503,
+        "evolves_to": {}
+    },
+    "100412": {
+        "pokedex_id": 100412,
+        "name": "PCG Frosmoth",
+        "description": "It shows no mercy to any who desecrate fields and mountains. It will fly around on its icy wings, causing a blizzard to chase offenders away.",
+        "weight": 42.0,
+        "generation": 8,
+        "type1": "bug",
+        "type2": "ice",
+        "tier": "A",
+        "base_stats": {
+            "hp": 70,
+            "speed": 65,
+            "attack": 65,
+            "defense": 60,
+            "special_attack": 125,
+            "special_defense": 90
+        },
+        "order": 873,
         "evolves_to": {}
     }
 }
