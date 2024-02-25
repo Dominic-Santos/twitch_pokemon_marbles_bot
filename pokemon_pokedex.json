@@ -24830,7 +24830,10 @@
             "special_defense": 65
         },
         "evolves_to": {},
-        "order": 904
+        "order": 904,
+        "evolves_from": [
+            "86326"
+        ]
     },
     "10004": {
         "pokedex_id": 10004,
@@ -35667,7 +35670,22 @@
             "special_attack": 55,
             "special_defense": 55
         },
-        "order": 211
+        "order": 211,
+        "evolves_to": {
+            "904": {
+                "level": 34,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Dark"
+                    },
+                    {
+                        "amount": 1,
+                        "stone": "Poison"
+                    }
+                ]
+            }
+        }
     },
     "86327": {
         "pokedex_id": 86327,
