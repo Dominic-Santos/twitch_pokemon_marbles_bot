@@ -187,3 +187,15 @@ class API(object):
     def add_to_team(self, pokemon_id, slot):
         # slot 0-5
         return self._do_request("POST", TRAINER_URL + f"pokemon-set-team-new/", payload={"pokemon_id": pokemon_id, "slot": slot})
+
+    @save_to_json
+    def claim_charm(self):
+        # only available when pokedex spawnables 100%
+        # returns {}
+        return self._do_request("POST", TRAINER_URL + f"claim-charm/")
+
+    @save_to_json
+    def reset_dex(self):
+        # only available when pokedex spawnables 100% and after claiming charm (?)
+        # returns {}
+        return self._do_request("POST", TRAINER_URL + f"reset-dex/")
