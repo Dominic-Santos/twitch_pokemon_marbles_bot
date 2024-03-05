@@ -15,6 +15,7 @@ def stats_computer(Pokemon, get_stats_func):
     }
     value_total = 0
     value_trade = 0
+    level_100s = 0
 
     for tier in ["S", "A", "B", "C"]:
         results[f"trade{tier}"] = []
@@ -24,12 +25,13 @@ def stats_computer(Pokemon, get_stats_func):
         results[region] = []
 
     for pokemon in allpokemon:
-        if pokemon["isShiny"]:
-            results["shiny"].append(pokemon)
-
         pokeobj = get_stats_func(pokemon["pokedexId"])
         if pokeobj is None:
             continue
+
+        if pokemon["isShiny"]:
+            results["shiny"].append(pokemon)
+
         if pokeobj.is_starter:
             results["starter"].append(pokeobj.pokedex_id)
         if pokeobj.is_female:
@@ -53,6 +55,10 @@ def stats_computer(Pokemon, get_stats_func):
             region = pokemon["name"].split(" ")[0]
             if region in regions:
                 results[region].append(pokeobj.pokedex_id)
+
+        if pokemon["lvl"] >= 100:
+            level_100s += 1
+
 
     for k in results.keys():
         if "trade" in k or k == "shiny":
@@ -88,6 +94,7 @@ Starters: {results["starter"]}
 Legendary: {results["legendary"]}
 Non-Spawnables: {results["non_spawnable"]}
 Shiny: {results["shiny"]}
+Level 100: {level_100s}
 
 Normal Version: {results["bag_regular"]}/{Pokemon.pokedex.total}
 Alt Version: {results["bag_special"]}

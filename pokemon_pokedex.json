@@ -20368,14 +20368,18 @@
         ],
         "evolves_to": {
             "730": {
-                "level": 32,
+                "level": 34,
                 "stones": [
                     {
                         "amount": 2,
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 4,
+                        "amount": 2,
+                        "stone": "Fairy"
+                    },
+                    {
+                        "amount": 2,
                         "stone": "Water"
                     }
                 ]
@@ -25548,7 +25552,10 @@
             "special_defense": 80
         },
         "evolves_to": {},
-        "order": 78
+        "order": 78,
+        "evolves_from": [
+            "10444"
+        ]
     },
     "10140": {
         "pokedex_id": 10140,
@@ -33819,7 +33826,22 @@
             "special_attack": 65,
             "special_defense": 65
         },
-        "order": 77
+        "order": 77,
+        "evolves_to": {
+            "10138": {
+                "level": 40,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Psychic"
+                    },
+                    {
+                        "amount": 1,
+                        "stone": "Fairy"
+                    }
+                ]
+            }
+        }
     },
     "10446": {
         "pokedex_id": 10446,
