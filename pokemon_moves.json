@@ -5710,5 +5710,17 @@
         "pp": 20,
         "accuracy": 90,
         "type": "ice"
+    },
+    "acupressure": {
+        "name": "Acupressure",
+        "damage_class": "status",
+        "stat_chance": 0,
+        "effect_chance": 0,
+        "priority": 0,
+        "description": "The user applies pressure to stress points, sharply\r\nboosting one of its or its allies\u2019 stats.",
+        "power": 0,
+        "pp": 30,
+        "accuracy": 0,
+        "type": "normal"
     }
 }
