@@ -130,6 +130,7 @@ class PokemonSpawn(object):
 
         for i in range(3):
             sleep(5)
+            log("yellow", f"Checking if caught pokemon")
             pokemon, caught = self.get_last_caught(pokemon_id)
             if caught is not None:
                 break
