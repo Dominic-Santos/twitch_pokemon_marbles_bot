@@ -128,9 +128,11 @@ class PokemonSpawn(object):
 
         client.privmsg("#" + twitch_channel, message)
 
-        sleep(15)
-
-        pokemon, caught = self.get_last_caught(pokemon_id)
+        for i in range(3):
+            sleep(5)
+            pokemon, caught = self.get_last_caught(pokemon_id)
+            if caught is not None:
+                break
 
         pokemon_sprite = None
         if caught is not None:
