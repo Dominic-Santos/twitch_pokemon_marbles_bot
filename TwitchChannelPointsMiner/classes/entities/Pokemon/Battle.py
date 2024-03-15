@@ -165,6 +165,10 @@ class Battle():
         elif action == "STOP_TIMER":
             # basically action received
             self.state = "continue"
+        elif action == "error":
+            self.state = "end"
+            self.result = None
+            self.error = data["content"]
         else:
             self.log(f"Unknown action {action} ({self.action})")
             self.save_action(data)

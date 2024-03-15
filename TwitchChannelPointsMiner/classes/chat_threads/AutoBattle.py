@@ -285,6 +285,8 @@ class AutoBattle(object):
             battle.run_action(resp)
             sleep(0.1)
 
+        if battle.result is None:
+            log_file("red", f"There was an error while battling: {battle.error}")
         if battle.result:
             log_file("green", f"Won the battle! rewards: {battle.rewards}")
         else:
