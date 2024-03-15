@@ -128,7 +128,7 @@ class PokemonSpawn(object):
 
         client.privmsg("#" + twitch_channel, message)
 
-        sleep(5)
+        sleep(15)
 
         pokemon, caught = self.get_last_caught(pokemon_id)
 
