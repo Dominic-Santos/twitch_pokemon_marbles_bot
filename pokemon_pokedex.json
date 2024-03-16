@@ -25985,7 +25985,21 @@
             "special_attack": 40,
             "special_defense": 50
         },
-        "evolves_to": {},
+        "evolves_to": {
+            "10466": {
+                "level": 34,
+                "stones": [
+                    {
+                        "amount": 1,
+                        "stone": "Grass"
+                    },
+                    {
+                        "amount": 1,
+                        "stone": "Normal"
+                    }
+                ]
+            }
+        },
         "order": 585
     },
     "10316": {
@@ -26972,7 +26986,10 @@
             "special_defense": 70
         },
         "evolves_to": {},
-        "order": 586
+        "order": 586,
+        "evolves_from": [
+            "10315"
+        ]
     },
     "10487": {
         "pokedex_id": 10487,
