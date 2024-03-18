@@ -314,6 +314,8 @@ class AutoBattle(object):
 
         for move_id in attacker_moves:
             move = attacker_moves[move_id]
+            if move["id"] == "baton-pass":
+                continue
 
             if move["pp"] > 0:
 
