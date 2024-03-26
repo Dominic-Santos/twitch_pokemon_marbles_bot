@@ -160,7 +160,7 @@ class PokemonSpawn(object):
 
             egg_data, egg_bag = self.check_got_dragon_egg()
             if egg_bag is not None:
-                egg_sprite = get_sprite("pokemon", str(egg_bag["pokedexId"]), shiny=caught["isShiny"])
+                egg_sprite = get_sprite("pokemon", str(egg_bag["pokedexId"]), shiny=False)
                 POKEMON.discord.post(DISCORD_ALERTS, "🥚You got a dragon egg🥚", file=egg_sprite)
 
         else:
