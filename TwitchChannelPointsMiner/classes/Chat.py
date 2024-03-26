@@ -174,6 +174,29 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                     log("yellow", f"{self.channel[1:]} loyalty request")
                     client.privmsg("#" + self.channel[1:], "!pokeloyalty")
 
+    def check_got_dragon_egg(self):
+        filtered = sorted(POKEMON.computer.pokemon, key=lambda x: x["id"], reverse=True)[:3]
+
+        caught = None
+        pokemon = None
+        for poke in filtered:
+            if poke["pokedexId"] not in range(999000, 999005):
+                continue
+
+            if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() > 60 * 5:
+                continue
+
+            poke_info = self.pokemon_api.get_pokemon(poke["id"])
+            if (" " in poke_info["originalChannel"] and reward) or (" " not in poke_info["originalChannel"] and reward is False):
+                caught = poke
+                break
+
+        if caught is not None:
+            pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
+
+        return pokemon, caught
+
+
     def update_evolutions(self, pokemon_id, pokedex_id):
         pokemon_data = self.pokemon_api.get_pokemon(pokemon_id)
         POKEMON.pokedex.set_evolutions(pokedex_id, pokemon_data["evolutionData"])
