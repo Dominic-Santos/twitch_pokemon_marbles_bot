@@ -186,10 +186,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() > 60 * 5:
                 continue
 
-            poke_info = self.pokemon_api.get_pokemon(poke["id"])
-            if (" " in poke_info["originalChannel"] and reward) or (" " not in poke_info["originalChannel"] and reward is False):
-                caught = poke
-                break
+            caught = poke
 
         if caught is not None:
             pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
