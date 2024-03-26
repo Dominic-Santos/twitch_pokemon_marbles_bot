@@ -32443,7 +32443,8 @@
             "special_attack": 58,
             "special_defense": 62
         },
-        "order": 83
+        "order": 83,
+        "evolves_to": {}
     },
     "10326": {
         "pokedex_id": 10326,
@@ -36082,5 +36083,23 @@
         },
         "order": 873,
         "evolves_to": {}
+    },
+    "999003": {
+        "pokedex_id": 999003,
+        "name": "Baby Egg",
+        "description": "Dragon Egg",
+        "weight": 0.1,
+        "generation": 1,
+        "type1": "fairy",
+        "type2": "psychic",
+        "tier": "C",
+        "base_stats": {
+            "hp": 1,
+            "speed": 1,
+            "attack": 1,
+            "defense": 1,
+            "special_attack": 1,
+            "special_defense": 1
+        }
     }
 }
