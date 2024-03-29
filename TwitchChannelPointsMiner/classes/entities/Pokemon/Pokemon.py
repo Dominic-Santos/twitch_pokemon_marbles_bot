@@ -46,6 +46,10 @@ class Pokemon(object):
     def is_spawnable(self):
         return (self.is_starter or self.is_legendary or self.is_non_spawnable) is False
 
+    @property
+    def is_egg(self):
+        return self.pokedex_id in range(999000, 999005)
+
     def __str__(self):
         real_id = "" if self.pokedex_id == self.order else f" ({self.order})"
         atts = []

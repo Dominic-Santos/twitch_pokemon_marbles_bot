@@ -25926,7 +25926,10 @@
             "special_defense": 55
         },
         "evolves_to": {},
-        "order": 555
+        "order": 555,
+        "evolves_from": [
+            "10312"
+        ]
     },
     "10313": {
         "pokedex_id": 10313,
@@ -32315,7 +32318,18 @@
             "special_attack": 15,
             "special_defense": 45
         },
-        "order": 554
+        "order": 554,
+        "evolves_to": {
+            "10310": {
+                "level": 35,
+                "stones": [
+                    {
+                        "amount": 2,
+                        "stone": "Ice"
+                    }
+                ]
+            }
+        }
     },
     "10317": {
         "pokedex_id": 10317,

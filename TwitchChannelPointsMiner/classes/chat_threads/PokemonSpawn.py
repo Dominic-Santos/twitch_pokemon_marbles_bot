@@ -162,6 +162,7 @@ class PokemonSpawn(object):
             if egg_bag is not None:
                 egg_sprite = get_sprite("pokemon", str(egg_bag["pokedexId"]), shiny=False)
                 POKEMON.discord.post(DISCORD_ALERTS, "🥚You got a dragon egg🥚", file=egg_sprite)
+                self.update_evolutions(egg_bag["id"], egg_data.pokedex_id)
 
         else:
             log_file("red", f"Failed to catch {pokemon.name} ({pokemon.tier})")
