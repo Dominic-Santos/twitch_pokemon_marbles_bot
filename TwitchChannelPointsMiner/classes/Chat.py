@@ -180,16 +180,14 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         caught = None
         pokemon = None
         for poke in filtered:
-            if poke["pokedexId"] not in range(999000, 999005):
+            pokemon = self.get_pokemon_stats(poke["pokedexId"])
+            if pokemon.is_egg is False:
                 continue
 
             if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() > 60 * 5:
                 continue
 
             caught = poke
-
-        if caught is not None:
-            pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
 
         return pokemon, caught
 
