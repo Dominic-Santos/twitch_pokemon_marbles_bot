@@ -129,9 +129,12 @@ class AutoBattle(object):
     def check_evolve_alert(self, team):
         for pokemon in team:
             poke_obj = self.get_pokemon_stats(pokemon["pokedexId"])
-            evolutions = list(poke_obj.evolve_to.keys())
+            if poke_obj.evolve_to is None:
+                print(poke_obj)
+                continue
 
-            if poke_obj.evolve_to is None or len(evolutions) == 0:
+            evolutions = list(poke_obj.evolve_to.keys())
+            if len(evolutions) == 0:
                 continue
 
             limit = poke_obj.evolve_to[evolutions[0]]["level"]
