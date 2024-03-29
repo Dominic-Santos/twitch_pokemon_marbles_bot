@@ -29132,7 +29132,8 @@
             "special_attack": 10,
             "special_defense": 35
         },
-        "order": 28
+        "order": 27,
+        "evolves_to": {}
     },
     "10102": {
         "pokedex_id": 10102,
@@ -32303,7 +32304,7 @@
         "description": "This popular symbol of good fortune will never fall over in its sleep, no matter how it\u2019s pushed or pulled.",
         "weight": 37.5,
         "generation": 5,
-        "type1": "fire",
+        "type1": "ice",
         "type2": "none",
         "tier": "C",
         "base_stats": {
@@ -34384,7 +34385,8 @@
             "special_attack": 95,
             "special_defense": 95
         },
-        "order": 773
+        "order": 773,
+        "evolves_to": {}
     },
     "10484": {
         "pokedex_id": 10484,
@@ -36101,5 +36103,43 @@
             "special_attack": 1,
             "special_defense": 1
         }
+    },
+    "999001": {
+        "pokedex_id": 999001,
+        "name": "Sparkling Egg",
+        "description": "A Sparkling Egg from the Easter Event 2024.",
+        "weight": 0.1,
+        "generation": 1,
+        "type1": "electric",
+        "type2": "none",
+        "tier": "C",
+        "base_stats": {
+            "hp": 1,
+            "speed": 1,
+            "attack": 1,
+            "defense": 1,
+            "special_attack": 1,
+            "special_defense": 1
+        }
+    },
+    "999000": {
+        "pokedex_id": 999000,
+        "name": "Dragon Egg",
+        "description": "A Dragon Egg from the Easter Event 2024.",
+        "weight": 0.1,
+        "generation": 1,
+        "type1": "normal",
+        "type2": "none",
+        "tier": "C",
+        "base_stats": {
+            "hp": 25,
+            "speed": 25,
+            "attack": 25,
+            "defense": 25,
+            "special_attack": 25,
+            "special_defense": 25
+        },
+        "order": 999000,
+        "evolves_to": {}
     }
 }
