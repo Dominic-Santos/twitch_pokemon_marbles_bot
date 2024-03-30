@@ -178,7 +178,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         filtered = sorted(POKEMON.computer.pokemon, key=lambda x: x["id"], reverse=True)[:3]
 
         caught = None
-        pokemon = None
+        caught_obj = None
         for poke in filtered:
             pokemon = self.get_pokemon_stats(poke["pokedexId"])
             if pokemon.is_egg is False:
@@ -188,8 +188,10 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 continue
 
             caught = poke
+            caught_obj = pokemon
+            break
 
-        return pokemon, caught
+        return caught_obj, caught
 
     def check_egg_hatched(self, current_buddy):
         old_buddy = POKEMON.poke_buddy
