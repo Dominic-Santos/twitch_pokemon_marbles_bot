@@ -94,6 +94,19 @@ class PokemonSpawn(object):
 
         # find reasons to catch the pokemon
         catch_reasons = POKEMON.need_pokemon(pokemon)
+        catch_balls = [] if "ball" not in catch_reasons else POKEMON.missions.data["ball"]
+
+        if POKEMON.poke_buddy is not None and POKEMON.settings["hatch_eggs"]:
+            buddy_obj = self.get_pokemon_stats(POKEMON.poke_buddy["pokedexId"])
+            egg_reason, egg_ball = POKEMON.egg_catch_reasons(pokemon, buddy_obj)
+
+            if egg_reason is not None:
+                if egg_reason not in catch_reasons:
+                    catch_reasons.append(egg_reason)
+
+            if egg_ball is not None:
+                if egg_ball not in catch_balls:
+                    catch_balls.append(egg_ball)
 
         if len(catch_reasons) == 0:
             twitch_channel = POKEMON.get_channel(ignore_priority=False)
@@ -107,8 +120,7 @@ class PokemonSpawn(object):
             self.get_missions()
             return
 
-        mission_balls = [] if "ball" not in catch_reasons else POKEMON.missions.data["ball"]
-        ball = POKEMON.inventory.get_catch_ball(pokemon, catch_reasons, mission_balls)
+        ball = POKEMON.inventory.get_catch_ball(pokemon, catch_reasons, catch_balls)
 
         if ball is None:
             log_file("red", f"Won't catch {pokemon.name}, ran out of balls")

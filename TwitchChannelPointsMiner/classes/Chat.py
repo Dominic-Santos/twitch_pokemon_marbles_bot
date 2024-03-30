@@ -215,7 +215,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         for pokemon in all_pokemon:
             if pokemon["isBuddy"]:
                 if POKEMON.poke_buddy is not None and POKEMON.poke_buddy["id"] != pokemon["id"]:
-                    check_egg_hatched(pokemon)
+                    self.check_egg_hatched(pokemon)
                 POKEMON.poke_buddy = pokemon
                 break
 
