@@ -191,6 +191,63 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
 
         return pokemon, caught
 
+    def check_egg_hatched(self, current_buddy):
+        old_buddy = POKEMON.poke_buddy
+        old_buddy_obj = self.get_pokemon_stats(old_buddy["pokedexId"])
+        
+        if old_buddy_obj.is_egg:
+            current_buddy_obj = self.get_pokemon_stats(current_buddy["pokedexId"])
+
+            ivs = int(current_buddy["avgIV"])
+            lvl = current_buddy['lvl']
+            shiny = " Shiny" if current_buddy["isShiny"] else ""
+            unidentified = " (Unidentified Ghost)" if pokemon.is_unidentified_ghost else ""
+            egg = old_buddy_obj.name
+            msg = f"🥚{egg} hatched into a{shiny} {current_buddy_obj.name} ({current_buddy_obj.tier}) Lvl.{lvl} {ivs}IV🥚"
+
+            log("green", msg)
+            if POKEMON.settings["alert_egg_hatched"]:
+                buddy_sprite = get_sprite("pokemon", str(current_buddy["pokedexId"]), shiny=current_buddy["isShiny"])
+                POKEMON.discord.post(DISCORD_ALERTS, msg, file=buddy_sprite)
+
+    def check_pokebuddy(self):
+        all_pokemon = POKEMON.computer.pokemon
+        for pokemon in all_pokemon:
+            if pokemon["isBuddy"]:
+                if POKEMON.poke_buddy is not None and POKEMON.poke_buddy["id"] != pokemon["id"]:
+                    check_egg_hatched(pokemon)
+                POKEMON.poke_buddy = pokemon
+                break
+
+        if POKEMON.settings["hatch_eggs"]:
+            self.hatch_egg()
+
+    def set_buddy(self, pokemon):
+        self.pokemon_api.set_buddy(add["id"])
+        msg = f"{pokemon['nickname']} ({pokemon['name']}) was set as buddy!"
+        log("yellow", msg)
+        if POKEMON.settings["alert_buddy_changed"]:
+            POKEMON.discord.post(DISCORD_ALERTS, msg)
+
+    def hatch_egg(self):
+        buddy = POKEMON.poke_buddy
+
+        # make sure if have egg its buddy
+        if buddy is not None:
+            # check if already hatching an egg
+            pokemon = self.get_pokemon_stats(buddy["pokedexId"])
+            if pokemon.is_egg:
+                # already hatching egg
+                return
+
+        all_pokemon = POKEMON.computer.pokemon
+        potential_eggs = [pokemon for pokemon in all_pokemon if pokemon["name"].lower().endswith(" egg")]
+        for egg in potential_eggs:
+            pokemon = self.get_pokemon_stats(egg["pokedexId"])
+            if pokemon.is_egg:
+                self.set_buddy(egg)
+                return
+
 
     def update_evolutions(self, pokemon_id, pokedex_id):
         pokemon_data = self.pokemon_api.get_pokemon(pokemon_id)

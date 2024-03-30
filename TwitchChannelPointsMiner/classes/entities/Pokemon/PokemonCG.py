@@ -27,6 +27,8 @@ class PokemonComunityGame(Loyalty):
         self.alerts = False
         self.alerts_channel = ""
 
+        self.poke_buddy = None
+
         self.channel_list = []
         self.online_channels = []
 
@@ -68,6 +70,14 @@ class PokemonComunityGame(Loyalty):
             "alert_level_value": {
                 "value": 100,
                 "hint": "The level a pokemon must reach to tigger the level alert",
+            },
+            "alert_egg_hatched": {
+                "value": True,
+                "hint": "Send alert to discord when egg hatches",
+            },
+            "alert_buddy_changed": {
+                "value": True,
+                "hint": "Send alert to discord when pokebuddy changed",
             },
             "catch_everything": {
                 "value": False,
@@ -215,7 +225,11 @@ class PokemonComunityGame(Loyalty):
             "skip_missions_default": {
                 "value": False,
                 "hint": "Skip new missions by default",
-            }
+            },
+            "hatch_eggs": {
+                "value": True,
+                "hint": "Set Eggs as buddies and try to hatch them.",
+            },
         }
 
         self.settings = {key: self.default_settings[key]["value"] for key in self.default_settings}
