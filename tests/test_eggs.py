@@ -86,7 +86,7 @@ def test_egg_trade_reasons():
     assert len(reasons) == 3
 
 
-def test_chat_egg_functions(monkeypatch):
+def test_check_got_dragon_egg(monkeypatch):
     missions = load_mission_data("14")
     inventory = load_inventory_data("01")
     pokedex = load_pokedex()
@@ -155,7 +155,6 @@ def test_chat_egg_functions(monkeypatch):
 
     """
     to test:
-    def check_got_dragon_egg(self):
     def check_egg_hatched(self, current_buddy):
     def check_pokebuddy(self, cached=False):
     def set_buddy(self, pokemon):

@@ -153,6 +153,11 @@ class Wondertrade(object):
             pokemon_object = self.get_pokemon_stats(pokemon_traded["pokedexId"])
             pokemon_object.level = pokemon_traded["lvl"]
             reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
+            if POKEMON.settings["hatch_eggs"] and POKEMON.poke_buddy is not None:
+                buddy = self.get_pokemon_stats(POKEMON.poke_buddy["pokedexId"])
+                for reason in POKEMON.egg_trade_reasons(pokemon_object, buddy):
+                    if reason not in reasons:
+                        reasons.append(reason)
             pokemon_received = self.pokemon_api.wondertrade(pokemon_traded["id"])
 
             if "pokemon" in pokemon_received:
