@@ -4,6 +4,7 @@ from ...DiscordAPI import DiscordAPI
 class Discord(object):
     def __init__(self):
         self.connected = False
+        self.api = None
         self.data = {
             "auth": None,
             "user": None,
@@ -34,10 +35,3 @@ class Discord(object):
     def post(self, url, data, file=None):
         if self.connected:
             return self.api.post(url, data, file)
-
-    def get_role(self, role):
-        if self.data["roles"] is not None:
-            if role in self.data["roles"]:
-                return self.data["roles"][role]
-
-        return None

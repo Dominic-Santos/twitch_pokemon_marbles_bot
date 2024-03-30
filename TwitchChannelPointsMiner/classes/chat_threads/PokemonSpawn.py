@@ -174,8 +174,9 @@ class PokemonSpawn(object):
 
             egg_data, egg_bag = self.check_got_dragon_egg()
             if egg_bag is not None:
+                egg_name = egg_bag["name"]
                 egg_sprite = get_sprite("pokemon", str(egg_bag["pokedexId"]), shiny=False)
-                POKEMON.discord.post(DISCORD_ALERTS, "🥚You got a dragon egg🥚", file=egg_sprite)
+                POKEMON.discord.post(DISCORD_ALERTS, "🥚You got a {egg_name}🥚", file=egg_sprite)
                 self.update_evolutions(egg_bag["id"], egg_data.pokedex_id)
 
         else:
