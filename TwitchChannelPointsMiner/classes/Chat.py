@@ -201,7 +201,6 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             ivs = int(current_buddy["avgIV"])
             lvl = current_buddy['lvl']
             shiny = " Shiny" if current_buddy["isShiny"] else ""
-            unidentified = " (Unidentified Ghost)" if pokemon.is_unidentified_ghost else ""
             egg = old_buddy_obj.name
             msg = f"🥚{egg} hatched into a{shiny} {current_buddy_obj.name} ({current_buddy_obj.tier}) Lvl.{lvl} {ivs}IV🥚"
 
