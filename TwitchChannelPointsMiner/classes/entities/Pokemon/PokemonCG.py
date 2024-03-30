@@ -395,8 +395,9 @@ class PokemonComunityGame(Loyalty):
             return "catch", None
         elif buddy.pokedex_id == 999001:
             # Sparkling Egg -> You caught 0 / 3 Pokemon with premier, luxury or cherish balls to hatch this Egg.
-            for ball in ["premierball", "luxuryball", "cherishball"]:
-                if self.inventory.have_ball(ball):
+            for ball in ["premier", "luxury", "cherish"]:
+                the_ball = ball + "ball"
+                if self.inventory.have_ball(the_ball):
                     return "ball", ball
         elif buddy.pokedex_id == 999003:
             # Baby Egg -> You caught 0 / 3 Pokemon under 400 BST to hatch this Egg.
