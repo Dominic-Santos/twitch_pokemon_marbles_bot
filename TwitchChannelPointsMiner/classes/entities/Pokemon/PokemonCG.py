@@ -385,6 +385,26 @@ class PokemonComunityGame(Loyalty):
 
         return reasons
 
+    def egg_catch_reasons(self, spawned, buddy):
+        # missions to hatch eggs
+        if buddy is None:
+            return None, None
+
+        if buddy.pokedex_id == 999000:
+            # Dragon Egg -> You caught 0 / 10 Pokemon to hatch this Egg.
+            return "catch", None
+        elif buddy.pokedex_id == 999001:
+            # Sparkling Egg -> You caught 0 / 3 Pokemon with premier, luxury or cherish balls to hatch this Egg.
+            for ball in ["premierball", "luxuryball", "cherishball"]:
+                if self.inventory.have_ball(ball):
+                    return "ball", ball
+        elif buddy.pokedex_id == 999003:
+            # Baby Egg -> You caught 0 / 3 Pokemon under 400 BST to hatch this Egg.
+            if spawned.bst < 400:
+                return "bst", None
+
+        return None, None
+
     def show_sprite(self, reasons, extra_reasons={}):
         for reason in reasons:
             if reason.split(" (")[0] in self.settings["alert_sprite"]:
