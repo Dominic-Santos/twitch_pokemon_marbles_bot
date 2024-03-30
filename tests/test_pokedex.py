@@ -135,3 +135,10 @@ def test_legendary():
 
     pokeobj = pokedex.stats(10139)
     assert pokeobj.is_legendary
+
+
+def test_eggs():
+    poke = Pokemon()
+    for i in range(999000, 999005):
+        poke.pokedex_id = 999000
+        assert poke.is_egg
