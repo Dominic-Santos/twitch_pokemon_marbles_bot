@@ -62,3 +62,36 @@ def test_egg_catch_reasons():
     reason, ball = PCG.egg_catch_reasons(poke, buddy)
     assert reason is None
     assert ball is None
+
+
+def test_egg_trade_reasons():
+    inventory = load_inventory_data("01")
+    PCG.inventory.set(inventory)
+
+    poke = Pokemon()
+    poke.pokedex_id = 25
+    poke.name = "Pikachu"
+    poke.types = ["Electric"]
+
+    reasons = PCG.egg_trade_reasons(poke, None)
+    assert len(reasons) == 0
+
+    buddy = Pokemon()
+    buddy.name = "Egg"
+
+    buddy.pokedex_id = 999001
+    reasons = PCG.egg_trade_reasons(poke, buddy)
+    assert len(reasons) == 0
+
+    buddy.pokedex_id = 999004
+    reasons = PCG.egg_trade_reasons(poke, buddy)
+    assert len(reasons) == 0
+
+    poke.types = ["Fire", "Grass", "Water"]
+    buddy.pokedex_id = 999001
+    reasons = PCG.egg_trade_reasons(poke, buddy)
+    assert len(reasons) == 0
+
+    buddy.pokedex_id = 999004
+    reasons = PCG.egg_trade_reasons(poke, buddy)
+    assert len(reasons) == 3

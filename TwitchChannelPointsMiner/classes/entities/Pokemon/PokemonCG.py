@@ -395,7 +395,7 @@ class PokemonComunityGame(Loyalty):
             return "catch", None
         elif buddy.pokedex_id == 999001:
             # Sparkling Egg -> You caught 0 / 3 Pokemon with premier, luxury or cherish balls to hatch this Egg.
-            for ball in ["premier", "luxury", "cherish"]:
+            for ball in ["premier", "luxury", "cherish", "greatcherish", "ultracherish"]:
                 the_ball = ball + "ball"
                 if self.inventory.have_ball(the_ball):
                     return "ball", ball
@@ -405,6 +405,18 @@ class PokemonComunityGame(Loyalty):
                 return "bst", None
 
         return None, None
+
+    def egg_trade_reasons(self, pokemon, buddy):
+        # missions to hatch eggs
+        reasons = []
+        if buddy is not None:
+            if buddy.pokedex_id == 999004:
+                # Starter Egg -> Trade 5 Fire, Water or Grass type Pokemon.
+                for poke_type in pokemon.types:
+                    if poke_type in ["Fire", "Water", "Grass"]:
+                        reasons.append(f"type ({poke_type})")
+
+        return reasons
 
     def show_sprite(self, reasons, extra_reasons={}):
         for reason in reasons:
