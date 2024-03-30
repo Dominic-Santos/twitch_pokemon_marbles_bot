@@ -58,8 +58,9 @@ class PokemonSpawn(object):
             client_channel, client = THREADCONTROLLER.get_client()
             try:
                 if client is not None:
-                    self.spawn(client)
                     self.check_pokebuddy()
+                    self.spawn(client)
+                    self.check_pokebuddy(cached=True)
                     self.sync_pokemon_data()
                 remaining_time = get_next_spawn()
             except KeyboardInterrupt:

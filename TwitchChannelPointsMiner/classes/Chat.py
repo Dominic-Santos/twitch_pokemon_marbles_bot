@@ -210,7 +210,11 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
                 buddy_sprite = get_sprite("pokemon", str(current_buddy["pokedexId"]), shiny=current_buddy["isShiny"])
                 POKEMON.discord.post(DISCORD_ALERTS, msg, file=buddy_sprite)
 
-    def check_pokebuddy(self):
+    def check_pokebuddy(self, cached=False):
+        if cached is False:
+            all_pokemon = self.pokemon_api.get_all_pokemon()
+            POKEMON.sync_computer(all_pokemon)
+
         all_pokemon = POKEMON.computer.pokemon
         for pokemon in all_pokemon:
             if pokemon["isBuddy"]:
