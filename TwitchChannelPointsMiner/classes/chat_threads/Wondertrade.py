@@ -128,6 +128,12 @@ class Wondertrade(object):
                         continue
 
                     reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
+                    if POKEMON.settings["hatch_eggs"] and POKEMON.poke_buddy is not None:
+                        buddy = self.get_pokemon_stats(POKEMON.poke_buddy["pokedexId"])
+                        for reason in POKEMON.egg_trade_reasons(pokemon_object, buddy):
+                            if reason not in reasons:
+                                reasons.append(reason)
+
                     if len(reasons) < best_nr_reasons:
                         continue
                     elif len(reasons) > best_nr_reasons:

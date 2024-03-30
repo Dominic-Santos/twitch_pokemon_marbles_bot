@@ -248,7 +248,8 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
         potential_eggs = [pokemon for pokemon in all_pokemon if pokemon["name"].lower().endswith(" egg")]
         for egg in potential_eggs:
             pokemon = self.get_pokemon_stats(egg["pokedexId"])
-            if pokemon.is_egg:
+            # 999002 is ranked battle egg, can't auto hatch so ignore
+            if pokemon.is_egg and pokemon.pokedex_id != 999002:
                 self.set_buddy(egg)
                 return
 
