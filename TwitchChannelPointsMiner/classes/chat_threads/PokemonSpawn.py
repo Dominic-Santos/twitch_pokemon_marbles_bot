@@ -59,6 +59,7 @@ class PokemonSpawn(object):
             try:
                 if client is not None:
                     self.spawn(client)
+                    self.check_pokebuddy()
                     self.sync_pokemon_data()
                 remaining_time = get_next_spawn()
             except KeyboardInterrupt:
@@ -175,8 +176,6 @@ class PokemonSpawn(object):
         self.update_inventory()
 
         self.sort_computer([pokemon_id])
-
-        self.check_pokebuddy()
 
         if caught is not None:
             # check for loyalty tier up
