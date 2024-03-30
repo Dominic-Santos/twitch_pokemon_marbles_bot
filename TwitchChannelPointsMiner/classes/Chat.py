@@ -223,7 +223,7 @@ class ClientIRCPokemon(ClientIRCBase, ChatThreads):
             self.hatch_egg()
 
     def set_buddy(self, pokemon):
-        self.pokemon_api.set_buddy(add["id"])
+        self.pokemon_api.set_buddy(pokemon["id"])
         msg = f"{pokemon['nickname']} ({pokemon['name']}) was set as buddy!"
         log("yellow", msg)
         if POKEMON.settings["alert_buddy_changed"]:
