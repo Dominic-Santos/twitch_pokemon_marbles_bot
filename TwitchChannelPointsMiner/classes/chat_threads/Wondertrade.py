@@ -115,7 +115,7 @@ class Wondertrade(object):
                         continue
 
                     pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
-                    if pokemon.is_egg:
+                    if pokemon_object.is_egg:
                         continue
 
                     pokemon_object.level = pokemon["lvl"]

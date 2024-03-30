@@ -176,6 +176,8 @@ class PokemonSpawn(object):
 
         self.sort_computer([pokemon_id])
 
+        self.check_pokebuddy()
+
         if caught is not None:
             # check for loyalty tier up
             rewards = POKEMON.increment_loyalty(twitch_channel)

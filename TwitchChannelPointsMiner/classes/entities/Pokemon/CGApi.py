@@ -199,3 +199,9 @@ class API(object):
         # only available when pokedex spawnables 100% and after claiming charm (?)
         # returns {}
         return self._do_request("POST", TRAINER_URL + f"reset-dex/")
+
+    @save_to_json
+    def set_buddy(self, pokemon_id):
+        # set pokebuddy IE: {pokemon_id: 35388287}
+        # returns {}
+        return self._do_request("POST", TRAINER_URL + f"pokemon-set-buddy/", payload={"pokemon_id": pokemon_id})
