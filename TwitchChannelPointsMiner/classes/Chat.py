@@ -7,7 +7,7 @@ from .chat.ChatPokemon import ClientIRCPokemon
 
 from .Utils import (
     POKEMON,
-    THREADCONTROLLER
+    leave_channel,
 )
 
 class ClientIRC(ClientIRCMarbles, ClientIRCPokemon):
@@ -54,19 +54,5 @@ class ThreadChat(ThreadChatO):
     def stop(self):
         ThreadChatO.stop(self)
         leave_channel(self.channel)
-
-
-def leave_channel(channel):
-    if channel in POKEMON.channel_list:
-        POKEMON.remove_channel(channel)
-        log(text=f"Leaving Pokemon: {channel}")
-        if len(POKEMON.channel_list) == 0:
-            log_file(text="Nobody is streaming Pokemon CG")
-
-    if channel in POKEMON.online_channels:
-        POKEMON.channel_offline(channel)
-
-    THREADCONTROLLER.remove_client(channel)
-
 
 ChatPresence = ChatPresenceO
