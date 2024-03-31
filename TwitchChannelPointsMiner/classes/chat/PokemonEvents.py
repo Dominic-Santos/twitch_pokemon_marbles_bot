@@ -67,18 +67,18 @@ class PokemonEvents():
         old_buddy = self.pokemon.poke_buddy
         old_buddy_obj = self.get_pokemon_stats(old_buddy["pokedexId"])
         
-        if old_buddy_obj.is_egg:
+        if old_buddy_obj.is_egg and old_buddy["id"] != current_buddy["id"]:
             current_buddy_obj = self.get_pokemon_stats(current_buddy["pokedexId"])
 
-            ivs = int(current_buddy["avgIV"])
-            lvl = current_buddy['lvl']
-            shiny = " Shiny" if current_buddy["isShiny"] else ""
+            ivs = int(current_buddy.get("avgIV", 0))
+            lvl = current_buddy.get("lvl", 0)
+            shiny = " Shiny" if current_buddy.get("isShiny", False) else ""
             egg = old_buddy_obj.name
             msg = f"🥚{egg} hatched into a{shiny} {current_buddy_obj.name} ({current_buddy_obj.tier}) Lvl.{lvl} {ivs}IV🥚"
 
-            log("green", msg)
+            self.log("green", msg)
             if self.pokemon.settings["alert_egg_hatched"]:
-                buddy_sprite = get_sprite("pokemon", str(current_buddy["pokedexId"]), shiny=current_buddy["isShiny"])
+                buddy_sprite = get_sprite("pokemon", str(current_buddy["pokedexId"]), shiny=current_buddy.get("isShiny", False))
                 self.pokemon.discord.post(DISCORD_ALERTS, msg, file=buddy_sprite)
 
     def check_pokebuddy(self, cached=False):
@@ -89,7 +89,7 @@ class PokemonEvents():
         all_pokemon = self.pokemon.computer.pokemon
         for pokemon in all_pokemon:
             if pokemon["isBuddy"]:
-                if self.pokemon.poke_buddy is not None and self.pokemon.poke_buddy["id"] != pokemon["id"]:
+                if self.pokemon.poke_buddy is not None:
                     self.check_egg_hatched(pokemon)
                 self.pokemon.poke_buddy = pokemon
                 break

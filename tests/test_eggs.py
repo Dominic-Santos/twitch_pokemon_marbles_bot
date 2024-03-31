@@ -7,6 +7,7 @@ from . import (
     load_pokedex,
     Pokemon,
     PokemonComunityGame,
+    MockLogger,
 )
 
 PCG = PokemonComunityGame()
@@ -86,47 +87,24 @@ def test_egg_trade_reasons():
     assert len(reasons) == 3
 
 
-def test_check_got_dragon_egg(monkeypatch):
-    missions = load_mission_data("14")
-    inventory = load_inventory_data("01")
+def test_check_got_dragon_egg():
     pokedex = load_pokedex()
     computer = {
         "allPokemon": [
             {
-                "id": 28031618,
-                "lvl": 14,
-                "nickname": "\u2b50Bulbasaur",
-                "current_hp": 38,
-                "max_hp": 38,
-                "locked": False,
+                "id": 1,
                 "pokedexId": 1,
-                "order": 1,
-                "isShiny": False,
-                "publicBattleBanned": False,
                 "isBuddy": True,
-                "avgIV": 20.333333333333332,
-                "sellPrice": 627,
                 "caughtAt": str(datetime.utcnow()),
-                "hpPercent": 100,
-                "specialVariant": 0,
-                "baseStats": 318,
-                "speed": 45,
-                "special_defense": 65,
-                "special_attack": 65,
-                "defense": 49,
-                "attack": 49,
-                "hp": 45,
                 "name": "Bulbasaur"
             }
         ]
     }
 
-    PCG.missions.set(missions)
-    PCG.inventory.set(inventory)
     PCG.pokedex.set(pokedex)
     PCG.computer.set(computer)
 
-    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg'
+    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCGd'
     client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
 
     poke_obj, poke_bag = client.check_got_dragon_egg()
@@ -152,10 +130,54 @@ def test_check_got_dragon_egg(monkeypatch):
     assert poke_bag is None
     assert poke_obj is None
 
-    """
-    to test:
-    def check_egg_hatched(self, current_buddy):
-    def check_pokebuddy(self, cached=False):
-    def set_buddy(self, pokemon):
-    def hatch_egg(self):
-    """
+
+def test_check_egg_hatched():
+    pokedex = load_pokedex()
+    egg = {
+        "id": 1,
+        "pokedexId": 999000,
+        "isBuddy": True,
+        "name": "Dragon Egg"
+    }
+    bulbasaur = {
+        "id": 2,
+        "pokedexId": 1,
+        "isBuddy": True,
+        "name": "Bulbasaur"
+    }
+    computer = {
+        "allPokemon": [egg.copy()]
+    }
+
+    PCG.pokedex.set(pokedex)
+    PCG.computer.set(computer)
+    PCG.settings["alert_egg_hatched"] = False
+
+    logger = MockLogger()
+
+    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCGd'
+    client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
+    client.log = logger.log
+    client.pokemon.poke_buddy = egg.copy()
+
+    client.check_egg_hatched(egg)
+    assert len(logger.calls) == 0
+
+    client.check_egg_hatched(bulbasaur)
+    assert len(logger.calls) == 1
+
+    logger.reset()
+
+    client.pokemon.poke_buddy = bulbasaur.copy()
+    client.check_egg_hatched(bulbasaur)
+    assert len(logger.calls) == 0
+
+    client.check_egg_hatched(egg)
+    assert len(logger.calls) == 0
+
+"""
+to test:
+def check_pokebuddy(self, cached=False):
+def set_buddy(self, pokemon):
+def hatch_egg(self):
+"""

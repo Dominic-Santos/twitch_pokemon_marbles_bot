@@ -14,6 +14,8 @@ class ClientIRC(ClientIRCMarbles, ClientIRCPokemon):
     def __init__(self, username, token, channel, get_pokemoncg_token, marbles, pcg):
         ClientIRCMarbles.__init__(self, username, token, channel, marbles)
         ClientIRCPokemon.init(self, username, get_pokemoncg_token, pcg, POKEMON)
+        self.log = log
+        self.log_file = log_file
 
     def on_pubmsg(self, client, message):
         ClientIRCMarbles.on_pubmsg(self, client, message)
