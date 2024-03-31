@@ -8,7 +8,6 @@ from ...entities.Pokemon.Pokedex import Move
 from ..ChatLogs import log, log_file
 from ...Utils import (
     DISCORD_ALERTS,
-    POKEMON,
     seconds_readable,
 )
 
@@ -37,26 +36,26 @@ class AutoBattle(object):
         team_slots = [pokemon["teamSlot"] for pokemon in team]
         team_ids = [pokemon["id"] for pokemon in team]
         swap_pokemon = [pokemon["teamSlot"] for pokemon in team if pokemon["lvl"] >= 100]
-        priority = POKEMON.settings["change_team_priority"]
-        tradables = POKEMON.settings["change_team_tradables"]
+        priority = self.pokemon.settings["change_team_priority"]
+        tradables = self.pokemon.settings["change_team_tradables"]
 
         for i in range(6):
             if i not in team_slots:
                 swap_pokemon.append(i)
 
-        type_missions = POKEMON.missions.check_battle_type()
+        type_missions = self.pokemon.missions.check_battle_type()
 
         if len(swap_pokemon) == 0 and len(type_missions) == 0:
             return
 
         all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
+        self.pokemon.sync_computer(all_pokemon)
 
         keymap = {
             "bst": "baseStats",
             "price": "sellPrice",
         }
-        sorted_box = sorted(POKEMON.computer.pokemon, key=lambda x: x[keymap[priority]], reverse=True)
+        sorted_box = sorted(self.pokemon.computer.pokemon, key=lambda x: x[keymap[priority]], reverse=True)
         new_team = []
 
         if len(type_missions) > 0:
@@ -139,39 +138,39 @@ class AutoBattle(object):
 
             limit = poke_obj.evolve_to[evolutions[0]]["level"]
 
-            if pokemon["lvl"] >= limit and pokemon["id"] not in POKEMON.ab_evolve_reached:
-                POKEMON.ab_evolve_reached.append(pokemon["id"])
-                if pokemon["id"] in POKEMON.ab_evolving:
+            if pokemon["lvl"] >= limit and pokemon["id"] not in self.pokemon.ab_evolve_reached:
+                self.pokemon.ab_evolve_reached.append(pokemon["id"])
+                if pokemon["id"] in self.pokemon.ab_evolving:
 
                     msg = f"⚔️ {pokemon['name']} ({poke_obj.name}) is level {limit}, ready to evolve! ⚔️"
                     log("green", msg)
-                    POKEMON.discord.post(DISCORD_ALERTS, msg)
+                    self.pokemon.discord.post(DISCORD_ALERTS, msg)
 
-            if pokemon["id"] not in POKEMON.ab_evolving:
-                POKEMON.ab_evolving.append(pokemon["id"])
+            if pokemon["id"] not in self.pokemon.ab_evolving:
+                self.pokemon.ab_evolving.append(pokemon["id"])
 
     def check_level_alert(self, team):
-        limit = POKEMON.settings["alert_level_value"]
+        limit = self.pokemon.settings["alert_level_value"]
         new_level_reached = []
 
         for pokemon in team:
 
-            if pokemon["lvl"] >= limit and pokemon["id"] not in POKEMON.ab_level_reached:
-                POKEMON.ab_level_reached.append(pokemon["id"])
-                if pokemon["id"] in POKEMON.ab_training:
+            if pokemon["lvl"] >= limit and pokemon["id"] not in self.pokemon.ab_level_reached:
+                self.pokemon.ab_level_reached.append(pokemon["id"])
+                if pokemon["id"] in self.pokemon.ab_training:
                     new_level_reached.append(pokemon)
 
-            if pokemon["id"] not in POKEMON.ab_training:
-                POKEMON.ab_training.append(pokemon["id"])
+            if pokemon["id"] not in self.pokemon.ab_training:
+                self.pokemon.ab_training.append(pokemon["id"])
 
         for pokemon in new_level_reached:
             poke_obj = self.get_pokemon_stats(pokemon["pokedexId"])
             msg = f"⚔️ {pokemon['name']} ({poke_obj.name}) reached level {limit}! ⚔️"
             log("green", msg)
-            POKEMON.discord.post(DISCORD_ALERTS, msg)
+            self.pokemon.discord.post(DISCORD_ALERTS, msg)
 
     def auto_battle(self):
-        if POKEMON.auto_battle:
+        if self.pokemon.auto_battle:
 
             data = self.pokemon_api.get_battle()
 
@@ -185,7 +184,7 @@ class AutoBattle(object):
             battle_mode = "stadium"
             difficulty = "hard"
 
-            if POKEMON.auto_battle_challenge and team_data["challenge"] is not None:
+            if self.pokemon.auto_battle_challenge and team_data["challenge"] is not None:
                 if team_data["challenge"]["error"] == "" or "Try again in" in team_data["challenge"]["error"]:
                     battle_mode = "challenge"
                     difficulty = "medium"
@@ -216,20 +215,20 @@ class AutoBattle(object):
 
                 if battle_mode == "stadium":
                     self.get_missions()
-                    if POKEMON.missions.check_stadium_mission():
-                        difficulty = POKEMON.missions.check_stadium_difficulty()
+                    if self.pokemon.missions.check_stadium_mission():
+                        difficulty = self.pokemon.missions.check_stadium_difficulty()
 
                 team_data = self.pokemon_api.get_teams()
                 if team_data[battle_mode]["meet_requirements"]:
-                    if POKEMON.settings["alert_level"]:
+                    if self.pokemon.settings["alert_level"]:
                         # check team pokemon that reached the desired level
                         self.check_level_alert(team_data["allPokemon"])
 
-                    if POKEMON.settings["alert_evolve"]:
+                    if self.pokemon.settings["alert_evolve"]:
                         # check team pokemon that reached level to evolve
                         self.check_evolve_alert(team_data["allPokemon"])
 
-                    if POKEMON.settings["change_team"]:
+                    if self.pokemon.settings["change_team"]:
                         # swap out level 100 pokemon
                         self.check_change_team(team_data["allPokemon"])
 
@@ -239,9 +238,9 @@ class AutoBattle(object):
                     log("yellow", f"Starting {battle_message} battle")
                     result, key = self.do_battle()
                     if result and battle_mode == "challenge":
-                        POKEMON.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
+                        self.pokemon.discord.post(DISCORD_ALERTS, f"⚔️ Won challenge battle {team_data['challenge']['name']} - {key} ⚔️")
                 else:
-                    if POKEMON.settings["change_team"]:
+                    if self.pokemon.settings["change_team"]:
                         # swap out level 100 pokemon
                         self.check_change_team(team_data["allPokemon"])
                         log("red", f"Didn't meet requirements for {battle_mode} battle, tried to change team")

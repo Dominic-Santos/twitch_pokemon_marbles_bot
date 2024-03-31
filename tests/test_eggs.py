@@ -126,10 +126,9 @@ def test_check_got_dragon_egg(monkeypatch):
     PCG.pokedex.set(pokedex)
     PCG.computer.set(computer)
 
-    monkeypatch.setattr(Chat, "POKEMON", PCG)
-
     # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg'
-    client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True)
+    client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
+
     poke_obj, poke_bag = client.check_got_dragon_egg()
     assert poke_bag is None
     assert poke_obj is None

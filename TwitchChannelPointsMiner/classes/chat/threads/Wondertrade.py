@@ -7,7 +7,6 @@ from ...utils import check_pokedex
 from ..ChatLogs import log
 from ...Utils import (
     DISCORD_ALERTS,
-    POKEMON,
     seconds_readable,
 )
 
@@ -59,9 +58,9 @@ class Wondertrade(object):
 
     def get_next_wondertrade(self):
         all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
+        self.pokemon.sync_computer(all_pokemon)
 
-        allpokemon = POKEMON.computer.pokemon
+        allpokemon = self.pokemon.computer.pokemon
         # get the timer from a pokemon
         pokemon = self.update_evolutions(allpokemon[0]["id"], allpokemon[0]["pokedexId"])
 
@@ -92,26 +91,26 @@ class Wondertrade(object):
             self.sync_pokemon_data(pokemon_id=received["id"])
 
     def do_wondertrade(self):
-        allpokemon = POKEMON.computer.pokemon
+        allpokemon = self.pokemon.computer.pokemon
         dex = self.pokemon_api.get_pokedex()
-        POKEMON.sync_pokedex(dex)
+        self.pokemon.sync_pokedex(dex)
 
         tradable = [pokemon for pokemon in allpokemon if pokemon["nickname"] is not None and "trade" in pokemon["nickname"]]
         pokemon_to_trade = []
         reasons = []
         best_nr_reasons = -1
         best_tier = ""
-        trade_legendaries = POKEMON.wondertrade_legendaries
-        trade_starters = POKEMON.wondertrade_starters
+        trade_legendaries = self.pokemon.wondertrade_legendaries
+        trade_starters = self.pokemon.wondertrade_starters
 
-        for tier in POKEMON.wondertrade_tiers:
+        for tier in self.pokemon.wondertrade_tiers:
             looking_for = f"trade{tier}"
             for pokemon in tradable:
                 if looking_for in pokemon["nickname"]:
                     if pokemon["locked"]:
                         continue
 
-                    if pokemon["lvl"] > POKEMON.settings["trade_level_max"]:
+                    if pokemon["lvl"] > self.pokemon.settings["trade_level_max"]:
                         continue
 
                     pokemon_object = self.get_pokemon_stats(pokemon["pokedexId"])
@@ -124,13 +123,13 @@ class Wondertrade(object):
                         continue
                     if pokemon_object.is_starter and not trade_starters:
                         continue
-                    if POKEMON.wondertrade_keep(pokemon_object):
+                    if self.pokemon.wondertrade_keep(pokemon_object):
                         continue
 
-                    reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
-                    if POKEMON.settings["hatch_eggs"] and POKEMON.poke_buddy is not None:
-                        buddy = self.get_pokemon_stats(POKEMON.poke_buddy["pokedexId"])
-                        for reason in POKEMON.egg_trade_reasons(pokemon_object, buddy):
+                    reasons = self.pokemon.missions.check_all_wondertrade_missions(pokemon_object)
+                    if self.pokemon.settings["hatch_eggs"] and self.pokemon.poke_buddy is not None:
+                        buddy = self.get_pokemon_stats(self.pokemon.poke_buddy["pokedexId"])
+                        for reason in self.pokemon.egg_trade_reasons(pokemon_object, buddy):
                             if reason not in reasons:
                                 reasons.append(reason)
 
@@ -152,10 +151,10 @@ class Wondertrade(object):
             pokemon_traded = sorted_pokemon_to_trade[0]
             pokemon_object = self.get_pokemon_stats(pokemon_traded["pokedexId"])
             pokemon_object.level = pokemon_traded["lvl"]
-            reasons = POKEMON.missions.check_all_wondertrade_missions(pokemon_object)
-            if POKEMON.settings["hatch_eggs"] and POKEMON.poke_buddy is not None:
-                buddy = self.get_pokemon_stats(POKEMON.poke_buddy["pokedexId"])
-                for reason in POKEMON.egg_trade_reasons(pokemon_object, buddy):
+            reasons = self.pokemon.missions.check_all_wondertrade_missions(pokemon_object)
+            if self.pokemon.settings["hatch_eggs"] and self.pokemon.poke_buddy is not None:
+                buddy = self.get_pokemon_stats(self.pokemon.poke_buddy["pokedexId"])
+                for reason in self.pokemon.egg_trade_reasons(pokemon_object, buddy):
                     if reason not in reasons:
                         reasons.append(reason)
             pokemon_received = self.pokemon_api.wondertrade(pokemon_traded["id"])
@@ -168,7 +167,7 @@ class Wondertrade(object):
 
                 self.update_evolutions(pokemon_received["id"], pokemon_received["pokedexId"])
 
-                if POKEMON.pokedex.have(pokemon_received_obj):
+                if self.pokemon.pokedex.have(pokemon_received_obj):
                     pokemon_received_need = ""
                     pokemon_sprite = None
                 else:
@@ -176,13 +175,13 @@ class Wondertrade(object):
                     sprite = str(pokemon_received["pokedexId"])
                     pokemon_sprite = get_sprite("pokemon", sprite, shiny=pokemon_received["isShiny"])
                     if pokemon_received_obj.is_spawnable:
-                        check_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
+                        check_pokedex(self.pokemon, self.pokemon_api, self.get_pokemon_stats)
 
                 reasons_string = "" if len(reasons) == 0 else " ({})".format(", ".join(reasons))
 
                 wondertrade_msg = f"Wondertraded {pokemon_traded['name']} ({pokemon_traded_tier}){reasons_string} for {pokemon_received['name']} ({pokemon_received_tier}){pokemon_received_need}"
                 log("green", f"{wondertrade_msg}")
-                POKEMON.discord.post(DISCORD_ALERTS, wondertrade_msg, file=pokemon_sprite)
+                self.pokemon.discord.post(DISCORD_ALERTS, wondertrade_msg, file=pokemon_sprite)
 
                 self.sort_computer([pokemon_received["pokedexId"]])
                 return pokemon_received
