@@ -13,7 +13,7 @@ from .Utils import (
 class ClientIRC(ClientIRCMarbles, ClientIRCPokemon):
     def __init__(self, username, token, channel, get_pokemoncg_token, marbles, pcg):
         ClientIRCMarbles.__init__(self, username, token, channel, marbles)
-        ClientIRCPokemon.init(self, username, get_pokemoncg_token, pcg)
+        ClientIRCPokemon.init(self, username, get_pokemoncg_token, pcg, POKEMON)
 
     def on_pubmsg(self, client, message):
         ClientIRCMarbles.on_pubmsg(self, client, message)

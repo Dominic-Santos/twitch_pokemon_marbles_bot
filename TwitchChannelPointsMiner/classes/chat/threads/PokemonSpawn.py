@@ -9,7 +9,6 @@ from ...utils import check_pokedex
 from ..ChatLogs import log, log_file
 from ...Utils import (
     DISCORD_ALERTS,
-    POKEMON,
     seconds_readable,
     THREADCONTROLLER,
 )
@@ -84,22 +83,22 @@ class PokemonSpawn(object):
 
         # sync everything
         dex = self.pokemon_api.get_pokedex()
-        POKEMON.sync_pokedex(dex)
+        self.pokemon.sync_pokedex(dex)
 
         all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
+        self.pokemon.sync_computer(all_pokemon)
 
         self.check_inventory()
 
         self.get_missions()
 
         # find reasons to catch the pokemon
-        catch_reasons = POKEMON.need_pokemon(pokemon)
-        catch_balls = [] if "ball" not in catch_reasons else POKEMON.missions.data["ball"]
+        catch_reasons = self.pokemon.need_pokemon(pokemon)
+        catch_balls = [] if "ball" not in catch_reasons else self.pokemon.missions.data["ball"]
 
-        if POKEMON.poke_buddy is not None and POKEMON.settings["hatch_eggs"]:
-            buddy_obj = self.get_pokemon_stats(POKEMON.poke_buddy["pokedexId"])
-            egg_reason, egg_ball = POKEMON.egg_catch_reasons(pokemon, buddy_obj)
+        if self.pokemon.poke_buddy is not None and self.pokemon.settings["hatch_eggs"]:
+            buddy_obj = self.get_pokemon_stats(self.pokemon.poke_buddy["pokedexId"])
+            egg_reason, egg_ball = self.pokemon.egg_catch_reasons(pokemon, buddy_obj)
 
             if egg_reason is not None:
                 if egg_reason not in catch_reasons:
@@ -110,7 +109,7 @@ class PokemonSpawn(object):
                     catch_balls.append(egg_ball)
 
         if len(catch_reasons) == 0:
-            twitch_channel = POKEMON.get_channel(ignore_priority=False)
+            twitch_channel = self.pokemon.get_channel(ignore_priority=False)
             now = datetime.now()
 
             if now.hour > 7:
@@ -121,13 +120,13 @@ class PokemonSpawn(object):
             self.get_missions()
             return
 
-        ball = POKEMON.inventory.get_catch_ball(pokemon, catch_reasons, catch_balls)
+        ball = self.pokemon.inventory.get_catch_ball(pokemon, catch_reasons, catch_balls)
 
         if ball is None:
             log_file("red", f"Won't catch {pokemon.name}, ran out of balls")
             return
 
-        twitch_channel = POKEMON.get_channel()
+        twitch_channel = self.pokemon.get_channel()
 
         reasons_string = ", ".join(catch_reasons)
         message = f"!pokecatch {ball}"
@@ -160,23 +159,23 @@ class PokemonSpawn(object):
 
             caught_pokemon = self.update_evolutions(caught["id"], pokemon.pokedex_id)
 
-            if pokemon.is_fish and POKEMON.fish_event:
+            if pokemon.is_fish and self.pokemon.fish_event:
                 if "🐟" in caught_pokemon["description"]:
                     msg += "\n" + caught_pokemon["description"].split("Your fish is ")[-1].split("Your fish has ")[-1]
 
             sprite = str(caught["pokedexId"])
             extra_reasons = {"shiny": caught["isShiny"]}
-            if POKEMON.show_sprite(catch_reasons, extra_reasons):
+            if self.pokemon.show_sprite(catch_reasons, extra_reasons):
                 pokemon_sprite = get_sprite("pokemon", sprite, shiny=caught["isShiny"])
 
             if "pokedex" in catch_reasons and pokemon.is_spawnable:
-                check_pokedex(POKEMON, self.pokemon_api, self.get_pokemon_stats)
+                check_pokedex(self.pokemon, self.pokemon_api, self.get_pokemon_stats)
 
             egg_data, egg_bag = self.check_got_dragon_egg()
             if egg_bag is not None:
                 egg_name = egg_bag["name"]
                 egg_sprite = get_sprite("pokemon", str(egg_bag["pokedexId"]), shiny=False)
-                POKEMON.discord.post(DISCORD_ALERTS, "🥚You got a {egg_name}🥚", file=egg_sprite)
+                self.pokemon.discord.post(DISCORD_ALERTS, "🥚You got a {egg_name}🥚", file=egg_sprite)
                 self.update_evolutions(egg_bag["id"], egg_data.pokedex_id)
 
         else:
@@ -185,7 +184,7 @@ class PokemonSpawn(object):
 
         msg = msg + f" {ball}, because {reasons_string}"
 
-        POKEMON.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
+        self.pokemon.discord.post(DISCORD_ALERTS, msg, file=pokemon_sprite)
 
         self.update_inventory()
 
@@ -193,7 +192,7 @@ class PokemonSpawn(object):
 
         if caught is not None:
             # check for loyalty tier up
-            rewards = POKEMON.increment_loyalty(twitch_channel)
+            rewards = self.pokemon.increment_loyalty(twitch_channel)
             if rewards is not None:
                 reward, next_reward = rewards
                 rewards_msg = f"Loyalty tier completed in {twitch_channel}, new reward: {reward}"
@@ -202,4 +201,4 @@ class PokemonSpawn(object):
                     rewards_msg = rewards_msg + f"\nNext reward: {next_reward}"
                     log("green", f"next reward: {next_reward}")
                 sprite = get_sprite("streamer", twitch_channel)
-                POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
+                self.pokemon.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)

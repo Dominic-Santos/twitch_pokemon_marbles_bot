@@ -11,7 +11,6 @@ from ...Utils import (
     DISCORD_POKEDAILY,
     DISCORD_POKEDAILY_SEARCH,
     POKEDAILY_DELAY,
-    POKEMON,
     seconds_readable,
 )
 
@@ -21,7 +20,7 @@ ATTEMPTS_LIMIT = 10
 
 class Pokedaily(object):
     def get_next_pokedaily(self):
-        resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
+        resp = self.pokemon.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=self.pokemon.discord.data["user"]))
 
         if len(resp["messages"]) == 0:
             return 0
@@ -84,10 +83,10 @@ class Pokedaily(object):
         self.update_inventory()
 
         log("yellow", f"Running Pokedaily")
-        POKEMON.discord.post(DISCORD_POKEDAILY, "!pokedaily")
+        self.pokemon.discord.post(DISCORD_POKEDAILY, "!pokedaily")
 
-        if POKEMON.discord.data["user"] is None:
-            POKEMON.discord.post(DISCORD_ALERTS, "Pokedaily, no user configured")
+        if self.pokemon.discord.data["user"] is None:
+            self.pokemon.discord.post(DISCORD_ALERTS, "Pokedaily, no user configured")
             log("green", f"Pokedaily, no user configured")
             return
 
@@ -95,7 +94,7 @@ class Pokedaily(object):
         while attempts < ATTEMPTS_LIMIT:
             sleep(SLEEPTIME)
             log("yellow", f"Looking for Pokedaily answer")
-            resp = POKEMON.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
+            resp = self.pokemon.discord.get(DISCORD_POKEDAILY_SEARCH.format(discord_id=self.pokemon.discord.data["user"]))
             if len(resp["messages"]) == 0:
                 continue
             msg = resp["messages"][0][0]
@@ -111,7 +110,7 @@ class Pokedaily(object):
         elif message.repeat:
             log("red", f"Pokedaily not ready")
         else:
-            POKEMON.discord.post(DISCORD_ALERTS, f"Pokedaily rewards ({message.rarity}):\n" + "\n".join(message.rewards))
+            self.pokemon.discord.post(DISCORD_ALERTS, f"Pokedaily rewards ({message.rarity}):\n" + "\n".join(message.rewards))
             log("green", f"Pokedaily ({message.rarity}) rewards " + ", ".join(message.rewards))
 
         self.update_inventory(skip=True)

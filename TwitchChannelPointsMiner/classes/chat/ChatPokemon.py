@@ -3,29 +3,28 @@ from time import sleep
 import copy
 from dateutil.parser import parse
 
+from ..entities.Pokemon import CGApi, get_sprite
 from ..ChatO import ClientIRC as ClientIRCO
-
-from .ChatThreads import ChatThreads
-from .ChatLogs import log, log_file
 from ..Utils import (
     CHARACTERS,
     ITEM_MIN_AMOUNT,
     ITEM_MIN_PURCHASE,
-    POKEMON,
     DISCORD_ALERTS,
     THREADCONTROLLER
 )
 
-from ..entities.Pokemon import CGApi, get_sprite
+from .ChatThreads import ChatThreads
+from .ChatLogs import log, log_file
+from .PokemonEvents import PokemonEvents
 
 MAX_UPDATES = 250
 
-class ClientIRCPokemon(ClientIRCO, ChatThreads):
-    def __init__(self, username, token, channel, get_pokemon_token, pcg):
+class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
+    def __init__(self, username, token, channel, get_pokemon_token, pcg, pokemon):
         ClientIRCO.__init__(self, username, token, channel)
-        self.init(username, get_pokemon_token, pcg)
+        self.init(username, get_pokemon_token, pcg, pokemon)
 
-    def init(self, username, get_pokemon_token, pcg):
+    def init(self, username, get_pokemon_token, pcg, pokemon):
         self.username = username.lower()
         self.at_username = "@" + self.username
 
@@ -34,6 +33,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
         self.pokemon_disabled = False
         self.pokemon_api = CGApi()
         self.pokemon_api.get_auth_token = get_pokemon_token
+        self.pokemon = pokemon
 
     def die(self):
         self.pokemon_active = False
@@ -52,34 +52,8 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
 
             THREADCONTROLLER.clients[self.channel[1:]] = client
 
-            if len(POKEMON.channel_list) > 0:
+            if len(self.pokemon.channel_list) > 0:
                 self.start_threads()
-
-    def check_snowmen(self, client, message, argstring):
-        if argstring.count("❄") == 34:
-            try:
-                total_score = 0
-                for part in ["Hat", "SnowHead", "Cone", "BodyMid", "BowTie"]:
-                    if part in argstring:
-                        total_score += int(argstring.split(part)[1][0])
-
-                tier = 0
-                if total_score == 15:
-                    tier = 5
-                elif total_score >= 11:
-                    tier = 4
-                elif total_score == 10:
-                    tier = 3
-                elif total_score >= 6:
-                    tier = 2
-                elif total_score == 5:
-                    tier = 1
-
-                if tier >= 4:
-                    twitch_channel = message.target[1:]
-                    log("green", f"A T{tier} snowman has been built in {twitch_channel}")
-            except Exception as e:
-                log("red", "not a real snowman message - " + argstring + str(e))
 
     def check_pokegifts(self, client, message, argstring):
         if self.username in argstring.lower() and "as present from" in argstring and "HolidayPresent" in argstring:
@@ -93,16 +67,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
 
             msg = f"🎁Received {item} as a present from {sender} in {twitch_channel} channel🎁"
             log("green", msg)
-            POKEMON.discord.post(DISCORD_ALERTS, msg)
-
-    def check_xmas_delibird_gift(self, client, message, argstring):
-        if self.username in argstring.lower() and "Delibird drops the following" in argstring and "HolidayPresent" in argstring:
-            twitch_channel = message.target[1:]
-
-            item = argstring.split("HolidayPresent")[1].replace(":", "").strip()
-            msg = f"🎁Received {item} as a present from Delibird in {twitch_channel} channel🎁"
-            log("green", msg)
-            POKEMON.discord.post(DISCORD_ALERTS, msg)
+            self.pokemon.discord.post(DISCORD_ALERTS, msg)
 
     def check_loyalty_info(self, client, message, argstring):
         if self.username in argstring.lower() and "Your loyalty level" in argstring:
@@ -113,7 +78,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
             level_points = int(loyalty_limits.split("/")[1].replace(",", ""))
             log("yellow", f"{channel} loyalty {current_points}/{level_points}, level {loyalty_level}")
 
-            POKEMON.set_loyalty(channel, loyalty_level, current_points, level_points)
+            self.pokemon.set_loyalty(channel, loyalty_level, current_points, level_points)
 
     def check_pokemon_active(self, client, message, argstring):
         if "Spawns and payouts are disabled" in argstring:
@@ -128,105 +93,31 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
                 self.pokemon_active = True
                 self.pokemon_disabled = False
                 log("yellow", f"Joined Pokemon for {message.target[1:]}")
-                POKEMON.add_channel(self.channel[1:])
+                self.pokemon.add_channel(self.channel[1:])
 
-                if POKEMON.need_loyalty(self.channel[1:]):
+                if self.pokemon.need_loyalty(self.channel[1:]):
                     sleep(5)
                     log("yellow", f"{self.channel[1:]} loyalty request")
                     client.privmsg("#" + self.channel[1:], "!pokeloyalty")
-
-    def check_got_dragon_egg(self):
-        filtered = sorted(POKEMON.computer.pokemon, key=lambda x: x["id"], reverse=True)[:3]
-
-        caught = None
-        caught_obj = None
-        for poke in filtered:
-            pokemon = self.get_pokemon_stats(poke["pokedexId"])
-            if pokemon.is_egg is False:
-                continue
-
-            if (datetime.utcnow() - parse(poke["caughtAt"][:-1])).total_seconds() > 60 * 5:
-                continue
-
-            caught = poke
-            caught_obj = pokemon
-            break
-
-        return caught_obj, caught
-
-    def check_egg_hatched(self, current_buddy):
-        old_buddy = POKEMON.poke_buddy
-        old_buddy_obj = self.get_pokemon_stats(old_buddy["pokedexId"])
-        
-        if old_buddy_obj.is_egg:
-            current_buddy_obj = self.get_pokemon_stats(current_buddy["pokedexId"])
-
-            ivs = int(current_buddy["avgIV"])
-            lvl = current_buddy['lvl']
-            shiny = " Shiny" if current_buddy["isShiny"] else ""
-            egg = old_buddy_obj.name
-            msg = f"🥚{egg} hatched into a{shiny} {current_buddy_obj.name} ({current_buddy_obj.tier}) Lvl.{lvl} {ivs}IV🥚"
-
-            log("green", msg)
-            if POKEMON.settings["alert_egg_hatched"]:
-                buddy_sprite = get_sprite("pokemon", str(current_buddy["pokedexId"]), shiny=current_buddy["isShiny"])
-                POKEMON.discord.post(DISCORD_ALERTS, msg, file=buddy_sprite)
-
-    def check_pokebuddy(self, cached=False):
-        if cached is False:
-            all_pokemon = self.pokemon_api.get_all_pokemon()
-            POKEMON.sync_computer(all_pokemon)
-
-        all_pokemon = POKEMON.computer.pokemon
-        for pokemon in all_pokemon:
-            if pokemon["isBuddy"]:
-                if POKEMON.poke_buddy is not None and POKEMON.poke_buddy["id"] != pokemon["id"]:
-                    self.check_egg_hatched(pokemon)
-                POKEMON.poke_buddy = pokemon
-                break
-
-        if POKEMON.settings["hatch_eggs"]:
-            self.hatch_egg()
 
     def set_buddy(self, pokemon):
         self.pokemon_api.set_buddy(pokemon["id"])
         msg = f"{pokemon['nickname']} ({pokemon['name']}) was set as buddy!"
         log("yellow", msg)
-        if POKEMON.settings["alert_buddy_changed"]:
-            POKEMON.discord.post(DISCORD_ALERTS, msg)
-
-    def hatch_egg(self):
-        buddy = POKEMON.poke_buddy
-
-        # make sure if have egg its buddy
-        if buddy is not None:
-            # check if already hatching an egg
-            pokemon = self.get_pokemon_stats(buddy["pokedexId"])
-            if pokemon.is_egg:
-                # already hatching egg
-                return
-
-        all_pokemon = POKEMON.computer.pokemon
-        potential_eggs = [pokemon for pokemon in all_pokemon if pokemon["name"].lower().endswith(" egg")]
-        for egg in potential_eggs:
-            pokemon = self.get_pokemon_stats(egg["pokedexId"])
-            # 999002 is ranked battle egg, can't auto hatch so ignore
-            if pokemon.is_egg and pokemon.pokedex_id != 999002:
-                self.set_buddy(egg)
-                return
-
+        if self.pokemon.settings["alert_buddy_changed"]:
+            self.pokemon.discord.post(DISCORD_ALERTS, msg)
 
     def update_evolutions(self, pokemon_id, pokedex_id):
         pokemon_data = self.pokemon_api.get_pokemon(pokemon_id)
-        POKEMON.pokedex.set_evolutions(pokedex_id, pokemon_data["evolutionData"])
-        POKEMON.pokedex.save_pokedex()
+        self.pokemon.pokedex.set_evolutions(pokedex_id, pokemon_data["evolutionData"])
+        self.pokemon.pokedex.save_pokedex()
         return pokemon_data
 
     def update_inventory(self, skip=False):
         # check if got items from catching or elsewhere
-        old_items = copy.deepcopy(POKEMON.inventory.items)
+        old_items = copy.deepcopy(self.pokemon.inventory.items)
         inv = self.pokemon_api.get_inventory()
-        POKEMON.sync_inventory(inv)
+        self.pokemon.sync_inventory(inv)
 
         if skip:
             return
@@ -239,8 +130,8 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
             # skip if init
             return
 
-        for item_name in POKEMON.inventory.items:
-            item = POKEMON.inventory.get_item(item_name)
+        for item_name in self.pokemon.inventory.items:
+            item = self.pokemon.inventory.get_item(item_name)
             old_item = old_items.get(item_name, {"amount": 0})
 
             amount_got = item["amount"] - old_item["amount"] - mission_items.get(item_name, 0)
@@ -256,7 +147,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
             rewards_msg = f"You got {prefix} {item_str}!"
             log("green", rewards_msg)
             sprite = get_sprite(item["category"], item["sprite"], tm_type=item["tm_type"])
-            POKEMON.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
+            self.pokemon.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
 
     def check_inventory(self):
         self.update_inventory()
@@ -270,9 +161,9 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
         changes = False
         for ball in sorted(shop_balls, key=lambda x: x["price"]):
             ball_name = ball["displayName"].lower().replace(" ", "")
-            ball_have = POKEMON.inventory.balls.get(ball_name, 0)
+            ball_have = self.pokemon.inventory.balls.get(ball_name, 0)
             if ball_have < ITEM_MIN_AMOUNT:
-                can_afford = POKEMON.inventory.cash // ball["price"] // ITEM_MIN_PURCHASE * ITEM_MIN_PURCHASE
+                can_afford = self.pokemon.inventory.cash // ball["price"] // ITEM_MIN_PURCHASE * ITEM_MIN_PURCHASE
                 need = ((ITEM_MIN_AMOUNT - ball_have) // ITEM_MIN_PURCHASE + min((ITEM_MIN_AMOUNT - ball_have) % ITEM_MIN_PURCHASE, 1)) * ITEM_MIN_PURCHASE
                 buying = min(need, can_afford)
 
@@ -280,18 +171,18 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
                     changes = True
                     resp = self.pokemon_api.buy_item(ball["name"], buying)
                     if "cash" in resp:
-                        POKEMON.inventory.cash = resp["cash"]
+                        self.pokemon.inventory.cash = resp["cash"]
                         log("green", f"Purchased {buying} {ball['displayName']}s")
 
         if changes:
             inv = self.pokemon_api.get_inventory()
-            POKEMON.sync_inventory(inv)
+            self.pokemon.sync_inventory(inv)
 
     def get_missions(self):
         missions = self.pokemon_api.get_missions()
-        POKEMON.sync_missions(missions)
+        self.pokemon.sync_missions(missions)
 
-        completed = POKEMON.missions.get_completed()
+        completed = self.pokemon.missions.get_completed()
         pokemon_to_sort = []
         for title, reward in completed:
             readable_reward = reward["reward"]
@@ -300,7 +191,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
             if reward["reward_type"] == "pokemon":
 
                 pokemonobj, caught = self.get_last_caught(reward["reward_name"], reward=True)
-                needed = "" if POKEMON.pokedex.have(pokemonobj) else " - needed"
+                needed = "" if self.pokemon.pokedex.have(pokemonobj) else " - needed"
                 ivs = int(caught["avgIV"])
                 lvl = caught['lvl']
                 shiny = " Shiny" if caught["isShiny"] else ""
@@ -310,7 +201,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
             else:
                 mission_msg = f"{mission_msg} {readable_reward}"
             log("green", f"{mission_msg}")
-            POKEMON.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
+            self.pokemon.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:
                 reward_sprite.close()
 
@@ -323,9 +214,9 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
         pokemon = self.get_pokemon_stats(pokedex_id, cached=False)
 
         all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
+        self.pokemon.sync_computer(all_pokemon)
 
-        filtered = sorted(POKEMON.computer.pokemon, key=lambda x: x["id"], reverse=True)[:3]
+        filtered = sorted(self.pokemon.computer.pokemon, key=lambda x: x["id"], reverse=True)[:3]
 
         is_hidden = pokemon.pokedex_id in [999999, 1000000]
 
@@ -353,29 +244,29 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
 
     def get_pokemon_move(self, move_name, move_type="None"):
 
-        move = POKEMON.pokedex.move(move_name)
+        move = self.pokemon.pokedex.move(move_name)
         if move is None:
             move_data = self.pokemon_api.get_move(move_name)
             move_data["type"] = move_type
 
-            POKEMON.pokedex.pokemon_moves[str(move_name)] = move_data
-            POKEMON.pokedex.save_moves()
+            self.pokemon.pokedex.pokemon_moves[str(move_name)] = move_data
+            self.pokemon.pokedex.save_moves()
 
-            move = POKEMON.pokedex.move(move_name)
+            move = self.pokemon.pokedex.move(move_name)
 
         return move
 
     def get_pokemon_stats(self, pokedex_id, cached=True):
 
-        pokemon = POKEMON.pokedex.stats(str(pokedex_id))
+        pokemon = self.pokemon.pokedex.stats(str(pokedex_id))
 
         if cached is False or pokemon is None:
             try:
                 pokemon_data = self.pokemon_api.get_pokedex_info(pokedex_id)["content"]
-                POKEMON.pokedex.pokemon_stats.setdefault(str(pokedex_id), {}).update(pokemon_data)
-                POKEMON.pokedex.save_pokedex()
+                self.pokemon.pokedex.pokemon_stats.setdefault(str(pokedex_id), {}).update(pokemon_data)
+                self.pokemon.pokedex.save_pokedex()
 
-                pokemon = POKEMON.pokedex.stats(str(pokedex_id))
+                pokemon = self.pokemon.pokedex.stats(str(pokedex_id))
             except Exception as e:
                 print(pokedex_id, "failed to get pokemon stats", e)
                 pokemon = None
@@ -384,15 +275,15 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
 
     def get_pokemon_data(self, pokemon, cached=True):
 
-        pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
+        pokemon_data = self.pokemon.computer.get_pokemon_data(pokemon["id"])
 
         if cached is False or pokemon_data is None:
             try:
                 resp = self.pokemon_api.get_pokemon(pokemon["id"])
-                POKEMON.computer.update_pokemon_data(pokemon, resp)
-                POKEMON.computer.save_computer()
+                self.pokemon.computer.update_pokemon_data(pokemon, resp)
+                self.pokemon.computer.save_computer()
 
-                pokemon_data = POKEMON.computer.get_pokemon_data(pokemon["id"])
+                pokemon_data = self.pokemon.computer.get_pokemon_data(pokemon["id"])
                 log("yellow", f"Updated data for {pokemon['id']} ({pokemon['name']})")
             except Exception as e:
                 log("yellow", f"{pokemon['id']} {pokemon['name']} failed to get pokemon data - {str(e)}")
@@ -454,19 +345,19 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
             # update data cache
             pokemon_data = self.get_pokemon_data(pokemon)
             pokemon_data["nickname"] = new_name
-            POKEMON.computer.set_pokemon_data(pokemon["id"], pokemon_data)
+            self.pokemon.computer.set_pokemon_data(pokemon["id"], pokemon_data)
 
             log_file("yellow", f"Renamed {pokemon['name']} from {pokemon['nickname']} to {new_name}")
             sleep(0.5)
 
-        POKEMON.computer.save_computer()
+        self.pokemon.computer.save_computer()
 
     def sort_computer(self, pokedex_ids=[]):
         '''Sort all/specific pokemon in computer and rename duplicates'''
         all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
+        self.pokemon.sync_computer(all_pokemon)
 
-        allpokemon = POKEMON.computer.pokemon
+        allpokemon = self.pokemon.computer.pokemon
         pokedict = {}
 
         for pokemon in allpokemon:
@@ -479,9 +370,9 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
 
     def sync_pokemon_data(self, pokemon_id=None):
         all_pokemon = self.pokemon_api.get_all_pokemon()
-        POKEMON.sync_computer(all_pokemon)
+        self.pokemon.sync_computer(all_pokemon)
 
-        allpokemon = POKEMON.computer.pokemon
+        allpokemon = self.pokemon.computer.pokemon
         updated = 0
 
         for pokemon in allpokemon:
@@ -489,12 +380,12 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads):
             if updated >= MAX_UPDATES:
                 break
 
-            if str(pokemon["id"]) not in POKEMON.computer.pokemon_data:
+            if str(pokemon["id"]) not in self.pokemon.computer.pokemon_data:
                 updated += 1
 
             use_cache = pokemon_id != pokemon["id"]
 
             self.get_pokemon_data(pokemon, cached=use_cache)
-            POKEMON.computer.update_pokemon_data(pokemon)
+            self.pokemon.computer.update_pokemon_data(pokemon)
 
-        POKEMON.computer.save_computer()
+        self.pokemon.computer.save_computer()

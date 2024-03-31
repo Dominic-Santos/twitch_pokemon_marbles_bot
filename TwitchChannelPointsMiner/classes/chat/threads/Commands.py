@@ -6,7 +6,6 @@ from ..ChatLogs import log
 from ...Utils import (
     DISCORD_COMMANDS_SEARCH,
     DISCORD_DELETE_COMMAND,
-    POKEMON,
 )
 
 
@@ -50,7 +49,7 @@ class Commands(object):
             self.money_graph()
 
     def commands(self):
-        resp = POKEMON.discord.get(DISCORD_COMMANDS_SEARCH.format(discord_id=POKEMON.discord.data["user"]))
+        resp = self.pokemon.discord.get(DISCORD_COMMANDS_SEARCH.format(discord_id=self.pokemon.discord.data["user"]))
 
         if len(resp["messages"]) == 0:
             return
@@ -58,7 +57,7 @@ class Commands(object):
         for message in resp["messages"]:
             latest_message = message[0]
 
-            POKEMON.discord.delete(DISCORD_DELETE_COMMAND.format(message_id=latest_message["id"]))
+            self.pokemon.discord.delete(DISCORD_DELETE_COMMAND.format(message_id=latest_message["id"]))
 
             command = latest_message["content"].replace("_", " ").strip().lower()
 

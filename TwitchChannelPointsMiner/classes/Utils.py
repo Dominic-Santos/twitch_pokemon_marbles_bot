@@ -89,3 +89,6 @@ def create_thread(func):
     worker = Thread(target=func)
     worker.setDaemon(True)
     worker.start()
+
+def get_pokemon():
+    return POKEMON
