@@ -8,6 +8,7 @@ from . import (
     Pokemon,
     PokemonComunityGame,
     MockLogger,
+    MockDiscord,
 )
 
 PCG = PokemonComunityGame()
@@ -151,29 +152,47 @@ def test_check_egg_hatched():
 
     PCG.pokedex.set(pokedex)
     PCG.computer.set(computer)
-    PCG.settings["alert_egg_hatched"] = False
+    # 
 
     logger = MockLogger()
+    discord = MockDiscord()
+    auth_data = {
+        "auth": "fakeuser",
+        "user": "fakeuser"
+    }
+    discord.set(auth_data)
+    discord.connect()
 
     # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCGd'
     client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
     client.log = logger.log
     client.pokemon.poke_buddy = egg.copy()
+    client.pokemon.discord = discord
 
     client.check_egg_hatched(egg)
     assert len(logger.calls) == 0
+    assert len(discord.api.requests) == 0
 
     client.check_egg_hatched(bulbasaur)
     assert len(logger.calls) == 1
+    assert len(discord.api.requests) == 1
+
+    PCG.settings["alert_egg_hatched"] = False
+    client.check_egg_hatched(bulbasaur)
+    assert len(logger.calls) == 2
+    assert len(discord.api.requests) == 1
 
     logger.reset()
+    discord.api.reset()
 
     client.pokemon.poke_buddy = bulbasaur.copy()
     client.check_egg_hatched(bulbasaur)
     assert len(logger.calls) == 0
+    assert len(discord.api.requests) == 0
 
     client.check_egg_hatched(egg)
     assert len(logger.calls) == 0
+    assert len(discord.api.requests) == 0
 
 """
 to test:

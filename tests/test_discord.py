@@ -23,7 +23,7 @@ class MockDiscordAPI():
         self.requests.append(("delete", url))
 
 
-class DiscordMock(Discord):
+class MockDiscord(Discord):
     def connect(self):
         if self.data["auth"] is None:
             return
@@ -33,7 +33,7 @@ class DiscordMock(Discord):
 
 
 def test_discord():
-    discord = DiscordMock()
+    discord = MockDiscord()
     url = None
     file = None
     data = None

@@ -3,3 +3,4 @@ from ..TwitchChannelPointsMiner.classes import Chat
 from ..TwitchChannelPointsMiner.classes.chat import ChatPokemon
 from .utils import *
 from .test_logger import MockLogger
+from .test_discord import MockDiscord
