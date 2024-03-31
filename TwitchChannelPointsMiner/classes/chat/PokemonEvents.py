@@ -46,8 +46,6 @@ class PokemonEvents():
 
     def check_got_dragon_egg(self):
         filtered = sorted(self.pokemon.computer.pokemon, key=lambda x: x["id"], reverse=True)[:3]
-        print(filtered)
-        print(self.pokemon)
 
         caught = None
         caught_obj = None
