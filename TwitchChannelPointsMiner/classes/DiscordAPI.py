@@ -1,5 +1,5 @@
 import requests
-from .ChatLogs import log
+from .chat.ChatLogs import log
 
 MAX_MESSAGE_SIZE = 2000
 

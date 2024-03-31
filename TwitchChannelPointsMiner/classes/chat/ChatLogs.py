@@ -1,7 +1,7 @@
 import logging
 import os
 
-from .ChatO import logger
+from ..ChatO import logger
 
 if os.path.exists("logs") is False:
     os.makedirs("logs")

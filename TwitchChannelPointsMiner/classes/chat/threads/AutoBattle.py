@@ -2,11 +2,11 @@ from time import sleep
 import traceback
 import json
 
-from ..entities.Pokemon import Battle, damage_calculator
-from ..entities.Pokemon.Pokedex import Move
+from ...entities.Pokemon import Battle, damage_calculator
+from ...entities.Pokemon.Pokedex import Move
 
 from ..ChatLogs import log, log_file
-from ..ChatUtils import (
+from ...Utils import (
     DISCORD_ALERTS,
     POKEMON,
     seconds_readable,

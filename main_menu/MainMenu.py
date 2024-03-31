@@ -4,7 +4,7 @@ from tkinter import font as TKFont
 import subprocess
 import tkinter
 
-from TwitchChannelPointsMiner.classes.chat_threads.DailyTasks import (
+from TwitchChannelPointsMiner.classes.chat.threads.DailyTasks import (
     battle_summary,
     check_finish_pokedex,
     stats_computer,

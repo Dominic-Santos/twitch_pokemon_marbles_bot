@@ -3,8 +3,8 @@ from time import sleep
 import traceback
 
 from ..ChatLogs import log
-from ..ChatUtils import DISCORD_STATS, POKEMON
-from ..utils import (
+from ...Utils import DISCORD_STATS, POKEMON
+from ...utils import (
     check_pokedex,
     get_catch_rates,
     money_graph, MONEY_GRAPH_IMAGE,

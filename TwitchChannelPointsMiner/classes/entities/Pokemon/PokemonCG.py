@@ -9,7 +9,7 @@ from .Computer import Computer
 from .Loyalty import Loyalty
 from .Utils import load_from_file, save_to_file
 
-from ...ChatLogs import log
+from ...chat.ChatLogs import log
 
 SETTINGS_FILE = "pokemon.json"
 

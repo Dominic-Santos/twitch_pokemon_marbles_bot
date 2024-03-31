@@ -1,4 +1,4 @@
-from ..ChatUtils import DISCORD_STATS
+from ..Utils import DISCORD_STATS
 
 
 def discord_update_pokedex(Pokemon, pokemon_api, get_pokemon_stats):
