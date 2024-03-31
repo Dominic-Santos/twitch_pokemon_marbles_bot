@@ -36155,5 +36155,25 @@
         },
         "order": 999000,
         "evolves_to": {}
+    },
+    "999002": {
+        "pokedex_id": 999002,
+        "name": "Battle Egg",
+        "description": "A Battle Egg from the Easter Event 2024.",
+        "weight": 0.1,
+        "generation": 1,
+        "type1": "dragon",
+        "type2": "none",
+        "tier": "C",
+        "base_stats": {
+            "hp": 25,
+            "speed": 25,
+            "attack": 25,
+            "defense": 25,
+            "special_attack": 25,
+            "special_defense": 25
+        },
+        "order": 999002,
+        "evolves_to": {}
     }
 }

@@ -1,13 +1,13 @@
 from time import sleep
 
-from .ChatUtils import THREADCONTROLLER, create_thread, POKEMON
+from ..Utils import THREADCONTROLLER, create_thread, POKEMON
 from .ChatLogs import log
-from .chat_threads.DailyTasks import DailyTasks
-from .chat_threads.Pokedaily import Pokedaily
-from .chat_threads.PokemonSpawn import PokemonSpawn
-from .chat_threads.Wondertrade import Wondertrade
-from .chat_threads.AutoBattle import AutoBattle
-from .chat_threads.Commands import Commands
+from .threads.DailyTasks import DailyTasks
+from .threads.Pokedaily import Pokedaily
+from .threads.PokemonSpawn import PokemonSpawn
+from .threads.Wondertrade import Wondertrade
+from .threads.AutoBattle import AutoBattle
+from .threads.Commands import Commands
 
 
 class ChatThreads(DailyTasks, Pokedaily, PokemonSpawn, Wondertrade, AutoBattle, Commands):

@@ -1,7 +1,7 @@
 import copy
 from dateutil.parser import parse
 
-from ..ChatLogs import LOGFILE
+from ..chat.ChatLogs import LOGFILE
 
 DIV_ZERO = "-"
 DEFAULT_DICT = {

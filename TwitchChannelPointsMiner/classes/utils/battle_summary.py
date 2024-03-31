@@ -1,6 +1,6 @@
 from dateutil.parser import parse
 
-from ..ChatLogs import LOGFILE
+from ..chat.ChatLogs import LOGFILE
 
 
 def get_battle_logs(the_date):
@@ -21,15 +21,18 @@ def get_battle_logs(the_date):
                 continue
 
             if "the battle!" in line:
-                rewards = line.split("rewards: ")[1].split(" and ")
-                exp = int(rewards[0][:-3])
-                cash = int(rewards[1][:-1])
+                try:
+                    rewards = line.split("rewards: ")[1].split(" and ")
+                    exp = int(rewards[0][:-3])
+                    cash = int(rewards[1][:-1])
 
-                total_exp += exp
-                total_cash += cash
-                total_battles += 1
-                if "Won" in line:
-                    total_wins += 1
+                    total_exp += exp
+                    total_cash += cash
+                    total_battles += 1
+                    if "Won" in line:
+                        total_wins += 1
+                except:
+                    pass
 
     return {
         "cash": total_cash,

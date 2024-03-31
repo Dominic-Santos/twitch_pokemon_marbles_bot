@@ -3,7 +3,7 @@ from datetime import datetime
 import traceback
 
 from ..ChatLogs import log
-from ..ChatUtils import (
+from ...Utils import (
     DISCORD_COMMANDS_SEARCH,
     DISCORD_DELETE_COMMAND,
     POKEMON,

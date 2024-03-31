@@ -3,11 +3,11 @@ from datetime import datetime
 import requests
 import traceback
 
-from ..entities.Pokemon import get_sprite
-from ..utils import check_pokedex
+from ...entities.Pokemon import get_sprite
+from ...utils import check_pokedex
 
 from ..ChatLogs import log, log_file
-from ..ChatUtils import (
+from ...Utils import (
     DISCORD_ALERTS,
     POKEMON,
     seconds_readable,

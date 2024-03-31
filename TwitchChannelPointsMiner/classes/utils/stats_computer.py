@@ -1,4 +1,4 @@
-from ..ChatUtils import CHARACTERS
+from ..Utils import CHARACTERS
 
 
 def stats_computer(Pokemon, get_stats_func):

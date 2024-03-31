@@ -4,7 +4,7 @@ import matplotlib.dates as mdates
 from time import sleep
 
 from ..entities.Pokemon.Utils import load_from_file, save_to_file
-from ..ChatUtils import DISCORD_STATS
+from ..Utils import DISCORD_STATS
 
 DATA_FILE = "catch_graph_data.json"
 OUTPUT_IMAGE = "catch_graph.png"

@@ -1,5 +1,5 @@
 from TwitchChannelPointsMiner.classes.entities.Pokemon import Pokedaily
-from TwitchChannelPointsMiner.classes.ChatUtils import DISCORD_POKEDAILY_SEARCH, POKEMON
+from TwitchChannelPointsMiner.classes.Utils import DISCORD_POKEDAILY_SEARCH, POKEMON
 from time import sleep
 
 
