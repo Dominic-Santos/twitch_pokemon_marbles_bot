@@ -152,7 +152,6 @@ def test_check_egg_hatched():
 
     PCG.pokedex.set(pokedex)
     PCG.computer.set(computer)
-    # 
 
     logger = MockLogger()
     discord = MockDiscord()
