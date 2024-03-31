@@ -92,3 +92,15 @@ def create_thread(func):
 
 def get_pokemon():
     return POKEMON
+
+def leave_channel(channel):
+    if channel in POKEMON.channel_list:
+        POKEMON.remove_channel(channel)
+        log(text=f"Leaving Pokemon: {channel}")
+        if len(POKEMON.channel_list) == 0:
+            log_file(text="Nobody is streaming Pokemon CG")
+
+    if channel in POKEMON.online_channels:
+        POKEMON.channel_offline(channel)
+
+    THREADCONTROLLER.remove_client(channel)

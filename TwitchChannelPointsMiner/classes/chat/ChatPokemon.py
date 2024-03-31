@@ -10,7 +10,8 @@ from ..Utils import (
     ITEM_MIN_AMOUNT,
     ITEM_MIN_PURCHASE,
     DISCORD_ALERTS,
-    THREADCONTROLLER
+    THREADCONTROLLER,
+    leave_channel,
 )
 
 from .ChatThreads import ChatThreads
