@@ -2,13 +2,14 @@ from datetime import datetime
 
 from . import (
     Chat,
+    create_mock_discord,
     load_inventory_data,
     load_mission_data,
     load_pokedex,
+    MockApi,
+    MockLogger,
     Pokemon,
     PokemonComunityGame,
-    MockLogger,
-    MockDiscord,
 )
 
 PCG = PokemonComunityGame()
@@ -105,7 +106,7 @@ def test_check_got_dragon_egg():
     PCG.pokedex.set(pokedex)
     PCG.computer.set(computer)
 
-    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCGd'
+    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCG'
     client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
 
     poke_obj, poke_bag = client.check_got_dragon_egg()
@@ -154,20 +155,15 @@ def test_check_egg_hatched():
     PCG.computer.set(computer)
 
     logger = MockLogger()
-    discord = MockDiscord()
-    auth_data = {
-        "auth": "fakeuser",
-        "user": "fakeuser"
-    }
-    discord.set(auth_data)
-    discord.connect()
+    discord = create_mock_discord()
 
-    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCGd'
+    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCG'
     client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
     client.log = logger.log
     client.pokemon.poke_buddy = egg.copy()
     client.pokemon.discord = discord
 
+    PCG.settings["alert_egg_hatched"] = True
     client.check_egg_hatched(egg)
     assert len(logger.calls) == 0
     assert len(discord.api.requests) == 0
@@ -193,9 +189,185 @@ def test_check_egg_hatched():
     assert len(logger.calls) == 0
     assert len(discord.api.requests) == 0
 
-"""
-to test:
-def check_pokebuddy(self, cached=False):
-def set_buddy(self, pokemon):
-def hatch_egg(self):
-"""
+
+def test_set_buddy():
+    logger = MockLogger()
+    discord = create_mock_discord()
+    api = MockApi()
+    
+    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCG'
+    client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
+    client.log = logger.log
+    client.pokemon.discord = discord
+    client.pokemon_api = api
+
+    egg = {
+        "id": 1,
+        "pokedexId": 999000,
+        "name": "Dragon Egg",
+        "nickname": None
+    }
+
+    client.pokemon.settings["alert_buddy_changed"] = True
+
+    client.set_buddy(egg)
+    assert len(api.requests) == 1
+    assert len(logger.calls) == 1
+    assert len(discord.api.requests) == 1
+
+    client.pokemon.settings["alert_buddy_changed"] = False
+
+    client.set_buddy(egg)
+    assert len(api.requests) == 2
+    assert len(logger.calls) == 2
+    assert len(discord.api.requests) == 1
+
+
+def test_hatch_egg():
+    pokedex = load_pokedex()
+    egg = {
+        "id": 1,
+        "pokedexId": 999000,
+        "name": "Dragon Egg",
+        "nickname": None 
+    }
+    bulbasaur = {
+        "id": 2,
+        "pokedexId": 1,
+        "name": "Bulbasaur",
+        "nickname": None 
+    }
+    computer = {
+        "allPokemon": [egg.copy(), bulbasaur.copy()]
+    }
+
+    logger = MockLogger()
+    discord = create_mock_discord()
+    api = MockApi()
+
+    PCG.pokedex.set(pokedex)
+    PCG.computer.set(computer)
+
+    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCG'
+    client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
+    client.log = logger.log
+    client.pokemon.discord = discord
+    client.pokemon_api = api
+    client.pokemon.poke_buddy = egg.copy()
+    client.pokemon.settings["alert_buddy_changed"] = True
+
+    client.hatch_egg()
+    assert len(api.requests) == 0
+    assert len(logger.calls) == 0
+    assert len(discord.api.requests) == 0
+
+    client.pokemon.poke_buddy = bulbasaur.copy()
+
+    client.hatch_egg()
+    assert len(api.requests) == 1
+    assert len(logger.calls) == 1
+    assert len(discord.api.requests) == 1
+
+    client.pokemon.poke_buddy = None
+
+    client.hatch_egg()
+    assert len(api.requests) == 2
+    assert len(logger.calls) == 2
+    assert len(discord.api.requests) == 2
+
+
+def test_check_pokebuddy():
+
+    pokedex = load_pokedex()
+    egg = {
+        "id": 1,
+        "pokedexId": 999000,
+        "name": "Dragon Egg",
+        "isBuddy": False,
+        "nickname": None 
+    }
+    bulbasaur = {
+        "id": 2,
+        "pokedexId": 1,
+        "name": "Bulbasaur",
+        "isBuddy": True,
+        "nickname": None
+    }
+    computer = {
+        "allPokemon": [egg.copy(), bulbasaur.copy()]
+    }
+
+    logger = MockLogger()
+    discord = create_mock_discord()
+    api = MockApi()
+
+    PCG.pokedex.set(pokedex)
+    PCG.computer.set(computer)
+
+    # 'username', 'token', 'channel', 'get_pokemon_token', 'pcg', 'PCG'
+    client = Chat.ClientIRCPokemon('username', 'token', 'channel', 'get_pokemon_token', True, PCG)
+    client.log = logger.log
+    client.pokemon.discord = discord
+    client.pokemon_api = api
+
+    client.pokemon.settings["alert_buddy_changed"] = True
+    client.pokemon.settings["alert_egg_hatched"] = True
+    client.pokemon.settings["hatch_eggs"] = False
+
+    assert client.pokemon.poke_buddy is None
+
+    client.check_pokebuddy(cached=True)
+    assert len(api.requests) == 0
+    assert len(logger.calls) == 0
+    assert len(discord.api.requests) == 0
+    assert client.pokemon.poke_buddy is not None
+    assert client.pokemon.poke_buddy["name"] == "Bulbasaur"
+
+    client.check_pokebuddy(cached=True)
+    assert len(api.requests) == 0
+    assert len(logger.calls) == 0
+    assert len(discord.api.requests) == 0
+    assert client.pokemon.poke_buddy is not None
+    assert client.pokemon.poke_buddy["name"] == "Bulbasaur"
+
+    client.pokemon.settings["hatch_eggs"] = True
+    client.check_pokebuddy(cached=True)
+    assert len(api.requests) == 1
+    assert len(logger.calls) == 1
+    assert len(discord.api.requests) == 1
+    assert client.pokemon.poke_buddy is not None
+    assert client.pokemon.poke_buddy["name"] == "Bulbasaur"
+
+    method, url, payload = api.requests[-1]
+    assert method == "POST"
+    assert url.endswith("pokemon-set-buddy/")
+    assert payload == {"pokemon_id": egg["id"]}
+
+    bulbasaur["isBuddy"] = False
+    egg["isBuddy"] = True
+    computer = {
+        "allPokemon": [egg.copy(), bulbasaur.copy()]
+    }
+    PCG.computer.set(computer)
+
+    client.check_pokebuddy(cached=True)
+    assert len(api.requests) == 1
+    assert len(logger.calls) == 1
+    assert len(discord.api.requests) == 1
+    assert client.pokemon.poke_buddy is not None
+    assert client.pokemon.poke_buddy["name"] == "Dragon Egg"
+
+    bulbasaur["isBuddy"] = True
+    egg["isBuddy"] = False
+    computer = {
+        "allPokemon": [egg.copy(), bulbasaur.copy()]
+    }
+    PCG.computer.set(computer)
+
+    # detected a hatch (1 log 1 discord call) then swap buddy to new egg (1 of each)
+    client.check_pokebuddy(cached=True)
+    assert len(api.requests) == 2
+    assert len(logger.calls) == 3
+    assert len(discord.api.requests) == 3
+    assert client.pokemon.poke_buddy is not None
+    assert client.pokemon.poke_buddy["name"] == "Bulbasaur"

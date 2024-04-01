@@ -15,7 +15,6 @@ from ..Utils import (
 )
 
 from .ChatThreads import ChatThreads
-from .ChatLogs import log, log_file
 from .PokemonEvents import PokemonEvents
 
 MAX_UPDATES = 250
@@ -67,7 +66,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
             item = argstring.split("HolidayPresent")[1].replace(":", "").strip()
 
             msg = f"🎁Received {item} as a present from {sender} in {twitch_channel} channel🎁"
-            log("green", msg)
+            self.log("green", msg)
             self.pokemon.discord.post(DISCORD_ALERTS, msg)
 
     def check_loyalty_info(self, client, message, argstring):
@@ -77,7 +76,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
             loyalty_limits = argstring.split("(")[1].split(")")[0]
             current_points = int(loyalty_limits.split("/")[0].replace(",", ""))
             level_points = int(loyalty_limits.split("/")[1].replace(",", ""))
-            log("yellow", f"{channel} loyalty {current_points}/{level_points}, level {loyalty_level}")
+            self.log("yellow", f"{channel} loyalty {current_points}/{level_points}, level {loyalty_level}")
 
             self.pokemon.set_loyalty(channel, loyalty_level, current_points, level_points)
 
@@ -86,25 +85,25 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
             if self.pokemon_disabled is False:
                 self.pokemon_disabled = True
                 self.pokemon_active = False
-                log(text=f"Pokemon Disabled: {self.channel}")
+                self.log(text=f"Pokemon Disabled: {self.channel}")
                 leave_channel(self.channel[1:])
 
         elif self.pokemon_active is False:
             if self.pokemon_disabled is False or (" has been caught by:" in argstring or " escaped." in argstring):
                 self.pokemon_active = True
                 self.pokemon_disabled = False
-                log("yellow", f"Joined Pokemon for {message.target[1:]}")
+                self.log("yellow", f"Joined Pokemon for {message.target[1:]}")
                 self.pokemon.add_channel(self.channel[1:])
 
                 if self.pokemon.need_loyalty(self.channel[1:]):
                     sleep(5)
-                    log("yellow", f"{self.channel[1:]} loyalty request")
+                    self.log("yellow", f"{self.channel[1:]} loyalty request")
                     client.privmsg("#" + self.channel[1:], "!pokeloyalty")
 
     def set_buddy(self, pokemon):
         self.pokemon_api.set_buddy(pokemon["id"])
         msg = f"{pokemon['nickname']} ({pokemon['name']}) was set as buddy!"
-        log("yellow", msg)
+        self.log("yellow", msg)
         if self.pokemon.settings["alert_buddy_changed"]:
             self.pokemon.discord.post(DISCORD_ALERTS, msg)
 
@@ -146,7 +145,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
                 prefix = amount_got
 
             rewards_msg = f"You got {prefix} {item_str}!"
-            log("green", rewards_msg)
+            self.log("green", rewards_msg)
             sprite = get_sprite(item["category"], item["sprite"], tm_type=item["tm_type"])
             self.pokemon.discord.post(DISCORD_ALERTS, rewards_msg, file=sprite)
 
@@ -173,7 +172,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
                     resp = self.pokemon_api.buy_item(ball["name"], buying)
                     if "cash" in resp:
                         self.pokemon.inventory.cash = resp["cash"]
-                        log("green", f"Purchased {buying} {ball['displayName']}s")
+                        self.log("green", f"Purchased {buying} {ball['displayName']}s")
 
         if changes:
             inv = self.pokemon_api.get_inventory()
@@ -201,7 +200,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
                     pokemon_to_sort.append(reward["reward_name"])
             else:
                 mission_msg = f"{mission_msg} {readable_reward}"
-            log("green", f"{mission_msg}")
+            self.log("green", f"{mission_msg}")
             self.pokemon.discord.post(DISCORD_ALERTS, mission_msg, file=reward_sprite)
             if reward_sprite is not None:
                 reward_sprite.close()
@@ -285,9 +284,9 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
                 self.pokemon.computer.save_computer()
 
                 pokemon_data = self.pokemon.computer.get_pokemon_data(pokemon["id"])
-                log("yellow", f"Updated data for {pokemon['id']} ({pokemon['name']})")
+                self.log("yellow", f"Updated data for {pokemon['id']} ({pokemon['name']})")
             except Exception as e:
-                log("yellow", f"{pokemon['id']} {pokemon['name']} failed to get pokemon data - {str(e)}")
+                self.log("yellow", f"{pokemon['id']} {pokemon['name']} failed to get pokemon data - {str(e)}")
                 pokemon_data = None
 
         return pokemon_data
@@ -339,7 +338,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
         changes = self.get_rename_suggestion(pokedict)
         for pokemon, new_name in changes:
             if new_name is not None and len(new_name) > 12:
-                log_file("yellow", f"Wont rename {pokemon['name']} from {pokemon['nickname']} to {new_name}, name too long")
+                self.log_file("yellow", f"Wont rename {pokemon['name']} from {pokemon['nickname']} to {new_name}, name too long")
                 continue
             self.pokemon_api.set_name(pokemon['id'], new_name)
 
@@ -348,7 +347,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
             pokemon_data["nickname"] = new_name
             self.pokemon.computer.set_pokemon_data(pokemon["id"], pokemon_data)
 
-            log_file("yellow", f"Renamed {pokemon['name']} from {pokemon['nickname']} to {new_name}")
+            self.log_file("yellow", f"Renamed {pokemon['name']} from {pokemon['nickname']} to {new_name}")
             sleep(0.5)
 
         self.pokemon.computer.save_computer()

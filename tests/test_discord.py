@@ -32,6 +32,16 @@ class MockDiscord(Discord):
         self.connected = True
 
 
+def create_mock_discord():
+    discord = MockDiscord()
+    discord.set({
+        "auth": "fakeuser",
+        "user": "fakeuser"
+    })
+    discord.connect()
+    return discord
+
+
 def test_discord():
     discord = MockDiscord()
     url = None

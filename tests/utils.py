@@ -1,6 +1,5 @@
 import json
 
-
 def load_data(filepath):
     try:
         return json.load(open(filepath))

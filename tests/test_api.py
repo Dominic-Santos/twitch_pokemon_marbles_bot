@@ -10,7 +10,6 @@ class MockApi(CGApi):
         if len(self.requests) <= len(self.responses):
             self.responses.append({})
         self.requests.append((method, url, payload))
-        print(self.requests, self.responses)
         return self.responses[len(self.requests) - 1]
 
 
