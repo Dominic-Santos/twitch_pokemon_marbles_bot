@@ -1,7 +1,6 @@
 from datetime import datetime
 from dateutil.parser import parse
 
-from .ChatLogs import log
 from ..Utils import (
     DISCORD_ALERTS
 )
@@ -31,9 +30,9 @@ class PokemonEvents():
 
                 if tier >= 4:
                     twitch_channel = message.target[1:]
-                    log("green", f"A T{tier} snowman has been built in {twitch_channel}")
+                    self.log("green", f"A T{tier} snowman has been built in {twitch_channel}")
             except Exception as e:
-                log("red", "not a real snowman message - " + argstring + str(e))
+                self.log("red", "not a real snowman message - " + argstring + str(e))
 
     def check_xmas_delibird_gift(self, client, message, argstring):
         if self.username in argstring.lower() and "Delibird drops the following" in argstring and "HolidayPresent" in argstring:
@@ -41,7 +40,7 @@ class PokemonEvents():
 
             item = argstring.split("HolidayPresent")[1].replace(":", "").strip()
             msg = f"🎁Received {item} as a present from Delibird in {twitch_channel} channel🎁"
-            log("green", msg)
+            self.log("green", msg)
             self.pokemon.discord.post(DISCORD_ALERTS, msg)
 
     def check_got_dragon_egg(self):
