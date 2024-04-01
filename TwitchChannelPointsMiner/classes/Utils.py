@@ -2,6 +2,7 @@ from datetime import timedelta
 from threading import Thread
 
 from .entities.Pokemon import PokemonComunityGame
+from .chat.ChatLogs import log, log_file
 
 ITEM_MIN_AMOUNT = 10
 ITEM_MIN_PURCHASE = 10
