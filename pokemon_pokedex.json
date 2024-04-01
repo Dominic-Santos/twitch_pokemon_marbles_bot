@@ -36134,7 +36134,8 @@
             "defense": 1,
             "special_attack": 1,
             "special_defense": 1
-        }
+        },
+        "evolves_to": {}
     },
     "999000": {
         "pokedex_id": 999000,
