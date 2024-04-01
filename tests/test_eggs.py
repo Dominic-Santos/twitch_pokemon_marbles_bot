@@ -277,7 +277,6 @@ def test_hatch_egg():
 
 
 def test_check_pokebuddy():
-
     pokedex = load_pokedex()
     egg = {
         "id": 1,

@@ -305,6 +305,9 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
                             continue
 
                 pokemon_obj = self.get_pokemon_stats(pokemon["pokedexId"])
+                
+                if pokemon_obj.is_egg:
+                    continue
 
                 if index == 0:
                     nick = ""
@@ -321,7 +324,6 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
                 else:
 
                     nick = "trade" + pokemon_obj.tier
-
                     if pokemon_obj.is_starter:
                         nick = CHARACTERS["starter"] + nick
                     if pokemon_obj.is_legendary:
@@ -334,8 +336,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
                 changes.append((pokemon, nick))
         return changes
 
-    def rename_computer(self, pokedict):
-        changes = self.get_rename_suggestion(pokedict)
+    def rename_computer(self, changes):
         for pokemon, new_name in changes:
             if new_name is not None and len(new_name) > 12:
                 self.log_file("yellow", f"Wont rename {pokemon['name']} from {pokemon['nickname']} to {new_name}, name too long")
@@ -350,13 +351,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
             self.log_file("yellow", f"Renamed {pokemon['name']} from {pokemon['nickname']} to {new_name}")
             sleep(0.5)
 
-        self.pokemon.computer.save_computer()
-
-    def sort_computer(self, pokedex_ids=[]):
-        '''Sort all/specific pokemon in computer and rename duplicates'''
-        all_pokemon = self.pokemon_api.get_all_pokemon()
-        self.pokemon.sync_computer(all_pokemon)
-
+    def sort_computer_by_pokedex_id(self, pokedex_ids=[]):
         allpokemon = self.pokemon.computer.pokemon
         pokedict = {}
 
@@ -365,8 +360,18 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
                 continue
             if len(pokedex_ids) == 0 or pokemon["pokedexId"] in pokedex_ids:
                 pokedict.setdefault(pokemon["pokedexId"], []).append(pokemon)
+        return pokedict
 
-        self.rename_computer(pokedict)
+    def sort_computer(self, pokedex_ids=[]):
+        '''Sort all/specific pokemon in computer and rename duplicates'''
+        all_pokemon = self.pokemon_api.get_all_pokemon()
+        self.pokemon.sync_computer(all_pokemon)
+
+        pokedict = self.sort_computer_by_pokedex_id()
+        changes = self.get_rename_suggestion(pokedict)
+
+        self.rename_computer(changes)
+        self.pokemon.computer.save_computer()
 
     def sync_pokemon_data(self, pokemon_id=None):
         all_pokemon = self.pokemon_api.get_all_pokemon()
