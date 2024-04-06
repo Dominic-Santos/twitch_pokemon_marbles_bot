@@ -4553,7 +4553,7 @@
         },
         "evolves_to": {
             "156": {
-                "level": 16,
+                "level": 14,
                 "stones": [
                     {
                         "amount": 1,
@@ -11066,14 +11066,18 @@
         },
         "evolves_to": {
             "391": {
-                "level": 16,
+                "level": 14,
                 "stones": [
                     {
                         "amount": 1,
                         "stone": "Shimmering"
                     },
                     {
-                        "amount": 2,
+                        "amount": 1,
+                        "stone": "Fighting"
+                    },
+                    {
+                        "amount": 1,
                         "stone": "Fire"
                     }
                 ]
@@ -34204,7 +34208,8 @@
             "special_attack": 95,
             "special_defense": 95
         },
-        "order": 773
+        "order": 773,
+        "evolves_to": {}
     },
     "10474": {
         "pokedex_id": 10474,
@@ -36023,13 +36028,13 @@
     },
     "999999": {
         "pokedex_id": 999999,
-        "name": "Unidentified Ghost",
-        "description": "Unidentified Ghost",
+        "name": "Elemental Dragon",
+        "description": "Elemental Dragon",
         "weight": 0.1,
         "generation": 1,
         "type1": "ghost",
-        "type2": "none",
-        "tier": "S",
+        "type2": "fire",
+        "tier": "A",
         "base_stats": {
             "hp": 1,
             "speed": 1,
@@ -36116,7 +36121,9 @@
             "defense": 1,
             "special_attack": 1,
             "special_defense": 1
-        }
+        },
+        "evolves_to": {},
+        "order": 999003
     },
     "999001": {
         "pokedex_id": 999001,
@@ -36128,12 +36135,12 @@
         "type2": "none",
         "tier": "C",
         "base_stats": {
-            "hp": 1,
-            "speed": 1,
-            "attack": 1,
-            "defense": 1,
-            "special_attack": 1,
-            "special_defense": 1
+            "hp": 25,
+            "speed": 25,
+            "attack": 25,
+            "defense": 25,
+            "special_attack": 25,
+            "special_defense": 25
         },
         "evolves_to": {}
     },
@@ -36176,5 +36183,45 @@
         },
         "order": 999002,
         "evolves_to": {}
+    },
+    "86331": {
+        "pokedex_id": 86331,
+        "name": "His Typhlosion",
+        "description": "Tornupto versteckt sich hinter einem flimmernden Hitzeschild, den es mithilfe seiner hei\u00dfen Flammen erzeugt. Dieses Pok\u00e9mon erzeugt Explosionen, die alles in Schutt und Asche legen.",
+        "weight": 69.8,
+        "generation": 2,
+        "type1": "fire",
+        "type2": "ghost",
+        "tier": "A",
+        "base_stats": {
+            "hp": 73,
+            "speed": 95,
+            "attack": 84,
+            "defense": 78,
+            "special_attack": 119,
+            "special_defense": 85
+        },
+        "order": 157,
+        "evolves_to": {}
+    },
+    "999004": {
+        "pokedex_id": 999004,
+        "name": "Starter Egg",
+        "description": "A Starter Egg from the Easter Event 2024.",
+        "weight": 0.1,
+        "generation": 1,
+        "type1": "fire",
+        "type2": "water",
+        "tier": "C",
+        "base_stats": {
+            "hp": 25,
+            "speed": 25,
+            "attack": 25,
+            "defense": 25,
+            "special_attack": 25,
+            "special_defense": 25
+        },
+        "evolves_to": {},
+        "order": 999004
     }
 }

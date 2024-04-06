@@ -101,11 +101,12 @@ def load_data(discord):
 
 
 class Graph:
-    def __init__(self, discord):
+    def __init__(self, discord, mode):
         self.ind = 0
         self.mode = 0
         self.modes = []
         self.discord = discord
+        self.mode = mode
 
     def init_graph(self):
         self.fig, self.ax = plt.subplots()
@@ -117,15 +118,22 @@ class Graph:
         if clear:
             self.ax.clear()
 
+        legends = []
+
         for i, user in enumerate(sorted(self.data.keys())):
             colors = COLORS[i]
             data = self.data[user]
 
-            self.ax.plot(data["timestamps"], data["total"], lw=2, color=colors[0])
-            self.ax.plot(data["timestamps"], data["a"], lw=2, color=colors[1])
-            self.ax.plot(data["timestamps"], data["b"], lw=2, color=colors[2])
-            self.ax.plot(data["timestamps"], data["c"], lw=2, color=colors[3])
+            if self.mode in ["all", "total"]:
+                self.ax.plot(data["timestamps"], data["total"], lw=2, color=colors[0])
+                legends.append(user if self.mode == "total" else f"{user} total")
+            if self.mode in ["all", "tiers"]:
+                for index, tier in enumerate(["a", "b", "c"]):
+                    self.ax.plot(data["timestamps"], data[tier], lw=2, color=colors[index + 1])
+                    legends.append(f"{user} {tier.title()}")
             self.ax.xaxis.set_major_formatter(mdates.DateFormatter('%d/%m'))
+
+        self.ax.legend(legends)
 
     def init_data(self):
         self.data_dirty = load_data(self.discord)
@@ -155,8 +163,8 @@ class Graph:
         plt.draw()
 
 
-def create_graph(discord):
-    g = Graph(discord)
+def create_graph(discord, mode="all"):
+    g = Graph(discord, mode)
     g.init_data()
     g.init_graph()
 
@@ -166,6 +174,6 @@ def run_graph(discord):
     plt.show()
 
 
-def generate_graph(discord):
-    create_graph(discord)
+def generate_graph(discord, mode="all"):
+    create_graph(discord, mode)
     plt.savefig(OUTPUT_IMAGE)

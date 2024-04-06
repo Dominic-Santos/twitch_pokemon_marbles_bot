@@ -63,8 +63,11 @@ class DailyTasks(object):
             log("red", "Computer Stats Cleaned - failed " + str(e))
 
     def catch_graph(self):
-        catch_graph(self.pokemon.discord)
-        self.pokemon.discord.post(DISCORD_STATS, "Catch Graph", file=open(CATCH_GRAPH_IMAGE, "rb"))
+        catch_graph(self.pokemon.discord, mode="tiers")
+        self.pokemon.discord.post(DISCORD_STATS, "Catch Graph Tiers", file=open(CATCH_GRAPH_IMAGE, "rb"))
+
+        catch_graph(self.pokemon.discord, mode="total")
+        self.pokemon.discord.post(DISCORD_STATS, "Catch Graph Total", file=open(CATCH_GRAPH_IMAGE, "rb"))
 
     def money_graph(self):
         money_graph(self.pokemon.discord)
