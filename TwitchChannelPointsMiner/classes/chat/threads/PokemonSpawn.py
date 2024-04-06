@@ -79,7 +79,7 @@ class PokemonSpawn(object):
 
         spawned_pokemon = self.get_pokemon_stats(pokemon_id, cached=False)
 
-        log_file("yellow", f"Pokemon spawned - processing {pokemon}")
+        log_file("yellow", f"Pokemon spawned - processing {spawned_pokemon}")
 
         # sync everything
         dex = self.pokemon_api.get_pokedex()
