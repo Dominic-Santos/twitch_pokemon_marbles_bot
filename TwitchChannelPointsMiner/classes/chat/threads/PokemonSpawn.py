@@ -77,7 +77,7 @@ class PokemonSpawn(object):
         data = get_spawn()
         pokemon_id = data["pokedex_id"]
 
-        pokemon = self.get_pokemon_stats(pokemon_id, cached=False)
+        spawned_pokemon = self.get_pokemon_stats(pokemon_id, cached=False)
 
         log_file("yellow", f"Pokemon spawned - processing {pokemon}")
 
@@ -93,12 +93,12 @@ class PokemonSpawn(object):
         self.get_missions()
 
         # find reasons to catch the pokemon
-        catch_reasons = self.pokemon.need_pokemon(pokemon)
+        catch_reasons = self.pokemon.need_pokemon(spawned_pokemon)
         catch_balls = [] if "ball" not in catch_reasons else self.pokemon.missions.data["ball"]
 
         if self.pokemon.poke_buddy is not None and self.pokemon.settings["hatch_eggs"]:
             buddy_obj = self.get_pokemon_stats(self.pokemon.poke_buddy["pokedexId"])
-            egg_reason, egg_ball = self.pokemon.egg_catch_reasons(pokemon, buddy_obj)
+            egg_reason, egg_ball = self.pokemon.egg_catch_reasons(spawned_pokemon, buddy_obj)
 
             if egg_reason is not None:
                 if egg_reason not in catch_reasons:
@@ -120,10 +120,10 @@ class PokemonSpawn(object):
             self.get_missions()
             return
 
-        ball = self.pokemon.inventory.get_catch_ball(pokemon, catch_reasons, catch_balls)
+        ball = self.pokemon.inventory.get_catch_ball(spawned_pokemon, catch_reasons, catch_balls)
 
         if ball is None:
-            log_file("red", f"Won't catch {pokemon.name}, ran out of balls")
+            log_file("red", f"Won't catch {spawned_pokemon.name}, ran out of balls")
             return
 
         twitch_channel = self.pokemon.get_channel()
@@ -136,7 +136,7 @@ class PokemonSpawn(object):
             log("green", f"Timerball selected, waiting {wait} seconds to catch")
             sleep(wait)
 
-        log_file("green", f"Trying to catch {pokemon.name} with {ball} because {reasons_string}")
+        log_file("green", f"Trying to catch {spawned_pokemon.name} with {ball} because {reasons_string}")
         log("green", f"Trying to catch in {twitch_channel}")
 
         client.privmsg("#" + twitch_channel, message)
@@ -153,7 +153,7 @@ class PokemonSpawn(object):
             ivs = int(caught["avgIV"])
             lvl = caught['lvl']
             shiny = " Shiny" if caught["isShiny"] else ""
-            unidentified = " (Unidentified Ghost)" if pokemon.is_unidentified_ghost else ""
+            unidentified = f" ({spawned_pokemon.name})" if pokemon.is_unidentified_spawn else ""
             msg = f"Caught{unidentified}{shiny} {pokemon.name} ({pokemon.tier}) Lvl.{lvl} {ivs}IV"
             log_file("green", msg)
 
@@ -179,8 +179,8 @@ class PokemonSpawn(object):
                 self.update_evolutions(egg_bag["id"], egg_data.pokedex_id)
 
         else:
-            log_file("red", f"Failed to catch {pokemon.name} ({pokemon.tier})")
-            msg = f"Missed {pokemon.name} ({pokemon.tier})!"
+            log_file("red", f"Failed to catch {spawned_pokemon.name} ({spawned_pokemon.tier})")
+            msg = f"Missed {spawned_pokemon.name} ({spawned_pokemon.tier})!"
 
         msg = msg + f" {ball}, because {reasons_string}"
 

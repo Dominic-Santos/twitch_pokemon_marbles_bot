@@ -235,10 +235,7 @@ class ClientIRCPokemon(ClientIRCO, ChatThreads, PokemonEvents):
 
         if caught is not None and pokemon.pokedex_id in [999999, 1000000]:
             pokemon = self.get_pokemon_stats(caught["pokedexId"], cached=False)
-            if pokemon.pokedex_id == 999999:
-                pokemon.is_unidentified_ghost = True
-            else:
-                pokemon.is_special_spawn = True
+            pokemon.is_unidentified_spawn = True
 
         return pokemon, caught
 

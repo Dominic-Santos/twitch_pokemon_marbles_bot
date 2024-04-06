@@ -28,8 +28,7 @@ class Pokemon(object):
         self.is_legendary = False
         self.is_female = False
         self.is_non_spawnable = False
-        self.is_unidentified_ghost = False
-        self.is_special_spawn = False
+        self.is_unidentified_spawn = False
 
         # evolution data, None = hasnt been added yet
         self.evolve_to = data.get("evolves_to", None)
