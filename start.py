@@ -14,7 +14,7 @@ from TwitchChannelPointsMiner.classes.entities.Streamer import Streamer, Streame
 from utils import load_settings
 
 settings = load_settings()
-CLAIM_DROPS = False
+CLAIM_DROPS = True
 
 twitch_miner = TwitchChannelPointsMiner(
     username=settings["login"]["username"],
