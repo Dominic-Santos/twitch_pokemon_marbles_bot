@@ -1,11 +1,11 @@
 {
     "streamers": {
         "theswedishfishofficial": {"goal": 3000, "priority": 1, "marbles": false, "pcg": false},
-        "msdopesauce": {"goal": 1000000, "priority": 2, "marbles": true},
-        "mslaracing": {"goal": 1000000, "priority": 2, "marbles": true},
-        "zagarose": {"goal": 1000000, "priority": 2, "marbles": true},
-        "emzia": {"goal": 1000000, "priority": 2, "marbles": true},
-        "jesteriah": {"goal": 1000000, "priority": 3}
+        "msdopesauce": {"goal": 1000000, "priority": 2, "marbles": true,  "pcg": false},
+        "mslaracing": {"goal": 1000000, "priority": 2, "marbles": true,  "pcg": false},
+        "zagarose": {"goal": 1000000, "priority": 2, "marbles": true,  "pcg": false},
+        "emzia": {"goal": 1000000, "priority": 2, "marbles": true,  "pcg": false},
+        "jesteriah": {"goal": 1000000, "priority": 3, "pcg": false}
     }
 }
 
