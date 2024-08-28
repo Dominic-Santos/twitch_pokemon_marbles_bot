@@ -7,7 +7,7 @@ from .chat.ChatLogs import log, log_file
 ITEM_MIN_AMOUNT = 10
 ITEM_MIN_PURCHASE = 10
 
-MARBLES_DELAY = 60 * 10  # seconds
+MARBLES_DELAY = 60 * 5  # seconds
 MARBLES_TRIGGER_COUNT = 3
 WONDERTRADE_DELAY = 60 * 60 * 3 + 60  # 3 hours and 1 min (just in case)
 POKEDAILY_DELAY = 60 * 60 * 20 + 60  # 20 hours and 1 min

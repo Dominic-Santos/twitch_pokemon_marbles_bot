@@ -1,7 +1,8 @@
 # pip install Twitch-Channel-Points-Miner-v2
 # python -m pip install --upgrade --force-reinstall git+https://github.com/bossoq/Twitch-Channel-Points-Miner-v2.git@fix-integrity
-
+import multiprocessing
 import logging
+from time import sleep
 from colorama import Fore
 from TwitchChannelPointsMiner import TwitchChannelPointsMiner
 from TwitchChannelPointsMiner.logger import LoggerSettings, ColorPalette
@@ -11,14 +12,21 @@ from TwitchChannelPointsMiner.classes.Telegram import Telegram
 from TwitchChannelPointsMiner.classes.Settings import Priority, Events, FollowersOrder
 from TwitchChannelPointsMiner.classes.entities.Bet import Strategy, BetSettings, Condition, OutcomeKeys, FilterCondition, DelayMode
 from TwitchChannelPointsMiner.classes.entities.Streamer import Streamer, StreamerSettings
-from utils import load_settings
+from utils import load_settings, get_login
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
-settings = load_settings()
+chrome_options = Options()
+chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+chrome_options.add_argument("--enable-javascript")
+
+login = get_login()
 CLAIM_DROPS = True
 
 twitch_miner = TwitchChannelPointsMiner(
-    username=settings["login"]["username"],
-    password=settings["login"]["password"],           # If no password will be provided, the script will ask interactively
+    username=login["username"],
+    password=login["password"],           # If no password will be provided, the script will ask interactively
     claim_drops_startup=CLAIM_DROPS,                  # If you want to auto claim all drops from Twitch inventory on the startup
     priority=[                                  # Custom priority in this case for example:
         Priority.STREAK,                        # - We want first of all to catch all watch streak from all streamers
@@ -72,6 +80,11 @@ twitch_miner = TwitchChannelPointsMiner(
     )
 )
 
+def create_driver():
+    dr = webdriver.Chrome(options=chrome_options)
+    # dr.set_window_size(400, 400)
+    return dr
+
 # You can customize the settings for each streamer. If not settings were provided, the script would use the streamer_settings from TwitchChannelPointsMiner.
 # If no streamer_settings are provided in TwitchChannelPointsMiner the script will use default settings.
 # The streamers array can be a String -> username or Streamer instance.
@@ -79,20 +92,47 @@ twitch_miner = TwitchChannelPointsMiner(
 # The settings priority are: settings in mine function, settings in TwitchChannelPointsMiner instance, default settings.
 # For example, if in the mine function you don't provide any value for 'make_prediction' but you have set it on TwitchChannelPointsMiner instance, the script will take the value from here.
 # If you haven't set any value even in the instance the default one will be used
-streamers = settings["streamers"]
-streamers_ordered = sorted(streamers.keys(), key=lambda x: streamers[x]["priority"])
-print(streamers_ordered)
+def get_rewards_channels():
+    driver = create_driver()
+    url = "https://www.twitch.tv/directory/category/marbles-on-stream?filter=drops"
+    driver.get(url)
+    sleep(5)
+    channels = driver.find_elements(By.XPATH, "//p[@data-a-target='preview-card-channel-link']/div")
+    to_return = []
+    for channel in channels:
+        to_return.append(channel.text)
+    return to_return
 
-twitch_miner.mine(
-    [
-        Streamer(
-            streamer,
-            settings=StreamerSettings(
-                marbles=streamers[streamer].get("marbles", False),
-                pcg=streamers[streamer].get("pcg", True)
-            ),
-        ) for streamer in streamers_ordered
-    ],                                  # Array of streamers (order = priority)
-    followers=False,                    # Automatic download the list of your followers
-    followers_order=FollowersOrder.ASC  # Sort the followers list by follow date. ASC or DESC
-)
+def run_miner(rewards_channels=[]):
+    blacklist = ["TheTonyBlacks"]
+
+    settings = load_settings()
+    streamers = settings["streamers"]
+    for channel in rewards_channels:
+        if channel not in blacklist:
+            streamers[channel] = {"goal": 1000000, "priority": 2, "pcg": False, "marbles": False}
+    streamers_ordered = sorted(streamers.keys(), key=lambda x: streamers[x]["priority"])
+    print(streamers_ordered)
+
+    twitch_miner.mine(
+        [
+            Streamer(
+                streamer,
+                settings=StreamerSettings(
+                    marbles=streamers[streamer].get("marbles", False),
+                    pcg=streamers[streamer].get("pcg", True)
+                ),
+            ) for streamer in streamers_ordered
+        ],                                  # Array of streamers (order = priority)
+        followers=False,                    # Automatic download the list of your followers
+        followers_order=FollowersOrder.ASC  # Sort the followers list by follow date. ASC or DESC
+    )
+
+def main():
+    channels = get_rewards_channels()
+    print("marbles channels", channels)
+    run_miner(channels)
+
+
+if __name__ == "__main__":
+    main()
