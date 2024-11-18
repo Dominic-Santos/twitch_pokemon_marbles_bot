@@ -1,6 +1,6 @@
 {
     "streamers": {
-        "jesteriah": {"goal": 1000000, "priority": 4, "pcg": false},
+        "jesteriah": {"goal": 1000000, "priority": 10, "pcg": false},
         "theswedishfishofficial": {"goal": 3000, "priority": 1, "marbles": false, "pcg": false}
     }   
 }

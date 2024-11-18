@@ -94,23 +94,31 @@ def create_driver():
 # If you haven't set any value even in the instance the default one will be used
 def get_rewards_channels():
     driver = create_driver()
-    url = "https://www.twitch.tv/directory/category/marbles-on-stream?filter=drops"
-    driver.get(url)
-    sleep(5)
-    channels = driver.find_elements(By.XPATH, "//p[@data-a-target='preview-card-channel-link']/div")
+
     to_return = []
-    for channel in channels:
-        to_return.append(channel.text)
+    for x in ["marbles-on-stream", "palworld"]:
+        url = f"https://www.twitch.tv/directory/category/{x}?filter=drops"
+        driver.get(url)
+        sleep(5)
+        channels = driver.find_elements(By.XPATH, "//p[@data-a-target='preview-card-channel-link']/div")
+        
+        for channel in channels:
+            channel_name = channel.text
+            if "(" in channel_name:
+                channel_name = channel_name.split("(")[1][:-1]
+            to_return.append((channel_name, x))
+
     return to_return
 
 def run_miner(rewards_channels=[]):
     blacklist = ["TheTonyBlacks"]
+    priorities = {"palworld": 4, "marbles-on-stream": 3}
 
     settings = load_settings()
     streamers = settings["streamers"]
-    for channel in rewards_channels:
+    for channel, game in rewards_channels:
         if channel not in blacklist:
-            streamers[channel] = {"goal": 1000000, "priority": 2, "pcg": False, "marbles": False}
+            streamers[channel] = {"goal": 1000000, "priority": priorities.get(game, 10), "pcg": False, "marbles": False}
     streamers_ordered = sorted(streamers.keys(), key=lambda x: streamers[x]["priority"])
     print(streamers_ordered)
 
