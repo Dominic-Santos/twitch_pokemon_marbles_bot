@@ -17,6 +17,7 @@ from .classes.Matrix import Matrix
 from .classes.Settings import Events
 from .classes.Telegram import Telegram
 from .classes.Pushover import Pushover
+from .classes.Gotify import Gotify
 from .utils import remove_emoji
 
 # Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
